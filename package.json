@@ -1,0 +1,19 @@
+{
+  "name": "financeinfoplatform",
+  "version": "1.0.0",
+  "description": "centralized platform aimed at enhancing the Financial Department's efficiency and knowledge sharing.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1Sarry/FinanceInfoPlatform.git"
+  },
+  "author": "FIP dev team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/1Sarry/FinanceInfoPlatform/issues"
+  },
+  "homepage": "https://github.com/1Sarry/FinanceInfoPlatform#readme"
+}
