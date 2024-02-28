@@ -64,7 +64,7 @@ function LoginForm({ onSubmit }) {
               background: "linear-gradient(to right, #013E7A, #0057A6)",
             }}
             type="submit"
-            value="submit"
+            value="LOGIN"
             className=" text-white font-bold py-3 px-4 w-full rounded focus:outline-none focus:shadow-outline"
           />
         </div>
