@@ -1,13 +1,12 @@
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: {
-    files: ["./src/**/*.{html,js,jsx,ts,tsx}"], // adjust this path as needed
-  },
+/* eslint-env node */
+module.exports = {
+  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
-  },
-  variants: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+      },
+    },
   },
   plugins: [],
 };
