@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
+import { Navigate } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const PrivateRoute = ({ children }) => {
     }
   }, [isAuthenticated, navigate]);
 
-  return isAuthenticated ? children : null;
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
 PrivateRoute.propTypes = {
