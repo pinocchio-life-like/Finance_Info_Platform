@@ -1,43 +1,18 @@
-import { useState, useEffect } from "react";
-import { authService } from "../services/authService";
-import { useNavigate } from "react-router-dom";
-import logo from "../assets/Images/logo.png";
+import { useState } from "react";
 import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
-
-function LoginPage() {
+import logo from "../../assets/Images/logo.png";
+function LoginForm({ onSubmit }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (authService.isAuthenticated()) {
-      navigate("/dashboard");
-    }
-  }, [isLoggedIn, navigate]);
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-
-    // Replace these with the actual username and password from the form
-    const username = "username";
-    const password = "password";
-
-    try {
-      const response = await authService.login(username, password);
-      console.log(response.data);
-      setIsLoggedIn(true);
-    } catch (error) {
-      setError("Failed to login. Please check your username and password.");
-    }
+    onSubmit({ username, password });
   };
 
   return (
-    <div
-      style={{ background: "linear-gradient(to right, #013E7A, #0057A6)" }}
-      className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center">
       <form
         style={{ width: "450px", height: "470px" }}
         onSubmit={handleSubmit}
@@ -93,9 +68,8 @@ function LoginPage() {
           />
         </div>
       </form>
-      {error && <p className="text-red-500 text-xs italic">{error}</p>}
     </div>
   );
 }
 
-export default LoginPage;
+export default LoginForm;
