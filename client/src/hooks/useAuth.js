@@ -24,7 +24,13 @@ function useAuth() {
     }
   };
 
-  return { login, error };
+  const logout = async () => {
+    authService.logout();
+    setIsLoggedIn(false);
+    navigate("/");
+  };
+
+  return { login, logout, error };
 }
 
 export default useAuth;
