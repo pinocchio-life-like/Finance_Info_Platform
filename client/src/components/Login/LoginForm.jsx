@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 import logo from "../../assets/Images/logo.png";
+import PropTypes from "prop-types";
 function LoginForm({ onSubmit }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -71,5 +72,9 @@ function LoginForm({ onSubmit }) {
     </div>
   );
 }
+
+LoginForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default LoginForm;
