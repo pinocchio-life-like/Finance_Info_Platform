@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
@@ -13,6 +14,10 @@ const PrivateRoute = ({ children }) => {
   }, [isAuthenticated, navigate]);
 
   return isAuthenticated ? children : null;
+};
+
+PrivateRoute.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default PrivateRoute;
