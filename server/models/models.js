@@ -56,9 +56,17 @@ const getUserByUserName = async (userName) => {
 const getAllUsers = async () => {
   return User.findAll();
 };
+//update user
+const updateUser = async (user) => {
+  const { firstName, userName, password, userRole } = user;
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  return User.update({firstName,userName,password:hashedPassword,userRole})
 
+}
 module.exports = {
   createUser,
   getUserByUserName,
   getAllUsers,
+  updateUser
 };
