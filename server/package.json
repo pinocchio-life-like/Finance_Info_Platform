@@ -4,6 +4,7 @@
   "description": "centralized platform aimed at enhancing the Financial Department's efficiency and knowledge sharing.",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,15 @@
   "bugs": {
     "url": "https://github.com/1Sarry/FinanceInfoPlatform/issues"
   },
-  "homepage": "https://github.com/1Sarry/FinanceInfoPlatform#readme"
+  "homepage": "https://github.com/1Sarry/FinanceInfoPlatform#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mysql2": "^3.9.2",
+    "sequelize": "^6.37.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "sequelize-cli": "^6.6.2"
+  }
 }
