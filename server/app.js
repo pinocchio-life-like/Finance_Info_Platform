@@ -3,19 +3,18 @@ require("dotenv").config();
 const express = require("express");
 //cors
 const cors = require("cors");
-const User  = require("./config/db.config"); // Incorrect for model classes
-const router=require('./routes/usersR')
+// const User  = require("./config/db.config"); 
+const userAddRoute=require('./routes/usersR')
 const loginRoute = require('./routes/userLoginR');
 
 const app = express();
 
-// addmidlewares
+// Middleware setup
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-//add routes
-app.use('/api',router);
-//loginroute
+// Routes setup
+app.use('/api',userAddRoute);
 app.use('/api',loginRoute)
 
 // app.get("/", async (req, res) => {
