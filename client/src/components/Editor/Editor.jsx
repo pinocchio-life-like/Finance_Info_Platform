@@ -17,7 +17,9 @@ const Editor = () => {
         modelValue={text}
         onChange={setText}
         language="en-US"
-        // onSave={(val) => {}}
+        onSave={() => {
+          console.log("Save");
+        }}
         showCodeRowNumber
       />
     </div>

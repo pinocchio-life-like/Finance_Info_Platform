@@ -1,24 +1,30 @@
+
+require("dotenv").config();
 const express = require("express");
-const User = require("./models"); // assuming your User model is exported from a 'models' directory
+//cors
+const cors = require("cors");
+// const User  = require("./config/db.config"); 
+const userAddRoute=require('./routes/usersR')
+const loginRoute = require('./routes/userLoginR');
 
 const app = express();
+
+// Middleware setup
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// Routes setup
+app.use('/api',userAddRoute);
+app.use('/api',loginRoute)
 
-// Create a user
-app.get("/", async (req, res) => {
-  try {
-    const newUser = await User.create({
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-    });
-    res.json(newUser);
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ message: "An error occurred while creating the user." });
-  }
-});
+// app.get("/", async (req, res) => {
+//   const user = await User.create({
+//     firstName: "zena",
+//     userName: "zena",
+//     password: "123",
+//     userRole: "admin",
+//   });
 
-app.listen(3000, () => console.log("Server is running on port 3000"));
+//   res.json(user)
+// });
+app.listen(5000, () => console.log("Server running on port 5000"));
