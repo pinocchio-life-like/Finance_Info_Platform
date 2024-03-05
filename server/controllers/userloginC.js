@@ -36,7 +36,7 @@ const userloginC = async (req, res) => {
           firstName: user.firstName,
         };
         // Generate accesstoken
-        const token = jwt.sign(payload, secretKey, { expiresIn: "3s" });
+        const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
         // Generate refresh token
         const refreshToken = generateRefreshToken(user);
         res.cookie("refreshToken", refreshToken, { httpOnly: true });
@@ -86,7 +86,7 @@ const refreshTokenC = async (req, res) => {
         userRole: decoded.userRole,
       };
 
-      const newAccessToken = jwt.sign(payload, secretKey, { expiresIn: "4h" });
+      const newAccessToken = jwt.sign(payload, secretKey, { expiresIn: "1h" });
 
       res.status(200).json({
         accessToken: newAccessToken,

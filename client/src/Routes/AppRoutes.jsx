@@ -7,6 +7,7 @@ import ProfilePage from "../components/Profile/ProfilePage";
 import Difference from "../components/DiffViewer/DiffViewer";
 import Editor from "../components/Editor/Editor";
 import Preview from "../components/Preview/Preview";
+import RoleBasedRoute from "../components/RoleBasedRoute";
 
 function AppRoutes() {
   return (
@@ -47,9 +48,11 @@ function AppRoutes() {
       <Route
         path="editor"
         element={
-          <PrivateRoute>
-            <Editor />
-          </PrivateRoute>
+          <RoleBasedRoute role="admin">
+            <PrivateRoute>
+              <Editor />
+            </PrivateRoute>
+          </RoleBasedRoute>
         }
       />
       <Route
@@ -60,6 +63,7 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
+      <Route path="404" element={<h1>404 Not Found</h1>} />
     </Routes>
   );
 }
