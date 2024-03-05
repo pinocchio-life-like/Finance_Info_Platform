@@ -11,6 +11,7 @@ const userSlice = createSlice({
       state.userRole = action.payload.userRole;
     },
     logout: (state) => {
+      console.log("from redux");
       state.firstName = null;
       state.userName = null;
       state.userRole = null;

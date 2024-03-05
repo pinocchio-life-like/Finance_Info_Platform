@@ -1,8 +1,7 @@
-// useAuth.js
 import { useState, useEffect } from "react";
 import { authService } from "../services/authService";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import store from "../redux/store";
 import {
   login as loginReducer,
   logout as logoutReducer,
@@ -12,7 +11,6 @@ function useAuth() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (authService.isAuthenticated()) {
@@ -25,7 +23,13 @@ function useAuth() {
       const response = await authService.login(credentials);
       console.log(response.data.payload);
       const data = response.data.payload;
-      dispatch(loginReducer({ ...data }));
+      store.dispatch(
+        loginReducer({
+          userName: data.userName,
+          firstName: data.firstName,
+          userRole: data.userRole,
+        })
+      );
       setIsLoggedIn(true);
     } catch (error) {
       setError("Failed to login. Please check your username and password.");
@@ -35,7 +39,7 @@ function useAuth() {
   const logout = async () => {
     authService.logout();
     setIsLoggedIn(false);
-    dispatch(logoutReducer());
+    store.dispatch(logoutReducer());
     navigate("/");
   };
 
