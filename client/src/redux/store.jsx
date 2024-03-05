@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
+import storage from "redux-persist/lib/storage";
 import userReducer from "./slices/userSlice";
 
 const persistConfig = {
@@ -13,7 +13,7 @@ const persistedReducer = persistReducer(persistConfig, userReducer);
 const store = configureStore({
   reducer: {
     user: persistedReducer,
-    // Add other reducers here
+    // add other reducers here
   },
 });
 
