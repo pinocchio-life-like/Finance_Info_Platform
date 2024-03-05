@@ -23,6 +23,7 @@ const userloginC = async (req, res) => {
     // Check if any user with the given username exists
     const user = users.find((user) => user.userName === username);
 
+
     if (user) {
       // Compare the provided password with the hashed password
       const passwordMatch = await bcrypt.compare(password, user.password);
@@ -37,6 +38,7 @@ const userloginC = async (req, res) => {
         };
         // Generate accesstoken
         const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
+
         // Generate refresh token
         const refreshToken = generateRefreshToken(user);
         res.cookie("refreshToken", refreshToken, { httpOnly: true });
@@ -48,6 +50,7 @@ const userloginC = async (req, res) => {
         });
       } else {
         res.status(401).json({
+
           message: "Incorrect password",
         });
       }
@@ -85,10 +88,9 @@ const refreshTokenC = async (req, res) => {
         firstName: decoded.firstName,
         userRole: decoded.userRole,
       };
-
       const newAccessToken = jwt.sign(payload, secretKey, { expiresIn: "1h" });
-
       res.status(200).json({
+
         accessToken: newAccessToken,
       });
       if (!decoded) {

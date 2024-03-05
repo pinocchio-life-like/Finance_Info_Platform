@@ -1,5 +1,7 @@
 const router=require('express').Router()
-const {updateUser}=require('../controllers/userUpadateC')
+
+const {updateUsers}=require('../controllers/userUpdateC')
 //update user route
-router.put('/update/:id',updateUser)
+router.put('/update/:id',updateUsers)
+
 module.exports=router

@@ -3,7 +3,6 @@ const { createUser, getUserByUserName } = require("../models/models");
 const createUsers = async (req, res) => {
   try {
     const newUser = req.body;
-    console.log(newUser);
 
     // Check if the user with the same userName already exists
     const existingUser = await getUserByUserName(newUser.userName);
