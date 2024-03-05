@@ -18,7 +18,7 @@ const Editor = () => {
         onChange={setText}
         language="en-US"
         onSave={() => {
-          console.log("Save");
+          // console.log("Save");
         }}
         showCodeRowNumber
       />
