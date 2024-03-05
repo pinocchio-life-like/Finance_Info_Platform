@@ -23,7 +23,6 @@ const userloginC = async (req, res) => {
     // Check if any user with the given username exists
     const user = users.find((user) => user.userName === username);
 
-
     if (user) {
       // Compare the provided password with the hashed password
       const passwordMatch = await bcrypt.compare(password, user.password);
@@ -37,7 +36,7 @@ const userloginC = async (req, res) => {
           firstName: user.firstName,
         };
         // Generate accesstoken
-        const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
+        const token = jwt.sign(payload, secretKey, { expiresIn: "4h" });
 
         // Generate refresh token
         const refreshToken = generateRefreshToken(user);
@@ -50,7 +49,6 @@ const userloginC = async (req, res) => {
         });
       } else {
         res.status(401).json({
-
           message: "Incorrect password",
         });
       }
@@ -70,35 +68,38 @@ const userloginC = async (req, res) => {
 //a function to refresh the access token by using the refresh token
 const refreshTokenC = async (req, res) => {
   try {
-    const refreshToken = req.body.refreshToken;
+    const refreshToken = req.cookies;
     console.log("Received refreshToken:", refreshToken);
 
     // Verify the refresh token
     if (!refreshToken) {
-      res.status(401).json({
+      return res.status(401).json({
         message: "No refresh token provided",
       });
-    } else {
-      let decoded = jwt.verify(refreshToken, refresh_key);
-      console.log("Decoded refreshToken:", decoded);
-
-      // If valid, generate a new access token and send it to the client
-      const payload = {
-        userName: decoded.userName,
-        firstName: decoded.firstName,
-        userRole: decoded.userRole,
-      };
-      const newAccessToken = jwt.sign(payload, secretKey, { expiresIn: "1h" });
-      res.status(200).json({
-
-        accessToken: newAccessToken,
-      });
-      if (!decoded) {
-        res.status(401).json({
-          message: "Invalid refresh token",
-        });
-      }
     }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(refreshToken, refresh_key);
+    } catch (err) {
+      return res.status(401).json({
+        message: "Invalid refresh token",
+      });
+    }
+
+    console.log("Decoded refreshToken:", decoded);
+
+    // If valid, generate a new access token and send it to the client
+    const payload = {
+      userName: decoded.userName,
+      firstName: decoded.firstName,
+      userRole: decoded.userRole,
+    };
+    const newAccessToken = jwt.sign(payload, secretKey, { expiresIn: "4h" });
+
+    res.status(200).json({
+      token: newAccessToken,
+    });
   } catch (error) {
     console.error("Internal Server Error:", error.message);
     res.status(500).json({

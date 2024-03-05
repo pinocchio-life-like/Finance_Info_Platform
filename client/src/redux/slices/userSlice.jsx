@@ -5,13 +5,11 @@ const userSlice = createSlice({
   initialState: { firstName: null, userName: null, userRole: null },
   reducers: {
     login: (state, action) => {
-      console.log("from redux", action.payload);
       state.firstName = action.payload.firstName;
       state.userName = action.payload.userName;
       state.userRole = action.payload.userRole;
     },
     logout: (state) => {
-      console.log("from redux");
       state.firstName = null;
       state.userName = null;
       state.userRole = null;

@@ -10,6 +10,7 @@ const authService = {
     return response;
   },
   logout: function () {
+    api.post("/api/logout");
     localStorage.removeItem("token");
   },
   isAuthenticated: function () {
@@ -24,8 +25,8 @@ const authService = {
     return localStorage.getItem("token");
   },
   refreshToken: async function () {
-    const response = await api.post("/api/auth/refresh");
-    const { token } = response.data;
+    const response = await api.post("/api/refreshToken");
+    const { token } = response.token;
     localStorage.setItem("token", token);
     return token;
   },
