@@ -4,11 +4,13 @@ const bcrypt = require("bcrypt");
 // const ArticleVersion = require("./articleVersionModel").ArticleVersion;
 //define user mmodel
 const User = sequelize.define("User", {
+
   userId: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
+
   firstName: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -19,7 +21,7 @@ const User = sequelize.define("User", {
     type: Sequelize.STRING,
     allowNull: false,
     require: true,
-    // unique: true,
+    unique: true,
   },
   password: {
     type: Sequelize.STRING,
@@ -32,10 +34,12 @@ const User = sequelize.define("User", {
     require: true,
   },
 });
+
 // User.hasMany(ArticleVersion,{foreignKey:'userId'})
 (async () => {
   await sequelize.sync({ alter: true });
 })();
+
 const createUser = async (user) => {
   let users = {};
   console.log("from model");
@@ -63,6 +67,7 @@ const getAllUsers = async () => {
   return User.findAll();
 };
 //update user
+
 const updateUser = async (id, userData) => {
   const { firstName, userName, password, userRole } = userData;
 
@@ -91,10 +96,12 @@ const updateUser = async (id, userData) => {
     throw error;
   }
 };
+
 module.exports = {
   createUser,
   getUserByUserName,
   getAllUsers,
+
   updateUser,
   User,
 };

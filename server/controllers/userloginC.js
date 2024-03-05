@@ -17,11 +17,12 @@ const generateRefreshToken = (user) => {
 };
 const userloginC = async (req, res) => {
   try {
-    const { userName, password } = req.body;
+    const { username, password } = req.body.data;
     const users = await getAllUsers();
 
     // Check if any user with the given username exists
-    const user = users.find((user) => user.userName === userName);
+    const user = users.find((user) => user.userName === username);
+
 
     if (user) {
       // Compare the provided password with the hashed password
@@ -37,22 +38,24 @@ const userloginC = async (req, res) => {
         };
         // Generate accesstoken
         const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
-        res.cookie('token', token, { httpOnly: true });
+
         // Generate refresh token
         const refreshToken = generateRefreshToken(user);
+        res.cookie("refreshToken", refreshToken, { httpOnly: true });
 
         res.json({
           message: "Login success",
+          payload: payload,
           token: token,
-          refreshToken: refreshToken,
         });
       } else {
-        res.json({
+        res.status(401).json({
+
           message: "Incorrect password",
         });
       }
     } else {
-      res.json({
+      res.status(404).json({
         message: "User not found",
       });
     }
@@ -85,10 +88,9 @@ const refreshTokenC = async (req, res) => {
         firstName: decoded.firstName,
         userRole: decoded.userRole,
       };
+      const newAccessToken = jwt.sign(payload, secretKey, { expiresIn: "1h" });
+      res.status(200).json({
 
-      const newAccessToken = jwt.sign(payload, secretKey, { expiresIn: "4h" });
-
-      res.json({
         accessToken: newAccessToken,
       });
       if (!decoded) {
@@ -105,7 +107,6 @@ const refreshTokenC = async (req, res) => {
     });
   }
 };
-
 
 module.exports = {
   userloginC,

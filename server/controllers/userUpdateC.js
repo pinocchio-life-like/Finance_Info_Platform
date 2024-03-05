@@ -1,11 +1,14 @@
+
 const {User }= require("../models/models");
 const { updateUser } = require("../models/models");
 
 const updateUsers = async (req, res) => {
+
   const { id } = req.params;
   const { firstName, userName, password, userRole } = req.body;
 
   try {
+
     // Check if the user exists before attempting to update
     const existingUser = await User.findByPk(id);
 
@@ -26,10 +29,9 @@ const updateUsers = async (req, res) => {
       return res.status(500).json({ message: "Failed to update user" });
     }
 
-    res.json({
-      message: "User updated successfully",
-      data: updatedUser,
-    });
+    res
+      .status(200)
+      .json({ message: "User updated successfully", data: updateduser });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
