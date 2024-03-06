@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 import logo from "../../assets/Images/wihLogo.png";
 import PropTypes from "prop-types";
-function LoginForm({ onSubmit }) {
+function LoginForm({ onSubmit, error }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -68,6 +68,7 @@ function LoginForm({ onSubmit }) {
             className=" text-white font-bold py-3 px-4 w-full rounded focus:outline-none focus:shadow-outline"
           />
         </div>
+        {error && <p className="text-red-500 text-xs italic">{error}</p>}
       </form>
     </div>
   );
@@ -75,6 +76,7 @@ function LoginForm({ onSubmit }) {
 
 LoginForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  error: PropTypes.string,
 };
 
 export default LoginForm;

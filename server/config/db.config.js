@@ -1,3 +1,4 @@
+
 const { Sequelize} = require('sequelize');// Create Sequelize instance
 const sequelize = new Sequelize({
   dialect: 'mysql', // Change to your database dialect
@@ -14,6 +15,7 @@ sequelize.authenticate()
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err);
+
   });
 // Define a User model
 // const User = sequelize.define('User', {
@@ -26,7 +28,7 @@ sequelize.authenticate()
 //     type: DataTypes.INTEGER,
 //     primaryKey:true,
 //     autoIncrement:true
-  
+
 //   },
 //   userName:{
 //     type: DataTypes.STRING,
@@ -44,8 +46,13 @@ sequelize.authenticate()
 //     allowNull:false,
 //     require:true
 //   }
-  
 // });
+
+sequelize.sync().then(() => {
+  console.log(`Database & tables created!`);
+});
+
+
 module.exports = sequelize;
 // Sync the model with the database (optional if using migrations)
 // await User.sync({force:true});
@@ -60,4 +67,6 @@ module.exports = sequelize;
 
 // console.log(user.toJSON());
 
+
 // module.exports ={ User}
+
