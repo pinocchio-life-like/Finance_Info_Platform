@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../config/db.config");
 const bcrypt = require("bcrypt");
-// const ArticleVersion = require("./articleVersionModel").ArticleVersion;
+const ArticleVersion = require("./articleVersionModel").ArticleVersion;
 //define user mmodel
 const User = sequelize.define("User", {
 
@@ -36,6 +36,14 @@ const User = sequelize.define("User", {
 });
 
 // User.hasMany(ArticleVersion,{foreignKey:'userId'})
+User.hasMany(ArticleVersion, {
+  foreignKey: "userId",
+  sourceKey: "userId",
+});
+ArticleVersion.belongsTo(User, {
+  foreignKey: "userId",
+  targetKey: "userId",
+});
 (async () => {
   await sequelize.sync({ alter: true });
 })();

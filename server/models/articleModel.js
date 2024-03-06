@@ -1,7 +1,7 @@
 const sequelize = require("../config/db.config");
 const { Sequelize, DataTypes } = require("sequelize");
 const User = require("./models").User;
-// const ArticleVersion = require("./articleVersionModel").ArticleVersion;
+const ArticleVersion = require("./articleVersionModel").ArticleVersion;
 const Article = sequelize.define("article", {
   articleId: {
     type: DataTypes.INTEGER,
@@ -15,7 +15,7 @@ const Article = sequelize.define("article", {
     require: true,
   },
   articleContent: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
     require: true,
   },
@@ -37,7 +37,17 @@ const Article = sequelize.define("article", {
 });
 // Define the foreign key relationship
 Article.belongsTo(User, { foreignKey: "userId" });
-// Article.hasMany(ArticleVersion, { foreignKey: "articleId" });
+// Article.hasMany(ArticleVersion,{foreignKey: 'columnName', sourceKey: 'articleId'});
+// ArticleVersion.belongsTo(Article,{foreignKey: 'columnName', targetKey: 'articleId'})
+// // ArticleVersion.belongsTo(Article,{foreignKey:'articleId'})
+Article.hasMany(ArticleVersion, {
+  foreignKey: "articleId",
+  sourceKey: "articleId",
+});
+ArticleVersion.belongsTo(Article, {
+  foreignKey: "articleId",
+  targetKey: "articleId",
+});
 
 (async () => {
   try {
@@ -62,13 +72,19 @@ const createArticle = async (article) => {
   }
   // Create the article with the associated user
   const createdArticle = await Article.create({
-    articleTitle,
-    articleContent,
-    category,
-    userId,
+      articleTitle,
+     articleContent,
+      category,
+     userId,
   });
+  //ctreate the first version   v1==article
+  const version1=await ArticleVersion.create({
+    articleVersionTitle:  articleTitle,
+  articleVersionContent: articleContent,
+  articleVersionCategory: category,
+    userId,})
 
-  return createdArticle;
+  return{ createdArticle,version1};
 };
 //function to get all  articles
 const getAllArticles = async () => {
@@ -79,11 +95,12 @@ const getAllArticles = async () => {
 };
 // function to update the articles
 const updateArticle = async (articleId, articleData) => {
-  const { articleTitle, articleContent, category } = articleData;
+  const { articleTitle, articleContent, category ,userId} = articleData;
 
   try {
     // Find the article by its primary key
     const article = await Article.findByPk(articleId);
+    // const user=await User.findByPk(userId)
 
     // If the article is not found, throw an error
     if (!article) {
@@ -95,9 +112,16 @@ const updateArticle = async (articleId, articleData) => {
       articleTitle,
       articleContent,
       category,
+      userId
     });
-
-    return updatedArticle;
+//ctreate the perspective versions
+const version=await ArticleVersion.create({ 
+  articleVersionTitle:  articleTitle,
+  articleVersionContent: articleContent,
+  articleVersionCategory: category,
+  articleId,
+userId})
+    return {updatedArticle,version};
   } catch (error) {
     throw error;
   }
