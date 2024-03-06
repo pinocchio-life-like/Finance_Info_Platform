@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
-import logo from "../../assets/Images/logo.png";
+import logo from "../../assets/Images/wihLogo.png";
 import PropTypes from "prop-types";
 function LoginForm({ onSubmit }) {
   const [username, setUsername] = useState("");
