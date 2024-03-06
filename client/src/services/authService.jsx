@@ -13,13 +13,31 @@ const authService = {
     api.post("/api/logout");
     localStorage.removeItem("token");
   },
-  isAuthenticated: function () {
-    const token = localStorage.getItem("token");
-    if (!token) return false;
+  isAuthenticated: async function () {
+    let token = localStorage.getItem("token");
+
+    if (!token) {
+      try {
+        const response = await this.refreshToken();
+        token = response;
+      } catch (error) {
+        return false;
+      }
+    }
 
     const decoded = jwtDecode(token);
     const currentTime = Date.now() / 1000;
-    return decoded.exp > currentTime;
+
+    if (decoded.exp < currentTime) {
+      try {
+        const response = await this.refreshToken();
+        token = response;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    return true;
   },
   getAuthToken: function () {
     return localStorage.getItem("token");

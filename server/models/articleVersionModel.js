@@ -24,7 +24,7 @@ const ArticleVersion = sequelize.define("ArticleVersion", {
     },
   },
   articleVersionContent: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
     require: true,
   },
@@ -33,6 +33,10 @@ const ArticleVersion = sequelize.define("ArticleVersion", {
     allowNull: false,
     require: true,
   },
+  // versionNumber: {
+  //   type: DataTypes.INTEGER,
+  //   allowNull: false,
+  // },
   articleVersionCategory: {
     type: DataTypes.STRING,
   },
@@ -53,5 +57,5 @@ const ArticleVersion = sequelize.define("ArticleVersion", {
 })();
 
 module.exports = {
-    // ArticleVersion
+    ArticleVersion
 };
