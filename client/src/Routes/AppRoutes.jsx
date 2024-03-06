@@ -40,9 +40,9 @@ function AppRoutes() {
       <Route
         path="diffviewer"
         element={
-          <PrivateRoute>
+          // <PrivateRoute>
             <Difference />
-          </PrivateRoute>
+          // </PrivateRoute>
         }
       />
       <Route
