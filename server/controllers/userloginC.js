@@ -36,7 +36,7 @@ const userloginC = async (req, res) => {
           firstName: user.firstName,
         };
         // Generate accesstoken
-        const token = jwt.sign(payload, secretKey, { expiresIn: "4h" });
+        const token = jwt.sign(payload, secretKey, { expiresIn: "5s" });
 
         // Generate refresh token
         const refreshToken = generateRefreshToken(user);
@@ -68,7 +68,7 @@ const userloginC = async (req, res) => {
 //a function to refresh the access token by using the refresh token
 const refreshTokenC = async (req, res) => {
   try {
-    const refreshToken = req.cookies;
+    const refreshToken = req.cookies.refreshToken;
     console.log("Received refreshToken:", refreshToken);
 
     // Verify the refresh token
@@ -95,6 +95,7 @@ const refreshTokenC = async (req, res) => {
       firstName: decoded.firstName,
       userRole: decoded.userRole,
     };
+
     const newAccessToken = jwt.sign(payload, secretKey, { expiresIn: "4h" });
 
     res.status(200).json({
