@@ -3,7 +3,8 @@ const {
   createArticle,
   getAllArticles,
   updateArticle,
-  deleteArticle
+  deleteArticle,
+  getAllVersions
 
 } = require("../models/articleModel");
 
@@ -85,9 +86,31 @@ const deleteArticleC = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+//version controller function
+const getAllVersionsC = async (req, res) => {
+  try {
+    // const { id } = req.params;
+    
+    const versions = await getAllVersions();
+
+    if (!versions) {
+      res.json({ message: "No versions found" });
+    } 
+    else
+     {
+      res.json({ 
+        message: "This are the existing versions", 
+        data: versions 
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error fron version" });
+  }
+};
 module.exports = {
    articleC, 
    getAllArticlesC,
 updateArticleC,
-deleteArticleC
+deleteArticleC,
+getAllVersionsC
  };

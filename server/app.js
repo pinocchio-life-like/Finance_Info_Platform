@@ -11,6 +11,7 @@ const loginRoute = require("./routes/userLoginR");
 
 const userUpdateRoute = require("./routes/userUpdateR");
 const articleRoute = require("./routes/articleR");
+const getUserR=require('./routes/getUserR')
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/api", loginRoute);
 
 app.use("/api", userUpdateRoute);
 app.use("/api", articleRoute);
+app.use('/api',getUserR)
 // app.use('/api',articleRoute)
 
 // app.get("/", async (req, res) => {

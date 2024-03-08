@@ -21,7 +21,7 @@ const User = sequelize.define("User", {
     type: Sequelize.STRING,
     allowNull: false,
     require: true,
-    unique: true,
+    // unique: true,
   },
   password: {
     type: Sequelize.STRING,
@@ -33,6 +33,8 @@ const User = sequelize.define("User", {
     allowNull: false,
     require: true,
   },
+  
+
 });
 
 // User.hasMany(ArticleVersion,{foreignKey:'userId'})
@@ -45,7 +47,7 @@ ArticleVersion.belongsTo(User, {
   targetKey: "userId",
 });
 (async () => {
-  await sequelize.sync({ alter: true });
+  await sequelize.sync({ alter: false });
 })();
 
 const createUser = async (user) => {

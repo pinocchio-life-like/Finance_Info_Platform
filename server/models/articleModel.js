@@ -82,7 +82,8 @@ const createArticle = async (article) => {
     articleVersionTitle:  articleTitle,
   articleVersionContent: articleContent,
   articleVersionCategory: category,
-    userId,})
+    userId,
+    articleId: createdArticle.articleId,})
 
   return{ createdArticle,version1};
 };
@@ -93,6 +94,7 @@ const getAllArticles = async () => {
     order: [["createdAt", "DESC"]],
   });
 };
+
 // function to update the articles
 const updateArticle = async (articleId, articleData) => {
   const { articleTitle, articleContent, category ,userId} = articleData;
@@ -151,10 +153,32 @@ const deleteArticle = async (articleId) => {
     throw error;
   }
 };
+//function to get all versions
+const getAllVersions = async () => {
+  try {
+    const versions = await ArticleVersion.findAll({
+      // where: {
+      //   articleId,
+      // },
+      include: [
+        // Include any additional associations you want to fetch (e.g., User)
+        { model: User, attributes: ['userId', 'userName'] }
+      ],
+      // Order by creation date in descending order
+      order: [['createdAt', 'DESC']], 
+    });
+
+    return versions;
+  } catch (error) {
+    console.log(error.message)
+    throw error;
+  }
+};
 module.exports = {
   Article,
   createArticle,
   getAllArticles,
   updateArticle,
   deleteArticle,
+  getAllVersions
 };
