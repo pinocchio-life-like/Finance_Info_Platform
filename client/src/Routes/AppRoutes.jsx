@@ -8,6 +8,7 @@ import Difference from "../components/DiffViewer/DiffViewer";
 import Editor from "../components/Editor/Editor";
 import Preview from "../components/Preview/Preview";
 import RoleBasedRoute from "../components/RoleBasedRoute";
+import WikiHome from "../components/Wiki/WikiHome";
 
 function AppRoutes() {
   return (
@@ -46,11 +47,13 @@ function AppRoutes() {
         }
       />
       <Route
-        path="editor"
+        path="wiki/editor"
         element={
           <RoleBasedRoute role="admin">
             <PrivateRoute>
-              <Editor />
+              <WikiHome>
+                <Editor />
+              </WikiHome>
             </PrivateRoute>
           </RoleBasedRoute>
         }
@@ -63,7 +66,17 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
-      <Route path="404" element={<h1>404 Not Found</h1>} />
+      <Route
+        path="wiki/articles"
+        element={
+          <PrivateRoute>
+            <WikiHome>
+              <Preview />
+            </WikiHome>
+          </PrivateRoute>
+        }
+      />
+      <Route path="*" element={<h1>404 Not Found</h1>} />
     </Routes>
   );
 }

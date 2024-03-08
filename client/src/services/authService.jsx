@@ -13,28 +13,18 @@ const authService = {
     api.post("/api/logout");
     localStorage.removeItem("token");
   },
-  isAuthenticated: async function () {
-    let token = localStorage.getItem("token");
+  isAuthenticated: function () {
+    const token = localStorage.getItem("token");
 
     if (!token) {
-      try {
-        const response = await this.refreshToken();
-        token = response;
-      } catch (error) {
-        return false;
-      }
+      return false;
     }
 
     const decoded = jwtDecode(token);
     const currentTime = Date.now() / 1000;
 
     if (decoded.exp < currentTime) {
-      try {
-        const response = await this.refreshToken();
-        token = response;
-      } catch (error) {
-        return false;
-      }
+      return false;
     }
 
     return true;
@@ -45,6 +35,7 @@ const authService = {
   refreshToken: async function () {
     const response = await api.post("/api/refreshToken");
     const { token } = response.token;
+    console.log(token);
     localStorage.setItem("token", token);
     return token;
   },
