@@ -47,7 +47,7 @@ function AppRoutes() {
         }
       />
       <Route
-        path="wiki/editor"
+        path="wiki/edit"
         element={
           <RoleBasedRoute role="admin">
             <PrivateRoute>
@@ -59,10 +59,12 @@ function AppRoutes() {
         }
       />
       <Route
-        path="preview"
+        path="wiki/history"
         element={
           <PrivateRoute>
-            <Preview />
+            <WikiHome>
+              <h1>History</h1>
+            </WikiHome>
           </PrivateRoute>
         }
       />

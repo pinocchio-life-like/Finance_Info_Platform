@@ -1,8 +1,8 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FaPlus, FaTimes, FaChevronDown } from "react-icons/fa";
 import PropTypes from "prop-types";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const MainContent = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,8 +10,23 @@ const MainContent = (props) => {
   const [activeLink, setActiveLink] = useState({ left: 0, right: 0 }); // Set Link 1 and Link 3 to be selected by default
   const buttonRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
   const currentUrl = location.pathname;
-  console.log(currentUrl);
+  useEffect(() => {
+    switch (currentUrl) {
+      case "/wiki/articles":
+        setActiveLink({ left: 0, right: 0 });
+        break;
+      case "/wiki/edit":
+        setActiveLink({ left: 0, right: 1 });
+        break;
+      case "/wiki/history":
+        setActiveLink({ left: 0, right: 2 });
+        break;
+      default:
+        setActiveLink({ left: 0, right: 0 }); // default case if none of the above match
+    }
+  }, [currentUrl]);
 
   const userRole = useSelector((state) => state.user.userRole);
 
@@ -25,6 +40,21 @@ const MainContent = (props) => {
 
   const handleLink = (side, index) => {
     setActiveLink((prevState) => ({ ...prevState, [side]: index }));
+    if (side === "right") {
+      switch (index) {
+        case 0:
+          navigate("/wiki/articles");
+          break;
+        case 1:
+          navigate("/wiki/edit");
+          break;
+        case 2:
+          navigate("/wiki/history");
+          break;
+        default:
+          break;
+      }
+    }
   };
 
   return (
@@ -108,8 +138,7 @@ const MainContent = (props) => {
           {["Article", "Files"].map((link, index) => (
             <a
               key={index}
-              href="#"
-              className={`p-2 ${
+              className={`p-2 cursor-pointer ${
                 activeLink.left === index
                   ? "border-b-2 border-black font-bold"
                   : ""
@@ -124,8 +153,7 @@ const MainContent = (props) => {
           {["Read", "Edit", "History"].map((link, index) => (
             <a
               key={index}
-              href="#"
-              className={`p-2 ${
+              className={`p-2 cursor-pointer ${
                 activeLink.right === index
                   ? "border-b-2 border-black font-bold"
                   : ""
