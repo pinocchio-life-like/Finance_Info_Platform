@@ -3,6 +3,7 @@ import getAllUsers from './../../services/services.user';
 import { BsPencilFill } from 'react-icons/bs';
 import AdminUserAddForm from './AdminUserAddForm';
 import Draggable from 'react-draggable';
+import api from '../../utils/api';
 
 function UserList() {
   const [users, setUsers] = useState([]);
@@ -29,14 +30,27 @@ function UserList() {
   }, []);
   //function to handle the user editting
   const handleEditClick = (userId) => {
-    console.log(userId)
     setEditedId(userId);
-    setIsEdited(!isEditable);
+    setIsEdited(prevState => (prevState && userId === editeId) ? false : true);
   };
 //const update function
   const updateUser = async (value) => {
+
     try {
       console.log(value)
+      
+      const updateduser= await api.put(`/api/update/${editeId}`,value)
+      console.log(updateduser,'updated user')
+      if(!updateduser){
+
+        return console.log('updatting error')
+      }
+      else{
+        alert('update success')
+        setIsEdited(false);
+       
+      return updateduser
+      }
     }
     catch (error) {
       console.error('Error updating user:', error);
@@ -78,8 +92,12 @@ function UserList() {
   <Draggable>
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
       <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-96 bg-white p-4 rounded-md shadow-md">
-        <h1 className="text-xl font-bold mb-4">Edit User</h1>
-        <AdminUserAddForm onUpdate={updateUser} status="edit" />
+        {/* <h1 className="text-xl font-bold mb-4">Edit User</h1> */}
+        <AdminUserAddForm onUpdate={updateUser} 
+        status="edit" 
+        isEditable={isEditable}
+      
+       />
       </div>
     </div>
   </Draggable>

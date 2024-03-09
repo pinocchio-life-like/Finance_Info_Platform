@@ -51,19 +51,20 @@ function AppRoutes() {
       <Route
         path="editor"
         element={
-          <RoleBasedRoute role="admin">
-            <PrivateRoute>
+          // <RoleBasedRoute role="admin">
+        
               <Editor />
-            </PrivateRoute>
-          </RoleBasedRoute>
+         
+          // </RoleBasedRoute>
+          
         }
       />
       <Route
         path="preview"
         element={
-          <PrivateRoute>
+          // <PrivateRoute>
             <Preview />
-          </PrivateRoute>
+          // </PrivateRoute>
         }
       />
       <Route path="/admin-add" element={<AdminUserAddForm/>}/>

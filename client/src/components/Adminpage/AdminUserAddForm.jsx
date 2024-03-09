@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import api from "../../utils/api";
+import UserList from "./UserList";
 
 function AdminUserAddForm(props) {
   const [formData, setFormData] = useState({
@@ -71,10 +72,15 @@ function AdminUserAddForm(props) {
         !formData.confirmPassword ||
         !formData.userRole
       ) {
-        props.onUpdate(formData);
+        
         return;
       }
+      props.onUpdate(formData);
+        UserList.onUpdate()
     }
+    else{
+
+    
     // Check if any required field is empty
     if (
       !formData.firstName ||
@@ -89,10 +95,11 @@ function AdminUserAddForm(props) {
 
     addUser();
   };
+}
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-md shadow-md">
-      <h1 className="text-2xl font-bold mb-4">User Admin page</h1>
+      <h1 className="text-2xl font-bold mb-4">  {props.status === "edit" ? "Update User" : "Add User"}</h1>
       <form onSubmit={handleFormSubmit}>
         <label className="block text-sm font-medium text-gray-600">
           First Name:
@@ -162,7 +169,7 @@ function AdminUserAddForm(props) {
           className="mt-4 bg-green-500 text-white p-2 rounded-md hover:bg-green-600 
             focus:outline-none focus:ring focus:border-blue-300"
         >
-          Add
+       {props.status === "edit" ? "Update" : "Add"}
         </button>
       </form>
     </div>
