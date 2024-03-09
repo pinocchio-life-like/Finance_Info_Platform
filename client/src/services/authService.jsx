@@ -39,7 +39,7 @@ const authService = {
       localStorage.setItem("token", token);
       return token;
     } catch (error) {
-      // If the refresh token is expired, log the user out
+      // If the refresh token is expired or undefined, log the user out
       if (error.response && error.response.status === 401) {
         this.logout();
       }
