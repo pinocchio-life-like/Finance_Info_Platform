@@ -38,7 +38,7 @@ app.use("/api", articleRoute);
 
 // async function syncDatabase() {
 //   try {
-//     await sequelize.sync({ alter: true, force: false });
+//     await sequelize.sync({ alter: true, force: false }); //edit this as needed
 //     console.log("All models were synchronized successfully.");
 //   } catch (error) {
 //     console.error("Error occurred during model synchronization:", error);
