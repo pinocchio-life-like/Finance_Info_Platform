@@ -33,29 +33,11 @@ const ArticleVersion = sequelize.define("ArticleVersion", {
     allowNull: false,
     require: true,
   },
-  // versionNumber: {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  // },
   articleVersionCategory: {
     type: DataTypes.STRING,
   },
 });
 
-// ArticleVersion.belongsTo(User, { foreignKey: "userId" });
-// ArticleVersion.belongsTo( Article, { foreignKey: "articleId" });
-
-// Use an async IIFE to sync the database
-(async () => {
-  try {
-    await sequelize.authenticate();
-    await ArticleVersion.sync({ alter: true });
-    console.log("Database synchronized successfully");
-  } catch (error) {
-    console.error("Error connecting to the database:", error);
-  }
-})();
-
 module.exports = {
-    ArticleVersion
+  ArticleVersion,
 };

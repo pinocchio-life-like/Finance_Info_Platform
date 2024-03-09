@@ -1,5 +1,5 @@
 const sequelize = require("../config/db.config");
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
 const Article = require("./articleModel").Article;
 
 const Category = sequelize.define(
@@ -52,16 +52,5 @@ Article.belongsTo(Category, {
   foreignKey: "category_Id",
   targetKey: "category_Id",
 });
-
-Category.sync()
-  .then(() => {
-    console.log("Category table has been synchronized successfully.");
-  })
-  .catch((error) => {
-    console.error(
-      "Error occurred during Category table synchronization:",
-      error
-    );
-  });
 
 module.exports = { Category };

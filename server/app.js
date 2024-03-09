@@ -1,4 +1,7 @@
 require("dotenv").config();
+
+const sequelize = require("./config/db.config");
+
 const express = require("express");
 
 const cookieParser = require("cookie-parser");
@@ -32,16 +35,5 @@ app.use("/api", loginRoute);
 
 app.use("/api", userUpdateRoute);
 app.use("/api", articleRoute);
-// app.use('/api',articleRoute)
 
-// app.get("/", async (req, res) => {
-//   const user = await User.create({
-//     firstName: "zena",
-//     userName: "zena",
-//     password: "123",
-//     userRole: "admin",
-//   });
-
-//   res.json(user)
-// });
 app.listen(5000, () => console.log("Server running on port 5000"));
