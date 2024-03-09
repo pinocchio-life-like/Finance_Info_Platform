@@ -8,8 +8,21 @@ import Difference from "../components/DiffViewer/DiffViewer";
 import Editor from "../components/Editor/Editor";
 import Preview from "../components/Preview/Preview";
 import RoleBasedRoute from "../components/RoleBasedRoute";
+import WikiHome from "../components/Wiki/WikiHome";
+import { useEffect } from "react";
+import { authService } from "../services/authService";
 
 function AppRoutes() {
+  useEffect(() => {
+    const checkTokenExpiration = async () => {
+      if (!authService.isAuthenticated()) {
+        await authService.refreshToken();
+      }
+    };
+
+    checkTokenExpiration();
+  }, []);
+
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
@@ -46,24 +59,38 @@ function AppRoutes() {
         }
       />
       <Route
-        path="editor"
+        path="wiki/edit"
         element={
           <RoleBasedRoute role="admin">
             <PrivateRoute>
-              <Editor />
+              <WikiHome>
+                <Editor />
+              </WikiHome>
             </PrivateRoute>
           </RoleBasedRoute>
         }
       />
       <Route
-        path="preview"
+        path="wiki/history"
         element={
           <PrivateRoute>
-            <Preview />
+            <WikiHome>
+              <h1>History</h1>
+            </WikiHome>
           </PrivateRoute>
         }
       />
-      <Route path="404" element={<h1>404 Not Found</h1>} />
+      <Route
+        path="wiki/articles"
+        element={
+          <PrivateRoute>
+            <WikiHome>
+              <Preview />
+            </WikiHome>
+          </PrivateRoute>
+        }
+      />
+      <Route path="*" element={<h1>404 Not Found</h1>} />
     </Routes>
   );
 }

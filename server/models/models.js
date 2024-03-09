@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const ArticleVersion = require("./articleVersionModel").ArticleVersion;
 //define user mmodel
 const User = sequelize.define("User", {
-
   userId: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -44,9 +43,6 @@ ArticleVersion.belongsTo(User, {
   foreignKey: "userId",
   targetKey: "userId",
 });
-(async () => {
-  await sequelize.sync({ alter: true });
-})();
 
 const createUser = async (user) => {
   let users = {};
