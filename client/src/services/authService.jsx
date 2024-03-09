@@ -33,11 +33,18 @@ const authService = {
     return localStorage.getItem("token");
   },
   refreshToken: async function () {
-    const response = await api.post("/api/refreshToken");
-    const { token } = response.token;
-    console.log(token);
-    localStorage.setItem("token", token);
-    return token;
+    try {
+      const response = await api.post("/api/refreshToken");
+      const { token } = response.data;
+      localStorage.setItem("token", token);
+      return token;
+    } catch (error) {
+      // If the refresh token is expired, log the user out
+      if (error.response && error.response.status === 401) {
+        this.logout();
+      }
+      throw error;
+    }
   },
 };
 

@@ -36,7 +36,7 @@ const userloginC = async (req, res) => {
           firstName: user.firstName,
         };
         // Generate accesstoken
-        const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
+        const token = jwt.sign(payload, secretKey, { expiresIn: "5s" });
 
         // Generate refresh token
         const refreshToken = generateRefreshToken(user);

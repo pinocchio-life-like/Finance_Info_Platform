@@ -9,8 +9,20 @@ import Editor from "../components/Editor/Editor";
 import Preview from "../components/Preview/Preview";
 import RoleBasedRoute from "../components/RoleBasedRoute";
 import WikiHome from "../components/Wiki/WikiHome";
+import { useEffect } from "react";
+import { authService } from "../services/authService";
 
 function AppRoutes() {
+  useEffect(() => {
+    const checkTokenExpiration = async () => {
+      if (!authService.isAuthenticated()) {
+        await authService.refreshToken();
+      }
+    };
+
+    checkTokenExpiration();
+  }, []);
+
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
