@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { FaPlus, FaTimes, FaChevronDown } from "react-icons/fa";
 import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Modal, Form, Input } from "antd";
+import { Modal, Form, Input, Button } from "antd";
 import api from "../../../utils/api";
 
 const MainContent = (props) => {
@@ -71,6 +71,7 @@ const MainContent = (props) => {
       order_within_parent: 1,
     });
     console.log(response);
+    setSubmitActive(true);
     form.resetFields();
   };
 
@@ -84,6 +85,7 @@ const MainContent = (props) => {
   };
   const handleCancel = () => {
     setOpen(false);
+    setSubmitActive(true);
     form.resetFields();
   };
 
@@ -209,14 +211,17 @@ const MainContent = (props) => {
         title="Add New Category"
         open={open}
         onCancel={handleCancel}
-        onOk={handleSubmit}
-        okText="Add"
-        okButtonProps={{
-          disabled: submitActive,
-        }}
-        cancelButtonProps={{
-          disabled: false,
-        }}>
+        footer={(_, { CancelBtn }) => (
+          <>
+            <CancelBtn />
+            <Button
+              disabled={!submitActive}
+              style={{ background: "#3B82f6", color: "white" }}
+              onClick={handleSubmit}>
+              Add
+            </Button>
+          </>
+        )}>
         <Form
           onFinish={addCategory}
           form={form}
@@ -244,11 +249,8 @@ const MainContent = (props) => {
             ]}>
             <Input
               onChange={(e) => {
-                if (!e.target.value) {
-                  setSubmitActive((val) => !val);
-                } else {
-                  setSubmitActive((val) => !val);
-                }
+                if (e.target.value !== "") setSubmitActive(true);
+                else setSubmitActive(false);
               }}
             />
           </Form.Item>
