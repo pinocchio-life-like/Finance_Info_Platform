@@ -23,9 +23,7 @@ const Category = sequelize.define(
     },
     order: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      require: true,
-      unique: true,
+      allowNull: true,
     },
     order_within_parent: {
       type: DataTypes.INTEGER,
