@@ -3,7 +3,7 @@ const { DataTypes } = require("sequelize");
 const Article = require("./articleModel").Article;
 
 const Category = sequelize.define(
-  "category",
+  "Categories",
   {
     category_Id: {
       type: DataTypes.INTEGER,
@@ -31,6 +31,7 @@ const Category = sequelize.define(
     },
   },
   {
+    timestamps: false,
     indexes: [
       {
         unique: true,

@@ -38,15 +38,15 @@ app.use("/api", userUpdateRoute);
 app.use("/api", articleRoute);
 app.use("/api", categoryRoute);
 
-// async function syncDatabase() {
-//   try {
-//     await sequelize.sync({ alter: true, force: false }); //edit this as needed
-//     console.log("All models were synchronized successfully.");
-//   } catch (error) {
-//     console.error("Error occurred during model synchronization:", error);
-//   }
-// }
+async function syncDatabase() {
+  try {
+    await sequelize.sync({ alter: true, force: true }); //edit this as needed
+    console.log("All models were synchronized successfully.");
+  } catch (error) {
+    console.error("Error occurred during model synchronization:", error);
+  }
+}
 
-// syncDatabase();
+syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));

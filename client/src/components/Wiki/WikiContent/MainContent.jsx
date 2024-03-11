@@ -17,6 +17,34 @@ const MainContent = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentUrl = location.pathname;
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const getCategories = async () => {
+      const response = await api.post("/api/category/getCategories");
+
+      const mainCategories = response.data.filter(
+        (category) => category.parent_Id === null
+      );
+      const subCategories = response.data.filter(
+        (category) => category.parent_Id !== null
+      );
+
+      mainCategories.sort((a, b) => a.order - b.order);
+      subCategories.sort(
+        (a, b) => a.order_within_parent - b.order_within_parent
+      );
+
+      mainCategories.forEach((mainCategory) => {
+        mainCategory.subCategories = subCategories.filter(
+          (subCategory) => subCategory.parent_Id === mainCategory.category_Id
+        );
+      });
+      setCategories(mainCategories);
+    };
+    getCategories();
+  }, []);
+
   useEffect(() => {
     switch (currentUrl) {
       case "/wiki/articles":
@@ -65,10 +93,7 @@ const MainContent = (props) => {
   const addCategory = async (values) => {
     console.log(values);
     const response = await api.post("/api/category/addCategory", {
-      name: "Category 1",
-      parent_Id: 1,
-      order: 1,
-      order_within_parent: 1,
+      category: values.category,
     });
     console.log(response);
     setSubmitActive(true);
@@ -124,13 +149,7 @@ const MainContent = (props) => {
                 <FaTimes size={12} />
               </button>
             </div>
-            {[
-              "Category 1",
-              "Category 2",
-              "Category 3",
-              "Category 4",
-              "Category 5",
-            ].map((link, index) => (
+            {categories.map((category, index) => (
               <div key={index}>
                 <div className="flex justify-start items-center">
                   {userRole === "admin" &&
@@ -140,8 +159,8 @@ const MainContent = (props) => {
                         <FaPlus size={12} color="#2D9596" />
                       </button>
                     )}
-                  <a href="#" className="text-black">
-                    {link}
+                  <a key={category.category_Id} href="#" className="text-black">
+                    {category.category}
                   </a>
                   <button
                     className="text-black rounded-full w-6 h-6 flex items-center justify-center ml-auto"
@@ -158,15 +177,14 @@ const MainContent = (props) => {
                         ? "pl-8"
                         : "pl-4"
                     }`}>
-                    <a href="#" className="text-black">
-                      SubCategory 1
-                    </a>
-                    <a href="#" className="text-black">
-                      SubCategory 2
-                    </a>
-                    <a href="#" className="text-black">
-                      SubCategory 3
-                    </a>
+                    {category.subCategories.map((subCategory) => (
+                      <a
+                        key={subCategory.category_Id}
+                        href="#"
+                        className="text-black">
+                        {subCategory.category}
+                      </a>
+                    ))}
                   </div>
                 )}
               </div>

@@ -27,7 +27,7 @@ const Article = sequelize.define("article", {
       key: "userId",
     },
   },
-  categoryId: {
+  category_Id: {
     type: DataTypes.INTEGER,
     references: {
       model: "categories",
