@@ -64,13 +64,13 @@ const MainContent = (props) => {
 
   const addCategory = async (values) => {
     console.log(values);
-    // const response = await api.post("/api/category/addCategory", {
-    //   name: "Category 1",
-    //   parent_Id: 1,
-    //   order: 1,
-    //   order_within_parent: 1,
-    // });
-    // console.log(response);
+    const response = await api.post("/api/category/addCategory", {
+      name: "Category 1",
+      parent_Id: 1,
+      order: 1,
+      order_within_parent: 1,
+    });
+    console.log(response);
     form.resetFields();
   };
 
@@ -206,7 +206,7 @@ const MainContent = (props) => {
       </div>
       <div className="w-3/5">{props.children}</div>
       <Modal
-        title="Basic Modal"
+        title="Add New Category"
         open={open}
         onCancel={handleCancel}
         onOk={handleSubmit}
@@ -245,9 +245,9 @@ const MainContent = (props) => {
             <Input
               onChange={(e) => {
                 if (!e.target.value) {
-                  setSubmitActive(true);
+                  setSubmitActive((val) => !val);
                 } else {
-                  setSubmitActive(false);
+                  setSubmitActive((val) => !val);
                 }
               }}
             />
