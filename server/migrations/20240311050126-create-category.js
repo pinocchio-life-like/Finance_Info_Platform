@@ -17,8 +17,7 @@ module.exports = {
       },
       order: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: true,
+        allowNull: true,
       },
       order_within_parent: {
         type: Sequelize.INTEGER,
