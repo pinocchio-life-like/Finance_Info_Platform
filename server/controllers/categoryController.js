@@ -6,12 +6,12 @@ const addCategory = async (req, res) => {
     console.log(req.body);
 
     // Create a new category
-    // const newCategory = await Category.create({
-    //   category,
-    //   parent_Id,
-    //   order,
-    //   order_within_parent,
-    // });
+    const newCategory = await Category.create({
+      category,
+      parent_Id,
+      order,
+      order_within_parent,
+    });
 
     // Send the new category as a response
     res.status(201).json({ bad: "man" });

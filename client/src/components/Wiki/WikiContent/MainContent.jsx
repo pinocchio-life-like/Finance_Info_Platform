@@ -3,11 +3,15 @@ import { useSelector } from "react-redux";
 import { FaPlus, FaTimes, FaChevronDown } from "react-icons/fa";
 import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Modal, Form, Input } from "antd";
 import api from "../../../utils/api";
 
 const MainContent = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [submitActive, setSubmitActive] = useState(false);
+  const [form] = Form.useForm();
   const [activeLink, setActiveLink] = useState({ left: 0, right: 0 }); // Set Link 1 and Link 3 to be selected by default
   const buttonRef = useRef(null);
   const location = useLocation();
@@ -58,15 +62,29 @@ const MainContent = (props) => {
     }
   };
 
-  const addCategory = async () => {
-    const response = await api.post("/api/category/addCategory", {
-      name: "Category 1",
-      parent_Id: 1,
-      order: 1,
-      order_within_parent: 1,
-    });
+  const addCategory = async (values) => {
+    console.log(values);
+    // const response = await api.post("/api/category/addCategory", {
+    //   name: "Category 1",
+    //   parent_Id: 1,
+    //   order: 1,
+    //   order_within_parent: 1,
+    // });
+    // console.log(response);
+    form.resetFields();
+  };
 
-    console.log(response);
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleSubmit = () => {
+    setOpen(false);
+    form.submit();
+  };
+  const handleCancel = () => {
+    setOpen(false);
+    form.resetFields();
   };
 
   return (
@@ -92,7 +110,7 @@ const MainContent = (props) => {
                 {userRole === "admin" &&
                   activeLink.left === 0 &&
                   activeLink.right === 1 && (
-                    <button className="mr-2 text-black" onClick={addCategory}>
+                    <button className="mr-2 text-black" onClick={showModal}>
                       <FaPlus size={12} color="#2D9596" />
                     </button>
                   )}
@@ -187,6 +205,55 @@ const MainContent = (props) => {
         </div>
       </div>
       <div className="w-3/5">{props.children}</div>
+      <Modal
+        title="Basic Modal"
+        open={open}
+        onCancel={handleCancel}
+        onOk={handleSubmit}
+        okText="Add"
+        okButtonProps={{
+          disabled: submitActive,
+        }}
+        cancelButtonProps={{
+          disabled: false,
+        }}>
+        <Form
+          onFinish={addCategory}
+          form={form}
+          name="basic"
+          labelCol={{
+            span: 8,
+          }}
+          wrapperCol={{
+            span: 16,
+          }}
+          style={{
+            maxWidth: 600,
+          }}
+          initialValues={{
+            remember: false,
+          }}>
+          <Form.Item
+            label="Category Title"
+            name="category"
+            rules={[
+              {
+                required: true,
+                message: "Please input Title!",
+              },
+            ]}>
+            <Input
+              onChange={(e) => {
+                if (!e.target.value) {
+                  setSubmitActive(true);
+                } else {
+                  setSubmitActive(false);
+                }
+              }}
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };
