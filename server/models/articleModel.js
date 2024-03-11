@@ -2,6 +2,7 @@ const sequelize = require("../config/db.config");
 const { Sequelize, DataTypes } = require("sequelize");
 const User = require("./models").User;
 const ArticleVersion = require("./articleVersionModel").ArticleVersion;
+
 const Article = sequelize.define("article", {
   articleId: {
     type: DataTypes.INTEGER,
@@ -19,11 +20,6 @@ const Article = sequelize.define("article", {
     allowNull: false,
     require: true,
   },
-  // articleAuthor: {
-  //     type: DataTypes.STRING,
-  //     allowNull: false,
-  //     require: true,
-  // },
   userId: {
     type: DataTypes.INTEGER,
     references: {
@@ -31,15 +27,17 @@ const Article = sequelize.define("article", {
       key: "userId",
     },
   },
-  category: {
-    type: DataTypes.STRING(255),
+  categoryId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: "categories",
+      key: "category_Id",
+    },
   },
 });
+
 // Define the foreign key relationship
 Article.belongsTo(User, { foreignKey: "userId" });
-// Article.hasMany(ArticleVersion,{foreignKey: 'columnName', sourceKey: 'articleId'});
-// ArticleVersion.belongsTo(Article,{foreignKey: 'columnName', targetKey: 'articleId'})
-// // ArticleVersion.belongsTo(Article,{foreignKey:'articleId'})
 Article.hasMany(ArticleVersion, {
   foreignKey: "articleId",
   sourceKey: "articleId",
@@ -49,31 +47,16 @@ ArticleVersion.belongsTo(Article, {
   targetKey: "articleId",
 });
 
-(async () => {
-  try {
-    // Sync models
-    await sequelize.authenticate();
-    await User.sync({ alter: true });
-    console.log("Database synchronized successfully");
-  } catch (error) {
-    console.error("Error synchronizing database:", error);
-  }
-})();
-
 //function to create an article
 const createArticle = async (article) => {
-  const { articleTitle, articleContent, category, userId } = article;
-  // Check if the user with the given userId exists
-  const user = await User.findByPk(userId);
-  console.log(user);
+  try {
+    const { articleTitle, articleContent, category, userId } = article;
+    const user = await User.findByPk(article.userId);
+    if (!user) throw new Error("User not found");
 
-  if (!user) {
-    throw new Error("User not found");
-  }
-  // Create the article with the associated user
-  const createdArticle = await Article.create({
+    const createdArticle = await Article.create({
       articleTitle,
-     articleContent,
+      articleContent,
       category,
      userId,
   });
@@ -86,73 +69,66 @@ const createArticle = async (article) => {
     articleId: createdArticle.articleId,})
 
   return{ createdArticle,version1};
-};
+}
+
+   catch (error) {
+    console.error("Error creating article:", error);
+  }
+}
 //function to get all  articles
 const getAllArticles = async () => {
-  return Article.findAll({
-    include: [User],
-    order: [["createdAt", "DESC"]],
-  });
+  try {
+    return await Article.findAll({
+      include: [User],
+      order: [["createdAt", "DESC"]],
+    });
+  } catch (error) {
+    console.error("Error getting all articles:", error);
+    throw error;
+  }
 };
 
 // function to update the articles
 const updateArticle = async (articleId, articleData) => {
-  const { articleTitle, articleContent, category ,userId} = articleData;
-
   try {
-    // Find the article by its primary key
+    const { articleTitle, articleContent, category, userId } = articleData;
     const article = await Article.findByPk(articleId);
-    // const user=await User.findByPk(userId)
+    if (!article) throw new Error("Article not found");
 
-    // If the article is not found, throw an error
-    if (!article) {
-      throw new Error("Article not found");
-    }
-
-    // Update the article with the provided data
     const updatedArticle = await article.update({
       articleTitle,
       articleContent,
       category,
-      userId
+      userId,
     });
-//ctreate the perspective versions
-const version=await ArticleVersion.create({ 
-  articleVersionTitle:  articleTitle,
-  articleVersionContent: articleContent,
-  articleVersionCategory: category,
-  articleId,
-userId})
-    return {updatedArticle,version};
+
+    const version = await ArticleVersion.create({
+      articleVersionTitle: articleTitle,
+      articleVersionContent: articleContent,
+      articleVersionCategory: category,
+      articleId,
+      userId,
+    });
+    return { updatedArticle, version };
   } catch (error) {
+    console.error("Error updating article:", error);
     throw error;
   }
 };
+
 //handling the dettting of an article
 const deleteArticle = async (articleId) => {
   try {
-    // Find the article by its primary key
     const article = await Article.findByPk(articleId);
+    if (!article) throw new Error("Article not found");
 
-    if (!article) {
-      throw new Error("Article not found");
-    }
-
-    // Delete the article
-    const deletedArticle = await article.destroy();
-
-    if (!deletedArticle) {
-      throw new Error("Failed to delete article");
-    }
-
-    return deletedArticle;
+    return await article.destroy();
   } catch (error) {
-    // Log the error or handle it in a way appropriate for your application
-    console.error("Error deleting article:", error.message);
-    // Rethrow the error to be caught by the calling function or middleware
+    console.error("Error deleting article:", error);
     throw error;
   }
 };
+
 //function to get all versions
 const getAllVersions = async () => {
   try {

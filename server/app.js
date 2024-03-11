@@ -1,4 +1,7 @@
 require("dotenv").config();
+
+const sequelize = require("./config/db.config");
+
 const express = require("express");
 
 const cookieParser = require("cookie-parser");
@@ -44,6 +47,6 @@ app.use('/api',getUserR)
 //     userRole: "admin",
 //   });
 
-//   res.json(user)
-// });
+// syncDatabase();
+
 app.listen(5000, () => console.log("Server running on port 5000"));

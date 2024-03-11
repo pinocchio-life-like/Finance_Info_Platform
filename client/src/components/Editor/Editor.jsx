@@ -46,6 +46,9 @@ const Editor = (props) => {
   return (
     <div>
       <MdEditor
+        style={{
+          height: "80vh",
+        }}
         modelValue={text}
         onChange={setText}
         language="en-US"

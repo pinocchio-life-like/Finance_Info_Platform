@@ -8,11 +8,24 @@ import Difference from "../components/DiffViewer/DiffViewer";
 import Editor from "../components/Editor/Editor";
 import Preview from "../components/Preview/Preview";
 import RoleBasedRoute from "../components/RoleBasedRoute";
+import WikiHome from "../components/Wiki/WikiHome";
+import { useEffect } from "react";
+import { authService } from "../services/authService";
 import AdminUserAddForm from "../components/Adminpage/AdminUserAddForm";
 import UserList from "../components/Adminpage/UserList";
 import AdminPage from "../components/Adminpage/Adminpage";
 
 function AppRoutes() {
+  useEffect(() => {
+    const checkTokenExpiration = async () => {
+      if (!authService.isAuthenticated()) {
+        await authService.refreshToken();
+      }
+    };
+
+    checkTokenExpiration();
+  }, []);
+
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
@@ -27,9 +40,9 @@ function AppRoutes() {
       <Route
         path="dashboard"
         element={
-          <PrivateRoute>
-            <DashboardPage />
-          </PrivateRoute>
+          // <PrivateRoute>
+          <DashboardPage />
+          // </PrivateRoute>
         }
       />
       <Route
@@ -49,29 +62,38 @@ function AppRoutes() {
         }
       />
       <Route
-        path="editor"
+        path="wiki/edit"
         element={
           // <RoleBasedRoute role="admin">
-        
-              <Editor />
-         
+          // <PrivateRoute>
+          <WikiHome>
+            <Editor />
+          </WikiHome>
+          //{/* </PrivateRoute> */}
           // </RoleBasedRoute>
-          
         }
       />
       <Route
-        path="preview"
+        path="wiki/history"
         element={
-          // <PrivateRoute>
-            <Preview />
-          // </PrivateRoute>
+          <PrivateRoute>
+            <WikiHome>
+              <h1>History</h1>
+            </WikiHome>
+          </PrivateRoute>
         }
       />
-      <Route path="/admin-add" element={<AdminUserAddForm/>}/>
-      <Route path="/admin-user" element={<UserList/>}/>
-      <Route path="/admin" element={<AdminPage/>}/>
-
-      <Route path="404" element={<h1>404 Not Found</h1>} />
+      <Route
+        path="wiki/articles"
+        element={
+          // <PrivateRoute>
+          <WikiHome>
+            <Preview />
+          </WikiHome>
+          /* </PrivateRoute> */
+        }
+      />
+      <Route path="*" element={<h1>404 Not Found</h1>} />
     </Routes>
   );
 }
