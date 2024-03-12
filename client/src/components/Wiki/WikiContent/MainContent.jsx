@@ -92,7 +92,7 @@ const MainContent = (props) => {
     };
 
     getFirstArticle();
-  });
+  }, [currentArticle]);
 
   useEffect(() => {
     switch (currentUrl) {
@@ -175,10 +175,10 @@ const MainContent = (props) => {
         action: "add",
       })
     );
-    // const response = await api.post("/api/category/addCategory", {
-    //   category: values.category,
-    // });
-    // console.log(response);
+    const response = await api.post("/api/category/addCategory", {
+      category: values.category,
+    });
+    console.log(response);
     setSubmitActive(true);
     articleForm.resetFields();
   };
@@ -221,7 +221,8 @@ const MainContent = (props) => {
         <button
           ref={buttonRef}
           className="flex items-center text-sm font-bold"
-          onClick={() => setIsOpen(!isOpen)}>
+          onClick={() => setIsOpen(!isOpen)}
+        >
           <div className="flex flex-col space-y-1">
             <span className="w-4 h-0.5 bg-black"></span>
             <span className="w-4 h-0.5 bg-black"></span>
@@ -231,7 +232,8 @@ const MainContent = (props) => {
         {isOpen && (
           <div
             className="bg-gray-100 flex flex-col space-y-2 absolute left-full p-4 ml-1 text-black"
-            style={{ width: "300px", top: buttonRef.current?.offsetTop }}>
+            style={{ width: "300px", top: buttonRef.current?.offsetTop }}
+          >
             <div className="flex justify-between items-center">
               <div className="flex justify-start items-center">
                 {userRole === "admin" &&
@@ -245,7 +247,8 @@ const MainContent = (props) => {
               </div>
               <button
                 className="text-red-500 rounded-full w-6 h-6 flex items-center justify-center"
-                onClick={() => setIsOpen(false)}>
+                onClick={() => setIsOpen(false)}
+              >
                 <FaTimes size={12} />
               </button>
             </div>
@@ -257,7 +260,8 @@ const MainContent = (props) => {
                     activeLink.right === 1 && (
                       <button
                         className="mr-2 text-black"
-                        onClick={() => addArticleHandler(category)}>
+                        onClick={() => addArticleHandler(category)}
+                      >
                         <FaPlus size={12} color="#2D9596" />
                       </button>
                     )}
@@ -266,7 +270,8 @@ const MainContent = (props) => {
                   </a>
                   <button
                     className="text-black rounded-full w-6 h-6 flex items-center justify-center ml-auto"
-                    onClick={() => handleDropdown(index)}>
+                    onClick={() => handleDropdown(index)}
+                  >
                     <FaChevronDown size={12} />
                   </button>
                 </div>
@@ -278,7 +283,8 @@ const MainContent = (props) => {
                       activeLink.right === 1
                         ? "pl-8"
                         : "pl-4"
-                    }`}>
+                    }`}
+                  >
                     {category.subCategories.map((subCategory) => (
                       <Link
                         key={subCategory.category_Id}
@@ -286,7 +292,8 @@ const MainContent = (props) => {
                         onClick={() => {
                           setArticleTitle(subCategory.category);
                           setCurrentId(subCategory.category_Id);
-                        }}>
+                        }}
+                      >
                         {subCategory.category}
                       </Link>
                     ))}
@@ -308,7 +315,8 @@ const MainContent = (props) => {
                   : ""
               }`}
               style={{ lineHeight: "2rem" }}
-              onClick={() => handleLink("left", index)}>
+              onClick={() => handleLink("left", index)}
+            >
               {link}
             </a>
           ))}
@@ -323,7 +331,8 @@ const MainContent = (props) => {
                   : ""
               }`}
               style={{ lineHeight: "2rem" }}
-              onClick={() => handleLink("right", index)}>
+              onClick={() => handleLink("right", index)}
+            >
               {link}
             </a>
           ))}
@@ -340,11 +349,13 @@ const MainContent = (props) => {
             <Button
               disabled={!submitActive}
               style={{ background: "#3B82f6", color: "white" }}
-              onClick={handleSubmit}>
+              onClick={handleSubmit}
+            >
               Add
             </Button>
           </>
-        )}>
+        )}
+      >
         <Form
           onFinish={addCategory}
           form={form}
@@ -360,7 +371,8 @@ const MainContent = (props) => {
           }}
           initialValues={{
             remember: false,
-          }}>
+          }}
+        >
           <Form.Item
             label="Category Title"
             name="category"
@@ -369,7 +381,8 @@ const MainContent = (props) => {
                 required: true,
                 message: "Please input Title!",
               },
-            ]}>
+            ]}
+          >
             <Input
               onChange={(e) => {
                 if (e.target.value !== "") setSubmitActive(true);
@@ -389,11 +402,13 @@ const MainContent = (props) => {
             <Button
               disabled={!submitActive}
               style={{ background: "#3B82f6", color: "white" }}
-              onClick={handleArticleSubmit}>
+              onClick={handleArticleSubmit}
+            >
               Add
             </Button>
           </>
-        )}>
+        )}
+      >
         <Form
           onFinish={addArticle}
           form={articleForm}
@@ -409,7 +424,8 @@ const MainContent = (props) => {
           }}
           initialValues={{
             remember: false,
-          }}>
+          }}
+        >
           <Form.Item
             label="Article Title"
             name="article"
@@ -418,7 +434,8 @@ const MainContent = (props) => {
                 required: true,
                 message: "Please input Title!",
               },
-            ]}>
+            ]}
+          >
             <Input
               onChange={(e) => {
                 if (e.target.value !== "") setSubmitActive(true);

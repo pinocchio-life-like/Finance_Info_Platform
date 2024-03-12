@@ -41,7 +41,13 @@ const Editor = () => {
       }
 
       if (action === "edit") {
-        console.log("Edit: ", articleName, text, category_Id);
+        const response = await api.put(`/api/article/${category_Id}`, {
+          articleTitle: articleName,
+          articleContent: text,
+          category_Id: category_Id,
+          userName: userName,
+        });
+        console.log("Edit: ", response.data);
       }
     } catch (error) {
       console.error("An error occurred while saving the article: ", error);

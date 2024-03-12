@@ -85,21 +85,19 @@ const getAllArticlesC = async (req, res) => {
 
 const updateArticleC = async (req, res) => {
   try {
-    const { articleTitle, articleContent, category_Id } = req.body;
+    const { articleTitle, articleContent, userName } = req.body;
     const { id } = req.params;
 
-    const article = await Article.findByPk(id);
-
-    if (!article) {
-      return res
-        .status(404)
-        .json({ message: "Article not found and can't update" });
+    const user = await User.findOne({ where: { userName } });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
     const updatedArticle = await updateArticle({
       articleTitle,
       articleContent,
-      category,
+      category_Id: id,
+      userId: user.userId
     });
 
     return res.status(200).json({
