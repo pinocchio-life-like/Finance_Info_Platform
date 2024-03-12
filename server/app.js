@@ -1,4 +1,7 @@
 require("dotenv").config();
+
+const sequelize = require("./config/db.config");
+
 const express = require("express");
 
 const cookieParser = require("cookie-parser");
@@ -32,16 +35,16 @@ app.use("/api", loginRoute);
 
 app.use("/api", userUpdateRoute);
 app.use("/api", articleRoute);
-// app.use('/api',articleRoute)
 
-// app.get("/", async (req, res) => {
-//   const user = await User.create({
-//     firstName: "zena",
-//     userName: "zena",
-//     password: "123",
-//     userRole: "admin",
-//   });
+// async function syncDatabase() {
+//   try {
+//     await sequelize.sync({ alter: true, force: false }); //edit this as needed
+//     console.log("All models were synchronized successfully.");
+//   } catch (error) {
+//     console.error("Error occurred during model synchronization:", error);
+//   }
+// }
 
-//   res.json(user)
-// });
+// syncDatabase();
+
 app.listen(5000, () => console.log("Server running on port 5000"));

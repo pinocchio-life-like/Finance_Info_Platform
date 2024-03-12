@@ -1,4 +1,5 @@
 const logoutC = (req, res) => {
+  console.log("logoutC");
   try {
     res.clearCookie("refreshToken");
     res.status(200).json({
