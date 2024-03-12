@@ -11,60 +11,63 @@ import RoleBasedRoute from "../components/RoleBasedRoute";
 
 function AppRoutes() {
   return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route
-        path="/"
-        element={
-          <PrivateRoute>
-            <DashboardPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="dashboard"
-        element={
-          <PrivateRoute>
-            <DashboardPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="profile"
-        element={
-          <PrivateRoute>
-            <ProfilePage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="diffviewer"
-        element={
-          // <PrivateRoute>
-            <Difference />
-          // </PrivateRoute>
-        }
-      />
-      <Route
-        path="editor"
-        element={
-          <RoleBasedRoute role="admin">
+    <>
+   
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/"
+          element={
             <PrivateRoute>
-              <Editor />
+              <DashboardPage />
             </PrivateRoute>
-          </RoleBasedRoute>
-        }
-      />
-      <Route
-        path="preview"
-        element={
-          <PrivateRoute>
-            <Preview />
-          </PrivateRoute>
-        }
-      />
-      <Route path="404" element={<h1>404 Not Found</h1>} />
-    </Routes>
+          }
+        />
+        <Route
+          path="dashboard"
+          element={
+            <PrivateRoute>
+              <DashboardPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="profile"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="diffviewer"
+          element={
+            // <PrivateRoute>
+            <Difference />
+            // </PrivateRoute>
+          }
+        />
+        <Route
+          path="editor"
+          element={
+            <RoleBasedRoute role="admin">
+              <PrivateRoute>
+                <Editor />
+              </PrivateRoute>
+            </RoleBasedRoute>
+          }
+        />
+        <Route
+          path="preview"
+          element={
+            <PrivateRoute>
+              <Preview />
+            </PrivateRoute>
+          }
+        />
+        <Route path="404" element={<h1>404 Not Found</h1>} />
+      </Routes>
+    </>
   );
 }
 
