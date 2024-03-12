@@ -59,7 +59,7 @@ function AppRoutes() {
         }
       />
       <Route
-        path="wiki/edit/:id"
+        path="wiki/edit"
         element={
           <RoleBasedRoute role="admin">
             <PrivateRoute>

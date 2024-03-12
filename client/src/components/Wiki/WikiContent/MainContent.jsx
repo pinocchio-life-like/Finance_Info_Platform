@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FaPlus, FaTimes, FaChevronDown } from "react-icons/fa";
 import PropTypes from "prop-types";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Modal, Form, Input, Button } from "antd";
 import api from "../../../utils/api";
 import store from "../../../redux/store";
@@ -17,6 +17,7 @@ const MainContent = (props) => {
   const [submitActive, setSubmitActive] = useState(false);
   const [addArtCategory_Id, setAddArt_Category_Id] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [currentId, setCurrentId] = useState(1);
   const [form] = Form.useForm();
   const [articleForm] = Form.useForm();
   const [activeLink, setActiveLink] = useState({ left: 0, right: 0 }); // Set Link 1 and Link 3 to be selected by default
@@ -79,6 +80,7 @@ const MainContent = (props) => {
               action: null,
             })
           );
+          setCurrentId(data.category_Id);
         }
       }
     };
@@ -101,6 +103,22 @@ const MainContent = (props) => {
         setActiveLink({ left: 0, right: 0 }); // default case
     }
   }, [currentUrl]);
+
+  useEffect(() => {
+    const getArticle = async () => {
+      const response = await api.get(`/api/article/${currentId}`);
+      const { data } = response.data;
+      store.dispatch(
+        addArticleState({
+          articleName: data.articleTitle,
+          articleContent: data.articleContent,
+          category_Id: data.category_Id,
+          action: "edit",
+        })
+      );
+    };
+    getArticle();
+  }, [currentId]);
 
   const userRole = useSelector((state) => state.user.userRole);
 
@@ -256,12 +274,15 @@ const MainContent = (props) => {
                         : "pl-4"
                     }`}>
                     {category.subCategories.map((subCategory) => (
-                      <a
+                      <Link
                         key={subCategory.category_Id}
-                        href="#"
-                        className="text-black">
+                        className="text-black"
+                        onClick={() => {
+                          console.log("subCategory", subCategory.category_Id);
+                          setCurrentId(subCategory.category_Id);
+                        }}>
                         {subCategory.category}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 )}
