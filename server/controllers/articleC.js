@@ -9,11 +9,11 @@ const {
 } = require("../models/articleModel");
 
 const articleC = async (req, res) => {
-  const { articleTitle, articleContent, category, userId } = req.body;
+  const { articleTitle, articleContent, categoryId, userId } = req.body;
   const article = await createArticle({
     articleTitle,
     articleContent,
-    category,
+    categoryId,
     userId,
   });
   
@@ -41,7 +41,7 @@ const getAllArticlesC = async (req, res) => {
   
  } catch(error) {
   
-  res.status(500).json({ message: "Internal server error" });
+  res.status(500).json({ message: "Internal server error" ,error});
 
  }
 };

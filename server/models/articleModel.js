@@ -2,6 +2,7 @@ const sequelize = require("../config/db.config");
 const { Sequelize, DataTypes } = require("sequelize");
 const User = require("./models").User;
 const ArticleVersion = require("./articleVersionModel").ArticleVersion;
+const Category=require('./categoryModel').Category
 
 const Article = sequelize.define("article", {
   articleId: {
@@ -46,25 +47,28 @@ ArticleVersion.belongsTo(Article, {
   foreignKey: "articleId",
   targetKey: "articleId",
 });
+// Article.sync({alter:true}).then(()=>{
+//   console.log("article table created");
+// })
 
 //function to create an article
 const createArticle = async (article) => {
   try {
-    const { articleTitle, articleContent, category, userId } = article;
+    const { articleTitle, articleContent, categoryId, userId } = article;
     const user = await User.findByPk(article.userId);
     if (!user) throw new Error("User not found");
 
     const createdArticle = await Article.create({
       articleTitle,
       articleContent,
-      category,
+      categoryId,
      userId,
   });
   //ctreate the first version   v1==article
   const version1=await ArticleVersion.create({
     articleVersionTitle:  articleTitle,
   articleVersionContent: articleContent,
-  articleVersionCategory: category,
+  articleVersionCategory: categoryId,
     userId,
     articleId: createdArticle.articleId,})
 
@@ -79,7 +83,7 @@ const createArticle = async (article) => {
 const getAllArticles = async () => {
   try {
     return await Article.findAll({
-      include: [User],
+      include: [User,Category],
       order: [["createdAt", "DESC"]],
     });
   } catch (error) {
@@ -91,21 +95,21 @@ const getAllArticles = async () => {
 // function to update the articles
 const updateArticle = async (articleId, articleData) => {
   try {
-    const { articleTitle, articleContent, category, userId } = articleData;
+    const { articleTitle, articleContent,categoryId, userId } = articleData;
     const article = await Article.findByPk(articleId);
     if (!article) throw new Error("Article not found");
 
     const updatedArticle = await article.update({
       articleTitle,
       articleContent,
-      category,
+      categoryId,
       userId,
     });
 
     const version = await ArticleVersion.create({
       articleVersionTitle: articleTitle,
       articleVersionContent: articleContent,
-      articleVersionCategory: category,
+      articleVersionCategory: categoryId,
       articleId,
       userId,
     });

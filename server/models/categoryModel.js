@@ -3,7 +3,7 @@ const { DataTypes } = require("sequelize");
 const Article = require("./articleModel").Article;
 
 const Category = sequelize.define(
-  "category",
+  'Category',
   {
     category_Id: {
       type: DataTypes.INTEGER,
@@ -12,14 +12,11 @@ const Category = sequelize.define(
       allowNull: false,
     },
     category: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING,
       allowNull: false,
-      require: true,
     },
     parent_Id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
-      require: false,
     },
     order: {
       type: DataTypes.INTEGER,
@@ -27,18 +24,26 @@ const Category = sequelize.define(
     },
     order_within_parent: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
     },
   },
   {
     indexes: [
       {
         unique: true,
-        fields: ["parent_Id", "order_within_parent"],
+        fields: ['parent_Id', 'order_within_parent'],
       },
     ],
   }
 );
+
 
 Category.belongsTo(Category, { as: "Parent", foreignKey: "parent_Id" });
 Category.hasMany(Category, { as: "Children", foreignKey: "parent_id" });
@@ -50,5 +55,24 @@ Article.belongsTo(Category, {
   foreignKey: "category_Id",
   targetKey: "category_Id",
 });
+// Category.sync({alter:true}).then(()=>{
+//   console.log("category table created");
+// })
+const createCategory=async(cat)=>{
+  const{category,
+    parent_Id,
+    order,
+    order_within_parent,}=cat
+  const newCategory = await Category.create({
+    category,
+    parent_Id,
+    order,
+    order_within_parent,
+  });
+  return newCategory
 
-module.exports = { Category };
+}
+    
+module.exports = { 
+  Category,
+  createCategory};
