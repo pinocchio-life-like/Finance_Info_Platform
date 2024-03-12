@@ -5,19 +5,25 @@ import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Modal, Form, Input, Button } from "antd";
 import api from "../../../utils/api";
+import store from "../../../redux/store";
+import { addArticleState } from "../../../redux/slices/articleSlice";
 
 const MainContent = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [open, setOpen] = useState(false);
+  const [articleTitle, setArticleTitle] = useState("");
+  const [openArticleModal, setOpenArticleModal] = useState(false);
   const [submitActive, setSubmitActive] = useState(false);
+  const [addArtCategory_Id, setAddArt_Category_Id] = useState(null);
+  const [categories, setCategories] = useState([]);
   const [form] = Form.useForm();
+  const [articleForm] = Form.useForm();
   const [activeLink, setActiveLink] = useState({ left: 0, right: 0 }); // Set Link 1 and Link 3 to be selected by default
   const buttonRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
   const currentUrl = location.pathname;
-  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const getCategories = async () => {
@@ -100,6 +106,23 @@ const MainContent = (props) => {
     form.resetFields();
   };
 
+  const addArticle = async (values) => {
+    setArticleTitle(values.article);
+    store.dispatch(
+      addArticleState({
+        articleName: values.article,
+        articleContent: "",
+        category_Id: addArtCategory_Id,
+      })
+    );
+    // const response = await api.post("/api/category/addCategory", {
+    //   category: values.category,
+    // });
+    // console.log(response);
+    setSubmitActive(true);
+    articleForm.resetFields();
+  };
+
   const showModal = () => {
     setOpen(true);
   };
@@ -110,14 +133,31 @@ const MainContent = (props) => {
   };
   const handleCancel = () => {
     setOpen(false);
-    setSubmitActive(true);
+    setSubmitActive(false);
     form.resetFields();
+  };
+  const handleArticleCancel = () => {
+    setOpenArticleModal(false);
+    setSubmitActive(false);
+    articleForm.resetFields();
+  };
+
+  const addArticleHandler = (category) => {
+    setOpenArticleModal(true);
+    setAddArt_Category_Id(category.category_Id);
+  };
+
+  const handleArticleSubmit = () => {
+    setOpenArticleModal(false);
+    articleForm.submit();
   };
 
   return (
     <div className="flex-grow flex flex-col items-center bg-white">
       <div className="flex justify-between items-center w-3/5 border-b border-gray-600 relative pt-4">
-        <h1 className="text-xl font-bold">Current Title</h1>
+        <h1 className="text-xl font-bold">
+          {articleTitle ? articleTitle : "Current Title"}
+        </h1>
         <button
           ref={buttonRef}
           className="flex items-center text-sm font-bold"
@@ -155,7 +195,9 @@ const MainContent = (props) => {
                   {userRole === "admin" &&
                     activeLink.left === 0 &&
                     activeLink.right === 1 && (
-                      <button className="mr-2 text-black">
+                      <button
+                        className="mr-2 text-black"
+                        onClick={() => addArticleHandler(category)}>
                         <FaPlus size={12} color="#2D9596" />
                       </button>
                     )}
@@ -243,7 +285,7 @@ const MainContent = (props) => {
         <Form
           onFinish={addCategory}
           form={form}
-          name="basic"
+          name="category"
           labelCol={{
             span: 8,
           }}
@@ -259,6 +301,55 @@ const MainContent = (props) => {
           <Form.Item
             label="Category Title"
             name="category"
+            rules={[
+              {
+                required: true,
+                message: "Please input Title!",
+              },
+            ]}>
+            <Input
+              onChange={(e) => {
+                if (e.target.value !== "") setSubmitActive(true);
+                else setSubmitActive(false);
+              }}
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
+      <Modal
+        title="Add New Article"
+        open={openArticleModal}
+        onCancel={handleArticleCancel}
+        footer={(_, { CancelBtn }) => (
+          <>
+            <CancelBtn />
+            <Button
+              disabled={!submitActive}
+              style={{ background: "#3B82f6", color: "white" }}
+              onClick={handleArticleSubmit}>
+              Add
+            </Button>
+          </>
+        )}>
+        <Form
+          onFinish={addArticle}
+          form={articleForm}
+          name="article"
+          labelCol={{
+            span: 8,
+          }}
+          wrapperCol={{
+            span: 16,
+          }}
+          style={{
+            maxWidth: 600,
+          }}
+          initialValues={{
+            remember: false,
+          }}>
+          <Form.Item
+            label="Article Title"
+            name="article"
             rules={[
               {
                 required: true,
