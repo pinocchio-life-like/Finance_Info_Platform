@@ -26,6 +26,8 @@ const MainContent = (props) => {
   const navigate = useNavigate();
   const currentUrl = location.pathname;
 
+  const currentArticle = useSelector((state) => state.article);
+
   useEffect(() => {
     const getCategories = async () => {
       const response = await api.post("/api/category/getCategories");
@@ -67,7 +69,11 @@ const MainContent = (props) => {
 
         if (subCategoryWithSmallestOrder) {
           const response = await api.get(
-            `/api/article/${subCategoryWithSmallestOrder.category_Id}`
+            `/api/article/${
+              currentArticle.category_Id
+                ? currentArticle.category_Id
+                : subCategoryWithSmallestOrder.category_Id
+            }`
           );
           const { data } = response.data;
           // Dispatch the addarticle action
@@ -76,7 +82,7 @@ const MainContent = (props) => {
               articleName: data.articleTitle,
               articleContent: data.articleContent,
               category_Id: data.category_Id,
-              action: null,
+              action: "edit",
             })
           );
           setCurrentId(data.category_Id);
@@ -86,7 +92,7 @@ const MainContent = (props) => {
     };
 
     getFirstArticle();
-  }, [categories]);
+  });
 
   useEffect(() => {
     switch (currentUrl) {
@@ -278,7 +284,6 @@ const MainContent = (props) => {
                         key={subCategory.category_Id}
                         className="text-black"
                         onClick={() => {
-                          console.log("subCategory", subCategory.category_Id);
                           setArticleTitle(subCategory.category);
                           setCurrentId(subCategory.category_Id);
                         }}>
