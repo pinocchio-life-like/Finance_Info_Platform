@@ -12,12 +12,12 @@ const MainContent = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [open, setOpen] = useState(false);
-  const [articleTitle, setArticleTitle] = useState("");
   const [openArticleModal, setOpenArticleModal] = useState(false);
   const [submitActive, setSubmitActive] = useState(false);
   const [addArtCategory_Id, setAddArt_Category_Id] = useState(null);
   const [categories, setCategories] = useState([]);
-  const [currentId, setCurrentId] = useState(1);
+  const [currentId, setCurrentId] = useState();
+  const [articleTitle, setArticleTitle] = useState("");
   const [form] = Form.useForm();
   const [articleForm] = Form.useForm();
   const [activeLink, setActiveLink] = useState({ left: 0, right: 0 }); // Set Link 1 and Link 3 to be selected by default
@@ -69,7 +69,6 @@ const MainContent = (props) => {
           const response = await api.get(
             `/api/article/${subCategoryWithSmallestOrder.category_Id}`
           );
-          console.log("response", response.data);
           const { data } = response.data;
           // Dispatch the addarticle action
           store.dispatch(
@@ -81,6 +80,7 @@ const MainContent = (props) => {
             })
           );
           setCurrentId(data.category_Id);
+          setArticleTitle(data.articleTitle);
         }
       }
     };
@@ -279,6 +279,7 @@ const MainContent = (props) => {
                         className="text-black"
                         onClick={() => {
                           console.log("subCategory", subCategory.category_Id);
+                          setArticleTitle(subCategory.category);
                           setCurrentId(subCategory.category_Id);
                         }}>
                         {subCategory.category}
