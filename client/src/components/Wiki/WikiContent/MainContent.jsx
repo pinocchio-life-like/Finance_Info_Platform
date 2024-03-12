@@ -52,6 +52,41 @@ const MainContent = (props) => {
   }, []);
 
   useEffect(() => {
+    const getFirstArticle = async () => {
+      const sortedCategories = [...categories].sort(
+        (a, b) => a.parent_Id - b.parent_Id
+      );
+      const categoryWithSmallestParentId = sortedCategories[0];
+
+      if (categoryWithSmallestParentId) {
+        const sortedSubCategories = [
+          ...categoryWithSmallestParentId.subCategories,
+        ].sort((a, b) => a.order_within_parent - b.order_within_parent);
+        const subCategoryWithSmallestOrder = sortedSubCategories[0];
+
+        if (subCategoryWithSmallestOrder) {
+          const response = await api.get(
+            `/api/article/${subCategoryWithSmallestOrder.category_Id}`
+          );
+          console.log("response", response.data);
+          const { data } = response.data;
+          // Dispatch the addarticle action
+          store.dispatch(
+            addArticleState({
+              articleName: data.articleTitle,
+              articleContent: data.articleContent,
+              category_Id: data.category_Id,
+              action: null,
+            })
+          );
+        }
+      }
+    };
+
+    getFirstArticle();
+  }, [categories]);
+
+  useEffect(() => {
     switch (currentUrl) {
       case "/wiki/articles":
         setActiveLink({ left: 0, right: 0 });
@@ -63,7 +98,7 @@ const MainContent = (props) => {
         setActiveLink({ left: 0, right: 2 });
         break;
       default:
-        setActiveLink({ left: 0, right: 0 }); // default case if none of the above match
+        setActiveLink({ left: 0, right: 0 }); // default case
     }
   }, [currentUrl]);
 

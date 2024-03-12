@@ -9,12 +9,13 @@ const persistConfig = {
   storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, userReducer);
+const persistedUser = persistReducer(persistConfig, userReducer);
+const persistedArticle = persistReducer(persistConfig, articleReducer);
 
 const store = configureStore({
   reducer: {
-    user: persistedReducer,
-    article: articleReducer,
+    user: persistedUser,
+    article: persistedArticle,
     // add other reducers here
   },
 });

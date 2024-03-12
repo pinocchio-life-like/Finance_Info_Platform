@@ -25,8 +25,8 @@ const Editor = () => {
   };
 
   useEffect(() => {
-    // console.log(text);
-  }, []);
+    // setText(articleContent ? articleContent : "");
+  }, [articleContent]);
 
   const saveArticleHandler = async () => {
     try {
@@ -37,7 +37,7 @@ const Editor = () => {
           parent_Id: category_Id,
           userName: userName,
         });
-        console.log("Add: ", response.data);
+        console.log("Add: ", response.data.category);
       }
 
       if (action === "edit") {

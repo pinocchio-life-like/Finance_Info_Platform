@@ -49,6 +49,26 @@ const articleC = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+//get Single Articel
+const getSingleArticleC = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const article = await Article.findOne({ where: { category_Id: id } });
+
+    if (!article) {
+      return res.status(404).json({ message: "Article not found" });
+    }
+
+    res.json({
+      message: "Article retrieved successfully",
+      data: article,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 //article getter
 const getAllArticlesC = async (req, res) => {
   try {
@@ -62,6 +82,7 @@ const getAllArticlesC = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
 const updateArticleC = async (req, res) => {
   try {
     const { articleTitle, articleContent, category } = req.body;
@@ -116,4 +137,5 @@ module.exports = {
   getAllArticlesC,
   updateArticleC,
   deleteArticleC,
+  getSingleArticleC,
 };
