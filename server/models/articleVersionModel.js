@@ -3,7 +3,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const User = require("./models").User;
 // const   Article = require("./articleModel").  Article;
 
-const ArticleVersion = sequelize.define("ArticleVersion", {
+const ArticleVersion = sequelize.define("ArticleVersions", {
   articleVersionId: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -12,14 +12,14 @@ const ArticleVersion = sequelize.define("ArticleVersion", {
   articleId: {
     type: DataTypes.INTEGER,
     references: {
-      model: "articles",
+      model: "Articles",
       key: "articleId",
     },
   },
   userId: {
     type: DataTypes.INTEGER,
     references: {
-      model: "users",
+      model: "Users",
       key: "userId",
     },
   },

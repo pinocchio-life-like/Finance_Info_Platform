@@ -25,7 +25,7 @@ module.exports = {
           key: "userId",
         },
       },
-      categoryId: {
+      category_Id: {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {

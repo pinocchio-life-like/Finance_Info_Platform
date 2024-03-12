@@ -3,7 +3,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const User = require("./models").User;
 const ArticleVersion = require("./articleVersionModel").ArticleVersion;
 
-const Article = sequelize.define("article", {
+const Article = sequelize.define("Articles", {
   articleId: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -23,14 +23,14 @@ const Article = sequelize.define("article", {
   userId: {
     type: DataTypes.INTEGER,
     references: {
-      model: "users",
+      model: "Users",
       key: "userId",
     },
   },
-  categoryId: {
+  category_Id: {
     type: DataTypes.INTEGER,
     references: {
-      model: "categories",
+      model: "Categories",
       key: "category_Id",
     },
   },
@@ -50,21 +50,18 @@ ArticleVersion.belongsTo(Article, {
 //function to create an article
 const createArticle = async (article) => {
   try {
-    const { articleTitle, articleContent, category, userId } = article;
-    const user = await User.findByPk(article.userId);
-    if (!user) throw new Error("User not found");
-
+    const { articleTitle, articleContent, category_Id, userId } = article;
     const createdArticle = await Article.create({
       articleTitle,
       articleContent,
-      category,
+      category_Id,
       userId,
     });
 
     const version1 = await ArticleVersion.create({
       articleVersionTitle: articleTitle,
       articleVersionContent: articleContent,
-      articleVersionCategory: category,
+      articleVersionCategory: category_Id,
       userId,
     });
 
@@ -87,26 +84,33 @@ const getAllArticles = async () => {
   }
 };
 // function to update the articles
-const updateArticle = async (articleId, articleData) => {
+const updateArticle = async (data) => {
   try {
-    const { articleTitle, articleContent, category, userId } = articleData;
-    const article = await Article.findByPk(articleId);
-    if (!article) throw new Error("Article not found");
+    const { articleTitle, articleContent, category_Id, userId } = data;
+
+    const article = await Article.findOne({ where: { category_Id: category_Id } })
+
+    if (!article) {
+      return res
+        .status(404)
+        .json({ message: "Article not found and can't update" });
+    }
 
     const updatedArticle = await article.update({
       articleTitle,
       articleContent,
-      category,
+      category_Id,
       userId,
     });
 
     const version = await ArticleVersion.create({
       articleVersionTitle: articleTitle,
       articleVersionContent: articleContent,
-      articleVersionCategory: category,
-      articleId,
+      articleVersionCategory: category_Id,
+      articleId: updatedArticle.articleId,
       userId,
     });
+
     return { updatedArticle, version };
   } catch (error) {
     console.error("Error updating article:", error);
