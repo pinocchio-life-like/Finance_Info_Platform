@@ -113,6 +113,7 @@ const MainContent = (props) => {
         articleName: values.article,
         articleContent: "",
         category_Id: addArtCategory_Id,
+        action: "add",
       })
     );
     // const response = await api.post("/api/category/addCategory", {

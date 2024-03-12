@@ -50,21 +50,18 @@ ArticleVersion.belongsTo(Article, {
 //function to create an article
 const createArticle = async (article) => {
   try {
-    const { articleTitle, articleContent, category, userId } = article;
-    const user = await User.findByPk(article.userId);
-    if (!user) throw new Error("User not found");
-
+    const { articleTitle, articleContent, category_Id, userId } = article;
     const createdArticle = await Article.create({
       articleTitle,
       articleContent,
-      category,
+      category_Id,
       userId,
     });
 
     const version1 = await ArticleVersion.create({
       articleVersionTitle: articleTitle,
       articleVersionContent: articleContent,
-      articleVersionCategory: category,
+      articleVersionCategory: category_Id,
       userId,
     });
 
