@@ -85,7 +85,7 @@ const getAllArticlesC = async (req, res) => {
 
 const updateArticleC = async (req, res) => {
   try {
-    const { articleTitle, articleContent, category } = req.body;
+    const { articleTitle, articleContent, category_Id } = req.body;
     const { id } = req.params;
 
     const article = await Article.findByPk(id);
