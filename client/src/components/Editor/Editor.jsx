@@ -61,8 +61,6 @@ const Editor = () => {
       <MdEditor
         style={{
           height: "80vh",
-          boxShadow:
-            "1px 0px 2px rgba(0, 0, 0, 0.1), -1px 0px 2px rgba(0, 0, 0, 0.1)",
         }}
         modelValue={text}
         onChange={setText}
