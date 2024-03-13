@@ -22,7 +22,7 @@ const MainContent = (props) => {
   const [articleTitle, setArticleTitle] = useState("");
   const [form] = Form.useForm();
   const [articleForm] = Form.useForm();
-  const [activeLink, setActiveLink] = useState({ left: 0, right: 0 }); // Set Link 1 and Link 3 to be selected by default
+  const [activeLink, setActiveLink] = useState({ left: 0, right: 0 }); // Set article and read to be selected by default
   const buttonRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
