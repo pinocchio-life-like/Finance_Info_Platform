@@ -2,36 +2,28 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Articles", {
-      articleId: {
+    await queryInterface.createTable("Categories", {
+      category_Id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
-      articleTitle: {
-        type: Sequelize.STRING,
+      category: {
+        type: Sequelize.STRING(255),
         allowNull: false,
       },
-      articleContent: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-      },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Users",
-          key: "userId",
-        },
-      },
-      categoryId: {
+      parent_Id: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        references: {
-          model: "Categories",
-          key: "category_Id",
-        },
+      },
+      order: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      order_within_parent: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
@@ -42,9 +34,18 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
+
+    await queryInterface.addIndex(
+      "Categories",
+      ["parent_Id", "order_within_parent"],
+      {
+        name: "UniqueParentId&OrderWithinParent", // change this to a unique name
+        unique: true,
+      }
+    );
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Articles");
+    await queryInterface.dropTable("Categories");
   },
 };

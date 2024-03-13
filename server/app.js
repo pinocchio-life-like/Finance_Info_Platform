@@ -40,16 +40,15 @@ app.use("/api", articleRoute);
 app.use('/api',getUserR)
 app.use("/api", categoryRoute);
 
-// app.use('/api',articleRoute)
-
-// app.get("/", async (req, res) => {
-//   const user = await User.create({
-//     firstName: "zena",
-//     userName: "zena",
-//     password: "123",
-//     userRole: "admin",
-//   });
-
+// async function syncDatabase() {
+//   try {
+//     await sequelize.sync({ alter: true, force: true }); //edit this as needed
+//     console.log("All models were synchronized successfully.");
+//   } catch (error) {
+//     console.error("Error occurred during model synchronization:", error);
+//   }
+// }
+// 
 // syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));

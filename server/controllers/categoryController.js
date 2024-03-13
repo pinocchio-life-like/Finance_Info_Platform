@@ -2,28 +2,32 @@ const { Category ,createCategory} = require("../models/categoryModel");
 
 const addCategory = async (req, res) => {
   try {
-    const { category, parent_Id, order, order_within_parent } = req.body;
-    console.log(req.body);
-    const cat=await createCategory(req.body)
+    const { category } = req.body;
 
-    if(!cat){
-      res.status(500).json({
-        message: "Category not created",
-      })
-    }else{
-      res.status(201).json({
-        message: "Category created",
-      })
-    }
-    }
+    // Count the number of existing categories
+    const existingCategoriesCount = await Category.count();
+
+    // Create a new category
+    const newCategory = await Category.create({
+      category,
+      order: existingCategoriesCount + 1,
+    });
 
     // Send the new category as a response
-    // res.status(201).json({ bad: "man" });
-   catch (error) {
-    // Send error response
-    console.error(error,'lllllll');
+    res.status(201).json(newCategory);
+  } catch (error) {
+    console.error("Error in addCategory: ", error);
     res.status(500).json({ error: error.message });
   }
 };
 
-module.exports = { addCategory };
+const getCategories = async (req, res) => {
+  try {
+    const categories = await Category.findAll();
+    res.status(200).json(categories);
+  } catch (error) {
+    console.error("Error in getCategories: ", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+module.exports = { addCategory, getCategories };

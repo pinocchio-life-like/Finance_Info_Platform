@@ -4,7 +4,7 @@ const User = require("./models").User;
 const ArticleVersion = require("./articleVersionModel").ArticleVersion;
 const Category=require('./categoryModel').Category
 
-const Article = sequelize.define("article", {
+const Article = sequelize.define("Articles", {
   articleId: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -24,14 +24,14 @@ const Article = sequelize.define("article", {
   userId: {
     type: DataTypes.INTEGER,
     references: {
-      model: "users",
+      model: "Users",
       key: "userId",
     },
   },
-  categoryId: {
+  category_Id: {
     type: DataTypes.INTEGER,
     references: {
-      model: "categories",
+      model: "Categories",
       key: "category_Id",
     },
   },
@@ -54,27 +54,24 @@ ArticleVersion.belongsTo(Article, {
 //function to create an article
 const createArticle = async (article) => {
   try {
-    const { articleTitle, articleContent, categoryId, userId } = article;
+    const { articleTitle, articleContent, category, userId } = article;
     const user = await User.findByPk(article.userId);
     if (!user) throw new Error("User not found");
 
     const createdArticle = await Article.create({
       articleTitle,
       articleContent,
-      categoryId,
-     userId,
-  });
-  //ctreate the first version   v1==article
-  const version1=await ArticleVersion.create({
-    articleVersionTitle:  articleTitle,
-  articleVersionContent: articleContent,
-  articleVersionCategory: categoryId,
-    userId,
-    articleId: createdArticle.articleId,})
+      category,
+      userId,
+    });
 
-  return{ createdArticle,version1};
-}
-
+    const version1 = await ArticleVersion.create({
+      articleVersionTitle: articleTitle,
+      articleVersionContent: articleContent,
+      articleVersionCategory: category,
+      userId,
+    });
+  }
    catch (error) {
     console.error("Error creating article:", error);
   }
@@ -93,26 +90,27 @@ const getAllArticles = async () => {
 };
 
 // function to update the articles
-const updateArticle = async (articleId, articleData) => {
+const updateArticle = async (data) => {
   try {
-    const { articleTitle, articleContent,categoryId, userId } = articleData;
+    const { articleTitle, articleContent, category, userId } = articleData;
     const article = await Article.findByPk(articleId);
     if (!article) throw new Error("Article not found");
 
     const updatedArticle = await article.update({
       articleTitle,
       articleContent,
-      categoryId,
+      category,
       userId,
     });
 
     const version = await ArticleVersion.create({
       articleVersionTitle: articleTitle,
       articleVersionContent: articleContent,
-      articleVersionCategory: categoryId,
+      articleVersionCategory: category,
       articleId,
       userId,
     });
+
     return { updatedArticle, version };
   } catch (error) {
     console.error("Error updating article:", error);

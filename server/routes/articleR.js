@@ -1,11 +1,16 @@
-const {articleC,getAllArticlesC,updateArticleC,deleteArticleC,getAllVersionsC}=require('../controllers/articleC')
-const router=require('express').Router()
+const {
+  articleC,
+  getAllArticlesC,
+  updateArticleC,
+  deleteArticleC,
+  getSingleArticleC,
+} = require("../controllers/articleC");
+const router = require("express").Router();
 
-router.post('/article',articleC)
-router.get('/articles',getAllArticlesC)
-router.put('/article/:id',updateArticleC)
-router.delete('/article/:id',deleteArticleC)
-router.get('/versions',getAllVersionsC)
+router.post("/article", articleC);
+router.get("/article/:id", getSingleArticleC);
+router.get("/articles", getAllArticlesC);
+router.put("/article/:id", updateArticleC);
+router.delete("/article/:id", deleteArticleC);
 
-
-module.exports=router
+module.exports = router;
