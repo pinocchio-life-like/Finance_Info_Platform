@@ -38,7 +38,7 @@ const Preview = () => {
             borderRight: "1px solid #EEEEEE",
             fontSize: "0.9rem",
             paddingTop: "0.6rem",
-            height: "80vh",
+            height: "100vh",
             overflow: "auto",
             position: "sticky",
             top: 0,
