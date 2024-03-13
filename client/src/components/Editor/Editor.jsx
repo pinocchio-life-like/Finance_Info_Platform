@@ -25,7 +25,7 @@ const Editor = () => {
   };
 
   useEffect(() => {
-    setText(articleContent);
+    setText(articleContent ? articleContent : "");
   }, [category_Id, articleContent]);
 
   const saveArticleHandler = async () => {

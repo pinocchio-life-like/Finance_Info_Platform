@@ -11,6 +11,7 @@ import RoleBasedRoute from "../components/RoleBasedRoute";
 import WikiHome from "../components/Wiki/WikiHome";
 import { useEffect } from "react";
 import { authService } from "../services/authService";
+import { Result } from "antd";
 
 function AppRoutes() {
   useEffect(() => {
@@ -90,7 +91,17 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
-      <Route path="*" element={<h1>404 Not Found</h1>} />
+      <Route
+        path="*"
+        element={
+          <Result
+            style={{ marginTop: "12%" }}
+            status="404"
+            title="404"
+            subTitle="Sorry, the page you visited does not exist."
+          />
+        }
+      />
     </Routes>
   );
 }
