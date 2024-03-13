@@ -17,8 +17,10 @@ const Preview = () => {
     <>
       <MdPreview
         style={{
-          borderLeft: "1px solid #67C6E3",
-          borderRight: "1px solid #67C6E3",
+          borderLeft: "1px solid #EEEEEE",
+          borderRight: "1px solid #EEEEEE",
+          boxShadow:
+            "1px 0px 5px rgba(0, 0, 0, 0.1), -1px 0px 5px rgba(0, 0, 0, 0.1)",
         }}
         editorId={id}
         modelValue={text}
