@@ -7,9 +7,11 @@ import { Modal, Form, Input, Button } from "antd";
 import api from "../../../utils/api";
 import store from "../../../redux/store";
 import { addArticleState } from "../../../redux/slices/articleSlice";
+import { changeTableOfContentsState } from "../../../redux/slices/contentsSlice";
 
 const MainContent = (props) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const contentsIsOpen = useSelector((state) => state.contents.status);
+  const [isOpen, setIsOpen] = useState(contentsIsOpen);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [open, setOpen] = useState(false);
   const [openArticleModal, setOpenArticleModal] = useState(false);
@@ -233,6 +235,10 @@ const MainContent = (props) => {
     setOpenArticleModal(false);
     articleForm.submit();
   };
+
+  useEffect(() => {
+    store.dispatch(changeTableOfContentsState({ status: isOpen }));
+  }, [isOpen]);
 
   return (
     <div className="flex-grow flex flex-col items-center bg-white">

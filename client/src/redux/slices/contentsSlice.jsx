@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const contentsSlice = createSlice({
   name: "tableOfContents",
   initialState: {
-    status: "closed",
+    status: false,
   },
   reducers: {
     changeTableOfContentsState: (state, action) => {
