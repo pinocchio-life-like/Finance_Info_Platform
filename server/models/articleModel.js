@@ -58,14 +58,15 @@ const createArticle = async (article) => {
       userId,
     });
 
-    const version1 = await ArticleVersion.create({
+    const version = await ArticleVersion.create({
+      articleId: createdArticle.articleId,
       articleVersionTitle: articleTitle,
       articleVersionContent: articleContent,
       articleVersionCategory: category_Id,
       userId,
     });
 
-    return { createdArticle, version1 };
+    return { createdArticle, version };
   } catch (error) {
     console.error("Error creating article:", error);
     throw error;
@@ -88,7 +89,9 @@ const updateArticle = async (data) => {
   try {
     const { articleTitle, articleContent, category_Id, userId } = data;
 
-    const article = await Article.findOne({ where: { category_Id: category_Id } })
+    const article = await Article.findOne({
+      where: { category_Id: category_Id },
+    });
 
     if (!article) {
       return res
