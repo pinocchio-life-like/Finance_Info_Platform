@@ -15,7 +15,14 @@ const Preview = () => {
 
   return (
     <>
-      <MdPreview editorId={id} modelValue={text} />
+      <MdPreview
+        style={{
+          borderLeft: "1px solid #67C6E3",
+          borderRight: "1px solid #67C6E3",
+        }}
+        editorId={id}
+        modelValue={text}
+      />
     </>
   );
 };
