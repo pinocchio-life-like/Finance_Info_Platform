@@ -72,12 +72,7 @@ const Editor = () => {
         });
       })
     );
-
-    const callbackData = res.map((item) => item.data.urls[0]);
-
-    console.log(callbackData);
-
-    callback(callbackData);
+    callback(res.map((item) => item.data.urls[0]));
   };
 
   return (
