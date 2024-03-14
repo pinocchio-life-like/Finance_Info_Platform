@@ -28,13 +28,13 @@ const Article = sequelize.define("Articles", {
       key: "userId",
     },
   },
-  category_Id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: "Categories",
-      key: "category_Id",
-    },
-  },
+  // category_Id: {
+  //   type: DataTypes.INTEGER,
+  //   references: {
+  //     model: "Categories",
+  //     key: "category_Id",
+  //   },
+  // },
 });
 
 // Define the foreign key relationship
@@ -54,14 +54,13 @@ ArticleVersion.belongsTo(Article, {
 //function to create an article
 const createArticle = async (article) => {
   try {
-    const { articleTitle, articleContent, category, userId } = article;
+    const { articleTitle, articleContent, userId } = article;
     const user = await User.findByPk(article.userId);
     if (!user) throw new Error("User not found");
 
     const createdArticle = await Article.create({
       articleTitle,
       articleContent,
-      category,
       userId,
     });
 
