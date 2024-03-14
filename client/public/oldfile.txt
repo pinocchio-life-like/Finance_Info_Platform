@@ -1,0 +1,159 @@
+CREATE VIEW Difference_Of_Internal_Balance_and_CashFlow AS (
+SELECT
+    CASE 
+        WHEN b.project = 110108 THEN 'Dividends receivable'
+        WHEN b.project = 110109 THEN 'Interest receivable'
+        WHEN b.project = 110601 THEN 'Short_term borrowing'
+        WHEN b.project = 110610 THEN 'Interest payable'
+        WHEN b.project = 110611 THEN 'Dividends payable'
+        WHEN b.project = 110806 THEN 'Long_term borrowing'
+    END AS items,
+    c.company_name_en,
+    202401 AS period,
+    COALESCE(b.ending_balance, 0) AS balance_end,
+    COALESCE(
+        CASE 
+            WHEN b.project = 110108 THEN icl.dividends_receivable
+            WHEN b.project = 110109 THEN icl.interest_receivable
+            WHEN b.project = 110601 THEN icl.short_term_borrowing
+            WHEN b.project = 110610 THEN icl.interest_payable
+            WHEN b.project = 110611 THEN icl.dividends_payable
+            WHEN b.project = 110806 THEN icl.long_term_borrowing
+        END, 0
+    ) AS internal_balance,
+    COALESCE(b.ending_balance, 0) - 
+    COALESCE(
+        CASE 
+            WHEN b.project = 110108 THEN icl.dividends_receivable
+            WHEN b.project = 110109 THEN icl.interest_receivable
+            WHEN b.project = 110601 THEN icl.short_term_borrowing
+            WHEN b.project = 110610 THEN icl.interest_payable
+            WHEN b.project = 110611 THEN icl.dividends_payable
+            WHEN b.project = 110806 THEN icl.long_term_borrowing
+        END, 0
+    ) AS difference
+FROM 
+    xbsn.yw_balance b
+JOIN 
+    xbsn.yw_internal_claims_liabilities icl
+ON 
+    b.company_id = icl.company_id
+    AND CASE 
+        WHEN b.project = 110108 THEN icl.dividends_receivable
+        WHEN b.project = 110109 THEN icl.interest_receivable
+        WHEN b.project = 110601 THEN icl.short_term_borrowing
+        WHEN b.project = 110610 THEN icl.interest_payable
+        WHEN b.project = 110611 THEN icl.dividends_payable
+        WHEN b.project = 110806 THEN icl.long_term_borrowing
+    END IS NOT NULL
+JOIN
+    xbsn.company c
+ON
+    b.company_id = c.company_id
+WHERE 
+    b.project IN (110108, 110109, 110601, 110610, 110611, 110806)
+    AND b.period = 202401
+    AND icl.period = 202401
+HAVING 
+    difference <> 0
+    
+UNION ALL
+
+SELECT
+    CASE 
+        WHEN b.project = 130201 THEN 'investment_recovery'
+        WHEN b.project = 130202 THEN 'investment_income'
+        WHEN b.project = 130203 THEN 'fixed_intangible_other'
+        WHEN b.project = 130204 THEN 'subsidiaries_and_other'
+        WHEN b.project = 130205 THEN 'related_to_investment_activities'
+        WHEN b.project = 130206 THEN 'fund_pool'
+        WHEN b.project = 130209 THEN 'cash_paid'
+        WHEN b.project = 130210 THEN 'subsidiaries_and_units'
+        WHEN b.project = 130211 THEN 'investment_activities'
+        WHEN b.project = 130212 THEN 'payment_of_fund_pool_funds'
+        WHEN b.project = 130301 THEN 'absorbing_investments'
+        WHEN b.project = 130302 THEN 'obtaining_loans'
+        WHEN b.project = 130303 THEN 'financing_activities'
+        WHEN b.project = 130305 THEN 'paid_debt'
+        WHEN b.project = 130306 THEN 'paid_distributing'
+        WHEN b.project = 130307 THEN 'payment_other_cash'
+    END AS items,
+    c.company_name_en,
+    202401 AS period,
+    COALESCE(b.amounts, 0) AS balance_end,
+    COALESCE(
+        CASE 
+            WHEN b.project = 130201 THEN ycl.investment_recovery
+			WHEN b.project = 130202 THEN ycl.investment_income
+			WHEN b.project = 130203 THEN ycl.fixed_intangible_other
+			WHEN b.project = 130204 THEN ycl.subsidiaries_and_other
+			WHEN b.project = 130205 THEN ycl.related_to_investment_activities
+			WHEN b.project = 130206 THEN ycl.fund_pool
+			WHEN b.project = 130209 THEN ycl.cash_paid
+			WHEN b.project = 130210 THEN ycl.subsidiaries_and_units
+			WHEN b.project = 130211 THEN ycl.investment_activities
+			WHEN b.project = 130212 THEN ycl.payment_of_fund_pool_funds
+			WHEN b.project = 130301 THEN ycl.absorbing_investments
+			WHEN b.project = 130302 THEN ycl.obtaining_loans
+			WHEN b.project = 130303 THEN ycl.financing_activities
+			WHEN b.project = 130305 THEN ycl.paid_debt
+			WHEN b.project = 130306 THEN ycl.paid_distributing
+			WHEN b.project = 130307 THEN ycl.payment_other_cash
+        END, 0
+    ) AS internal_balance,
+    COALESCE(b.amounts, 0) - 
+    COALESCE(
+        CASE 
+            WHEN b.project = 130201 THEN ycl.investment_recovery
+			WHEN b.project = 130202 THEN ycl.investment_income
+			WHEN b.project = 130203 THEN ycl.fixed_intangible_other
+			WHEN b.project = 130204 THEN ycl.subsidiaries_and_other
+			WHEN b.project = 130205 THEN ycl.related_to_investment_activities
+			WHEN b.project = 130206 THEN ycl.fund_pool
+			WHEN b.project = 130209 THEN ycl.cash_paid
+			WHEN b.project = 130210 THEN ycl.subsidiaries_and_units
+			WHEN b.project = 130211 THEN ycl.investment_activities
+			WHEN b.project = 130212 THEN ycl.payment_of_fund_pool_funds
+			WHEN b.project = 130301 THEN ycl.absorbing_investments
+			WHEN b.project = 130302 THEN ycl.obtaining_loans
+			WHEN b.project = 130303 THEN ycl.financing_activities
+			WHEN b.project = 130305 THEN ycl.paid_debt
+			WHEN b.project = 130306 THEN ycl.paid_distributing
+			WHEN b.project = 130307 THEN ycl.payment_other_cash
+        END, 0
+    ) AS difference
+FROM 
+    xbsn.yw_cash_flow b
+JOIN 
+    xbsn.yw_internal_cashflow ycl
+ON 
+    b.company_id = ycl.company_id
+    AND CASE 
+			WHEN b.project = 130201 THEN ycl.investment_recovery
+			WHEN b.project = 130202 THEN ycl.investment_income
+			WHEN b.project = 130203 THEN ycl.fixed_intangible_other
+			WHEN b.project = 130204 THEN ycl.subsidiaries_and_other
+			WHEN b.project = 130205 THEN ycl.related_to_investment_activities
+			WHEN b.project = 130206 THEN ycl.fund_pool
+			WHEN b.project = 130209 THEN ycl.cash_paid
+			WHEN b.project = 130210 THEN ycl.subsidiaries_and_units
+			WHEN b.project = 130211 THEN ycl.investment_activities
+			WHEN b.project = 130212 THEN ycl.payment_of_fund_pool_funds
+			WHEN b.project = 130301 THEN ycl.absorbing_investments
+			WHEN b.project = 130302 THEN ycl.obtaining_loans
+			WHEN b.project = 130303 THEN ycl.financing_activities
+			WHEN b.project = 130305 THEN ycl.paid_debt
+			WHEN b.project = 130306 THEN ycl.paid_distributing
+			WHEN b.project = 130307 THEN ycl.payment_other_cash
+    END IS NOT NULL
+JOIN
+    xbsn.company c
+ON
+    b.company_id = c.company_id
+WHERE 
+    b.project IN (130201,130202,130203,130204,130205,130206,130209,130210,130211,130212,130301,130302,130303,130305,130306,130307)
+    AND b.period = 202401
+    AND ycl.period = 202401
+HAVING 
+    difference <> 0
+);
