@@ -5,17 +5,25 @@ import "md-editor-rt/lib/preview.css";
 import { useSelector } from "react-redux";
 import { Button, Modal } from "antd";
 import api from "../../utils/api";
+import { Bars } from "react-loader-spinner";
 
 const Editor = () => {
   const { userName } = useSelector((state) => state.user);
 
   const [text, setText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const getMainArticle = async () => {
-      const res = await api.get("/api/article/main/1");
-      const { data } = res.data;
+      setIsLoading(true);
+      try {
+        const res = await api.get("/api/article/main/1");
+        const { data } = res.data;
 
-      setText(data.articleContent);
+        setText(data.articleContent);
+      } finally {
+        setIsLoading(false);
+      }
     };
     getMainArticle();
   }, []);
@@ -46,35 +54,62 @@ const Editor = () => {
   };
 
   return (
-    <div>
-      <MdEditor
-        style={{
-          height: "80vh",
-        }}
-        modelValue={text}
-        onChange={setText}
-        language="en-US"
-        onSave={() => {
-          showModal();
-        }}
-        showCodeRowNumber
-      />
-      <Modal
-        title="Save Article:"
-        open={open}
-        onCancel={hideModal}
-        footer={(_, { CancelBtn }) => (
-          <>
-            <CancelBtn />
-            <Button
-              style={{ background: "#3B82f6", color: "white" }}
-              onClick={saveArticleHandler}>
-              Save
-            </Button>
-          </>
-        )}>
-        <p>Do you want to save this article?</p>
-      </Modal>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+      }}>
+      {isLoading ? (
+        <div
+          style={{
+            display: "flex",
+            alignContent: "center",
+            alignItems: "center",
+            margin: "auto",
+            height: "86vh",
+          }}>
+          <Bars
+            height="100"
+            width="100"
+            color="#67C6E3"
+            ariaLabel="bars-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        </div>
+      ) : (
+        <>
+          <MdEditor
+            style={{
+              height: "85vh",
+            }}
+            modelValue={text}
+            onChange={setText}
+            language="en-US"
+            onSave={() => {
+              showModal();
+            }}
+            showCodeRowNumber
+          />
+          <Modal
+            title="Save Article:"
+            open={open}
+            onCancel={hideModal}
+            footer={(_, { CancelBtn }) => (
+              <>
+                <CancelBtn />
+                <Button
+                  style={{ background: "#3B82f6", color: "white" }}
+                  onClick={saveArticleHandler}>
+                  Save
+                </Button>
+              </>
+            )}>
+            <p>Do you want to save this article?</p>
+          </Modal>
+        </>
+      )}
     </div>
   );
 };

@@ -44,8 +44,8 @@ const MainContent = (props) => {
   };
 
   return (
-    <div className="flex-grow flex flex-col items-center bg-white">
-      <div className="flex justify-between items-center w-3/5 border-b border-gray-600 pb-1">
+    <div className="flex-grow flex flex-col items-center bg-white mt-1">
+      <div className="flex justify-between items-center w-3/4 border-b border-gray-600 pb-1">
         <div>
           {["Article", "Files"].map((link, index) => (
             <a
@@ -77,7 +77,7 @@ const MainContent = (props) => {
           ))}
         </div>
       </div>
-      <div className="w-3/5">{props.children}</div>
+      <div className="w-3/4">{props.children}</div>
     </div>
   );
 };
