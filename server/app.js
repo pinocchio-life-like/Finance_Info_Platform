@@ -14,9 +14,6 @@ const loginRoute = require("./routes/userLoginR");
 
 const userUpdateRoute = require("./routes/userUpdateR");
 const articleRoute = require("./routes/articleR");
-const getUserR=require('./routes/getUserR')
-const categoryRoute = require("./routes/categoryRoute");
-const versionRoute=require('./routes/versionR')
 
 const app = express();
 
@@ -38,9 +35,6 @@ app.use("/api", loginRoute);
 
 app.use("/api", userUpdateRoute);
 app.use("/api", articleRoute);
-app.use('/api',getUserR)
-app.use("/api", categoryRoute);
-app.use('/api',versionRoute)
 
 // async function syncDatabase() {
 //   try {
@@ -50,7 +44,7 @@ app.use('/api',versionRoute)
 //     console.error("Error occurred during model synchronization:", error);
 //   }
 // }
-// 
+//
 // syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));

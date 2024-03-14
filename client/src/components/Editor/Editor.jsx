@@ -6,14 +6,30 @@ import useAuth from "../../hooks/useAuth";
 import { useSelector } from "react-redux";
 
 
+import { Button, Modal } from "antd";
+import api from "../../utils/api";
+import { Bars } from "react-loader-spinner";
 
 const Editor = () => {
-  const { articleName, articleContent, category_Id, action } = useSelector(
-    (state) => state.article
-  );
   const { userName } = useSelector((state) => state.user);
 
-  const [text, setText] = useState(articleContent ? articleContent : "");
+  const [text, setText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const getMainArticle = async () => {
+      setIsLoading(true);
+      try {
+        const res = await api.get("/api/article/main/1");
+        const { data } = res.data;
+
+        setText(data.articleContent);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getMainArticle();
+  }, []);
 
   const [open, setOpen] = useState(false);
 

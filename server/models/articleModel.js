@@ -1,6 +1,6 @@
 const sequelize = require("../config/db.config");
 const { Sequelize, DataTypes } = require("sequelize");
-const User = require("./models").User;
+const User = require("./userModel").User;
 const ArticleVersion = require("./articleVersionModel").ArticleVersion;
 const Category=require('./categoryModel').Category
 
@@ -58,13 +58,15 @@ const createArticle = async (article) => {
     const user = await User.findByPk(article.userId);
     if (!user) throw new Error("User not found");
 
+    const { articleTitle, articleContent, userId } = article;
     const createdArticle = await Article.create({
       articleTitle,
       articleContent,
       userId,
     });
 
-    const version1 = await ArticleVersion.create({
+    const version = await ArticleVersion.create({
+      articleId: createdArticle.articleId,
       articleVersionTitle: articleTitle,
       articleVersionContent: articleContent,
       articleVersionCategory: category,
@@ -72,6 +74,9 @@ const createArticle = async (article) => {
     });
   }
    catch (error) {
+
+    return { createdArticle, version };
+  } catch (error) {
     console.error("Error creating article:", error);
   }
 }
@@ -88,12 +93,23 @@ const getAllArticles = async () => {
   }
 };
 
+};
+
 // function to update the articles
 const updateArticle = async (data) => {
   try {
     const { articleTitle, articleContent, category, userId } = articleData;
     const article = await Article.findByPk(articleId);
     if (!article) throw new Error("Article not found");
+    const { articleTitle, articleContent, articleId, userId } = data;
+
+    const article = await Article.findByPk(articleId);
+
+    if (!article) {
+      return res
+        .status(404)
+        .json({ message: "Article not found and can't update" });
+    }
 
     const updatedArticle = await article.update({
       articleTitle,
@@ -107,25 +123,13 @@ const updateArticle = async (data) => {
       articleVersionContent: articleContent,
       articleVersionCategory: category,
       articleId,
+      articleId: updatedArticle.articleId,
       userId,
     });
 
     return { updatedArticle, version };
   } catch (error) {
     console.error("Error updating article:", error);
-    throw error;
-  }
-};
-
-//handling the dettting of an article
-const deleteArticle = async (articleId) => {
-  try {
-    const article = await Article.findByPk(articleId);
-    if (!article) throw new Error("Article not found");
-
-    return await article.destroy();
-  } catch (error) {
-    console.error("Error deleting article:", error);
     throw error;
   }
 };
@@ -154,7 +158,6 @@ const getAllVersions = async () => {
 module.exports = {
   Article,
   createArticle,
-  getAllArticles,
   updateArticle,
   deleteArticle,
   getAllVersions

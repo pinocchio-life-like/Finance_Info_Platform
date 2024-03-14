@@ -1,6 +1,6 @@
 const sequelize = require("../config/db.config");
 const { Sequelize, DataTypes } = require("sequelize");
-const User = require("./models").User;
+const User = require("./userModel").User;
 // const   Article = require("./articleModel").  Article;
 
 const ArticleVersion = sequelize.define("ArticleVersions", {
@@ -32,9 +32,6 @@ const ArticleVersion = sequelize.define("ArticleVersions", {
     type: DataTypes.STRING,
     allowNull: false,
     require: true,
-  },
-  articleVersionCategory: {
-    type: DataTypes.STRING,
   },
 });
 const getallversionsOFAnArticle=async(Id)=>{

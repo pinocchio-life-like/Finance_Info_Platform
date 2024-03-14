@@ -31,3 +31,4 @@ const getCategories = async (req, res) => {
   }
 };
 module.exports = { addCategory, getCategories };
+
