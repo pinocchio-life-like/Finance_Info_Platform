@@ -1,107 +1,150 @@
-import React, { useEffect, useState } from 'react';
-import getAllUsers from './../../services/services.user';
-import { BsPencilFill } from 'react-icons/bs';
-import AdminUserAddForm from './AdminUserAddForm';
-import Draggable from 'react-draggable';
-import api from '../../utils/api';
+import React, { useEffect, useState } from "react";
+import { Table, Button, message, Popconfirm } from "antd";
+import { BsPencilFill, BsTrash } from "react-icons/bs";
+import AdminUserAddForm from "./AdminUserAddForm";
+import Draggable from "react-draggable";
+import api from "../../utils/api";
 
 function UserList() {
   const [users, setUsers] = useState([]);
-  const[editeId,setEditedId]=useState()
-  const[isEditable,setIsEdited]=useState(false)
+  const [editedUser, setEditedUser] = useState(null);
+  const [isEditable, setIsEditable] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await getAllUsers();
+        const response = await api.get("/api/users");
 
         if (response.data && Array.isArray(response.data.data)) {
           setUsers(response.data.data);
         } else {
-          console.error('Invalid data structure:', response);
+          console.error("Invalid data structure:", response);
           setUsers([]);
         }
       } catch (error) {
-        console.error('Error fetching users:', error);
+        console.error("Error fetching users:", error);
       }
     };
 
     fetchUsers();
   }, []);
-  //function to handle the user editting
-  const handleEditClick = (userId) => {
-    setEditedId(userId);
-    setIsEdited(prevState => (prevState && userId === editeId) ? false : true);
+
+  const handleEditClick = (user) => {
+    setEditedUser(user);
+    setIsEditable(true);
   };
-//const update function
-  const updateUser = async (value) => {
+  const handleDeletClick = (user) => {
+    setEditedUser(user);
 
+  };
+
+  const handleDelete = async (userId) => {
     try {
-      console.log(value)
-      
-      const updateduser= await api.put(`/api/update/${editeId}`,value)
-      console.log(updateduser,'updated user')
-      if(!updateduser){
-
-        return console.log('updatting error')
+      const response = await api.delete(`/api/delete/${userId}`);
+      console.log(response.data.data)
+  
+      if (response.status === 200) {
+        message.success("User deleted successfully");
+        setUsers(users.filter((user) => user.userId !== userId));
+      } else {
+        message.error("Failed to delete user");
       }
-      else{
-        alert('update success')
-        setIsEdited(false);
-       
-      return updateduser
-      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      message.error("An error occurred while deleting the user");
     }
-    catch (error) {
-      console.error('Error updating user:', error);
-    }
-  }
+  };
 
+  const updateUser = async (value) => {
+    try {
+      const updatedUser = await api.put(
+        `/api/update/${editedUser.userId}`,
+        value
+      );
+
+      if (updatedUser) {
+        message.success("User updated successfully");
+        setIsEditable(false);
+        // Update the users list with the updated user data
+        setUsers(
+          users.map((user) =>
+            user.userId === updatedUser.userId ? updatedUser : user
+          )
+        );
+      } else {
+        message.error("Failed to update user");
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
+
+  const columns = [
+    {
+      title: "User Name",
+      dataIndex: "userName",
+      key: "userName",
+      align: "center",
+    },
+    {
+      title: "First Name",
+      dataIndex: "firstName",
+      key: "firstName",
+      align: "center",
+    },
+    {
+      title: "User Role",
+      dataIndex: "userRole",
+      key: "userRole",
+      align: "center",
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      align: "center",
+      render: (_, record) => (
+        <>
+          <Button
+            type="primary"
+            onClick={() => handleEditClick(record)}
+            icon={<BsPencilFill />}
+          />
+          <Popconfirm
+            title="Are you sure you want to delete this user?"
+            onConfirm={() => handleDelete (record.userId)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="danger" icon={<BsTrash />} className="ml-2" />
+          </Popconfirm>
+        </>
+      ),
+    },
+  ];
 
   return (
     <div className="w-full mx-auto pl-6 bg-white rounded-md shadow-md overflow-x-auto">
       <h1 className="text-2xl font-bold mb-4 text-center">User List</h1>
-
-      {users.length === 0 ? (
-        <p>No users found.</p>
-      ) : (
-        <table className="min-w-full bg-white border border-gray-300">
-          <thead>
-            <tr>
-              <th className="border-b p-2">User Name</th>
-              <th className="border-b p-2">First Name</th>
-              <th className="border-b p-2">User Role</th>
-              <th className="border-b p-2">Edit user</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users?.map((user) => (
-              <tr key={user.userId}>
-                <td className="border-b p-2 font-medium text-center">{user.userName}</td>
-                <td className="border-b p-2 text-gray-600 text-center">{user.firstName}</td>
-                <td className="border-b p-2 text-center">{user.userRole}</td>
-                <td className="border-b p-2 text-center"><button onClick={()=>handleEditClick(user.userId)}   className="bg-blue-500 text-white py-1 px-1 rounded m-2 ">
-                <BsPencilFill/></button></td>
-                
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <Table
+        dataSource={users}
+        columns={columns}
+        pagination={false}
+        rowKey="userId"
+      />
+      {isEditable && editedUser && (
+        <Draggable>
+          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
+            <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-96 bg-white p-4 rounded-md shadow-md">
+              <AdminUserAddForm
+                onUpdate={updateUser}
+                status="edit"
+                userData={editedUser}
+                onClose={() => setIsEditable(false)}
+              />
+            </div>
+          </div>
+        </Draggable>
       )}
-     {isEditable && (
-  <Draggable>
-    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
-      <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-96 bg-white p-4 rounded-md shadow-md">
-        {/* <h1 className="text-xl font-bold mb-4">Edit User</h1> */}
-        <AdminUserAddForm onUpdate={updateUser} 
-        status="edit" 
-        isEditable={isEditable}
-      
-       />
-      </div>
-    </div>
-  </Draggable>
-)}
     </div>
   );
 }

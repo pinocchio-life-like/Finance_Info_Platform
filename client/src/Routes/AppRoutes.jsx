@@ -15,6 +15,7 @@ import { Result } from "antd";
 import AdminUserAddForm from "../components/Adminpage/AdminUserAddForm";
 import UserList from "../components/Adminpage/UserList";
 import AdminPage from "../components/Adminpage/Adminpage";
+import AdminMenu from './../components/Adminpage/AdminMenu';
 
 function AppRoutes() {
   useEffect(() => {
@@ -94,6 +95,9 @@ function AppRoutes() {
           /* </PrivateRoute> */
         }
       />
+      <Route path="/user-admin" element={<AdminMenu/>}/>
+      <Route path="/user" element={<UserList/>}/>
+      <Route path="/admin" element={<AdminPage/>}/>
       <Route
         path="*"
         element={

@@ -105,12 +105,22 @@ const updateUser = async (id, userData) => {
     throw error;
   }
 };
+const deleteUser=async(id)=>{
+  const user= await User.findByPk(id)
+  if(!user) throw new Error('User not found')
+  else{
+    await user.destroy();
+    return user;
+}
+
+    
+}
 
 module.exports = {
   createUser,
   getUserByUserName,
   getAllUsers,
-
-  updateUser,
+  deleteUser,
+updateUser,
   User,
 };

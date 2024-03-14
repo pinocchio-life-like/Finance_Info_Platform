@@ -1,4 +1,4 @@
-const {getAllUsers}=require('../models/models')
+const {getAllUsers}=require('../models/userModel')
 const getUserC=async(req,res)=>{
     const users=await getAllUsers()
     if(!users){

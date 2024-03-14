@@ -14,6 +14,8 @@ const loginRoute = require("./routes/userLoginR");
 
 const userUpdateRoute = require("./routes/userUpdateR");
 const articleRoute = require("./routes/articleR");
+const getUserRoute=require('./routes/getUserR')
+const deleteUserR=require('./routes/deleteuserR')
 
 const app = express();
 
@@ -34,6 +36,8 @@ app.use("/api", userAddRoute);
 app.use("/api", loginRoute);
 
 app.use("/api", userUpdateRoute);
+app.use("/api", getUserRoute);
+app.use("/api", deleteUserR);
 app.use("/api", articleRoute);
 
 // async function syncDatabase() {
