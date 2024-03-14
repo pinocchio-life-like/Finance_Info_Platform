@@ -37,7 +37,13 @@ const ArticleVersion = sequelize.define("ArticleVersions", {
     type: DataTypes.STRING,
   },
 });
-
+const getallversionsOFAnArticle=async(Id)=>{
+  const versionOfArticle=await ArticleVersion.findAll({
+    where:{articleId:Id}
+  })
+  return versionOfArticle
+}
 module.exports = {
   ArticleVersion,
+  getallversionsOFAnArticle
 };

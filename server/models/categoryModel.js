@@ -53,6 +53,7 @@ Category.hasOne(Article, {
   sourceKey: "category_Id",
 });
 Article.belongsTo(Category, {
+  sourceKey:"category_Id",
   foreignKey: "category_Id",
   targetKey: "category_Id",
 });
