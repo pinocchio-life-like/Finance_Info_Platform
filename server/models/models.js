@@ -3,7 +3,7 @@ const sequelize = require("../config/db.config");
 const bcrypt = require("bcrypt");
 const ArticleVersion = require("./articleVersionModel").ArticleVersion;
 //define user mmodel
-const User = sequelize.define("User", {
+const User = sequelize.define("Users", {
   userId: {
     type: Sequelize.INTEGER,
     primaryKey: true,

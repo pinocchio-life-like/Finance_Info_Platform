@@ -11,6 +11,7 @@ import RoleBasedRoute from "../components/RoleBasedRoute";
 import WikiHome from "../components/Wiki/WikiHome";
 import { useEffect } from "react";
 import { authService } from "../services/authService";
+import NavBar from "../components/Common/NavBar/NavBar";
 
 function AppRoutes() {
   useEffect(() => {
@@ -24,74 +25,77 @@ function AppRoutes() {
   }, []);
 
   return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route
-        path="/"
-        element={
-          <PrivateRoute>
-            <DashboardPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="dashboard"
-        element={
-          <PrivateRoute>
-            <DashboardPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="profile"
-        element={
-          <PrivateRoute>
-            <ProfilePage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="diffviewer"
-        element={
-          <PrivateRoute>
-            <Difference />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="wiki/edit"
-        element={
-          <RoleBasedRoute role="admin">
+    <>
+    <NavBar/>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <DashboardPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="dashboard"
+          element={
+            <PrivateRoute>
+              <DashboardPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="profile"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="diffviewer"
+          element={
+            <PrivateRoute>
+              <Difference />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="wiki/edit"
+          element={
+            <RoleBasedRoute role="admin">
+              <PrivateRoute>
+                <WikiHome>
+                  <Editor />
+                </WikiHome>
+              </PrivateRoute>
+            </RoleBasedRoute>
+          }
+        />
+        <Route
+          path="wiki/history"
+          element={
             <PrivateRoute>
               <WikiHome>
-                <Editor />
+                <h1>History</h1>
               </WikiHome>
             </PrivateRoute>
-          </RoleBasedRoute>
-        }
-      />
-      <Route
-        path="wiki/history"
-        element={
-          <PrivateRoute>
-            <WikiHome>
-              <h1>History</h1>
-            </WikiHome>
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="wiki/articles"
-        element={
-          <PrivateRoute>
-            <WikiHome>
-              <Preview />
-            </WikiHome>
-          </PrivateRoute>
-        }
-      />
-      <Route path="*" element={<h1>404 Not Found</h1>} />
-    </Routes>
+          }
+        />
+        <Route
+          path="wiki/articles"
+          element={
+            <PrivateRoute>
+              <WikiHome>
+                <Preview />
+              </WikiHome>
+            </PrivateRoute>
+          }
+        />
+        <Route path="*" element={<h1>404 Not Found</h1>} />
+      </Routes>
+    </>
   );
 }
 
