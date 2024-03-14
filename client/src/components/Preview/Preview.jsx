@@ -2,20 +2,25 @@ import { useEffect, useState } from "react";
 import { MdPreview, MdCatalog } from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
 import "md-editor-rt/lib/preview.css";
-import { useSelector } from "react-redux";
+import api from "../../utils/api";
 
 const Preview = () => {
-  const articleContent = useSelector((state) => state.article.articleContent);
   const [state, setState] = useState({
-    text: articleContent ? articleContent : "",
+    text: "",
     scrollElement: document.documentElement,
   });
   useEffect(() => {
-    setState({
-      text: articleContent,
-      scrollElement: document.documentElement,
-    });
-  }, [articleContent]);
+    const getMainArticle = async () => {
+      const res = await api.get("/api/article/main/1");
+      const { data } = res.data;
+
+      setState({
+        text: data.articleContent,
+        scrollElement: document.documentElement,
+      });
+    };
+    getMainArticle();
+  }, []);
 
   const [id] = useState("preview-only");
 

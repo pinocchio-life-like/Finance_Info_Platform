@@ -1,14 +1,11 @@
-
-const {User }= require("../models/models");
-const { updateUser } = require("../models/models");
+const { User } = require("../models/userModel");
+const { updateUser } = require("../models/userModel");
 
 const updateUsers = async (req, res) => {
-
   const { id } = req.params;
   const { firstName, userName, password, userRole } = req.body;
 
   try {
-
     // Check if the user exists before attempting to update
     const existingUser = await User.findByPk(id);
 

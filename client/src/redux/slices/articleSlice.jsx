@@ -6,14 +6,12 @@ const articleSlice = createSlice({
     articleName: null,
     articleContent: null,
     category_Id: null,
-    action: null,
   },
   reducers: {
     addArticleState: (state, action) => {
       state.articleName = action.payload.articleName;
       state.articleContent = action.payload.articleContent;
       state.category_Id = action.payload.category_Id;
-      state.action = action.payload.action;
     },
   },
 });

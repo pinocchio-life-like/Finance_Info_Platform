@@ -7,12 +7,18 @@ import { Button, Modal } from "antd";
 import api from "../../utils/api";
 
 const Editor = () => {
-  const { articleName, articleContent, category_Id, action } = useSelector(
-    (state) => state.article
-  );
   const { userName } = useSelector((state) => state.user);
 
-  const [text, setText] = useState(articleContent ? articleContent : "");
+  const [text, setText] = useState("");
+  useEffect(() => {
+    const getMainArticle = async () => {
+      const res = await api.get("/api/article/main/1");
+      const { data } = res.data;
+
+      setText(data.articleContent);
+    };
+    getMainArticle();
+  }, []);
 
   const [open, setOpen] = useState(false);
 
@@ -24,31 +30,14 @@ const Editor = () => {
     setOpen(false);
   };
 
-  useEffect(() => {
-    setText(articleContent ? articleContent : "");
-  }, [category_Id, articleContent]);
-
   const saveArticleHandler = async () => {
     try {
-      if (action === "add") {
-        const response = await api.post("/api/article", {
-          articleTitle: articleName,
-          articleContent: text,
-          parent_Id: category_Id,
-          userName: userName,
-        });
-        console.log("Add: ", response.data.category);
-      }
-
-      if (action === "edit") {
-        const response = await api.put(`/api/article/${category_Id}`, {
-          articleTitle: articleName,
-          articleContent: text,
-          category_Id: category_Id,
-          userName: userName,
-        });
-        console.log("Edit: ", response.data);
-      }
+      const response = await api.put(`/api/article/main/1`, {
+        articleTitle: "Main",
+        articleContent: text,
+        userName: userName,
+      });
+      console.log("Edit: ", response.data);
     } catch (error) {
       console.error("An error occurred while saving the article: ", error);
     } finally {
