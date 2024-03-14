@@ -29,7 +29,6 @@ const Editor = () => {
   }, []);
 
   const [open, setOpen] = useState(false);
-
   const showModal = () => {
     setOpen(true);
   };
@@ -39,6 +38,7 @@ const Editor = () => {
   };
 
   const saveArticleHandler = async () => {
+    setIsLoading(true);
     try {
       const response = await api.put(`/api/article/main/1`, {
         articleTitle: "Main",
@@ -49,8 +49,35 @@ const Editor = () => {
     } catch (error) {
       console.error("An error occurred while saving the article: ", error);
     } finally {
+      setIsLoading(false);
       hideModal();
     }
+  };
+
+  const onUploadImg = async (files, callback) => {
+    const res = await Promise.all(
+      files.map((file) => {
+        return new Promise((rev, rej) => {
+          const form = new FormData();
+          form.append("file", file);
+
+          api
+            .post("/api/img/upload", form, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
+            .then((res) => rev(res))
+            .catch((error) => rej(error));
+        });
+      })
+    );
+
+    const callbackData = res.map((item) => item.data.urls[0]);
+
+    console.log(callbackData);
+
+    callback(callbackData);
   };
 
   return (
@@ -90,7 +117,7 @@ const Editor = () => {
             onSave={() => {
               showModal();
             }}
-            showCodeRowNumber
+            onUploadImg={onUploadImg}
           />
           <Modal
             title="Save Article:"
