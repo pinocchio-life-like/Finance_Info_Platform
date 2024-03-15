@@ -14,8 +14,9 @@ const loginRoute = require("./routes/userLoginR");
 
 const userUpdateRoute = require("./routes/userUpdateR");
 const articleRoute = require("./routes/articleR");
-const getUserRoute=require('./routes/getUserR')
-const deleteUserR=require('./routes/deleteuserR')
+const getUserRoute = require("./routes/getUserR");
+const deleteUserR = require("./routes/deleteuserR");
+const forgotpasswordRoute = require("./routes/forgotPasswordR");
 
 const app = express();
 
@@ -39,16 +40,17 @@ app.use("/api", userUpdateRoute);
 app.use("/api", getUserRoute);
 app.use("/api", deleteUserR);
 app.use("/api", articleRoute);
+// app.use('/api',forgotpasswordRoute);
 
-// async function syncDatabase() {
-//   try {
-//     await sequelize.sync({ alter: true, force: true }); //edit this as needed
-//     console.log("All models were synchronized successfully.");
-//   } catch (error) {
-//     console.error("Error occurred during model synchronization:", error);
-//   }
-// }
-//
-// syncDatabase();
+async function syncDatabase() {
+  try {
+    await sequelize.sync({ alter: true }); //edit this as needed
+    console.log("All models were synchronized successfully.");
+  } catch (error) {
+    console.error("Error occurred during model synchronization:", error);
+  }
+}
+
+syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));

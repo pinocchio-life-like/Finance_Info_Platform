@@ -105,7 +105,7 @@ function UserList() {
       render: (_, record) => (
         <>
           <Button
-            type="primary"
+            type="primary" ghost
             onClick={() => handleEditClick(record)}
             icon={<BsPencilFill />}
           />

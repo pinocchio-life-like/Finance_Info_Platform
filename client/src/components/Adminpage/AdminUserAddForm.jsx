@@ -31,14 +31,17 @@ const AdminUserAddForm = ({ onUpdate, status, userData, onClose }) => {
   };
 
   return (
-    <Form
+    <div className="mx-auto max-w-xl p-6 bg-white rounded-md shadow-md  w-full">
+      <Form
       form={form}
       layout="vertical"
       onFinish={onFinish}
       initialValues={userData}
+      //,boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+      style={{ margin: '0 auto', padding:"12px",maxWidth: '800px'  }}
     >
-      <div className="flex justify-between items-center mb-4">
-        <h1>{status === "edit" ? "Update User" : "Add User"}</h1>
+      <div className="flex justify-between items-center mb-4 " >
+        <h1 className="text-center mx-auto">{status === "edit" ? "Update User" : "Add User"}</h1>
         {status === "edit" && (
           <Button
             type="text"
@@ -99,11 +102,12 @@ const AdminUserAddForm = ({ onUpdate, status, userData, onClose }) => {
         </Select>
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit" loading={loading}>
+        <Button type="primary" htmlType="submit" loading={loading} ghost>
           {status === "edit" ? "Update" : "Add"}
         </Button>
       </Form.Item>
     </Form>
+    </div>
   );
 };
 
