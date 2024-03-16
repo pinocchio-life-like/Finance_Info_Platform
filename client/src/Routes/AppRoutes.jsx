@@ -12,6 +12,8 @@ import WikiHome from "../components/Wiki/WikiHome";
 import { useEffect } from "react";
 import { authService } from "../services/authService";
 import { Result } from "antd";
+import Header from "../components/UI/Header/Header";
+import Sidebar from "../components/UI/SideBar/SideBar";
 
 function AppRoutes() {
   useEffect(() => {
@@ -39,6 +41,8 @@ function AppRoutes() {
         path="dashboard"
         element={
           <PrivateRoute>
+            <Header />
+            <Sidebar />
             <DashboardPage />
           </PrivateRoute>
         }
@@ -47,6 +51,8 @@ function AppRoutes() {
         path="profile"
         element={
           <PrivateRoute>
+            <Header />
+            <Sidebar />
             <ProfilePage />
           </PrivateRoute>
         }
@@ -55,6 +61,8 @@ function AppRoutes() {
         path="diffviewer"
         element={
           <PrivateRoute>
+            <Header />
+            <Sidebar />
             <Difference />
           </PrivateRoute>
         }
@@ -64,6 +72,8 @@ function AppRoutes() {
         element={
           <RoleBasedRoute role="admin">
             <PrivateRoute>
+              <Header />
+              <Sidebar />
               <WikiHome>
                 <Editor />
               </WikiHome>
@@ -75,6 +85,8 @@ function AppRoutes() {
         path="wiki/history"
         element={
           <PrivateRoute>
+            <Header />
+            <Sidebar />
             <WikiHome>
               <h1>History</h1>
             </WikiHome>
@@ -85,6 +97,8 @@ function AppRoutes() {
         path="wiki/articles"
         element={
           <PrivateRoute>
+            <Header />
+            <Sidebar />
             <WikiHome>
               <Preview />
             </WikiHome>

@@ -75,6 +75,20 @@ const Preview = () => {
                 overflow: "auto",
                 position: "sticky",
                 top: 0,
+                scrollbarWidth: "thin",
+                scrollbarColor: "#888 #f2f2f2",
+                "&::-webkit-scrollbar": {
+                  width: "5px",
+                },
+                "&::-webkit-scrollbar-track": {
+                  background: "#f2f2f2",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  background: "#888",
+                },
+                "&::-webkit-scrollbar-thumb:hover": {
+                  background: "#555",
+                },
               }}
             />
           </>
