@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { MdPreview, MdCatalog } from "md-editor-rt";
+// import { MdPreview, MdCatalog } from "md-editor-rt";
+import { MdPreview } from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
 import "md-editor-rt/lib/preview.css";
 import api from "../../utils/api";
 import { Bars } from "react-loader-spinner";
+import CustomMdCatalog from "./MdCatalogCustom/CustomMdCatalog";
 
 const Preview = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -91,7 +93,7 @@ const Preview = () => {
               editorId={id}
               modelValue={filteredText || originalText}
             />
-            <MdCatalog
+            {/* <MdCatalog
               editorId={id}
               scrollElement={document.documentElement}
               articles={articles} 
@@ -105,6 +107,10 @@ const Preview = () => {
                 position: "sticky",
                 top: 0,
               }}
+            ></MdCatalog> */}
+            <CustomMdCatalog
+              editorId={id}
+              scrollElement={state.scrollElement}
             />
           </>
         )}
