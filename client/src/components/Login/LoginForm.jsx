@@ -74,12 +74,12 @@ function LoginForm({ onSubmit, error }) {
           />
         </div>
         {error && <p className="text-red-500 text-xs italic">{error}</p>}
-        <button
+        {/* <button
           className="text-blue-500 hover:text-blue-800"
           onClick={handleForgotPassword}
         >
           Forgot Password
-        </button>
+        </button> */}
       </form>
     </div>
   );

@@ -12,7 +12,8 @@ const Editor = () => {
 
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const [searchQuery, setSearchQuery] = useState("");
+  const [originalText, setOriginalText] = useState("");
   useEffect(() => {
     const getMainArticle = async () => {
       setIsLoading(true);
@@ -21,6 +22,7 @@ const Editor = () => {
         const { data } = res.data;
 
         setText(data.articleContent);
+        setOriginalText(data.articleContent);
       } finally {
         setIsLoading(false);
       }
@@ -52,13 +54,26 @@ const Editor = () => {
       hideModal();
     }
   };
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+    const filteredText = originalText
+      .split("\n")
+      .filter((line) => line.toLowerCase().includes(e.target.value.toLowerCase()))
+      .join("\n");
+    setText(filteredText);
+  };
+
 
   return (
+    <>
+    <label htmlFor="search">Search:</label>
+      <input type="text" id="search" value={searchQuery} onChange={handleSearch} />
     <div
       style={{
         width: "100%",
         display: "flex",
       }}>
+        
       {isLoading ? (
         <div
           style={{
@@ -80,6 +95,8 @@ const Editor = () => {
         </div>
       ) : (
         <>
+        <label htmlFor="search">search</label>
+        <input type="text" />
           <MdEditor
             style={{
               height: "85vh",
@@ -111,6 +128,7 @@ const Editor = () => {
         </>
       )}
     </div>
+    </>
   );
 };
 

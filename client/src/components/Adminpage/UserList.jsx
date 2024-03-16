@@ -33,16 +33,11 @@ function UserList() {
     setEditedUser(user);
     setIsEditable(true);
   };
-  const handleDeletClick = (user) => {
-    setEditedUser(user);
-
-  };
-
+  
   const handleDelete = async (userId) => {
     try {
       const response = await api.delete(`/api/delete/${userId}`);
-      console.log(response.data.data)
-  
+      
       if (response.status === 200) {
         message.success("User deleted successfully");
         setUsers(users.filter((user) => user.userId !== userId));
@@ -111,9 +106,19 @@ function UserList() {
           />
           <Popconfirm
             title="Are you sure you want to delete this user?"
-            onConfirm={() => handleDelete (record.userId)}
+            onConfirm={() => handleDelete(record.userId)}
             okText="Yes"
             cancelText="No"
+             okButtonProps={{
+              ghost: true,
+              style: {
+                background: "none",
+                border: "1px solid #1890cc",
+                color: "#1890cc",
+                transition: "border-color 0.6s ease",
+                },
+             
+            }}
           >
             <Button type="danger" icon={<BsTrash />} className="ml-2" />
           </Popconfirm>
@@ -128,7 +133,7 @@ function UserList() {
       <Table
         dataSource={users}
         columns={columns}
-        pagination={false}
+        pagination={{ pageSize: 10 }} 
         rowKey="userId"
       />
       {isEditable && editedUser && (
@@ -149,4 +154,4 @@ function UserList() {
   );
 }
 
-export default UserList;
+export default UserList

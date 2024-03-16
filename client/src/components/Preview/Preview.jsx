@@ -6,57 +6,60 @@ import api from "../../utils/api";
 import { Bars } from "react-loader-spinner";
 
 const Preview = () => {
-  const [state, setState] = useState({
-    text: "",
-    scrollElement: document.documentElement,
-  });
   const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [originalText, setOriginalText] = useState("");
+  const [filteredText, setFilteredText] = useState("");
+
+  const [id] = useState("preview-only");
+  const [articles, setArticles] = useState();
+
   useEffect(() => {
-    const getMainArticle = async () => {
+    const fetchMainArticle = async () => {
       setIsLoading(true);
       try {
         const res = await api.get("/api/article/main/1");
         const { data } = res.data;
-
-        setState({
-          text: data.articleContent,
-          scrollElement: document.documentElement,
-        });
+        setOriginalText(data.articleContent);
+      } catch (error) {
+        console.error("Error fetching main article:", error);
       } finally {
         setIsLoading(false);
       }
     };
-    getMainArticle();
+    fetchMainArticle();
   }, []);
 
-  const [id] = useState("preview-only");
-  const[articles,setAricle]=useState()
-  console.log(articles)
-  useEffect(()=>{
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await api.get("/api/articles");
+        setArticles(response.data.data);
+      } catch (error) {
+        console.log("Error fetching articles:", error);
+      }
+    };
+    fetchArticles();
+  }, []);
 
-  const fetchArticle=async()=>{
-    try{
-      const art=await api.get('/api/articles')
-      setAricle(art.data.data)
-    }
-    catch(error){
-      console.log(error)
-      
-    }
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+    const filteredText = originalText
+      .split("\n")
+      .filter((line) => line.toLowerCase().includes(e.target.value.toLowerCase()))
+      .join("\n");
+    setFilteredText(filteredText);
   };
-  fetchArticle()
-
-  },[])
-  // if (props.status === 'editor') {
-  //   const markdownContent = articles.map((art) => (
-  //     `# ${art.articleTitle}\n\n${art.articleContent}\n\n`
-  //   )).join('');
-
-  //   return markdownContent;
-  // }
 
   return (
     <>
+      <label htmlFor="search">Search:</label>
+      <input
+        type="text"
+        id="search"
+        value={searchQuery}
+        onChange={handleSearch}
+      />
       <div style={{ display: "flex", width: "100%" }}>
         {isLoading ? (
           <div
@@ -66,7 +69,8 @@ const Preview = () => {
               alignItems: "center",
               margin: "auto",
               height: "86vh",
-            }}>
+            }}
+          >
             <Bars
               height="100"
               width="100"
@@ -85,11 +89,12 @@ const Preview = () => {
                 borderRight: "1px solid #EEEEEE",
               }}
               editorId={id}
-              modelValue={state.text}
+              modelValue={filteredText || originalText}
             />
             <MdCatalog
               editorId={id}
-              scrollElement={state.scrollElement}
+              scrollElement={document.documentElement}
+              articles={articles} 
               style={{
                 width: "20%",
                 borderRight: "1px solid #EEEEEE",
