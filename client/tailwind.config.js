@@ -5,8 +5,15 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
-      },
+      }, colors: {
+      'nav-bg': '#d9d9d9', 
+    },
     },
   },
-  plugins: [],
+//   plugins: [
+//     require('flowbite/plugin')
+//   ],
+//   content: [
+//     'node_modules/flowbite-react/lib/esm/**/*.js'
+// ]
 };
