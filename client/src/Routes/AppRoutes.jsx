@@ -1,5 +1,5 @@
 // AppRoutes.jsx
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import PrivateRoute from "../components/PrivateRoute";
 import LoginPage from "../components/Login/LoginPage";
 import DashboardPage from "../components/Dashboard/DashboardPage";
@@ -15,6 +15,7 @@ import { Result } from "antd";
 import NavBar from "../components/Common/NavBar/NavBar";
 
 function AppRoutes() {
+  const location = useLocation()
   useEffect(() => {
     const checkTokenExpiration = async () => {
       if (!authService.isAuthenticated()) {
@@ -27,84 +28,86 @@ function AppRoutes() {
 
   return (
     <>
-      <NavBar />
+     {location.pathname !== "/login" && <NavBar />}
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <DashboardPage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="dashboard"
-          element={
-            <PrivateRoute>
-              <DashboardPage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="profile"
-          element={
-            <PrivateRoute>
-              <ProfilePage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="diffviewer"
-          element={
-            <PrivateRoute>
-              <Difference />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="wiki/edit"
-          element={
-            <RoleBasedRoute role="admin">
+        <>
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <DashboardPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="dashboard"
+            element={
+              <PrivateRoute>
+                <DashboardPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <PrivateRoute>
+                <ProfilePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="diffviewer"
+            element={
+              <PrivateRoute>
+                <Difference />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="wiki/edit"
+            element={
+              <RoleBasedRoute role="admin">
+                <PrivateRoute>
+                  <WikiHome>
+                    <Editor />
+                  </WikiHome>
+                </PrivateRoute>
+              </RoleBasedRoute>
+            }
+          />
+          <Route
+            path="wiki/history"
+            element={
               <PrivateRoute>
                 <WikiHome>
-                  <Editor />
+                  <h1>History</h1>
                 </WikiHome>
               </PrivateRoute>
-            </RoleBasedRoute>
-          }
-        />
-        <Route
-          path="wiki/history"
-          element={
-            <PrivateRoute>
-              <WikiHome>
-                <h1>History</h1>
-              </WikiHome>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="wiki/articles"
-          element={
-            <PrivateRoute>
-              <WikiHome>
-                <Preview />
-              </WikiHome>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="*"
-          element={
-            <Result
-              style={{ marginTop: "12%" }}
-              status="404"
-              title="404"
-              subTitle="Sorry, the page you visited does not exist."
-            />
-          }
-        />
+            }
+          />
+          <Route
+            path="wiki/articles"
+            element={
+              <PrivateRoute>
+                <WikiHome>
+                  <Preview />
+                </WikiHome>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <Result
+                style={{ marginTop: "12%" }}
+                status="404"
+                title="404"
+                subTitle="Sorry, the page you visited does not exist."
+              />
+            }
+          />
+        </>
       </Routes>
     </>
   );
