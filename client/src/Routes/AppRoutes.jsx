@@ -13,12 +13,13 @@ import { useEffect } from "react";
 import { authService } from "../services/authService";
 import { Result } from "antd";
 import NavBar from "../components/Common/NavBar/NavBar";
-import AdminUserAddForm from "../components/Adminpage/AdminUserAddForm";
-import UserList from "../components/Adminpage/UserList";
+// import AdminUserAddForm from "../components/Adminpage/AdminUserAddForm";
+// import UserList from "../components/Adminpage/UserList";
 import AdminPage from "../components/Adminpage/Adminpage";
-import AdminMenu from './../components/Adminpage/AdminMenu';
+// import AdminMenu from './../components/Adminpage/AdminMenu';
 import ForgotPassword from "../components/Login/Passwordrest";
 import ResetPasswordForm from './../components/Login/PasswordResetForm';
+import Logout from "../components/Login/logout";
 
 function AppRoutes() {
   const location = useLocation()
@@ -37,6 +38,7 @@ function AppRoutes() {
      {location.pathname !== "/login" && <NavBar />}
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/logout" element={<Logout />} />
         <>
           <Route
             path="/"
@@ -47,7 +49,7 @@ function AppRoutes() {
             }
           />
           <Route
-            path="dashboard"
+            path="/dashboard"
             element={
               // <PrivateRoute>
               <DashboardPage />
@@ -107,8 +109,8 @@ function AppRoutes() {
       <Route path="/admin" element={<PrivateRoute>
         <AdminPage/>
       </PrivateRoute>}/>
-    <Route path="/reset" element={<ForgotPassword/>}/> 
-    <Route path="/forgot-password" element={<ResetPasswordForm/>}/> 
+    {/* <Route path="/reset" element={<ForgotPassword/>}/> 
+    <Route path="/forgot-password" element={<ResetPasswordForm/>}/>  */}
       <Route
             path="*"
             element={

@@ -5,8 +5,11 @@ import { IoLanguageOutline } from "react-icons/io5";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { CiSearch } from "react-icons/ci";
 import { GoChevronDown } from "react-icons/go";
+import Logout from "../../Login/logout";
+import useAuth from "../../../hooks/useAuth";
 
 const NavBar = () => {
+  const { logout } = useAuth();
   useEffect(() => {
     const dropdownButton = document.getElementById("dropdownInformationButton");
     const dropdown = document.getElementById("dropdownInformation");
@@ -17,9 +20,11 @@ const NavBar = () => {
 
     dropdownButton.addEventListener("click", toggleDropdown);
 
-
     document.addEventListener("click", (event) => {
-      if (!dropdown.contains(event.target) && !dropdownButton.contains(event.target)) {
+      if (
+        !dropdown.contains(event.target) &&
+        !dropdownButton.contains(event.target)
+      ) {
         dropdown.classList.add("hidden");
       }
     });
@@ -30,7 +35,7 @@ const NavBar = () => {
         dropdown.classList.add("hidden");
       });
     };
-  }, [])
+  }, []);
 
   return (
     <nav className="nav-bar-container bg-nav-bg px-10  h-20 ">
@@ -104,7 +109,7 @@ const NavBar = () => {
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="logout"
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >
                     Earnings
@@ -113,7 +118,7 @@ const NavBar = () => {
               </ul>
               <div className="py-2">
                 <a
-                  href="#"
+                  onClick={logout}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
                   Sign out
