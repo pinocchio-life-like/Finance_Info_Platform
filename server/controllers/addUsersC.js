@@ -8,14 +8,14 @@ const createUsers = async (req, res) => {
     const existingUser = await getUserByUserName(newUser.userName);
 
     if (existingUser) {
-      res.json({
+      res.status(409).json({
         message:
           "This username is already taken. Please choose another username.",
       });
     } else {
       // Create a new user if the username is not taken
       const user = await createUser(newUser);
-      res.json({
+      res.status(201).json({
         message: "User created successfully",
         data: user,
       });

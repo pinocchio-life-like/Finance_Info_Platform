@@ -20,8 +20,9 @@ const User = sequelize.define("Users", {
     type: Sequelize.STRING,
     allowNull: false,
     require: true,
-    unique: true,
+    // unique: true,
   },
+  
   password: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -32,6 +33,8 @@ const User = sequelize.define("Users", {
     allowNull: false,
     require: true,
   },
+  
+
 });
 
 // User.hasMany(ArticleVersion,{foreignKey:'userId'})
@@ -43,6 +46,9 @@ ArticleVersion.belongsTo(User, {
   foreignKey: "userId",
   targetKey: "userId",
 });
+(async () => {
+  await sequelize.sync({ alter: false });
+})();
 
 const createUser = async (user) => {
   let users = {};
@@ -100,12 +106,22 @@ const updateUser = async (id, userData) => {
     throw error;
   }
 };
+const deleteUser=async(id)=>{
+  const user= await User.findByPk(id)
+  if(!user) throw new Error('User not found')
+  else{
+    await user.destroy();
+    return user;
+}
+
+    
+}
 
 module.exports = {
   createUser,
   getUserByUserName,
   getAllUsers,
-
-  updateUser,
+  deleteUser,
+updateUser,
   User,
 };

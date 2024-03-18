@@ -13,6 +13,12 @@ const Preview = () => {
     scrollElement: document.documentElement,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [originalText, setOriginalText] = useState("");
+  const [filteredText, setFilteredText] = useState("");
+
+
+  const [articles, setArticles] = useState();
   useEffect(() => {
     const getMainArticle = async () => {
       setIsLoading(true);
@@ -32,9 +38,54 @@ const Preview = () => {
   }, []);
 
   const [id] = useState("preview-only");
+  useEffect(() => {
+    const fetchMainArticle = async () => {
+      setIsLoading(true);
+      try {
+        const res = await api.get("/api/article/main/1");
+        const { data } = res.data;
+        setOriginalText(data.articleContent);
+      } catch (error) {
+        console.error("Error fetching main article:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchMainArticle();
+  }, []);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await api.get("/api/articles");
+        setArticles(response.data.data);
+      } catch (error) {
+        console.log("Error fetching articles:", error);
+      }
+    };
+    fetchArticles();
+  }, []);
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+    const filteredText = originalText
+      .split("\n")
+      .filter((line) =>
+        line.toLowerCase().includes(e.target.value.toLowerCase())
+      )
+      .join("\n");
+    setFilteredText(filteredText);
+  };
 
   return (
     <>
+      <label htmlFor="search">Search:</label>
+      <input
+        type="text"
+        id="search"
+        value={searchQuery}
+        onChange={handleSearch}
+      />
       <div style={{ display: "flex", width: "100%" }}>
         {isLoading ? (
           <div
@@ -68,7 +119,8 @@ const Preview = () => {
             />
             {/* <MdCatalog
               editorId={id}
-              scrollElement={state.scrollElement}
+              scrollElement={document.documentElement}
+              articles={articles} 
               style={{
                 width: "20%",
                 borderRight: "1px solid #EEEEEE",

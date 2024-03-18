@@ -13,6 +13,12 @@ import { useEffect } from "react";
 import { authService } from "../services/authService";
 import { Result } from "antd";
 import NavBar from "../components/Common/NavBar/NavBar";
+import AdminUserAddForm from "../components/Adminpage/AdminUserAddForm";
+import UserList from "../components/Adminpage/UserList";
+import AdminPage from "../components/Adminpage/Adminpage";
+import AdminMenu from './../components/Adminpage/AdminMenu';
+import ForgotPassword from "../components/Login/Passwordrest";
+import ResetPasswordForm from './../components/Login/PasswordResetForm';
 import History from "../components/History/History";
 
 function AppRoutes() {
@@ -44,9 +50,9 @@ function AppRoutes() {
           <Route
             path="dashboard"
             element={
-              <PrivateRoute>
-                <DashboardPage />
-              </PrivateRoute>
+              // <PrivateRoute>
+              <DashboardPage />
+              // </PrivateRoute>
             }
           />
           <Route
@@ -68,13 +74,13 @@ function AppRoutes() {
           <Route
             path="wiki/edit"
             element={
-              <RoleBasedRoute role="admin">
-                <PrivateRoute>
-                  <WikiHome>
-                    <Editor />
-                  </WikiHome>
-                </PrivateRoute>
-              </RoleBasedRoute>
+              // <RoleBasedRoute role="admin">
+              // <PrivateRoute>
+              <WikiHome>
+                <Editor />
+              </WikiHome>
+              //{/* </PrivateRoute> */}
+              // </RoleBasedRoute>
             }
           />
           <Route
@@ -90,14 +96,21 @@ function AppRoutes() {
           <Route
             path="wiki/articles"
             element={
-              <PrivateRoute>
-                <WikiHome>
-                  <Preview />
-                </WikiHome>
-              </PrivateRoute>
+              // <PrivateRoute>
+              <WikiHome>
+                <Preview />
+              </WikiHome>
+              /* </PrivateRoute> */
             }
           />
-          <Route
+          {/* <Route path="/user-admin" element={<AdminMenu/>}/>
+      <Route path="/user" element={<UserList/>}/> */}
+      <Route path="/admin" element={<PrivateRoute>
+        <AdminPage/>
+      </PrivateRoute>}/>
+    <Route path="/reset" element={<ForgotPassword/>}/> 
+    <Route path="/forgot-password" element={<ResetPasswordForm/>}/> 
+      <Route
             path="*"
             element={
               <Result

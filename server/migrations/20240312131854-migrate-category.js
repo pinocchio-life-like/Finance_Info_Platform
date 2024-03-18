@@ -25,6 +25,14 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
     });
 
     await queryInterface.addIndex(

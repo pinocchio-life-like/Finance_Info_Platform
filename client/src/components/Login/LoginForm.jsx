@@ -11,6 +11,11 @@ function LoginForm({ onSubmit, error }) {
     event.preventDefault();
     onSubmit({ username, password });
   };
+  const handleForgotPassword = () => {
+    // Handle the forgot password logic here
+    // For example, navigate to the forgot password page
+    window.location.href = "/forgot-password";
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -69,6 +74,12 @@ function LoginForm({ onSubmit, error }) {
           />
         </div>
         {error && <p className="text-red-500 text-xs italic">{error}</p>}
+        {/* <button
+          className="text-blue-500 hover:text-blue-800"
+          onClick={handleForgotPassword}
+        >
+          Forgot Password
+        </button> */}
       </form>
     </div>
   );
