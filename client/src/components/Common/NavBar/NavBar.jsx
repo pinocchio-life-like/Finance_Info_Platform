@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../../../assets/Images/wihLogo.png";
 import { BsBellFill } from "react-icons/bs";
 import { IoLanguageOutline } from "react-icons/io5";
@@ -7,6 +7,31 @@ import { CiSearch } from "react-icons/ci";
 import { GoChevronDown } from "react-icons/go";
 
 const NavBar = () => {
+  useEffect(() => {
+    const dropdownButton = document.getElementById("dropdownInformationButton");
+    const dropdown = document.getElementById("dropdownInformation");
+
+    const toggleDropdown = () => {
+      dropdown.classList.toggle("hidden");
+    };
+
+    dropdownButton.addEventListener("click", toggleDropdown);
+
+
+    document.addEventListener("click", (event) => {
+      if (!dropdown.contains(event.target) && !dropdownButton.contains(event.target)) {
+        dropdown.classList.add("hidden");
+      }
+    });
+
+    return () => {
+      dropdownButton.removeEventListener("click", toggleDropdown);
+      document.removeEventListener("click", () => {
+        dropdown.classList.add("hidden");
+      });
+    };
+  }, [])
+
   return (
     <nav className="nav-bar-container bg-nav-bg px-10  h-20 ">
       <div className="nav flex justify-between w-full h-full items-center">
@@ -38,7 +63,7 @@ const NavBar = () => {
           <div className="lang">
             <IoLanguageOutline size={26} />
           </div>
-          <div className="login-info">
+          <div className="login-info relative">
             <button
               id="dropdownInformationButton"
               data-dropdown-toggle="dropdownInformation"
@@ -51,7 +76,7 @@ const NavBar = () => {
 
             <div
               id="dropdownInformation"
-              className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+              className="z-10 hidden absolute right-0 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
             >
               <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                 <div>Bonnie Green</div>

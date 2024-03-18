@@ -8,14 +8,36 @@ import { Bars } from "react-loader-spinner";
 import CustomMdCatalog from "./MdCatalogCustom/CustomMdCatalog";
 
 const Preview = () => {
+  const [state, setState] = useState({
+    text: "",
+    scrollElement: document.documentElement,
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [originalText, setOriginalText] = useState("");
   const [filteredText, setFilteredText] = useState("");
 
-  const [id] = useState("preview-only");
-  const [articles, setArticles] = useState();
 
+  const [articles, setArticles] = useState();
+  useEffect(() => {
+    const getMainArticle = async () => {
+      setIsLoading(true);
+      try {
+        const res = await api.get("/api/article/main/1");
+        const { data } = res.data;
+
+        setState({
+          text: data.articleContent,
+          scrollElement: document.documentElement,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getMainArticle();
+  }, []);
+
+  const [id] = useState("preview-only");
   useEffect(() => {
     const fetchMainArticle = async () => {
       setIsLoading(true);
@@ -48,7 +70,9 @@ const Preview = () => {
     setSearchQuery(e.target.value);
     const filteredText = originalText
       .split("\n")
-      .filter((line) => line.toLowerCase().includes(e.target.value.toLowerCase()))
+      .filter((line) =>
+        line.toLowerCase().includes(e.target.value.toLowerCase())
+      )
       .join("\n");
     setFilteredText(filteredText);
   };
@@ -91,7 +115,7 @@ const Preview = () => {
                 borderRight: "1px solid #EEEEEE",
               }}
               editorId={id}
-              modelValue={filteredText || originalText}
+              modelValue={state.text}
             />
             {/* <MdCatalog
               editorId={id}
