@@ -13,9 +13,10 @@ import { useEffect } from "react";
 import { authService } from "../services/authService";
 import { Result } from "antd";
 import NavBar from "../components/Common/NavBar/NavBar";
+import History from "../components/History/History";
 
 function AppRoutes() {
-  const location = useLocation()
+  const location = useLocation();
   useEffect(() => {
     const checkTokenExpiration = async () => {
       if (!authService.isAuthenticated()) {
@@ -28,7 +29,7 @@ function AppRoutes() {
 
   return (
     <>
-     {location.pathname !== "/login" && <NavBar />}
+      {location.pathname !== "/login" && <NavBar />}
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <>
@@ -81,7 +82,7 @@ function AppRoutes() {
             element={
               <PrivateRoute>
                 <WikiHome>
-                  <h1>History</h1>
+                  <History />
                 </WikiHome>
               </PrivateRoute>
             }
