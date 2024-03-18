@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
+import PropTypes from "prop-types";
 import { MdCatalog } from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
 import "md-editor-rt/lib/preview.css";
 import { CiSearch } from "react-icons/ci";
 
-const CustomMdCatalog = ({ editorId, scrollElement }) => {
+const CustomMdCatalog = ({ editorId, scrollElement, scrollChange }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value.trim().toLowerCase());
@@ -43,7 +44,8 @@ const CustomMdCatalog = ({ editorId, scrollElement }) => {
 
   //   highlightMatches();
   // }, [searchQuery]);
-  const executeSearch = () => {
+  const executeSearch = (event) => {
+    event.preventDefault();
     const headers = document.querySelectorAll(
       ".md-editor-preview h1, .md-editor-preview h2, .md-editor-preview h3, .md-editor-preview h4, .md-editor-preview h5, .md-editor-preview h6"
     );
@@ -86,12 +88,20 @@ const CustomMdCatalog = ({ editorId, scrollElement }) => {
           behavior: "smooth",
           block: "start",
         });
+        scrollChange(firstMatchCatalogItem);
       }
     }
   };
   return (
-    <div style={{ position: "relative" }}>
-      <div className="flex items-center justify-center px-4 mb-2 mt-4 pr-5 bg-white rounded border-b">
+    <div
+      style={{
+        position: "relative",
+        width: "20%",
+        borderRight: "1px solid #EEEEEE",
+      }}>
+      <form
+        className="flex items-center justify-center px-2 mb-2 mt-1 pr-1 bg-white rounded border-b"
+        onSubmit={executeSearch}>
         <input
           className="outline-none "
           type="text"
@@ -103,13 +113,10 @@ const CustomMdCatalog = ({ editorId, scrollElement }) => {
             padding: "0.5rem",
           }}
         />
-        <button
-          onClick={executeSearch}
-          className="ml-2 rounded  px-4  text-gray"
-        >
+        <button type="submit" className="ml-2 rounded  px-4  text-gray">
           <CiSearch size={26} color="gray" />
         </button>
-      </div>
+      </form>
       <MdCatalog
         editorId={editorId}
         scrollElement={scrollElement}
@@ -118,10 +125,30 @@ const CustomMdCatalog = ({ editorId, scrollElement }) => {
           overflow: "auto",
           position: "sticky",
           top: 0,
+          scrollbarWidth: "thin",
+          scrollbarColor: "#888 #f2f2f2",
+          "&::-webkit-scrollbar": {
+            width: "5px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "#f2f2f2",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#888",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#555",
+          },
         }}
       />
     </div>
   );
+};
+
+CustomMdCatalog.propTypes = {
+  editorId: PropTypes.string.isRequired,
+  scrollElement: PropTypes.object,
+  scrollChange: PropTypes.func,
 };
 
 export default CustomMdCatalog;

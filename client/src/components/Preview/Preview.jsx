@@ -44,8 +44,7 @@ const Preview = () => {
               alignItems: "center",
               margin: "auto",
               height: "86vh",
-            }}
-          >
+            }}>
             <Bars
               height="100"
               width="100"
@@ -83,6 +82,9 @@ const Preview = () => {
             <CustomMdCatalog
               editorId={id}
               scrollElement={state.scrollElement}
+              scrollChange={(element) => {
+                setState({ ...state, scrollElement: element });
+              }}
             />
           </>
         )}
