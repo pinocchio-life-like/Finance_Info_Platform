@@ -46,7 +46,7 @@ app.use("/api", categoryRoute);
 //     console.error("Error occurred during model synchronization:", error);
 //   }
 // }
-// 
+//
 // syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));
