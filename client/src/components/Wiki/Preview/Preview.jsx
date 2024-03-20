@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { MdPreview } from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
 import "md-editor-rt/lib/preview.css";
-import api from "../../utils/api";
+import api from "../../../utils/api";
 import { Bars } from "react-loader-spinner";
 import CustomMdCatalog from "./MdCatalogCustom/CustomMdCatalog";
 

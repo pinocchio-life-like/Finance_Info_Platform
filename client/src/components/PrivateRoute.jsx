@@ -6,15 +6,20 @@ import { Navigate } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
   const navigate = useNavigate();
-  const isAuthenticated = authService.isAuthenticated();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
-  }, [isAuthenticated, navigate]);
-
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
+    const checkTokenExpiration = async () => {
+      if (!authService.isAuthenticated()) {
+        await authService.refreshToken();
+      }
+    };
+    checkTokenExpiration();
+  }, [navigate, children]);
+  return authService.isAuthenticated() ? (
+    children
+  ) : (
+    <Navigate to="/login" replace />
+  );
 };
 
 PrivateRoute.propTypes = {

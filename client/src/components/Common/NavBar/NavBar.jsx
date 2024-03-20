@@ -72,6 +72,17 @@ const NavBar = () => {
                 Q&A
               </Link>
             </li>
+            <li>
+              <Link
+                to="/manage"
+                className={`font-semibold hover:text-blue-700 ${
+                  location.pathname.includes("Manage")
+                    ? "text-blue-800"
+                    : "text-black"
+                }`}>
+                Manage
+              </Link>
+            </li>
           </ul>
         </div>
         {/* {add a na menu here} */}
@@ -121,17 +132,17 @@ const NavBar = () => {
                   className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
                   Inbox
                 </Link> */}
-                <Link
-                  to="#"
-                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
-                  Manage
-                </Link>
-                {/* this is to give some articles and demo */}
                 {/* <Link
                   to="#"
                   className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
-                  Help
+                  Manage
                 </Link> */}
+                {/* this is to give some articles and demo */}
+                <Link
+                  to="#"
+                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                  Help
+                </Link>
                 <Link
                   onClick={logout}
                   to="#"

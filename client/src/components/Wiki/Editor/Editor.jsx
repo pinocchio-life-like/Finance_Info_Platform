@@ -4,7 +4,7 @@ import "md-editor-rt/lib/style.css";
 import "md-editor-rt/lib/preview.css";
 import { useSelector } from "react-redux";
 import { Button, Modal } from "antd";
-import api from "../../utils/api";
+import api from "../../../utils/api";
 
 const Editor = () => {
   const { articleName, articleContent, category_Id, action } = useSelector(
