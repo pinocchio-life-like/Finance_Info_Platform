@@ -13,12 +13,12 @@ const cors = require("cors");
 // const User  = require("./config/db.config");
 const userAddRoute = require("./routes/usersR");
 const loginRoute = require("./routes/userLoginR");
-
 const userUpdateRoute = require("./routes/userUpdateR");
 const articleRoute = require("./routes/articleR");
 const getUserRoute = require("./routes/getUserR");
 const deleteUserR = require("./routes/deleteuserR");
 const forgotpasswordRoute = require("./routes/forgotPasswordR");
+const getVersions = require("./routes/versionR");
 
 const app = express();
 
@@ -44,6 +44,7 @@ app.use("/api", userUpdateRoute);
 app.use("/api", getUserRoute);
 app.use("/api", deleteUserR);
 app.use("/api", articleRoute);
+app.use("/api", getVersions);
 
 // Set up multer for file storage
 const storage = multer.diskStorage({

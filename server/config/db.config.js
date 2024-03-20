@@ -3,7 +3,7 @@ const sequelize = new Sequelize({
   dialect: "mysql", // Change to your database dialect
   username: "admin",
   password: "12345678",
-  database: "eliyas_test",
+  database: "financeapp",
   host: "fip-demodb.ckhs9i5s4dyl.us-east-1.rds.amazonaws.com",
   port: "3306",
 });
