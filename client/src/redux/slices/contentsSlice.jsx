@@ -4,10 +4,12 @@ const contentsSlice = createSlice({
   name: "tableOfContents",
   initialState: {
     status: false,
+    drop: null,
   },
   reducers: {
     changeTableOfContentsState: (state, action) => {
       state.status = action.payload.status;
+      state.drop = action.payload.drop;
     },
   },
 });

@@ -96,7 +96,7 @@ const CustomMdCatalog = ({ editorId, scrollElement, scrollChange }) => {
     <div
       style={{
         position: "relative",
-        width: "20%",
+        width: "25%",
         borderRight: "1px solid #EEEEEE",
       }}>
       <form
@@ -127,18 +127,18 @@ const CustomMdCatalog = ({ editorId, scrollElement, scrollChange }) => {
           top: 0,
           scrollbarWidth: "thin",
           scrollbarColor: "#888 #f2f2f2",
-          "&::-webkit-scrollbar": {
-            width: "5px",
-          },
-          "&::-webkit-scrollbar-track": {
-            background: "#f2f2f2",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            background: "#888",
-          },
-          "&::-webkit-scrollbar-thumb:hover": {
-            background: "#555",
-          },
+          // "&::-webkit-scrollbar": {
+          //   width: "5px",
+          // },
+          // "&::-webkit-scrollbar-track": {
+          //   background: "#f2f2f2",
+          // },
+          // "&::-webkit-scrollbar-thumb": {
+          //   background: "#888",
+          // },
+          // "&::-webkit-scrollbar-thumb:hover": {
+          //   background: "#555",
+          // },
         }}
       />
     </div>

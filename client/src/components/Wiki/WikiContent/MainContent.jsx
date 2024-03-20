@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FaPlus, FaTimes, FaChevronDown } from "react-icons/fa";
 import PropTypes from "prop-types";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Modal, Form, Input, Button } from "antd";
 import api from "../../../utils/api";
 import store from "../../../redux/store";
@@ -10,15 +10,16 @@ import { addArticleState } from "../../../redux/slices/articleSlice";
 import { changeTableOfContentsState } from "../../../redux/slices/contentsSlice";
 
 const MainContent = (props) => {
-  const contentsIsOpen = useSelector((state) => state.contents.status);
-  const [isOpen, setIsOpen] = useState(contentsIsOpen);
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const { status, drop } = useSelector((state) => state.contents);
+  const { category_Id } = useSelector((state) => state.article);
+  const [isOpen, setIsOpen] = useState(status);
+  const [activeDropdown, setActiveDropdown] = useState(drop);
   const [open, setOpen] = useState(false);
   const [openArticleModal, setOpenArticleModal] = useState(false);
   const [submitActive, setSubmitActive] = useState(false);
   const [addArtCategory_Id, setAddArt_Category_Id] = useState(null);
   const [categories, setCategories] = useState([]);
-  const [currentId, setCurrentId] = useState();
+  const param = useParams();
   const [articleTitle, setArticleTitle] = useState("");
   const [form] = Form.useForm();
   const [articleForm] = Form.useForm();
@@ -27,8 +28,6 @@ const MainContent = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentUrl = location.pathname;
-
-  const currentArticle = useSelector((state) => state.article);
 
   useEffect(() => {
     const getCategories = async () => {
@@ -58,72 +57,24 @@ const MainContent = (props) => {
       }
     };
     getCategories();
-  }, []);
+  }, [category_Id]);
 
   useEffect(() => {
-    const getFirstArticle = async () => {
-      try {
-        const sortedCategories = [...categories].sort(
-          (a, b) => a.parent_Id - b.parent_Id
-        );
-        const categoryWithSmallestParentId = sortedCategories[0];
-
-        if (categoryWithSmallestParentId) {
-          const sortedSubCategories = [
-            ...categoryWithSmallestParentId.subCategories,
-          ].sort((a, b) => a.order_within_parent - b.order_within_parent);
-          const subCategoryWithSmallestOrder = sortedSubCategories[0];
-
-          if (subCategoryWithSmallestOrder) {
-            const response = await api.get(
-              `/api/article/${
-                currentArticle.category_Id
-                  ? currentArticle.category_Id
-                  : subCategoryWithSmallestOrder.category_Id
-              }`
-            );
-            const { data } = response.data;
-            // Dispatch the addarticle action
-            store.dispatch(
-              addArticleState({
-                articleName: data.articleTitle,
-                articleContent: data.articleContent,
-                category_Id: data.category_Id,
-                action: "edit",
-              })
-            );
-            setCurrentId(data.category_Id);
-            setArticleTitle(data.articleTitle);
-          }
-        }
-      } catch (error) {
-        console.error("An error occurred while fetching: ", error);
-      }
-    };
-
-    getFirstArticle();
-  }, [currentArticle, categories]);
-
-  useEffect(() => {
-    switch (currentUrl) {
-      case "/wiki/articles":
-        setActiveLink({ left: 0, right: 0 });
-        break;
-      case "/wiki/edit":
-        setActiveLink({ left: 0, right: 1 });
-        break;
-      case "/wiki/history":
-        setActiveLink({ left: 0, right: 2 });
-        break;
-      default:
-        setActiveLink({ left: 0, right: 0 }); // default case
+    if (currentUrl.includes("/wiki/articles")) {
+      setActiveLink({ left: 0, right: 0 });
+    } else if (currentUrl.includes("/wiki/edit")) {
+      setActiveLink({ left: 0, right: 1 });
+    } else if (currentUrl.includes("/wiki/history")) {
+      setActiveLink({ left: 0, right: 2 });
+    } else {
+      setActiveLink({ left: 0, right: 0 }); // default case
     }
   }, [currentUrl]);
 
   useEffect(() => {
     const getArticle = async () => {
       try {
-        const response = await api.get(`/api/article/${currentId}`);
+        const response = await api.get(`/api/article/${param.id}`);
         const { data } = response.data;
         store.dispatch(
           addArticleState({
@@ -133,12 +84,13 @@ const MainContent = (props) => {
             action: "edit",
           })
         );
+        setArticleTitle(data.articleTitle);
       } catch (error) {
         console.error("An error occurred while fetching: ", error);
       }
     };
     getArticle();
-  }, [currentId]);
+  }, [param.id]);
 
   const userRole = useSelector((state) => state.user.userRole);
 
@@ -146,6 +98,7 @@ const MainContent = (props) => {
     if (activeDropdown === index) {
       setActiveDropdown(null);
     } else {
+      store.dispatch(changeTableOfContentsState({ status: true, drop: index }));
       setActiveDropdown(index);
     }
   };
@@ -155,13 +108,13 @@ const MainContent = (props) => {
     if (side === "right") {
       switch (index) {
         case 0:
-          navigate("/wiki/articles");
+          navigate(`/wiki/articles/${param.id}`);
           break;
         case 1:
-          navigate("/wiki/edit");
+          navigate(`/wiki/edit/${param.id}`);
           break;
         case 2:
-          navigate("/wiki/history");
+          navigate(`/wiki/history/${param.id}`);
           break;
         default:
           break;
@@ -171,7 +124,6 @@ const MainContent = (props) => {
 
   const addCategory = async (values) => {
     try {
-      console.log(values);
       const response = await api.post("/api/category/addCategory", {
         category: values.category,
       });
@@ -195,10 +147,6 @@ const MainContent = (props) => {
           action: "add",
         })
       );
-      const response = await api.post("/api/category/addCategory", {
-        category: values.category,
-      });
-      console.log(response);
       setSubmitActive(true);
       articleForm.resetFields();
     } catch (error) {
@@ -237,8 +185,10 @@ const MainContent = (props) => {
   };
 
   useEffect(() => {
-    store.dispatch(changeTableOfContentsState({ status: isOpen }));
-  }, [isOpen]);
+    store.dispatch(
+      changeTableOfContentsState({ status: isOpen, drop: activeDropdown })
+    );
+  }, [isOpen, activeDropdown]);
 
   return (
     <div className="flex-grow flex flex-col items-center bg-white">
@@ -311,10 +261,13 @@ const MainContent = (props) => {
                       <Link
                         key={subCategory.category_Id}
                         className="text-black"
-                        onClick={() => {
-                          setArticleTitle(subCategory.category);
-                          setCurrentId(subCategory.category_Id);
-                        }}>
+                        to={
+                          currentUrl.includes("edit")
+                            ? `/wiki/edit/${subCategory.category_Id}`
+                            : currentUrl.includes("articles")
+                            ? `/wiki/articles/${subCategory.category_Id}`
+                            : `/wiki/history/${subCategory.category_Id}`
+                        }>
                         {subCategory.category}
                       </Link>
                     ))}

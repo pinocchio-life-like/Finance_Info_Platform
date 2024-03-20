@@ -30,7 +30,7 @@ const NavBar = () => {
           <ul className="flex gap-10 ml-36">
             <li>
               <Link
-                to="/wiki/articles"
+                to="/wiki/articles/2"
                 className={`font-bold hover:text-blue-700 ${
                   location.pathname.includes("wiki")
                     ? "text-blue-800"
@@ -147,7 +147,7 @@ const NavBar = () => {
                   onClick={logout}
                   to="#"
                   className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
-                  Sign Out
+                  Logout
                 </Link>
               </div>
             )}

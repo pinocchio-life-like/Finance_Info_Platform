@@ -6,8 +6,10 @@ import "md-editor-rt/lib/preview.css";
 import api from "../../../utils/api";
 import { Bars } from "react-loader-spinner";
 import CustomMdCatalog from "./MdCatalogCustom/CustomMdCatalog";
+import { useParams } from "react-router-dom";
 
 const Preview = () => {
+  const param = useParams();
   const [state, setState] = useState({
     text: "",
     scrollElement: document.documentElement,
@@ -17,7 +19,7 @@ const Preview = () => {
     const getMainArticle = async () => {
       setIsLoading(true);
       try {
-        const res = await api.get("/api/article/main/1");
+        const res = await api.get(`/api/article/${param.id}`);
         const { data } = res.data;
 
         setState({
@@ -29,7 +31,7 @@ const Preview = () => {
       }
     };
     getMainArticle();
-  }, []);
+  }, [param.id]);
 
   const [id] = useState("preview-only");
 
@@ -65,20 +67,6 @@ const Preview = () => {
               editorId={id}
               modelValue={state.text}
             />
-            {/* <MdCatalog
-              editorId={id}
-              scrollElement={state.scrollElement}
-              style={{
-                width: "20%",
-                borderRight: "1px solid #EEEEEE",
-                fontSize: "0.9rem",
-                paddingTop: "0.6rem",
-                height: "100vh",
-                overflow: "auto",
-                position: "sticky",
-                top: 0,
-              }}
-            ></MdCatalog> */}
             <CustomMdCatalog
               editorId={id}
               scrollElement={state.scrollElement}

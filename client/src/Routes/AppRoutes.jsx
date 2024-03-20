@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { authService } from "../services/authService";
 import { Result } from "antd";
 import NavBar from "../components/Common/NavBar/NavBar";
+import Admin from "../components/Dashboard/Admin/Admin";
 
 function AppRoutes() {
   const location = useLocation();
@@ -65,7 +66,7 @@ function AppRoutes() {
             }
           />
           <Route
-            path="wiki/edit"
+            path="wiki/edit/:id"
             element={
               <RoleBasedRoute role="admin">
                 <PrivateRoute>
@@ -77,7 +78,7 @@ function AppRoutes() {
             }
           />
           <Route
-            path="wiki/history"
+            path="wiki/history/:id"
             element={
               <PrivateRoute>
                 <WikiHome>
@@ -87,7 +88,7 @@ function AppRoutes() {
             }
           />
           <Route
-            path="wiki/articles"
+            path="wiki/articles/:id"
             element={
               <PrivateRoute>
                 <WikiHome>
@@ -97,14 +98,26 @@ function AppRoutes() {
             }
           />
           <Route
+            path="manage"
+            element={
+              <RoleBasedRoute role="admin">
+                <PrivateRoute>
+                  <Admin />
+                </PrivateRoute>
+              </RoleBasedRoute>
+            }
+          />
+          <Route
             path="*"
             element={
-              <Result
-                style={{ marginTop: "12%" }}
-                status="404"
-                title="404"
-                subTitle="Sorry, the page you visited does not exist."
-              />
+              <PrivateRoute>
+                <Result
+                  style={{ marginTop: "12%" }}
+                  status="404"
+                  title="404"
+                  subTitle="Sorry, the page you visited does not exist."
+                />
+              </PrivateRoute>
             }
           />
         </>
