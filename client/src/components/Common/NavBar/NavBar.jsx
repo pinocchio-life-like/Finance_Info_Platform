@@ -29,48 +29,48 @@ const NavBar = () => {
           </Link>
           <ul className="flex gap-10 ml-36">
             <li>
-              <a
-                href="/wiki/articles"
+              <Link
+                to="/wiki/articles"
                 className={`font-bold hover:text-blue-700 ${
                   location.pathname.includes("wiki")
                     ? "text-blue-800"
                     : "text-black"
                 }`}>
                 Wiki
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/ftp"
+              <Link
+                to="/ftp"
                 className={`font-bold hover:text-blue-700 ${
                   location.pathname.includes("ftp")
                     ? "text-blue-800"
                     : "text-black"
                 }`}>
                 FTP
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/notice"
+              <Link
+                to="/notice"
                 className={`font-bold hover:text-blue-700 ${
                   location.pathname.includes("notice")
                     ? "text-blue-800"
                     : "text-black"
                 }`}>
                 Notice
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/qa"
+              <Link
+                to="/qa"
                 className={`font-semibold hover:text-blue-700 ${
                   location.pathname.includes("qa")
                     ? "text-blue-800"
                     : "text-black"
                 }`}>
                 Q&A
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -110,34 +110,34 @@ const NavBar = () => {
 
             {menuActive && (
               <div className="menu z-50 absolute top-full right-0 bg-white shadow-md mt-1 py-2 w-48 rounded">
-                <a
-                  href="#"
+                <Link
+                  to="#"
                   className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
                   Profile
-                </a>
+                </Link>
                 {/* may be we need to set our own email app */}
-                {/* <a
-                  href="#"
+                {/* <Link
+                  to="#"
                   className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
                   Inbox
-                </a> */}
-                <a
-                  href="#"
+                </Link> */}
+                <Link
+                  to="#"
                   className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
                   Manage
-                </a>
+                </Link>
                 {/* this is to give some articles and demo */}
-                {/* <a
-                  href="#"
+                {/* <Link
+                  to="#"
                   className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
                   Help
-                </a> */}
-                <a
+                </Link> */}
+                <Link
                   onClick={logout}
-                  href="#"
+                  to="#"
                   className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
                   Sign Out
-                </a>
+                </Link>
               </div>
             )}
           </div>
