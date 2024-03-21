@@ -1,7 +1,7 @@
 const logoutC = (req, res) => {
   console.log("logoutC");
   try {
-    res.clearCookie("refreshToken");
+    res.clearCookie("refreshToken", { httpOnly: true });
     res.status(200).json({
       message: "Logout successful",
     });

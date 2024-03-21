@@ -36,7 +36,6 @@ const authService = {
     try {
       const response = await api.post("/api/refreshToken");
       const { token } = response.data;
-      localStorage.removeItem("token");
       localStorage.setItem("token", token);
       return token;
     } catch (error) {
