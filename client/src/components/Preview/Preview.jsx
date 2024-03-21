@@ -57,7 +57,7 @@ const Preview = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await api.get("/api/articles");
+        const response = await api.get("/api/article/main/7");
         setArticles(response.data.data);
       } catch (error) {
         console.log("Error fetching articles:", error);

@@ -44,7 +44,7 @@ const MainContent = (props) => {
   };
 
   return (
-    <div className="flex-grow flex flex-col items-center bg-white mt-1">
+    <div className="flex-grow flex flex-col items-center bg-white mt-8">
       <div className="flex justify-between items-center w-3/4 border-b border-gray-600 pb-1">
         <div>
           {["Article", "Files"].map((link, index) => (

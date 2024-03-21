@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table } from "antd";
 import api from "../../utils/api";
+import { useParams } from "react-router-dom";
 
 const History = () => {
+  const articleId = useParams()
   const [versions, setVersions] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [loading, setLoading] = useState(false);
