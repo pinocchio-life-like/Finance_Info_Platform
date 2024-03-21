@@ -69,8 +69,6 @@ const userloginC = async (req, res) => {
 const refreshTokenC = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
-    console.log("Received refreshToken:", refreshToken);
-
     // Verify the refresh token
     if (!refreshToken) {
       return res.status(401).json({

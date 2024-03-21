@@ -3,7 +3,7 @@
     "dialect": "mysql",
     "username": "admin",
     "password": "12345678",
-    "database": "eliyas_test",
+    "database": "financeapp",
     "host": "fip-demodb.ckhs9i5s4dyl.us-east-1.rds.amazonaws.com",
     "port": "3306",
     "logging": true
@@ -12,7 +12,7 @@
     "dialect": "mysql",
     "username": "admin",
     "password": "12345678",
-    "database": "eliyas_test",
+    "database": "financeapp",
     "host": "fip-demodb.ckhs9i5s4dyl.us-east-1.rds.amazonaws.com",
     "port": "3306"
   },

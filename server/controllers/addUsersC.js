@@ -1,6 +1,7 @@
 const { createUser, getUserByUserName } = require("../models/userModel");
 
 const createUsers = async (req, res) => {
+  console.log("hello");
   try {
     const newUser = req.body;
 

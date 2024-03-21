@@ -7,10 +7,9 @@ const api = axios.create({
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (error.response) {
       const originalRequest = error.config;
-
       if (
         error.response.status === 401 &&
         !originalRequest._retry &&
@@ -18,14 +17,18 @@ api.interceptors.response.use(
       ) {
         originalRequest._retry = true;
 
-        return api.post("/api/refreshToken").then((response) => {
-          const newToken = response.data.token;
-          console.log(newToken);
-          api.defaults.headers.common["Authorization"] = "Bearer " + newToken;
-          originalRequest.headers["Authorization"] = "Bearer " + newToken;
+        try {
+          const response = await api.post("/api/refreshToken");
+          const { token } = response.data;
+          api.defaults.headers.common["Authorization"] = "Bearer " + token;
+          originalRequest.headers["Authorization"] = "Bearer " + token;
           return api(originalRequest);
-        });
+        } catch (err) {
+          return Promise.reject(err);
+        }
       }
+    } else {
+      console.log("Network error", error);
     }
 
     return Promise.reject(error);

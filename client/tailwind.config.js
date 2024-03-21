@@ -5,9 +5,10 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
-      }, colors: {
-      'nav-bg': '#d9d9d9', 
-    },
+      },
+      colors: {
+        "nav-bg": "#d9d9d9",
+      },
     },
   },
 //   plugins: [
