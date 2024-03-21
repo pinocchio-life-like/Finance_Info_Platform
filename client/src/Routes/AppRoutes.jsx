@@ -38,7 +38,7 @@ function AppRoutes() {
      {location.pathname !== "/login" && <NavBar />}
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/logout" element={<Logout />} />
+     
         <>
           <Route
             path="/"
@@ -49,7 +49,7 @@ function AppRoutes() {
             }
           />
           <Route
-            path="/dashboard"
+            path="dashboard"
             element={
               // <PrivateRoute>
               <DashboardPage />
@@ -104,13 +104,11 @@ function AppRoutes() {
               /* </PrivateRoute> */
             }
           />
-          {/* <Route path="/user-admin" element={<AdminMenu/>}/>
-      <Route path="/user" element={<UserList/>}/> */}
+       
       <Route path="/admin" element={<PrivateRoute>
         <AdminPage/>
       </PrivateRoute>}/>
-    {/* <Route path="/reset" element={<ForgotPassword/>}/> 
-    <Route path="/forgot-password" element={<ResetPasswordForm/>}/>  */}
+    
       <Route
             path="*"
             element={

@@ -27,6 +27,13 @@ const Article = sequelize.define("Articles", {
       key: "userId",
     },
   },
+  category_Id:{
+    type: DataTypes.INTEGER,
+    references: {
+      model: "Categories",
+      key: "category_Id",
+    },
+  }
 });
 
 // Define the foreign key relationship
