@@ -1,10 +1,8 @@
-// import { AndroidOutlined, AppleOutlined } from "@ant-design/icons";
-// import { Tabs } from "antd";
-import { Table } from "antd";
-import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-//
-// const { TabPane } = Tabs;
+import { FaPlus, FaTrash } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { Button, Drawer, Form, Input, Select, Table, message } from "antd";
+import api from "../../../utils/api";
+import { useSelector } from "react-redux";
 
 const data = [
   {
@@ -35,79 +33,368 @@ const data = [
 const columns = [
   {
     title: "Name",
-    dataIndex: "name",
+    dataIndex: "firstName",
     render: (text) => <a>{text}</a>,
   },
   {
-    title: "Age",
-    dataIndex: "age",
+    title: "User Name",
+    dataIndex: "userName",
   },
   {
-    title: "Address",
-    dataIndex: "address",
+    title: "User Role",
+    dataIndex: "userRole",
+  },
+  {
+    title: "Password",
+    dataIndex: "password",
   },
 ];
 
 const Admin = () => {
   const [activeLink, setActiveLink] = useState({ left: 1, right: 0 });
-  // const navigate = useNavigate();
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [drawerData, setDrawerData] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [updateform] = Form.useForm();
+  const [newform] = Form.useForm();
+  const { userName } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await api.get("/api/users/getall");
+        setUsers(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (activeLink.left === 1) {
+      fetchUsers();
+    }
+  }, [activeLink.left]);
+  useEffect(() => {
+    updateform.setFieldsValue(drawerData);
+  }, [drawerData, updateform]);
+
+  const [messageApi, contextHolder] = message.useMessage();
+  const success = (message) => {
+    messageApi.open({
+      type: "success",
+      content: message || "User added successfully",
+    });
+  };
+  const error = (message) => {
+    messageApi.open({
+      type: "error",
+      content: message || "An error occurred. Please try again!",
+    });
+  };
+
   const handleLink = (side, index) => {
     setActiveLink((prevState) => ({ ...prevState, [side]: index }));
   };
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(
+        `selectedRowKeys: ${selectedRowKeys}`,
+        "selectedRows: ",
+        selectedRows
+      );
+      setSelectedRows(selectedRows);
+    },
+    getCheckboxProps: (record) => ({
+      disabled: record.userName === userName,
+      // Column configuration not to be checked
+      userName: record.userName,
+    }),
+  };
+  const handleAdd = () => {
+    newform.resetFields();
+    showAddDrawer();
+  };
+
+  const handleDelete = () => {
+    // Handle delete
+  };
+  const [open, setOpen] = useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const showAddDrawer = () => {
+    setOpenAdd(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
+  const onCloseAdd = () => {
+    setOpenAdd(false);
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await api.get("/api/users/getall");
+      setUsers(response.data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onFinishUpdate = async (values) => {
+    try {
+      await api.put(`/api/user/update/${drawerData.userId}`, values);
+      success("User updated successfully");
+      onClose();
+      fetchUsers();
+    } catch (e) {
+      error(
+        "Error updating, or User with this username already exists! please choose another username."
+      );
+    }
+  };
+
+  const onFinishAdd = async (values) => {
+    try {
+      await api.post("/api/users", values);
+      onCloseAdd();
+      success("User added successfully");
+      fetchUsers();
+    } catch (e) {
+      error(
+        "User with this username already exists! please choose another username."
+      );
+    }
+  };
   return (
-    <div
-      style={{ width: "100%" }}
-      className="flex-grow flex flex-col items-center bg-white">
+    <>
+      {contextHolder}
       <div
-        style={{ width: "95%" }}
-        className="flex justify-between items-center border-b mt-3 border-gray-600 pb-1">
-        <div>
-          {["Company", "User"].map((link, index) => (
-            <a
-              key={index}
-              className={`p-2 cursor-pointer ${
-                activeLink.left === index
-                  ? "border-b-2 border-black font-bold"
-                  : ""
-              }`}
-              style={{ lineHeight: "2rem" }}
-              onClick={() => handleLink("left", index)}>
-              {link}
-            </a>
-          ))}
-        </div>
-      </div>
-      <div style={{ width: "95%" }}>
-        {activeLink.left === 0 ? (
-          <div>Company</div>
-        ) : (
-          <div style={{ width: "100%" }} className="flex flex-row">
-            <div style={{ width: "15%" }}>
-              <div
-                style={{ width: "100%" }}
-                className="flex justify-between items-center mt-6 pl-2 border-b border-gray-600 pb-1">
-                <div>Soon ...</div>
-              </div>
-            </div>
-            <div style={{ width: "85%" }} className="border-l border-gray-600">
-              <div
-                style={{ width: "100%" }}
-                className="flex justify-between items-center pl-2">
-                <Table
-                  style={{ width: "100%" }}
-                  //   rowSelection={{
-                  //     type: selectionType,
-                  //     ...rowSelection,
-                  //   }}
-                  columns={columns}
-                  dataSource={data}
-                />
-              </div>
-            </div>
+        style={{ width: "100%" }}
+        className="flex-grow flex flex-col items-center bg-white">
+        <div
+          style={{ width: "95%" }}
+          className="flex justify-between items-center border-b mt-3 border-gray-600 pb-1">
+          <div>
+            {["Company", "User"].map((link, index) => (
+              <a
+                key={index}
+                className={`p-2 cursor-pointer ${
+                  activeLink.left === index
+                    ? "border-b-2 border-black font-bold"
+                    : ""
+                }`}
+                style={{ lineHeight: "2rem" }}
+                onClick={() => handleLink("left", index)}>
+                {link}
+              </a>
+            ))}
           </div>
-        )}
+        </div>
+        <div style={{ width: "95%" }}>
+          {activeLink.left === 0 ? (
+            <div>Company</div>
+          ) : (
+            <div style={{ width: "100%" }} className="flex flex-row">
+              <div style={{ width: "15%" }}>
+                <div
+                  style={{ width: "100%" }}
+                  className="flex justify-between items-center mt-2 pl-2 border-b border-gray-600 pb-1">
+                  <div>Soon ...</div>
+                </div>
+              </div>
+              <div
+                style={{ width: "85%" }}
+                className="border-l border-gray-600">
+                <div
+                  style={{ width: "100%" }}
+                  className="flex flex-col justify-between items-center">
+                  <div
+                    style={{ width: "100%" }}
+                    className="flex items-center mt-2 pl-2 border-b border-gray-600 pb-1">
+                    <button
+                      onClick={handleAdd}
+                      className="flex items-center text-black hover:bg-white hover:text-green-500 rounded">
+                      <FaPlus size={12} style={{ marginRight: 4 }} /> Add New
+                    </button>
+                    <button
+                      onClick={handleDelete}
+                      disabled={selectedRows.length === 0}
+                      className={`flex items-center rounded pl-4 ${
+                        selectedRows.length === 0
+                          ? "text-gray-400 cursor-not-allowed"
+                          : "text-black hover:bg-white hover:text-red-500"
+                      }`}>
+                      <FaTrash size={12} style={{ marginRight: 4 }} /> Delete
+                    </button>
+                  </div>
+                  <Table
+                    size="small"
+                    style={{ width: "100%" }}
+                    rowSelection={{
+                      type: "checkbox",
+                      ...rowSelection,
+                    }}
+                    columns={columns}
+                    dataSource={activeLink.left === 1 ? users : data}
+                    rowKey={activeLink.left === 1 ? "userId" : "firstName"}
+                    onRow={(record) => ({
+                      onClick: () => {
+                        setDrawerData(record);
+                        showDrawer();
+                      },
+                    })}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <Drawer width={500} title="Update User" onClose={onClose} open={open}>
+          <Form
+            onFinish={onFinishUpdate}
+            form={updateform}
+            layout="vertical"
+            variant="filled"
+            style={{
+              maxWidth: 600,
+            }}
+            initialValues={drawerData}>
+            <Form.Item
+              label="Name"
+              name="firstName"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input!",
+                },
+              ]}>
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="User Name"
+              name="userName"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input!",
+                },
+              ]}>
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="User Role"
+              name="userRole"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select a role!",
+                },
+              ]}>
+              <Select placeholder="Select a role">
+                <Select.Option value="admin">Admin</Select.Option>
+                <Select.Option value="user">User</Select.Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item label="Password" name="password">
+              <Input.Password />
+            </Form.Item>
+
+            <Form.Item
+              wrapperCol={{
+                offset: 0,
+                span: 24,
+              }}>
+              <Button
+                style={{ background: "#387ADF", color: "white", width: "100%" }}
+                htmlType="submit">
+                Update User
+              </Button>
+            </Form.Item>
+          </Form>
+        </Drawer>
+        <Drawer
+          width={500}
+          title="Add New User"
+          onClose={onCloseAdd}
+          open={openAdd}>
+          <Form
+            onFinish={onFinishAdd}
+            form={newform}
+            layout="vertical"
+            variant="filled"
+            style={{
+              maxWidth: 600,
+            }}>
+            <Form.Item
+              label="Name"
+              name="firstName"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input!",
+                },
+              ]}>
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="User Name"
+              name="userName"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input!",
+                },
+              ]}>
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="User Role"
+              name="userRole"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select a role!",
+                },
+              ]}>
+              <Select placeholder="Select a role">
+                <Select.Option value="admin">Admin</Select.Option>
+                <Select.Option value="user">User</Select.Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input!",
+                },
+              ]}>
+              <Input.Password />
+            </Form.Item>
+
+            <Form.Item
+              wrapperCol={{
+                offset: 0,
+                span: 24,
+              }}>
+              <Button
+                style={{ background: "#387ADF", color: "white", width: "100%" }}
+                htmlType="submit">
+                Save User
+              </Button>
+            </Form.Item>
+          </Form>
+        </Drawer>
       </div>
-    </div>
+    </>
   );
 };
 
