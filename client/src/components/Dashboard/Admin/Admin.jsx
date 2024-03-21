@@ -53,6 +53,7 @@ const columns = [
 const Admin = () => {
   const [activeLink, setActiveLink] = useState({ left: 1, right: 0 });
   const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [drawerData, setDrawerData] = useState(null);
   const [users, setUsers] = useState([]);
   const [updateform] = Form.useForm();
@@ -102,6 +103,7 @@ const Admin = () => {
         selectedRows
       );
       setSelectedRows(selectedRows);
+      setSelectedRowKeys(selectedRowKeys);
     },
     getCheckboxProps: (record) => ({
       disabled: record.userName === userName,
@@ -114,8 +116,15 @@ const Admin = () => {
     showAddDrawer();
   };
 
-  const handleDelete = () => {
-    // Handle delete
+  const handleDelete = async () => {
+    try {
+      const userIds = selectedRowKeys; // Array of selected user IDs
+      await api.delete("/api/users/delete", { data: { userIds } });
+      success("Users deleted successfully");
+      fetchUsers();
+    } catch (e) {
+      error("Failed to delete users");
+    }
   };
   const [open, setOpen] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
@@ -240,8 +249,11 @@ const Admin = () => {
                     rowKey={activeLink.left === 1 ? "userId" : "firstName"}
                     onRow={(record) => ({
                       onClick: () => {
-                        setDrawerData(record);
-                        showDrawer();
+                        if (record.userName !== userName) {
+                          // Check if the row is not disabled
+                          setDrawerData(record);
+                          showDrawer();
+                        }
                       },
                     })}
                   />
@@ -259,7 +271,7 @@ const Admin = () => {
             style={{
               maxWidth: 600,
             }}
-            initialValues={drawerData}>
+            initialValues={drawerData || {}}>
             <Form.Item
               label="Name"
               name="firstName"

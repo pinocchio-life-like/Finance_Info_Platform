@@ -2,6 +2,7 @@ const Sequelize = require("sequelize");
 const sequelize = require("../config/db.config");
 const bcrypt = require("bcrypt");
 const ArticleVersion = require("./articleVersionModel").ArticleVersion;
+const { Op } = require("sequelize");
 //define user mmodel
 const User = sequelize.define("Users", {
   userId: {
@@ -105,11 +106,21 @@ const updateUser = async (id, userData) => {
     throw error;
   }
 };
+const destroy = async (userIds) => {
+  try {
+    await User.destroy({
+      where: { userId: { [Op.in]: userIds } },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
 
 module.exports = {
   createUser,
   getUserByUserName,
   getAllUsers,
   updateUser,
+  destroy,
   User,
 };

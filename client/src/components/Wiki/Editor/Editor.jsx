@@ -89,6 +89,27 @@ const Editor = () => {
     }
   };
 
+  const onUploadImg = async (files, callback) => {
+    const res = await Promise.all(
+      files.map((file) => {
+        return new Promise((rev, rej) => {
+          const form = new FormData();
+          form.append("file", file);
+
+          api
+            .post("/api/img/upload", form, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
+            .then((res) => rev(res))
+            .catch((error) => rej(error));
+        });
+      })
+    );
+    callback(res.map((item) => item.data.urls[0]));
+  };
+
   return (
     <div>
       {isLoading ? (
@@ -123,6 +144,7 @@ const Editor = () => {
               showModal();
             }}
             showCodeRowNumber
+            onUploadImg={onUploadImg}
           />
           <Modal
             title="Save Article:"
