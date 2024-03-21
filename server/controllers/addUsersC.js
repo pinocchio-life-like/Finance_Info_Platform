@@ -2,6 +2,7 @@ const {
   createUser,
   getUserByUserName,
   getAllUsers,
+  destroy,
 } = require("../models/models");
 
 const createUsers = async (req, res) => {
@@ -48,4 +49,20 @@ const getUsers = async (req, res) => {
   }
 };
 
-module.exports = { createUsers, getUsers };
+const deleteUsers = async (req, res) => {
+  const { userIds } = req.body;
+  try {
+    await destroy(userIds);
+    res.status(200).json({
+      message: "Users deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+module.exports = { createUsers, getUsers, deleteUsers };
