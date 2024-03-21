@@ -10,7 +10,7 @@ import { addArticleState } from "../../../redux/slices/articleSlice";
 import { changeTableOfContentsState } from "../../../redux/slices/contentsSlice";
 
 const MainContent = (props) => {
-  const { status, drop } = useSelector((state) => state.contents);
+  const { status, drop } = useSelector((state) => state.contents ?? {});
   const { category_Id } = useSelector((state) => state.article);
   const [isOpen, setIsOpen] = useState(status);
   const [activeDropdown, setActiveDropdown] = useState(drop);
