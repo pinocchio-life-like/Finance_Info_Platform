@@ -43,7 +43,11 @@ ArticleVersion.belongsTo(User, {
   foreignKey: "userId",
   targetKey: "userId",
 });
-
+// User.sync({ force
+  
+//   : true }).then(() => {
+//   console.log("users table created");
+// })
 const createUser = async (user) => {
   let users = {};
   console.log("from model");

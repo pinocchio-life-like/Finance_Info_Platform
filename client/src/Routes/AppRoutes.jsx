@@ -17,22 +17,22 @@ import Admin from "../components/Dashboard/Admin/Admin";
 
 function AppRoutes() {
   const location = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  // const [isAuthenticated, setIsAuthenticated] = useState(null);
 
-  useEffect(() => {
-    const checkTokenExpiration = async () => {
-      if (!authService.isAuthenticated()) {
-        await authService.refreshToken();
-      }
-      setIsAuthenticated(authService.isAuthenticated());
-    };
+  // useEffect(() => {
+  //   const checkTokenExpiration = async () => {
+  //     if (!authService.isAuthenticated()) {
+  //       await authService.refreshToken();
+  //     }
+  //     setIsAuthenticated(authService.isAuthenticated());
+  //   };
 
-    checkTokenExpiration();
-  }, []);
+  //   checkTokenExpiration();
+  // }, []);
 
-  if (isAuthenticated === null) {
-    return null;
-  }
+  // if (isAuthenticated === null) {
+  //   return null;
+  // }
 
   return (
     <>
