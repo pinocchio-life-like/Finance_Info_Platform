@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 
 const RoleBasedRoute = ({ children, role }) => {
   const userRole = useSelector((state) => state.user.userRole);
+  console.log(userRole);
 
   return userRole === role ? children : <Navigate to="/404" replace />;
 };

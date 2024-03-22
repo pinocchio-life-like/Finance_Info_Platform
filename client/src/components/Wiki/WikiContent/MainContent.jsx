@@ -11,8 +11,8 @@ import { changeTableOfContentsState } from "../../../redux/slices/contentsSlice"
 
 const MainContent = (props) => {
   const { status, drop } = useSelector((state) => state.contents);
-  const { category_Id } = useSelector((state) => state.article);
   const [isOpen, setIsOpen] = useState(status);
+  const [initiateContent, setInitiateContent] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(drop);
   const [open, setOpen] = useState(false);
   const [openArticleModal, setOpenArticleModal] = useState(false);
@@ -57,7 +57,7 @@ const MainContent = (props) => {
       }
     };
     getCategories();
-  }, [category_Id]);
+  }, [initiateContent]);
 
   useEffect(() => {
     if (currentUrl.includes("/wiki/articles")) {
@@ -128,6 +128,7 @@ const MainContent = (props) => {
         category: values.category,
       });
       console.log(response);
+      setInitiateContent(!initiateContent);
       setSubmitActive(true);
       form.resetFields();
     } catch (error) {

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { authService } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import store from "../redux/store";
+import { persistStore } from "redux-persist";
 import {
   login as loginReducer,
   logout as logoutReducer,
@@ -30,6 +31,8 @@ function useAuth() {
   const logout = async () => {
     try {
       await authService.logout();
+      const persistor = persistStore(store);
+      await persistor.purge();
       store.dispatch(logoutReducer());
       navigate("/login");
     } catch (error) {
