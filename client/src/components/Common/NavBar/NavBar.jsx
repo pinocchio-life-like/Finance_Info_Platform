@@ -144,7 +144,9 @@ const NavBar = () => {
                   Help
                 </Link>
                 <Link
-                  onClick={logout}
+                  onClick={async () => {
+                    await logout();
+                  }}
                   to="#"
                   className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
                   Logout

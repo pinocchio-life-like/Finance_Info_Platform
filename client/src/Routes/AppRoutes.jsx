@@ -14,10 +14,12 @@ import { authService } from "../services/authService";
 import { Result } from "antd";
 import NavBar from "../components/Common/NavBar/NavBar";
 import Admin from "../components/Dashboard/Admin/Admin";
+import { useNavigate } from "react-router-dom";
 
 function AppRoutes() {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkTokenExpiration = async () => {
@@ -26,14 +28,14 @@ function AppRoutes() {
           await authService.refreshToken();
         } catch (error) {
           console.error("Error refreshing token:", error);
-          Navigate("/login", { replace: true });
+          navigate("/login", { replace: true });
         }
       }
       setIsAuthenticated(authService.isAuthenticated());
     };
 
     checkTokenExpiration();
-  }, []);
+  }, [navigate]);
 
   if (isAuthenticated === null) {
     return null;

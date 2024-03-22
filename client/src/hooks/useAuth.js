@@ -28,9 +28,13 @@ function useAuth() {
   };
 
   const logout = async () => {
-    authService.logout();
-    store.dispatch(logoutReducer());
-    navigate("/");
+    try {
+      await authService.logout();
+      store.dispatch(logoutReducer());
+      navigate("/login");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
 
   return { login, logout, error };

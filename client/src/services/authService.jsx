@@ -9,9 +9,13 @@ const authService = {
     localStorage.setItem("token", token);
     return response;
   },
-  logout: function () {
-    api.post("/api/logout");
-    localStorage.removeItem("token");
+  logout: async function () {
+    try {
+      await api.post("/api/logout");
+      localStorage.removeItem("token");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   },
   isAuthenticated: function () {
     const token = localStorage.getItem("token");
