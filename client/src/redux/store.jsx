@@ -21,6 +21,10 @@ const store = configureStore({
     contents: persistedContents,
     // add other reducers here
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export default store;

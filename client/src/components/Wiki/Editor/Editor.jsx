@@ -17,7 +17,7 @@ const Editor = () => {
   );
   const { userName } = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
-  const [text, setText] = useState(articleContent ? articleContent : "");
+  const [text, setText] = useState("");
   const param = useParams();
 
   const [open, setOpen] = useState(false);
@@ -63,7 +63,6 @@ const Editor = () => {
         store.dispatch(
           addArticleState({
             articleName: articleName,
-            articleContent: text,
             category_Id: categoryId,
             action: "edit",
           })

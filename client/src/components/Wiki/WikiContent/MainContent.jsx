@@ -57,7 +57,7 @@ const MainContent = (props) => {
       }
     };
     getCategories();
-  }, [initiateContent]);
+  }, [initiateContent, param.id]);
 
   useEffect(() => {
     if (currentUrl.includes("/wiki/articles")) {
@@ -79,7 +79,6 @@ const MainContent = (props) => {
         store.dispatch(
           addArticleState({
             articleName: data.articleTitle,
-            articleContent: data.articleContent,
             category_Id: data.category_Id,
             action: "edit",
           })
@@ -236,7 +235,10 @@ const MainContent = (props) => {
                     activeLink.right === 1 && (
                       <button
                         className="mr-2 text-black"
-                        onClick={() => addArticleHandler(category)}>
+                        onClick={() => {
+                          addArticleHandler(category);
+                          handleDropdown(index);
+                        }}>
                         <FaPlus size={12} color="#2D9596" />
                       </button>
                     )}
