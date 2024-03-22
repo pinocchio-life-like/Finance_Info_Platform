@@ -21,7 +21,7 @@ function AppRoutes() {
 
   useEffect(() => {
     const checkTokenExpiration = async () => {
-      if (authService.isAuthenticated()) {
+      if (!authService.isAuthenticated()) {
         try {
           await authService.refreshToken();
         } catch (error) {
