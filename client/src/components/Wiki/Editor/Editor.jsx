@@ -9,13 +9,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Bars } from "react-loader-spinner";
 import store from "../../../redux/store";
 import { addArticleState } from "../../../redux/slices/articleSlice";
+const secretKey = import.meta.env.VITE_SECRET_KEY;
+import { jwtDecode } from "jwt-decode";
 
 const Editor = () => {
   const navigate = useNavigate();
   const { articleName, articleContent, category_Id, action } = useSelector(
     (state) => state.article
   );
-  const { userName } = useSelector((state) => state.user);
+  const token = localStorage.getItem("token");
+  const decodedToken = jwtDecode(token, secretKey);
+  const { userName } = decodedToken;
   const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState("");
   const param = useParams();

@@ -8,6 +8,8 @@ import api from "../../../utils/api";
 import store from "../../../redux/store";
 import { addArticleState } from "../../../redux/slices/articleSlice";
 import { changeTableOfContentsState } from "../../../redux/slices/contentsSlice";
+const secretKey = import.meta.env.VITE_SECRET_KEY;
+import { jwtDecode } from "jwt-decode";
 
 const MainContent = (props) => {
   const { status, drop } = useSelector((state) => state.contents);
@@ -28,6 +30,9 @@ const MainContent = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentUrl = location.pathname;
+  const token = localStorage.getItem("token");
+  const decodedToken = jwtDecode(token, secretKey);
+  const { userRole } = decodedToken;
 
   useEffect(() => {
     const getCategories = async () => {
@@ -90,8 +95,6 @@ const MainContent = (props) => {
     };
     getArticle();
   }, [param.id]);
-
-  const userRole = useSelector((state) => state.user.userRole);
 
   const handleDropdown = (index) => {
     if (activeDropdown === index) {

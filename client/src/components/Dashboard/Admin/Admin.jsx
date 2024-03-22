@@ -2,7 +2,8 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { Button, Drawer, Form, Input, Select, Table, message } from "antd";
 import api from "../../../utils/api";
-import { useSelector } from "react-redux";
+const secretKey = import.meta.env.VITE_SECRET_KEY;
+import { jwtDecode } from "jwt-decode";
 
 const data = [
   {
@@ -58,7 +59,9 @@ const Admin = () => {
   const [users, setUsers] = useState([]);
   const [updateform] = Form.useForm();
   const [newform] = Form.useForm();
-  const { userName } = useSelector((state) => state.user);
+  const token = localStorage.getItem("token");
+  const decodedToken = jwtDecode(token, secretKey);
+  const { userName } = decodedToken;
 
   useEffect(() => {
     const fetchUsers = async () => {
