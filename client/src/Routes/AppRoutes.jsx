@@ -9,6 +9,7 @@ import Editor from "../components/Wiki/Editor/Editor";
 import Preview from "../components/Wiki/Preview/Preview";
 import RoleBasedRoute from "../components/RoleBasedRoute";
 import WikiHome from "../components/Wiki/WikiHome";
+import { useEffect, useState } from "react";
 import { authService } from "../services/authService";
 import { Result } from "antd";
 import NavBar from "../components/Common/NavBar/NavBar";
@@ -16,6 +17,27 @@ import Admin from "../components/Dashboard/Admin/Admin";
 
 function AppRoutes() {
   const location = useLocation();
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  useEffect(() => {
+    const checkTokenExpiration = async () => {
+      if (authService.isAuthenticated()) {
+        try {
+          await authService.refreshToken();
+        } catch (error) {
+          console.error("Error refreshing token:", error);
+          Navigate("/login", { replace: true });
+        }
+      }
+      setIsAuthenticated(authService.isAuthenticated());
+    };
+
+    checkTokenExpiration();
+  }, []);
+
+  if (isAuthenticated === null) {
+    return null;
+  }
 
   return (
     <>
@@ -24,11 +46,7 @@ function AppRoutes() {
         <Route
           path="/login"
           element={
-            authService.isAuthenticated() ? (
-              <Navigate to="/" replace />
-            ) : (
-              <LoginPage />
-            )
+            isAuthenticated ? <Navigate to="/" replace /> : <LoginPage />
           }
         />
         <Route
