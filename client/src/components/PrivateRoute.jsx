@@ -1,10 +1,12 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { authService } from "../services/authService";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkTokenExpiration = async () => {
@@ -13,13 +15,14 @@ const PrivateRoute = ({ children }) => {
           await authService.refreshToken();
         } catch (error) {
           console.error("Error refreshing token:", error);
+          navigate("/login", { replace: true });
         }
       }
       setIsAuthenticated(authService.isAuthenticated());
     };
 
     checkTokenExpiration();
-  }, []);
+  }, [navigate]);
 
   if (isAuthenticated === null) {
     return null;
