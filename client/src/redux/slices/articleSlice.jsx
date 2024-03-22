@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const articleSlice = createSlice({
   name: "article",
   initialState: {
-    articleName: null,
-    articleContent: null,
+    articleName: "",
+    articleContent: "",
     category_Id: null,
     action: null,
   },
