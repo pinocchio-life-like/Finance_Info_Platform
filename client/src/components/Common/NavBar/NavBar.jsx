@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import logo from "../../../assets/Images/wihLogo.png";
 import { BsBellFill } from "react-icons/bs";
@@ -7,15 +7,56 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import { CiSearch } from "react-icons/ci";
 import { GoChevronDown } from "react-icons/go";
 import useAuth from "../../../hooks/useAuth";
+import api from "../../../utils/api";
 
 const NavBar = () => {
   const { logout } = useAuth();
   const [menuActive, setMenuActive] = useState(false);
+  const [categoryId, setCategoryId] = useState(null);
   const location = useLocation();
 
   const toggleMenu = () => {
     setMenuActive(!menuActive);
   };
+
+  useEffect(() => {
+    const getFirstArticle = async () => {
+      const response = await api.post("/api/category/getCategories");
+
+      const mainCategories = response.data.filter(
+        (category) => category.parent_Id === null
+      );
+      const subCategories = response.data.filter(
+        (category) => category.parent_Id !== null
+      );
+
+      mainCategories.sort((a, b) => a.order - b.order);
+      subCategories.sort(
+        (a, b) => a.order_within_parent - b.order_within_parent
+      );
+
+      mainCategories.forEach((mainCategory) => {
+        mainCategory.subCategories = subCategories.filter(
+          (subCategory) => subCategory.parent_Id === mainCategory.category_Id
+        );
+      });
+
+      const sortedCategories = [...mainCategories].sort(
+        (a, b) => a.parent_Id - b.parent_Id
+      );
+      const categoryWithSmallestParentId = sortedCategories[0];
+
+      if (categoryWithSmallestParentId) {
+        const sortedSubCategories = [
+          ...categoryWithSmallestParentId.subCategories,
+        ].sort((a, b) => a.order_within_parent - b.order_within_parent);
+        const subCategoryWithSmallestOrder = sortedSubCategories[0];
+        setCategoryId(subCategoryWithSmallestOrder.category_Id);
+      }
+    };
+
+    getFirstArticle();
+  }, []);
 
   return (
     <nav className="nav-bar-container bg-nav-bg px-12  h-20 ">
@@ -30,7 +71,7 @@ const NavBar = () => {
           <ul className="flex gap-10 ml-36">
             <li>
               <Link
-                to="/wiki/articles/2"
+                to={`/wiki/articles/${categoryId}`}
                 className={`font-bold hover:text-blue-700 ${
                   location.pathname.includes("wiki")
                     ? "text-blue-800"
