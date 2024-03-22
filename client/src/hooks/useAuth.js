@@ -3,25 +3,13 @@ import { authService } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import store from "../redux/store";
 import { persistStore } from "redux-persist";
-import {
-  login as loginReducer,
-  logout as logoutReducer,
-} from "../redux/slices/userSlice";
 
 function useAuth() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const login = async (credentials) => {
     try {
-      const response = await authService.login(credentials);
-      const data = response.data.payload;
-      store.dispatch(
-        loginReducer({
-          userName: data.userName,
-          firstName: data.firstName,
-          userRole: data.userRole,
-        })
-      );
+      await authService.login(credentials);
       navigate("/dashboard");
     } catch (error) {
       setError("Failed to login. Please check your username and password.");
@@ -33,7 +21,6 @@ function useAuth() {
       await authService.logout();
       const persistor = persistStore(store);
       await persistor.purge();
-      store.dispatch(logoutReducer());
       navigate("/login");
     } catch (error) {
       console.error("Error logging out:", error);
