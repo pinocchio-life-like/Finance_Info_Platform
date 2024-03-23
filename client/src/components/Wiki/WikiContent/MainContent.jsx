@@ -217,7 +217,7 @@ const MainContent = (props) => {
             style={{ width: "320px", top: buttonRef.current?.offsetTop }}>
             <div className="flex justify-between items-center">
               <div className="flex justify-start items-center">
-                {userRole === "admin" &&
+                {userRole !== "reader" &&
                   activeLink.left === 0 &&
                   activeLink.right === 1 && (
                     <button className="mr-2 text-black" onClick={showModal}>
@@ -237,7 +237,7 @@ const MainContent = (props) => {
             {categories.map((category, index) => (
               <div key={index}>
                 <div className="flex justify-start items-center">
-                  {userRole === "admin" &&
+                  {userRole !== "reader" &&
                     activeLink.left === 0 &&
                     activeLink.right === 1 && (
                       <button
@@ -265,9 +265,7 @@ const MainContent = (props) => {
                 {activeDropdown === index && (
                   <div
                     className={`flex flex-col space-y-2 ${
-                      userRole === "admin" &&
-                      activeLink.left === 0 &&
-                      activeLink.right === 1
+                      activeLink.left === 0 && activeLink.right === 1
                         ? "pl-8"
                         : "pl-4"
                     }`}>

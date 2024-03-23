@@ -8,12 +8,17 @@ import { CiSearch } from "react-icons/ci";
 import { GoChevronDown } from "react-icons/go";
 import useAuth from "../../../hooks/useAuth";
 import api from "../../../utils/api";
+const secretKey = import.meta.env.VITE_SECRET_KEY;
+import { jwtDecode } from "jwt-decode";
 
 const NavBar = () => {
   const { logout } = useAuth();
   const [menuActive, setMenuActive] = useState(false);
   const [categoryId, setCategoryId] = useState(null);
   const location = useLocation();
+  const token = localStorage.getItem("token");
+  const decodedToken = jwtDecode(token, secretKey);
+  const { userRole } = decodedToken;
 
   const toggleMenu = () => {
     setMenuActive(!menuActive);
@@ -113,20 +118,22 @@ const NavBar = () => {
                 Q&A
               </Link>
             </li>
-            <li>
-              <Link
-                to="/manage"
-                className={`font-semibold hover:text-blue-700 ${
-                  location.pathname.includes("Manage")
-                    ? "text-blue-800"
-                    : "text-black"
-                }`}>
-                Manage
-              </Link>
-            </li>
+            {userRole === "admin" && (
+              <li>
+                <Link
+                  to="/manage"
+                  className={`font-semibold hover:text-blue-700 ${
+                    location.pathname.includes("Manage")
+                      ? "text-blue-800"
+                      : "text-black"
+                  }`}>
+                  Manage
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
-        {/* {add a na menu here} */}
+        {/* {add other menus here} */}
         <div className="nav-left flex items-center gap-6 w-3/6 justify-end h-11">
           <div className="search-input  w-2/4 h-10">
             <div className="flex items-center justify-end  h-full">
