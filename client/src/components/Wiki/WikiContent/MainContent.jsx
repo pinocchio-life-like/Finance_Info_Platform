@@ -8,7 +8,6 @@ import api from "../../../utils/api";
 import store from "../../../redux/store";
 import { addArticleState } from "../../../redux/slices/articleSlice";
 import { changeTableOfContentsState } from "../../../redux/slices/contentsSlice";
-const secretKey = import.meta.env.VITE_SECRET_KEY;
 import { jwtDecode } from "jwt-decode";
 import { FiCopy } from "react-icons/fi";
 
@@ -32,8 +31,15 @@ const MainContent = (props) => {
   const navigate = useNavigate();
   const currentUrl = location.pathname;
   const token = localStorage.getItem("token");
-  const decodedToken = jwtDecode(token, secretKey);
-  const { userRole } = decodedToken;
+  let userRole = null;
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      userRole = decodedToken.userRole;
+    } catch (error) {
+      console.error("Invalid token");
+    }
+  }
   const [copied, setCopied] = useState(null);
 
   useEffect(() => {

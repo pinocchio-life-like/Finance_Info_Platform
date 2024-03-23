@@ -8,7 +8,6 @@ import { CiSearch } from "react-icons/ci";
 import { GoChevronDown } from "react-icons/go";
 import useAuth from "../../../hooks/useAuth";
 import api from "../../../utils/api";
-const secretKey = import.meta.env.VITE_SECRET_KEY;
 import { jwtDecode } from "jwt-decode";
 
 const NavBar = () => {
@@ -17,8 +16,15 @@ const NavBar = () => {
   const [categoryId, setCategoryId] = useState(null);
   const location = useLocation();
   const token = localStorage.getItem("token");
-  const decodedToken = jwtDecode(token, secretKey);
-  const { userRole } = decodedToken;
+  let userRole = null;
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      userRole = decodedToken.userRole;
+    } catch (error) {
+      console.error("Invalid token");
+    }
+  }
 
   const toggleMenu = () => {
     setMenuActive(!menuActive);
