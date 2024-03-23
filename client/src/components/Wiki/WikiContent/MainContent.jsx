@@ -285,7 +285,7 @@ const MainContent = (props) => {
                       return (
                         <div
                           key={subCategory.category_Id}
-                          className="flex justify-between items-center mt-2">
+                          className="flex justify-between items-center mt-2 group">
                           <Link
                             style={{ color: "#070F2B" }}
                             key={subCategory.category_Id}
@@ -293,7 +293,7 @@ const MainContent = (props) => {
                             to={linkAddress}>
                             {subCategory.category}
                           </Link>
-                          <div>
+                          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                             <Tooltip
                               visible={copied === subCategory.category_Id}
                               placement="right"
