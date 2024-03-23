@@ -114,7 +114,7 @@ const Editor = () => {
   };
 
   return (
-    <div>
+    <div style={{ display: "flex", width: "100%" }}>
       {isLoading ? (
         <div
           style={{
