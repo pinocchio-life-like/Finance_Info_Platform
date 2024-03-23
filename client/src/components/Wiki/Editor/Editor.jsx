@@ -9,15 +9,26 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Bars } from "react-loader-spinner";
 import store from "../../../redux/store";
 import { addArticleState } from "../../../redux/slices/articleSlice";
+import { jwtDecode } from "jwt-decode";
 
 const Editor = () => {
   const navigate = useNavigate();
   const { articleName, articleContent, category_Id, action } = useSelector(
     (state) => state.article
   );
-  const { userName } = useSelector((state) => state.user);
+  const token = localStorage.getItem("token");
+  let userName = null;
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      userName = decodedToken.userName;
+      console.log(token)
+    } catch (error) {
+      console.error("Invalid token");
+    }
+  }
   const [isLoading, setIsLoading] = useState(false);
-  const [text, setText] = useState(articleContent ? articleContent : "");
+  const [text, setText] = useState("");
   const param = useParams();
 
   const [open, setOpen] = useState(false);
@@ -63,7 +74,6 @@ const Editor = () => {
         store.dispatch(
           addArticleState({
             articleName: articleName,
-            articleContent: text,
             category_Id: categoryId,
             action: "edit",
           })
@@ -111,7 +121,7 @@ const Editor = () => {
   };
 
   return (
-    <div>
+    <div style={{ display: "flex", width: "100%" }}>
       {isLoading ? (
         <div
           style={{

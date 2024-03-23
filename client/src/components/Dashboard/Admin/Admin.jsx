@@ -2,7 +2,7 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { Button, Drawer, Form, Input, Select, Table, message } from "antd";
 import api from "../../../utils/api";
-import { useSelector } from "react-redux";
+import { jwtDecode } from "jwt-decode";
 
 const data = [
   {
@@ -58,7 +58,16 @@ const Admin = () => {
   const [users, setUsers] = useState([]);
   const [updateform] = Form.useForm();
   const [newform] = Form.useForm();
-  const { userName } = useSelector((state) => state.user);
+  const token = localStorage.getItem("token");
+  let userName = null;
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      userName = decodedToken.userName;
+    } catch (error) {
+      console.error("Invalid token");
+    }
+  }
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -308,6 +317,7 @@ const Admin = () => {
               <Select placeholder="Select a role">
                 <Select.Option value="admin">Admin</Select.Option>
                 <Select.Option value="user">User</Select.Option>
+                <Select.Option value="reader">Reader</Select.Option>
               </Select>
             </Form.Item>
 
@@ -377,6 +387,7 @@ const Admin = () => {
               <Select placeholder="Select a role">
                 <Select.Option value="admin">Admin</Select.Option>
                 <Select.Option value="user">User</Select.Option>
+                <Select.Option value="reader">Reader</Select.Option>
               </Select>
             </Form.Item>
 
