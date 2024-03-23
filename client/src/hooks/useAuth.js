@@ -14,6 +14,7 @@ function useAuth() {
     try {
       const response = await authService.login(credentials);
       const data = response.data.payload;
+      console.log(data)
       store.dispatch(
         loginReducer({
           userName: data.userName,

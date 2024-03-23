@@ -3,7 +3,7 @@ import api from "../utils/api";
 const authService = {
   login: async function (data) {
     const response = await api.post("/api/login", {
-      data,
+      data: data,
     });
     const { token } = response.data;
     localStorage.setItem("token", token);
