@@ -12,17 +12,18 @@ const Editor = () => {
 
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [originalText, setOriginalText] = useState("");
+  // const [searchQuery, setSearchQuery] = useState("");
+  // const [originalText, setOriginalText] = useState("");
+
   useEffect(() => {
     const getMainArticle = async () => {
       setIsLoading(true);
       try {
-        const res = await api.get("/api/article/main/1");
+        const res = await api.get("/api/article");
         const { data } = res.data;
 
         setText(data.articleContent);
-        setOriginalText(data.articleContent);
+        // setOriginalText(data.articleContent);
       } finally {
         setIsLoading(false);
       }
@@ -42,7 +43,8 @@ const Editor = () => {
   const saveArticleHandler = async () => {
     setIsLoading(true);
     try {
-      const response = await api.put(`/api/article/main/1`, {
+      const articleId=text.articleId
+      const response = await api.put(`/api/article/${articleId}`, {
         articleTitle: "Main",
         articleContent: text,
         userName: userName,
@@ -55,14 +57,14 @@ const Editor = () => {
       hideModal();
     }
   };
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-    const filteredText = originalText
-      .split("\n")
-      .filter((line) => line.toLowerCase().includes(e.target.value.toLowerCase()))
-      .join("\n");
-    setText(filteredText);
-  };
+  // const handleSearch = (e) => {
+  //   setSearchQuery(e.target.value);
+  //   const filteredText = originalText
+  //     .split("\n")
+  //     .filter((line) => line.toLowerCase().includes(e.target.value.toLowerCase()))
+  //     .join("\n");
+  //   setText(filteredText);
+  // };
 
 
   const onUploadImg = async (files, callback) => {
@@ -117,8 +119,8 @@ const Editor = () => {
         </div>
       ) : (
         <>
-        <label htmlFor="search">search</label>
-        <input type="text" />
+        {/* <label htmlFor="search">search</label>
+        <input type="text" /> */}
           <MdEditor
             style={{
               height: "85vh",

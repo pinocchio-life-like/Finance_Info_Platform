@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 // import { MdPreview, MdCatalog } from "md-editor-rt";
-import { MdPreview } from "md-editor-rt";
+import { MdCatalog, MdPreview } from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
 import "md-editor-rt/lib/preview.css";
 import api from "../../utils/api";
 import { Bars } from "react-loader-spinner";
 import CustomMdCatalog from "./MdCatalogCustom/CustomMdCatalog";
+const editorId = "my-editor";
 
 const Preview = () => {
   const [state, setState] = useState({
@@ -76,6 +77,11 @@ const Preview = () => {
       .join("\n");
     setFilteredText(filteredText);
   };
+
+  // const [state,setState] = useState({
+  //   text: "# heading",
+  //   scrollElement: document.documentElement,
+  // });
 
   return (
     <>

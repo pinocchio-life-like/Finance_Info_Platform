@@ -88,3 +88,4 @@ app.post("/api/img/upload", upload.array("file"), (req, res) => {
 // syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));
+
