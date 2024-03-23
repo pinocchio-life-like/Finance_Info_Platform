@@ -344,19 +344,25 @@ const MainContent = (props) => {
           ))}
         </div>
         <div>
-          {["Read", "Edit", "History"].map((link, index) => (
-            <a
-              key={index}
-              className={`p-2 cursor-pointer ${
-                activeLink.right === index
-                  ? "border-b-2 border-black font-bold"
-                  : ""
-              }`}
-              style={{ lineHeight: "2rem" }}
-              onClick={() => handleLink("right", index)}>
-              {link}
-            </a>
-          ))}
+          {["Read", "Edit", "History"].map((link, index) => {
+            if (userRole === "reader" && link === "Edit") {
+              return null;
+            }
+
+            return (
+              <a
+                key={index}
+                className={`p-2 cursor-pointer ${
+                  activeLink.right === index
+                    ? "border-b-2 border-black font-bold"
+                    : ""
+                }`}
+                style={{ lineHeight: "2rem" }}
+                onClick={() => handleLink("right", index)}>
+                {link}
+              </a>
+            );
+          })}
         </div>
       </div>
       <div className="w-3/5">{props.children}</div>
