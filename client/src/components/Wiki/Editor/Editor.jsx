@@ -9,7 +9,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Bars } from "react-loader-spinner";
 import store from "../../../redux/store";
 import { addArticleState } from "../../../redux/slices/articleSlice";
-const secretKey = import.meta.env.VITE_SECRET_KEY;
 import { jwtDecode } from "jwt-decode";
 
 const Editor = () => {
@@ -18,8 +17,15 @@ const Editor = () => {
     (state) => state.article
   );
   const token = localStorage.getItem("token");
-  const decodedToken = jwtDecode(token, secretKey);
-  const { userName } = decodedToken;
+  let userName = null;
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      userName = decodedToken.userName;
+    } catch (error) {
+      console.error("Invalid token");
+    }
+  }
   const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState("");
   const param = useParams();
