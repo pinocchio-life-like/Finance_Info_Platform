@@ -3,13 +3,14 @@ import { useSelector } from "react-redux";
 import { FaPlus, FaTimes, FaChevronDown } from "react-icons/fa";
 import PropTypes from "prop-types";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Modal, Form, Input, Button } from "antd";
+import { Modal, Form, Input, Button, Tooltip } from "antd";
 import api from "../../../utils/api";
 import store from "../../../redux/store";
 import { addArticleState } from "../../../redux/slices/articleSlice";
 import { changeTableOfContentsState } from "../../../redux/slices/contentsSlice";
 const secretKey = import.meta.env.VITE_SECRET_KEY;
 import { jwtDecode } from "jwt-decode";
+import { FiCopy } from "react-icons/fi";
 
 const MainContent = (props) => {
   const { status, drop } = useSelector((state) => state.contents);
@@ -33,6 +34,7 @@ const MainContent = (props) => {
   const token = localStorage.getItem("token");
   const decodedToken = jwtDecode(token, secretKey);
   const { userRole } = decodedToken;
+  const [copied, setCopied] = useState(null);
 
   useEffect(() => {
     const getCategories = async () => {
@@ -212,17 +214,19 @@ const MainContent = (props) => {
         {isOpen && (
           <div
             className="bg-gray-100 flex flex-col space-y-2 absolute left-full p-4 ml-1 text-black"
-            style={{ width: "300px", top: buttonRef.current?.offsetTop }}>
+            style={{ width: "320px", top: buttonRef.current?.offsetTop }}>
             <div className="flex justify-between items-center">
               <div className="flex justify-start items-center">
-                {userRole === "admin" &&
+                {userRole !== "reader" &&
                   activeLink.left === 0 &&
                   activeLink.right === 1 && (
                     <button className="mr-2 text-black" onClick={showModal}>
                       <FaPlus size={12} color="#2D9596" />
                     </button>
                   )}
-                <h2 className="text-lg font-bold">Contents</h2>
+                <h2 style={{ color: "#070F2B" }} className="text-lg font-bold">
+                  Contents
+                </h2>
               </div>
               <button
                 className="text-red-500 rounded-full w-6 h-6 flex items-center justify-center"
@@ -233,7 +237,7 @@ const MainContent = (props) => {
             {categories.map((category, index) => (
               <div key={index}>
                 <div className="flex justify-start items-center">
-                  {userRole === "admin" &&
+                  {userRole !== "reader" &&
                     activeLink.left === 0 &&
                     activeLink.right === 1 && (
                       <button
@@ -245,7 +249,11 @@ const MainContent = (props) => {
                         <FaPlus size={12} color="#2D9596" />
                       </button>
                     )}
-                  <a key={category.category_Id} href="#" className="text-black">
+                  <a
+                    style={{ color: "#070F2B", fontWeight: "bold" }}
+                    key={category.category_Id}
+                    href="#"
+                    className="text-black">
                     {category.category}
                   </a>
                   <button
@@ -257,26 +265,61 @@ const MainContent = (props) => {
                 {activeDropdown === index && (
                   <div
                     className={`flex flex-col space-y-2 ${
-                      userRole === "admin" &&
-                      activeLink.left === 0 &&
-                      activeLink.right === 1
+                      activeLink.left === 0 && activeLink.right === 1
                         ? "pl-8"
                         : "pl-4"
                     }`}>
-                    {category.subCategories.map((subCategory) => (
-                      <Link
-                        key={subCategory.category_Id}
-                        className="text-black"
-                        to={
-                          currentUrl.includes("edit")
-                            ? `/wiki/edit/${subCategory.category_Id}`
-                            : currentUrl.includes("articles")
-                            ? `/wiki/articles/${subCategory.category_Id}`
-                            : `/wiki/history/${subCategory.category_Id}`
-                        }>
-                        {subCategory.category}
-                      </Link>
-                    ))}
+                    {category.subCategories.map((subCategory) => {
+                      const linkAddress = currentUrl.includes("edit")
+                        ? `/wiki/edit/${subCategory.category_Id}`
+                        : currentUrl.includes("articles")
+                        ? `/wiki/articles/${subCategory.category_Id}`
+                        : `/wiki/history/${subCategory.category_Id}`;
+
+                      return (
+                        <div
+                          key={subCategory.category_Id}
+                          className="flex justify-between items-center mt-2">
+                          <Link
+                            style={{ color: "#070F2B" }}
+                            key={subCategory.category_Id}
+                            className="text-black"
+                            to={linkAddress}>
+                            {subCategory.category}
+                          </Link>
+                          <div>
+                            <Tooltip
+                              visible={copied === subCategory.category_Id}
+                              placement="right"
+                              color="#00224D"
+                              title={
+                                copied === subCategory.category_Id
+                                  ? "Copied!"
+                                  : ""
+                              }
+                              arrow>
+                              <FiCopy
+                                color="#00224D"
+                                fontSize={18}
+                                style={{
+                                  cursor: "pointer",
+                                  marginRight: "2px",
+                                }}
+                                onClick={(event) => {
+                                  event.preventDefault();
+                                  navigator.clipboard.writeText(
+                                    window.location.origin +
+                                      `/wiki/articles/${subCategory.category_Id}`
+                                  );
+                                  setCopied(subCategory.category_Id);
+                                  setTimeout(() => setCopied(null), 2000);
+                                }}
+                              />
+                            </Tooltip>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
