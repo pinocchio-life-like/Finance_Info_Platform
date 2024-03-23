@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
-const RoleBasedRoute = ({ children, role }) => {
+const RoleBasedRoute = ({ children, roles }) => {
   const token = localStorage.getItem("token");
   let userRole = null;
   if (token) {
@@ -13,12 +13,12 @@ const RoleBasedRoute = ({ children, role }) => {
       console.error("Invalid token");
     }
   }
-  return userRole === role ? children : <Navigate to="/404" replace />;
+  return roles.includes(userRole) ? children : <Navigate to="/404" replace />;
 };
 
 RoleBasedRoute.propTypes = {
   children: PropTypes.node.isRequired,
-  role: PropTypes.string.isRequired,
+  roles: PropTypes.string.isRequired,
 };
 
 export default RoleBasedRoute;
