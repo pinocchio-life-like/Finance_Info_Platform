@@ -86,7 +86,7 @@ function AppRoutes() {
         <Route
           path="wiki/edit/:id"
           element={
-            <RoleBasedRoute role="admin">
+            <RoleBasedRoute roles={["admin", "user"]}>
               <PrivateRoute>
                 <WikiHome>
                   <Editor />
@@ -118,7 +118,7 @@ function AppRoutes() {
         <Route
           path="manage"
           element={
-            <RoleBasedRoute role="admin">
+            <RoleBasedRoute roles={["admin"]}>
               <PrivateRoute>
                 <Admin />
               </PrivateRoute>
