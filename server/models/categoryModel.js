@@ -42,7 +42,7 @@ const Category = sequelize.define(
 );
 
 Category.belongsTo(Category, { as: "Parent", foreignKey: "parent_Id" });
-// Category.hasMany(Category, { as: "Children", foreignKey: "parent_id" });
+Category.hasMany(Category, { as: "Children", foreignKey: "parent_id" });
 Category.hasOne(Article, {
   foreignKey: "category_Id",
   sourceKey: "category_Id",

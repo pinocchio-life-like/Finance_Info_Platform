@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 
 const Preview = () => {
   const param = useParams();
+  console.log("on read page", param);
   const [state, setState] = useState({
     text: "",
     scrollElement: document.documentElement,

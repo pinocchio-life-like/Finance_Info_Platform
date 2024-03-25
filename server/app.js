@@ -74,14 +74,14 @@ app.post("/api/img/upload", upload.array("file"), (req, res) => {
     res.status(500).json({ error: error.toString() });
   }
 });
-// async function syncDatabase() {
-//   try {
-//     await sequelize.sync({alter: true,   }); //edit this as needed
-//     console.log("All models were synchronized successfully.");
-//   } catch (error) {
-//     console.error("Error occurred during model synchronization:", error);
-//   }
-// }
+async function syncDatabase() {
+  try {
+    await sequelize.sync({alter: true,   }); //edit this as needed
+    console.log("All models were synchronized successfully.");
+  } catch (error) {
+    console.error("Error occurred during model synchronization:", error);
+  }
+}
 
 // syncDatabase();
 

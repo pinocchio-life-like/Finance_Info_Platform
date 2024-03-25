@@ -30,6 +30,7 @@ const Editor = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState("");
   const param = useParams();
+  console.log("on edit page", param);
 
   const [open, setOpen] = useState(false);
 

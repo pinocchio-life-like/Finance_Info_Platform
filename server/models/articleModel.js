@@ -1,7 +1,7 @@
 const sequelize = require("../config/db.config");
 const { Sequelize, DataTypes } = require("sequelize");
 const User = require("./models").User;
-const ArticleVersion = require("./articleVersionModel").ArticleVersion;
+// const ArticleVersion = require("./articleVersionModel").ArticleVersion;
 
 const Article = sequelize.define("Articles", {
   articleId: {
@@ -36,16 +36,6 @@ const Article = sequelize.define("Articles", {
   },
 });
 
-// Define the foreign key relationship
-Article.belongsTo(User, { foreignKey: "userId" });
-Article.hasMany(ArticleVersion, {
-  foreignKey: "articleId",
-  sourceKey: "articleId",
-});
-ArticleVersion.belongsTo(Article, {
-  foreignKey: "articleId",
-  targetKey: "articleId",
-});
 
 //function to create an article
 const createArticle = async (article) => {

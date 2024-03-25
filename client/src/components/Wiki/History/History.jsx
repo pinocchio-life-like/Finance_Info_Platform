@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const History = () => {
   const param = useParams();
-  console.log(param);
+  console.log("on history page", param);
   
   const navigate = useNavigate();
   const [versions, setVersions] = useState([]);
@@ -75,7 +75,7 @@ const History = () => {
   };
   const compareSelectedVersions = () => {
     if (selectedRowKeys.length === 2) {
-      navigate(`wiki/diffviewer/${selectedRowKeys[0]}/${selectedRowKeys[1]}`); // Use navigate for routing
+      navigate(`/wiki/diffviewer/${selectedRowKeys[0]}/${selectedRowKeys[1]}`); 
     } else {
       alert("Please select exactly two versions to compare.");
     }
@@ -97,7 +97,7 @@ const History = () => {
         }}
       >
         <Button
-          type="primary"
+          //type="primary"
           onClick={compareSelectedVersions}
           disabled={selectedRowKeys.length !== 2}
           loading={loading}

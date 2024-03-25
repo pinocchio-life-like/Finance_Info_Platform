@@ -1,7 +1,7 @@
 const sequelize = require("../config/db.config");
 const { Sequelize, DataTypes } = require("sequelize");
-const User = require("./models").User;
-// const   Article = require("./articleModel").  Article;
+const { Article } = require("./articleModel");
+// const   Article = require("./articleModel").Article;
 
 const ArticleVersion = sequelize.define("ArticleVersions", {
   articleVersionId: {
@@ -37,13 +37,21 @@ const ArticleVersion = sequelize.define("ArticleVersions", {
     type: DataTypes.STRING,
   },
 });
-
+// Article.hasMany(ArticleVersion, {
+//   foreignKey: "articleId",
+//   sourceKey: "articleId",
+// });
+// ArticleVersion.belongsTo(Article, {
+//   foreignKey: "articleId",
+// });
 module.exports = {
   ArticleVersion,
 };
 const getallversionsOFAnArticle = async (id) => {
+  const article = await Article.findOne({ where: { category_Id: id } });
+
   const versions = await ArticleVersion.findAll({
-    where: { articleId: id },
+    where: { articleId: article.articleId },
     attributes: [
       "articleVersionId",
       "articleVersionContent",
@@ -55,8 +63,21 @@ const getallversionsOFAnArticle = async (id) => {
   });
   return versions;
 };
-
+const getVersionById = async (id) => {
+  const version = await ArticleVersion.findOne({
+    where: { articleVersionId: id },
+    attributes: [
+      "articleVersionId",
+      "articleVersionContent",
+      "articleVersionTitle",
+      "updatedAt",
+      "createdAt",
+    ],
+  });
+  return version;
+};
 module.exports = {
   ArticleVersion,
   getallversionsOFAnArticle,
+  getVersionById,
 };
