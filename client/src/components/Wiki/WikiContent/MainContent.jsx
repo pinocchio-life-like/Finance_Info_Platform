@@ -285,7 +285,7 @@ const MainContent = (props) => {
                       return (
                         <div
                           key={subCategory.category_Id}
-                          className="flex justify-between items-center mt-2 group hover:bg-blue-100 hover:rounded-sm">
+                          className="flex justify-between items-center mt-2 group hover:bg-white hover:p-1">
                           <Link
                             style={{ color: "#070F2B" }}
                             key={subCategory.category_Id}
