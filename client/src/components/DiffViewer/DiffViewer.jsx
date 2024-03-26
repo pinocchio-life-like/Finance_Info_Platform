@@ -47,7 +47,7 @@ function Difference() {
     : "";
   return (
     <div className=" main-diff flex  justify-center m-10">
-      <div className="container lg ">
+      <div className="container  w-3/5">
         <div className="article-title border-b border-gray-200 flex justify-between">
           <div>
             <h2 className="text-xl font-semibold">
