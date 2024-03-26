@@ -75,7 +75,7 @@ const History = () => {
   };
   const compareSelectedVersions = () => {
     if (selectedRowKeys.length === 2) {
-      navigate(`/wiki/diffviewer/${selectedRowKeys[0]}/${selectedRowKeys[1]}`); 
+      navigate(`/wiki/diffviewer/${param.id}/${selectedRowKeys[0]}/${selectedRowKeys[1]}`); 
     } else {
       alert("Please select exactly two versions to compare.");
     }

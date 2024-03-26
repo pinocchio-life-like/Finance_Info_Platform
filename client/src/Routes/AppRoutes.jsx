@@ -77,7 +77,7 @@ function AppRoutes() {
           }
         />
         <Route
-          path="wiki/diffviewer/:id1/:id2"
+          path="wiki/diffviewer/:category_Id/:id1/:id2"
           element={
             <PrivateRoute>
               <Difference />

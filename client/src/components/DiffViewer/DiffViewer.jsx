@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import DiffViewer from "react-diff-viewer";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import api from "../../utils/api";
+import { RollbackOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 function Difference() {
   const [oldValue, setOldValue] = useState("");
   const [newValue, setNewValue] = useState("");
   const [title, setTitle] = useState("");
   const [updatedAt, setUpdatedAt] = useState("");
-  const { id1, id2 } = useParams();
+  // const { id1, id2 } = useParams();
+  const { category_Id, id1, id2 } = useParams();
   useEffect(() => {
     Promise.all([
       api.get(`/api/articleversion/${id1}`).then((response) => ({
@@ -45,11 +48,21 @@ function Difference() {
   return (
     <div className=" main-diff flex  justify-center m-10">
       <div className="container lg ">
-        <div className="article-title">
-          <h2 className="text-xl font-semibold">
-            {`Article Title: ${title}`} 
-          </h2>
-          <span className="italic text-gray-300">{`Date Modified: ${formattedUpdatedAt}`}</span>
+        <div className="article-title border-b border-gray-200 flex justify-between">
+          <div>
+            <h2 className="text-xl font-semibold">
+              {`Article Title: ${title}`}
+            </h2>
+            <span className="italic text-gray-300 pb-4">{`Date Modified: ${formattedUpdatedAt}`}</span>
+          </div>
+          <div className="button">
+            {" "}
+            <Link to={`/wiki/history/${category_Id}`} >
+              <Button className="" icon={<RollbackOutlined />}>
+                Back
+              </Button>
+            </Link>
+          </div>
         </div>
         <div className="diff-viewer-container mt-8">
           <DiffViewer
