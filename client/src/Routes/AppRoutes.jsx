@@ -15,7 +15,7 @@ import { Result } from "antd";
 import NavBar from "../components/Common/NavBar/NavBar";
 import Admin from "../components/Dashboard/Admin/Admin";
 import { useNavigate } from "react-router-dom";
-import  MainCompanyAdmin from'../components/Dashboard/Admin/MainCompanyAdmin'
+import History from "../components/Wiki/History/History";
 
 function AppRoutes() {
   const location = useLocation();
@@ -53,7 +53,9 @@ function AppRoutes() {
           }
         />
 
-        <Route path="/com" element={< MainCompanyAdmin/>}/>
+
+       
+
         <Route
           path="/"
           element={
@@ -79,7 +81,8 @@ function AppRoutes() {
           }
         />
         <Route
-          path="diffviewer"
+
+          path="wiki/diffviewer/:category_Id/:id1/:id2"
           element={
             <PrivateRoute>
               <Difference />
@@ -103,7 +106,11 @@ function AppRoutes() {
           element={
             <PrivateRoute>
               <WikiHome>
+
+                <History/>
+
                 <h1>History</h1>
+
               </WikiHome>
             </PrivateRoute>
           }

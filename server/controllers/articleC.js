@@ -1,10 +1,11 @@
 const {
   Article,
-  createArticle,
+  
   getAllArticles,
-  updateArticle,
+ 
   deleteArticle,
 } = require("../models/articleModel");
+const{createArticle, updateArticle}=require('../models/associations')
 const { Category } = require("../models/categoryModel");
 const { User } = require("../models/models");
 
