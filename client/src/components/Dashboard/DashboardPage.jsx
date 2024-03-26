@@ -1,11 +1,10 @@
-import Logout from "../Login/logout";
-
 function DashboardPage() {
   return (
-    <div>
-      <h1>Dashboard Page</h1>
-      <p>Welcome to your dashboard!</p>
-      <Logout />
+    <div
+      className="flex flex-col items-center justify-center text-center"
+      style={{ height: "calc(100vh - 90px)" }}>
+      <h1 className="text-2xl font-bold">Welcome!</h1>
+      <h1 className="text-3xl font-bold">Comming soon...</h1>
     </div>
   );
 }

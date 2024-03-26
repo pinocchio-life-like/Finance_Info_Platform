@@ -2,6 +2,7 @@ const Sequelize = require("sequelize");
 const sequelize = require("../config/db.config");
 const bcrypt = require("bcrypt");
 const ArticleVersion = require("./articleVersionModel").ArticleVersion;
+const { Op } = require("sequelize");
 //define user mmodel
 const User = sequelize.define("Users", {
   userId: {
@@ -46,7 +47,6 @@ ArticleVersion.belongsTo(User, {
 
 const createUser = async (user) => {
   let users = {};
-  console.log("from model");
   const { firstName, userName, password, userRole } = user;
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
@@ -70,32 +70,43 @@ const getUserByUserName = async (userName) => {
 const getAllUsers = async () => {
   return User.findAll();
 };
-//update user
 
+//update user
 const updateUser = async (id, userData) => {
   const { firstName, userName, password, userRole } = userData;
-
   try {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    let hashedPassword;
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      hashedPassword = await bcrypt.hash(password, salt);
+    }
 
-    const [rowsUpdated, updatedUsers] = await User.update(
-      { firstName, userName, password: hashedPassword, userRole },
-      {
-        where: { userId: id },
-        returning: true,
-      }
-    );
+    const updateData = { firstName, userName, userRole };
+    if (hashedPassword) {
+      updateData.password = hashedPassword;
+    }
+
+    const [rowsUpdated, updatedUsers] = await User.update(updateData, {
+      where: { userId: id },
+      returning: true,
+    });
 
     if (rowsUpdated === 0) {
       throw new Error("User not found or no updates made");
     }
 
-    // Since updatedUsers is an array, use updatedUsers[0] to get the first element
     const updatedUser = updatedUsers[0];
 
-    // Return an object with both updatedUser and the result of findByPk
     return { updatedUser, user: await User.findByPk(id) };
+  } catch (error) {
+    throw error;
+  }
+};
+const destroy = async (userIds) => {
+  try {
+    await User.destroy({
+      where: { userId: { [Op.in]: userIds } },
+    });
   } catch (error) {
     throw error;
   }
@@ -105,7 +116,7 @@ module.exports = {
   createUser,
   getUserByUserName,
   getAllUsers,
-
   updateUser,
+  destroy,
   User,
 };

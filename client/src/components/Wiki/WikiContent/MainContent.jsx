@@ -2,23 +2,27 @@ import { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FaPlus, FaTimes, FaChevronDown } from "react-icons/fa";
 import PropTypes from "prop-types";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Modal, Form, Input, Button } from "antd";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Modal, Form, Input, Button, Tooltip } from "antd";
 import api from "../../../utils/api";
 import store from "../../../redux/store";
 import { addArticleState } from "../../../redux/slices/articleSlice";
 import { changeTableOfContentsState } from "../../../redux/slices/contentsSlice";
+const secretKey = import.meta.env.VITE_SECRET_KEY;
+import { jwtDecode } from "jwt-decode";
+import { FiCopy } from "react-icons/fi";
 
 const MainContent = (props) => {
-  const contentsIsOpen = useSelector((state) => state.contents.status);
-  const [isOpen, setIsOpen] = useState(contentsIsOpen);
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const { status, drop } = useSelector((state) => state.contents);
+  const [isOpen, setIsOpen] = useState(status);
+  const [initiateContent, setInitiateContent] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(drop);
   const [open, setOpen] = useState(false);
   const [openArticleModal, setOpenArticleModal] = useState(false);
   const [submitActive, setSubmitActive] = useState(false);
   const [addArtCategory_Id, setAddArt_Category_Id] = useState(null);
   const [categories, setCategories] = useState([]);
-  const [currentId, setCurrentId] = useState();
+  const param = useParams();
   const [articleTitle, setArticleTitle] = useState("");
   const [form] = Form.useForm();
   const [articleForm] = Form.useForm();
@@ -27,8 +31,10 @@ const MainContent = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentUrl = location.pathname;
-
-  const currentArticle = useSelector((state) => state.article);
+  const token = localStorage.getItem("token");
+  const decodedToken = jwtDecode(token, secretKey);
+  const { userRole } = decodedToken;
+  const [copied, setCopied] = useState(null);
 
   useEffect(() => {
     const getCategories = async () => {
@@ -58,94 +64,45 @@ const MainContent = (props) => {
       }
     };
     getCategories();
-  }, []);
+  }, [initiateContent, param.id]);
 
   useEffect(() => {
-    const getFirstArticle = async () => {
-      try {
-        const sortedCategories = [...categories].sort(
-          (a, b) => a.parent_Id - b.parent_Id
-        );
-        const categoryWithSmallestParentId = sortedCategories[0];
-
-        if (categoryWithSmallestParentId) {
-          const sortedSubCategories = [
-            ...categoryWithSmallestParentId.subCategories,
-          ].sort((a, b) => a.order_within_parent - b.order_within_parent);
-          const subCategoryWithSmallestOrder = sortedSubCategories[0];
-
-          if (subCategoryWithSmallestOrder) {
-            const response = await api.get(
-              `/api/article/${
-                currentArticle.category_Id
-                  ? currentArticle.category_Id
-                  : subCategoryWithSmallestOrder.category_Id
-              }`
-            );
-            const { data } = response.data;
-            // Dispatch the addarticle action
-            store.dispatch(
-              addArticleState({
-                articleName: data.articleTitle,
-                articleContent: data.articleContent,
-                category_Id: data.category_Id,
-                action: "edit",
-              })
-            );
-            setCurrentId(data.category_Id);
-            setArticleTitle(data.articleTitle);
-          }
-        }
-      } catch (error) {
-        console.error("An error occurred while fetching: ", error);
-      }
-    };
-
-    getFirstArticle();
-  }, [currentArticle, categories]);
-
-  useEffect(() => {
-    switch (currentUrl) {
-      case "/wiki/articles":
-        setActiveLink({ left: 0, right: 0 });
-        break;
-      case "/wiki/edit":
-        setActiveLink({ left: 0, right: 1 });
-        break;
-      case "/wiki/history":
-        setActiveLink({ left: 0, right: 2 });
-        break;
-      default:
-        setActiveLink({ left: 0, right: 0 }); // default case
+    if (currentUrl.includes("/wiki/articles")) {
+      setActiveLink({ left: 0, right: 0 });
+    } else if (currentUrl.includes("/wiki/edit")) {
+      setActiveLink({ left: 0, right: 1 });
+    } else if (currentUrl.includes("/wiki/history")) {
+      setActiveLink({ left: 0, right: 2 });
+    } else {
+      setActiveLink({ left: 0, right: 0 }); // default case
     }
   }, [currentUrl]);
 
   useEffect(() => {
     const getArticle = async () => {
       try {
-        const response = await api.get(`/api/article/${currentId}`);
+        const response = await api.get(`/api/article/${param.id}`);
         const { data } = response.data;
         store.dispatch(
           addArticleState({
             articleName: data.articleTitle,
-            articleContent: data.articleContent,
             category_Id: data.category_Id,
             action: "edit",
           })
         );
+        setArticleTitle(data.articleTitle);
       } catch (error) {
         console.error("An error occurred while fetching: ", error);
       }
     };
     getArticle();
-  }, [currentId]);
-
-  const userRole = useSelector((state) => state.user.userRole);
+  }, [param.id]);
 
   const handleDropdown = (index) => {
     if (activeDropdown === index) {
       setActiveDropdown(null);
     } else {
+      store.dispatch(changeTableOfContentsState({ status: true, drop: index }));
       setActiveDropdown(index);
     }
   };
@@ -155,13 +112,13 @@ const MainContent = (props) => {
     if (side === "right") {
       switch (index) {
         case 0:
-          navigate("/wiki/articles");
+          navigate(`/wiki/articles/${param.id}`);
           break;
         case 1:
-          navigate("/wiki/edit");
+          navigate(`/wiki/edit/${param.id}`);
           break;
         case 2:
-          navigate("/wiki/history");
+          navigate(`/wiki/history/${param.id}`);
           break;
         default:
           break;
@@ -171,11 +128,11 @@ const MainContent = (props) => {
 
   const addCategory = async (values) => {
     try {
-      console.log(values);
       const response = await api.post("/api/category/addCategory", {
         category: values.category,
       });
       console.log(response);
+      setInitiateContent(!initiateContent);
       setSubmitActive(true);
       form.resetFields();
     } catch (error) {
@@ -195,10 +152,6 @@ const MainContent = (props) => {
           action: "add",
         })
       );
-      const response = await api.post("/api/category/addCategory", {
-        category: values.category,
-      });
-      console.log(response);
       setSubmitActive(true);
       articleForm.resetFields();
     } catch (error) {
@@ -237,8 +190,10 @@ const MainContent = (props) => {
   };
 
   useEffect(() => {
-    store.dispatch(changeTableOfContentsState({ status: isOpen }));
-  }, [isOpen]);
+    store.dispatch(
+      changeTableOfContentsState({ status: isOpen, drop: activeDropdown })
+    );
+  }, [isOpen, activeDropdown]);
 
   return (
     <div className="flex-grow flex flex-col items-center bg-white">
@@ -259,17 +214,19 @@ const MainContent = (props) => {
         {isOpen && (
           <div
             className="bg-gray-100 flex flex-col space-y-2 absolute left-full p-4 ml-1 text-black"
-            style={{ width: "300px", top: buttonRef.current?.offsetTop }}>
+            style={{ width: "320px", top: buttonRef.current?.offsetTop }}>
             <div className="flex justify-between items-center">
               <div className="flex justify-start items-center">
-                {userRole === "admin" &&
+                {userRole !== "reader" &&
                   activeLink.left === 0 &&
                   activeLink.right === 1 && (
                     <button className="mr-2 text-black" onClick={showModal}>
                       <FaPlus size={12} color="#2D9596" />
                     </button>
                   )}
-                <h2 className="text-lg font-bold">Contents</h2>
+                <h2 style={{ color: "#070F2B" }} className="text-lg font-bold">
+                  Contents
+                </h2>
               </div>
               <button
                 className="text-red-500 rounded-full w-6 h-6 flex items-center justify-center"
@@ -280,16 +237,23 @@ const MainContent = (props) => {
             {categories.map((category, index) => (
               <div key={index}>
                 <div className="flex justify-start items-center">
-                  {userRole === "admin" &&
+                  {userRole !== "reader" &&
                     activeLink.left === 0 &&
                     activeLink.right === 1 && (
                       <button
                         className="mr-2 text-black"
-                        onClick={() => addArticleHandler(category)}>
+                        onClick={() => {
+                          addArticleHandler(category);
+                          handleDropdown(index);
+                        }}>
                         <FaPlus size={12} color="#2D9596" />
                       </button>
                     )}
-                  <a key={category.category_Id} href="#" className="text-black">
+                  <a
+                    style={{ color: "#070F2B", fontWeight: "bold" }}
+                    key={category.category_Id}
+                    href="#"
+                    className="text-black">
                     {category.category}
                   </a>
                   <button
@@ -301,23 +265,61 @@ const MainContent = (props) => {
                 {activeDropdown === index && (
                   <div
                     className={`flex flex-col space-y-2 ${
-                      userRole === "admin" &&
-                      activeLink.left === 0 &&
-                      activeLink.right === 1
+                      activeLink.left === 0 && activeLink.right === 1
                         ? "pl-8"
                         : "pl-4"
                     }`}>
-                    {category.subCategories.map((subCategory) => (
-                      <Link
-                        key={subCategory.category_Id}
-                        className="text-black"
-                        onClick={() => {
-                          setArticleTitle(subCategory.category);
-                          setCurrentId(subCategory.category_Id);
-                        }}>
-                        {subCategory.category}
-                      </Link>
-                    ))}
+                    {category.subCategories.map((subCategory) => {
+                      const linkAddress = currentUrl.includes("edit")
+                        ? `/wiki/edit/${subCategory.category_Id}`
+                        : currentUrl.includes("articles")
+                        ? `/wiki/articles/${subCategory.category_Id}`
+                        : `/wiki/history/${subCategory.category_Id}`;
+
+                      return (
+                        <div
+                          key={subCategory.category_Id}
+                          className="flex justify-between items-center mt-2">
+                          <Link
+                            style={{ color: "#070F2B" }}
+                            key={subCategory.category_Id}
+                            className="text-black"
+                            to={linkAddress}>
+                            {subCategory.category}
+                          </Link>
+                          <div>
+                            <Tooltip
+                              visible={copied === subCategory.category_Id}
+                              placement="right"
+                              color="#00224D"
+                              title={
+                                copied === subCategory.category_Id
+                                  ? "Copied!"
+                                  : ""
+                              }
+                              arrow>
+                              <FiCopy
+                                color="#00224D"
+                                fontSize={18}
+                                style={{
+                                  cursor: "pointer",
+                                  marginRight: "2px",
+                                }}
+                                onClick={(event) => {
+                                  event.preventDefault();
+                                  navigator.clipboard.writeText(
+                                    window.location.origin +
+                                      `/wiki/articles/${subCategory.category_Id}`
+                                  );
+                                  setCopied(subCategory.category_Id);
+                                  setTimeout(() => setCopied(null), 2000);
+                                }}
+                              />
+                            </Tooltip>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -342,19 +344,25 @@ const MainContent = (props) => {
           ))}
         </div>
         <div>
-          {["Read", "Edit", "History"].map((link, index) => (
-            <a
-              key={index}
-              className={`p-2 cursor-pointer ${
-                activeLink.right === index
-                  ? "border-b-2 border-black font-bold"
-                  : ""
-              }`}
-              style={{ lineHeight: "2rem" }}
-              onClick={() => handleLink("right", index)}>
-              {link}
-            </a>
-          ))}
+          {["Read", "Edit", "History"].map((link, index) => {
+            if (userRole === "reader" && link === "Edit") {
+              return null;
+            }
+
+            return (
+              <a
+                key={index}
+                className={`p-2 cursor-pointer ${
+                  activeLink.right === index
+                    ? "border-b-2 border-black font-bold"
+                    : ""
+                }`}
+                style={{ lineHeight: "2rem" }}
+                onClick={() => handleLink("right", index)}>
+                {link}
+              </a>
+            );
+          })}
         </div>
       </div>
       <div className="w-3/5">{props.children}</div>
