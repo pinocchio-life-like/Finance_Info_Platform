@@ -335,19 +335,24 @@ const MainContent = (props) => {
       </div>
       <div className="flex justify-between items-center w-3/5 border-b border-gray-600 pb-1">
         <div>
-          {["Article", "Files"].map((link, index) => (
-            <a
-              key={index}
-              className={`p-2 cursor-pointer ${
-                activeLink.left === index
-                  ? "border-b-2 border-black font-bold"
-                  : ""
-              }`}
-              style={{ lineHeight: "2rem" }}
-              onClick={() => handleLink("left", index)}>
-              {link}
-            </a>
-          ))}
+          {["Article", "Files"].map((link, index) => {
+            if (link === "Files") {
+              return null;
+            }
+            return (
+              <a
+                key={index}
+                className={`p-2 cursor-pointer ${
+                  activeLink.left === index
+                    ? "border-b-2 border-black font-bold"
+                    : ""
+                }`}
+                style={{ lineHeight: "2rem" }}
+                onClick={() => handleLink("left", index)}>
+                {link}
+              </a>
+            );
+          })}
         </div>
         <div>
           {["Read", "Edit", "History"].map((link, index) => {
