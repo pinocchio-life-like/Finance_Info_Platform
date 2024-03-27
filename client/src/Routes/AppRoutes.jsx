@@ -2,7 +2,7 @@
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import PrivateRoute from "../components/PrivateRoute";
 import LoginPage from "../components/Login/LoginPage";
-import DashboardPage from "../components/Dashboard/DashboardPage";
+// import DashboardPage from "../components/Dashboard/DashboardPage";
 import ProfilePage from "../components/Profile/ProfilePage";
 import Difference from "../components/DiffViewer/DiffViewer";
 import Editor from "../components/Wiki/Editor/Editor";
@@ -51,22 +51,30 @@ function AppRoutes() {
             isAuthenticated ? <Navigate to="/" replace /> : <LoginPage />
           }
         />
-        <Route
+        {/* <Route
           path="/"
           element={
             <PrivateRoute>
               <DashboardPage />
             </PrivateRoute>
           }
+        /> */}
+        <Route
+          path="/"
+          element={<Navigate to={`/wiki/articles/${2}`} replace />}
         />
         <Route
+          path="dashboard"
+          element={<Navigate to={`/wiki/articles/${2}`} replace />}
+        />
+        {/* <Route
           path="dashboard"
           element={
             <PrivateRoute>
               <DashboardPage />
             </PrivateRoute>
           }
-        />
+        /> */}
         <Route
           path="profile"
           element={
