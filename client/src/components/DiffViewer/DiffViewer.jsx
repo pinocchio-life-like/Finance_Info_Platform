@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import DiffViewer from "react-diff-viewer";
+import DiffViewer from "react-diff-viewer-continued";
 import { Link, useParams } from "react-router-dom";
 import api from "../../utils/api";
-import { RollbackOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { RollbackOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 function Difference() {
   const [oldValue, setOldValue] = useState("");
   const [newValue, setNewValue] = useState("");
@@ -47,7 +47,7 @@ function Difference() {
     : "";
   return (
     <div className=" main-diff flex  justify-center m-10">
-      <div className="container  w-3/5">
+      <div className="container  w-4/5">
         <div className="article-title border-b border-gray-200 flex justify-between">
           <div>
             <h2 className="text-xl font-semibold">
@@ -57,7 +57,7 @@ function Difference() {
           </div>
           <div className="button">
             {" "}
-            <Link to={`/wiki/history/${category_Id}`} >
+            <Link to={`/wiki/history/${category_Id}`}>
               <Button className="" icon={<RollbackOutlined />}>
                 Back
               </Button>

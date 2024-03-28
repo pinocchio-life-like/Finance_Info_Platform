@@ -2,20 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Button, Table } from "antd";
 import api from "../../../utils/api";
 import { useParams } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const History = () => {
   const param = useParams();
   console.log("on history page", param);
 
-  
   const navigate = useNavigate();
   const [versions, setVersions] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectionError, setSelectionError] = useState("");
-  console.log(versions)
+  console.log(versions);
   useEffect(() => {
     const fetchArticleVersions = async () => {
       setIsLoading(true);
@@ -40,8 +39,6 @@ const History = () => {
 
     fetchArticleVersions();
   }, [param.id]);
-
-  
 
   const columns = [
     {
@@ -69,17 +66,24 @@ const History = () => {
   };
   const onSelectChange = (newSelectedRowKeys) => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
+    if (newSelectedRowKeys.length > 2) {
+      newSelectedRowKeys = newSelectedRowKeys.slice(0, 2);
+    }
     setSelectedRowKeys(newSelectedRowKeys);
     if (newSelectedRowKeys.length === 2) {
-      setSelectedRowKeys(newSelectedRowKeys);
       setSelectionError("");
     } else {
-      setSelectionError("You must select exactly two items.");
+      const remainingSelections = 2 - newSelectedRowKeys.length;
+      setSelectionError(
+        `Selected ${newSelectedRowKeys.length} item, ${remainingSelections} selection left.`
+      );
     }
   };
   const compareSelectedVersions = () => {
     if (selectedRowKeys.length === 2) {
-      navigate(`/wiki/diffviewer/${param.id}/${selectedRowKeys[0]}/${selectedRowKeys[1]}`); 
+      navigate(
+        `/wiki/diffviewer/${param.id}/${selectedRowKeys[0]}/${selectedRowKeys[1]}`
+      );
     } else {
       alert("Please select exactly two versions to compare.");
     }
@@ -88,40 +92,34 @@ const History = () => {
     selectedRowKeys,
     onChange: onSelectChange,
     getCheckboxProps: (record) => ({
-      disabled: selectedRowKeys.length === 2 && !selectedRowKeys.includes(record.key),
+      disabled:
+        selectedRowKeys.length === 2 && !selectedRowKeys.includes(record.key),
     }),
   };
   const hasSelected = selectedRowKeys.length > 0;
 
   return (
-    <div className="mt-10">
+    <div className="mt-4">
       <div
         style={{
           marginBottom: 16,
-        }}
-      >
+        }}>
         <Button
           //type="primary"
           onClick={compareSelectedVersions}
           disabled={selectedRowKeys.length !== 2}
-          loading={loading}
-        >
-          Compare Selected Versions
+          loading={loading}>
+          Compare Versions
         </Button>
         <span
           style={{
             marginLeft: 8,
-          }}
-        >
-          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
+          }}>
+          {hasSelected ? selectionError : ""}
         </span>
       </div>
-      {selectionError && (
-        <div style={{ color: "red", marginBottom: "10px" }}>
-          {selectionError}
-        </div>
-      )}
       <Table
+        size="small"
         loading={isLoading}
         rowSelection={rowSelection}
         columns={columns}

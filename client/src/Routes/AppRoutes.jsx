@@ -86,7 +86,6 @@ function AppRoutes() {
           }
         />
         <Route
-
           path="wiki/diffviewer/:category_Id/:id1/:id2"
           element={
             <PrivateRoute>
@@ -111,11 +110,7 @@ function AppRoutes() {
           element={
             <PrivateRoute>
               <WikiHome>
-
-                <History/>
-
-                <h1>History</h1>
-
+                <History />
               </WikiHome>
             </PrivateRoute>
           }
