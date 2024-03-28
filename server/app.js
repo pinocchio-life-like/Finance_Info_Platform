@@ -19,6 +19,8 @@ const loginRoute = require("./routes/userLoginR");
 const userUpdateRoute = require("./routes/userUpdateR");
 const articleRoute = require("./routes/articleR");
 const categoryRoute = require("./routes/categoryRoute");
+const companyR=require('./routes/companyR')
+const versionRoute=require('./routes/articleVersionR')
 
 const app = express();
 
@@ -30,12 +32,12 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-app.use(cors(corsOptions));
+
 
 app.use(cookieParser());
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors(corsOptions));
 // Routes setup
 app.use("/api", userAddRoute);
 app.use("/api", loginRoute);
@@ -43,6 +45,8 @@ app.use("/api", loginRoute);
 app.use("/api", userUpdateRoute);
 app.use("/api", articleRoute);
 app.use("/api", categoryRoute);
+app.use('/api',companyR)
+app.use('/api',versionRoute)
 
 // Set up multer for file storage
 const storage = multer.diskStorage({
@@ -73,15 +77,16 @@ app.post("/api/img/upload", upload.array("file"), (req, res) => {
     res.status(500).json({ error: error.toString() });
   }
 });
-// async function syncDatabase() {
-//   try {
-//     await sequelize.sync({ alter: true, force: true }); //edit this as needed
-//     console.log("All models were synchronized successfully.");
-//   } catch (error) {
-//     console.error("Error occurred during model synchronization:", error);
-//   }
-// }
-//
+async function syncDatabase() {
+  try {
+    await sequelize.sync({ alter: true }); //edit this as needed
+    console.log("All models were synchronized successfully.");
+  } catch (error) {
+    console.error("Error occurred during model synchronization:", error);
+  }
+}
+
 // syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));
+ 

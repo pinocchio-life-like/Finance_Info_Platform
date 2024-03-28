@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 // import { MdPreview, MdCatalog } from "md-editor-rt";
 import { MdPreview } from "md-editor-rt";
@@ -10,7 +11,6 @@ import { useParams } from "react-router-dom";
 
 const Preview = () => {
   const param = useParams();
-  console.log("on read page", param);
   const [state, setState] = useState({
     text: "",
     scrollElement: document.documentElement,
@@ -83,3 +83,4 @@ const Preview = () => {
 };
 
 export default Preview;
+
