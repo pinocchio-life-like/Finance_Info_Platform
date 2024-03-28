@@ -22,6 +22,7 @@ const Editor = () => {
     try {
       const decodedToken = jwtDecode(token);
       userName = decodedToken.userName;
+      console.log(token)
     } catch (error) {
       console.error("Invalid token");
     }
@@ -29,6 +30,7 @@ const Editor = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState("");
   const param = useParams();
+  console.log("on edit page", param);
 
   const [open, setOpen] = useState(false);
 

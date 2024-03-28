@@ -19,6 +19,8 @@ const loginRoute = require("./routes/userLoginR");
 const userUpdateRoute = require("./routes/userUpdateR");
 const articleRoute = require("./routes/articleR");
 const categoryRoute = require("./routes/categoryRoute");
+const companyR = require("./routes/companyR");
+const versionRoute = require("./routes/articleVersionR");
 
 const app = express();
 
@@ -30,12 +32,10 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-app.use(cors(corsOptions));
-
 app.use(cookieParser());
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors(corsOptions));
 // Routes setup
 app.use("/api", userAddRoute);
 app.use("/api", loginRoute);
@@ -43,6 +43,8 @@ app.use("/api", loginRoute);
 app.use("/api", userUpdateRoute);
 app.use("/api", articleRoute);
 app.use("/api", categoryRoute);
+app.use("/api", companyR);
+app.use("/api", versionRoute);
 
 // Set up multer for file storage
 const storage = multer.diskStorage({

@@ -1,5 +1,5 @@
 const sequelize = require("../config/db.config");
-const { Sequelize, DataTypes } = require("sequelize");
+const {DataTypes } = require("sequelize");
 const User = require("./models").User;
 const ArticleVersion = require("./articleVersionModel").ArticleVersion;
 
@@ -36,42 +36,32 @@ const Article = sequelize.define("Articles", {
   },
 });
 
-// Define the foreign key relationship
-Article.belongsTo(User, { foreignKey: "userId" });
-Article.hasMany(ArticleVersion, {
-  foreignKey: "articleId",
-  sourceKey: "articleId",
-});
-ArticleVersion.belongsTo(Article, {
-  foreignKey: "articleId",
-  targetKey: "articleId",
-});
 
 //function to create an article
-const createArticle = async (article) => {
-  try {
-    const { articleTitle, articleContent, category_Id, userId } = article;
-    const createdArticle = await Article.create({
-      articleTitle,
-      articleContent,
-      category_Id,
-      userId,
-    });
+// const createArticle = async (article) => {
+//   try {
+//     const { articleTitle, articleContent, category_Id, userId } = article;
+//     const createdArticle = await Article.create({
+//       articleTitle,
+//       articleContent,
+//       category_Id,
+//       userId,
+//     });
 
-    const version = await ArticleVersion.create({
-      articleId: createdArticle.articleId,
-      articleVersionTitle: articleTitle,
-      articleVersionContent: articleContent,
-      articleVersionCategory: category_Id,
-      userId,
-    });
+//     const version = await ArticleVersion.create({
+//       articleId: createdArticle.articleId,
+//       articleVersionTitle: articleTitle,
+//       articleVersionContent: articleContent,
+//       articleVersionCategory: category_Id,
+//       userId,
+//     });
 
-    return { createdArticle, version };
-  } catch (error) {
-    console.error("Error creating article:", error);
-    throw error;
-  }
-};
+//     return { createdArticle, version };
+//   } catch (error) {
+//     console.error("Error creating article:", error);
+//     throw error;
+//   }
+// };
 //function to get all  articles
 const getAllArticles = async () => {
   try {
@@ -85,41 +75,41 @@ const getAllArticles = async () => {
   }
 };
 // function to update the articles
-const updateArticle = async (data) => {
-  try {
-    const { articleTitle, articleContent, category_Id, userId } = data;
+// const updateArticle = async (data) => {
+//   try {
+//     const { articleTitle, articleContent, category_Id, userId } = data;
 
-    const article = await Article.findOne({
-      where: { category_Id: category_Id },
-    });
+//     const article = await Article.findOne({
+//       where: { category_Id: category_Id },
+//     });
 
-    if (!article) {
-      return res
-        .status(404)
-        .json({ message: "Article not found and can't update" });
-    }
+//     if (!article) {
+//       return res
+//         .status(404)
+//         .json({ message: "Article not found and can't update" });
+//     }
 
-    const updatedArticle = await article.update({
-      articleTitle,
-      articleContent,
-      category_Id,
-      userId,
-    });
+//     const updatedArticle = await article.update({
+//       articleTitle,
+//       articleContent,
+//       category_Id,
+//       userId,
+//     });
 
-    const version = await ArticleVersion.create({
-      articleVersionTitle: articleTitle,
-      articleVersionContent: articleContent,
-      articleVersionCategory: category_Id,
-      articleId: updatedArticle.articleId,
-      userId,
-    });
+//     const version = await ArticleVersion.create({
+//       articleVersionTitle: articleTitle,
+//       articleVersionContent: articleContent,
+//       articleVersionCategory: category_Id,
+//       articleId: updatedArticle.articleId,
+//       userId,
+//     });
 
-    return { updatedArticle, version };
-  } catch (error) {
-    console.error("Error updating article:", error);
-    throw error;
-  }
-};
+//     return { updatedArticle, version };
+//   } catch (error) {
+//     console.error("Error updating article:", error);
+//     throw error;
+//   }
+// };
 
 //handling the dettting of an article
 const deleteArticle = async (articleId) => {
@@ -133,11 +123,16 @@ const deleteArticle = async (articleId) => {
     throw error;
   }
 };
+// const findOne=async(id)=>{
+//   const article = await Article.findOne({ where: { category_Id: id } });
+//   return article
+// }
 
 module.exports = {
   Article,
-  createArticle,
+  // createArticle,
   getAllArticles,
-  updateArticle,
+  // updateArticle,
   deleteArticle,
+  // findOne
 };

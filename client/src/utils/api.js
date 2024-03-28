@@ -8,14 +8,14 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const originalRequest = error.config;
-
-    if (
-      error.response.status === 401 &&
-      !originalRequest._retry &&
-      originalRequest.url !== "/api/refreshToken"
-    ) {
-      originalRequest._retry = true;
+    if (error.response) {
+      const originalRequest = error.config;
+      if (
+        error.response.status === 401 &&
+        !originalRequest._retry &&
+        originalRequest.url !== "/api/refreshToken"
+      ) {
+        originalRequest._retry = true;
 
       try {
         const response = await api.post("/api/refreshToken");
@@ -35,6 +35,6 @@ api.interceptors.response.use(
     console.log("Error making request:", error); // Log the error if the request fails
     return Promise.reject(error);
   }
+}
 );
-
 export default api;

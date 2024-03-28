@@ -80,7 +80,7 @@ const MainContent = (props) => {
     } else if (currentUrl.includes("/wiki/history")) {
       setActiveLink({ left: 0, right: 2 });
     } else {
-      setActiveLink({ left: 0, right: 0 }); // default case
+      setActiveLink({ left: 0, right: 0 });
     }
   }, [currentUrl]);
 
@@ -285,7 +285,7 @@ const MainContent = (props) => {
                       return (
                         <div
                           key={subCategory.category_Id}
-                          className="flex justify-between items-center mt-2 group hover:bg-white hover:p-1">
+                          className="flex justify-between items-center mt-2 group hover:bg-white">
                           <Link
                             style={{ color: "#070F2B" }}
                             key={subCategory.category_Id}
