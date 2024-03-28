@@ -292,8 +292,7 @@ const MainContent = (props) => {
                       return (
                         <div
                           key={subCategory.category_Id}
-                          className="flex justify-between items-center mt-2"
-                        >
+                          className="flex justify-between items-center mt-2 group hover:bg-white hover:p-1">
                           <Link
                             style={{ color: "#070F2B" }}
                             key={subCategory.category_Id}
@@ -302,7 +301,7 @@ const MainContent = (props) => {
                           >
                             {subCategory.category}
                           </Link>
-                          <div>
+                          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-100">
                             <Tooltip
                               visible={copied === subCategory.category_Id}
                               placement="right"
@@ -345,20 +344,24 @@ const MainContent = (props) => {
       </div>
       <div className="flex justify-between items-center w-3/5 border-b border-gray-600 pb-1">
         <div>
-          {["Article", "Files"].map((link, index) => (
-            <a
-              key={index}
-              className={`p-2 cursor-pointer ${
-                activeLink.left === index
-                  ? "border-b-2 border-black font-bold"
-                  : ""
-              }`}
-              style={{ lineHeight: "2rem" }}
-              onClick={() => handleLink("left", index)}
-            >
-              {link}
-            </a>
-          ))}
+          {["Article", "Files"].map((link, index) => {
+            if (link === "Files") {
+              return null;
+            }
+            return (
+              <a
+                key={index}
+                className={`p-2 cursor-pointer ${
+                  activeLink.left === index
+                    ? "border-b-2 border-black font-bold"
+                    : ""
+                }`}
+                style={{ lineHeight: "2rem" }}
+                onClick={() => handleLink("left", index)}>
+                {link}
+              </a>
+            );
+          })}
         </div>
         <div>
           {["Read", "Edit", "History"].map((link, index) => {
