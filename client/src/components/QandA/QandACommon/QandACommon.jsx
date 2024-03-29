@@ -114,7 +114,7 @@ const QandACommon = () => {
             </div>
             <div className="w-full p-4 pt-3">
               <div className="border-t pt-3">
-                <h2 className="font-bold text-xl">A question title...</h2>
+                <h2 className="font-bold text-lg">A question title...</h2>
                 <p className="text-gray-700 truncate">
                   A question description
                   <button className="text-[#008DDA]">...see more</button>
@@ -145,7 +145,7 @@ const QandACommon = () => {
             </div>
             <div className="w-full p-4">
               <div className="border-t pt-3">
-                <h2 className="font-bold text-xl">A question title...</h2>
+                <h2 className="font-bold text-lg">A question title...</h2>
                 <p className="text-gray-700 truncate">
                   A question description
                   <button className="text-[#008DDA]">...see more</button>
