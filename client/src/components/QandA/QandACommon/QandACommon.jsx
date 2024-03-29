@@ -103,10 +103,16 @@ const QandACommon = () => {
             </nav>
           </div>
           <div className="w-4/5 bg-white">
-            <h1 className="w-full p-4 pt-8 font-bold text-2xl pb-3">
-              Explore Questions
-            </h1>
-            <div className="w-full p-4">
+            <div className="flex justify-between w-full p-4 pt-8 pb-3">
+              <h1 className="font-bold text-2xl">
+                Explore Questions <span>|</span>{" "}
+                <span className="font-light text-xl">648 questions</span>
+              </h1>
+              <button className="bg-[#008DDA] py-[1.5px] px-2 text-white rounded font-semibold">
+                Ask Question
+              </button>
+            </div>
+            <div className="w-full p-4 pt-3">
               <div className="border-t pt-3">
                 <h2 className="font-bold text-xl">A question title...</h2>
                 <p className="text-gray-700 truncate">
