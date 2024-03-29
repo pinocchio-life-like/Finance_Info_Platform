@@ -6,6 +6,7 @@ const mainCompany = sequelize.define("mainCompany", {
     maincompany_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+ 
         autoIncrement: true
     },
     maincompany_name: {

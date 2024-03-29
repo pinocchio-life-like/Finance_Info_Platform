@@ -21,7 +21,7 @@ const company=sequelize.define(
             type:DataTypes.INTEGER,
             allowNull:false,
             references:{
-                model:"mianCompany",
+                model:"mianCompan",
                 key:"maincompany_id"
             }
         }
@@ -53,3 +53,4 @@ module.exports={
     getAllCompanies,
 
 }
+

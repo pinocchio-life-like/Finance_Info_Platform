@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import DiffViewer from "react-diff-viewer";
 import { Link, useParams } from "react-router-dom";
 import api from "../../utils/api";
-import { RollbackOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { RollbackOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 function Difference() {
   const [oldValue, setOldValue] = useState("");
   const [newValue, setNewValue] = useState("");
@@ -23,6 +23,7 @@ function Difference() {
         content: response.data.articleVersionContent,
         id: response.data.articleVersionId,
         updatedAt: response.data.updatedAt,
+        title: response.data.articleVersionTitle,
       })),
     ])
       .then(([oldArticle, newArticle]) => {
@@ -57,7 +58,7 @@ function Difference() {
           </div>
           <div className="button">
             {" "}
-            <Link to={`/wiki/history/${category_Id}`} >
+            <Link to={`/wiki/history/${category_Id}`}>
               <Button className="" icon={<RollbackOutlined />}>
                 Back
               </Button>
