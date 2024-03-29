@@ -1,0 +1,19 @@
+.ant-checkbox .ant-checkbox-inner {
+  background-color: transparent;
+  border-color: #008dda;
+}
+
+.ant-checkbox:hover .ant-checkbox-inner {
+  background-color: #cdcdcd;
+  border-color: red;
+}
+
+.ant-checkbox-disabled .ant-checkbox-inner {
+  background-color: gray;
+  border-color: gray;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #008dda;
+  border-color: #008dda;
+}
