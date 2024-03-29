@@ -2,7 +2,7 @@
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import PrivateRoute from "../components/PrivateRoute";
 import LoginPage from "../components/Login/LoginPage";
-import DashboardPage from "../components/Dashboard/DashboardPage";
+// import DashboardPage from "../components/Dashboard/DashboardPage";
 import ProfilePage from "../components/Profile/ProfilePage";
 import Difference from "../components/DiffViewer/DiffViewer";
 import Editor from "../components/Wiki/Editor/Editor";
@@ -53,25 +53,30 @@ function AppRoutes() {
           }
         />
 
-
-       
-
-        <Route
+        {/* <Route
           path="/"
           element={
             <PrivateRoute>
               <DashboardPage />
             </PrivateRoute>
           }
+        /> */}
+        <Route
+          path="/"
+          element={<Navigate to={`/wiki/articles/${2}`} replace />}
         />
         <Route
+          path="dashboard"
+          element={<Navigate to={`/wiki/articles/${2}`} replace />}
+        />
+        {/* <Route
           path="dashboard"
           element={
             <PrivateRoute>
               <DashboardPage />
             </PrivateRoute>
           }
-        />
+        /> */}
         <Route
           path="profile"
           element={
@@ -81,7 +86,6 @@ function AppRoutes() {
           }
         />
         <Route
-
           path="wiki/diffviewer/:category_Id/:id1/:id2"
           element={
             <PrivateRoute>
@@ -92,7 +96,7 @@ function AppRoutes() {
         <Route
           path="wiki/edit/:id"
           element={
-            <RoleBasedRoute role="admin">
+            <RoleBasedRoute roles={["admin", "user"]}>
               <PrivateRoute>
                 <WikiHome>
                   <Editor />
@@ -106,11 +110,7 @@ function AppRoutes() {
           element={
             <PrivateRoute>
               <WikiHome>
-
-                <History/>
-
-                <h1>History</h1>
-
+                <History />
               </WikiHome>
             </PrivateRoute>
           }
@@ -128,7 +128,7 @@ function AppRoutes() {
         <Route
           path="manage"
           element={
-            <RoleBasedRoute role="admin">
+            <RoleBasedRoute roles={["admin"]}>
               <PrivateRoute>
                 <Admin />
               </PrivateRoute>

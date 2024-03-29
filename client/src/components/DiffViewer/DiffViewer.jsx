@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import DiffViewer from "react-diff-viewer";
+import DiffViewer from "react-diff-viewer-continued";
 import { Link, useParams } from "react-router-dom";
 import api from "../../utils/api";
 import { RollbackOutlined } from "@ant-design/icons";
@@ -48,7 +48,7 @@ function Difference() {
     : "";
   return (
     <div className=" main-diff flex  justify-center m-10">
-      <div className="container  w-3/5">
+      <div className="container  w-4/5">
         <div className="article-title border-b border-gray-200 flex justify-between">
           <div>
             <h2 className="text-xl font-semibold">

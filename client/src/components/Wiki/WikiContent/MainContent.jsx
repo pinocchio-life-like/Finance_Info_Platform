@@ -80,7 +80,7 @@ const MainContent = (props) => {
     } else if (currentUrl.includes("/wiki/history")) {
       setActiveLink({ left: 0, right: 2 });
     } else {
-      setActiveLink({ left: 0, right: 0 }); 
+      setActiveLink({ left: 0, right: 0 });
     }
   }, [currentUrl]);
 
@@ -210,8 +210,7 @@ const MainContent = (props) => {
         <button
           ref={buttonRef}
           className="flex items-center text-sm font-bold"
-          onClick={() => setIsOpen(!isOpen)}
-        >
+          onClick={() => setIsOpen(!isOpen)}>
           <div className="flex flex-col space-y-1">
             <span className="w-4 h-0.5 bg-black"></span>
             <span className="w-4 h-0.5 bg-black"></span>
@@ -221,8 +220,7 @@ const MainContent = (props) => {
         {isOpen && (
           <div
             className="bg-gray-100 flex flex-col space-y-2 absolute left-full p-4 ml-1 text-black"
-            style={{ width: "320px", top: buttonRef.current?.offsetTop }}
-          >
+            style={{ width: "320px", top: buttonRef.current?.offsetTop }}>
             <div className="flex justify-between items-center">
               <div className="flex justify-start items-center">
                 {userRole !== "reader" &&
@@ -238,8 +236,7 @@ const MainContent = (props) => {
               </div>
               <button
                 className="text-red-500 rounded-full w-6 h-6 flex items-center justify-center"
-                onClick={() => setIsOpen(false)}
-              >
+                onClick={() => setIsOpen(false)}>
                 <FaTimes size={12} />
               </button>
             </div>
@@ -254,8 +251,7 @@ const MainContent = (props) => {
                         onClick={() => {
                           addArticleHandler(category);
                           handleDropdown(index);
-                        }}
-                      >
+                        }}>
                         <FaPlus size={12} color="#2D9596" />
                       </button>
                     )}
@@ -263,14 +259,12 @@ const MainContent = (props) => {
                     style={{ color: "#070F2B", fontWeight: "bold" }}
                     key={category.category_Id}
                     href="#"
-                    className="text-black"
-                  >
+                    className="text-black">
                     {category.category}
                   </a>
                   <button
                     className="text-black rounded-full w-6 h-6 flex items-center justify-center ml-auto"
-                    onClick={() => handleDropdown(index)}
-                  >
+                    onClick={() => handleDropdown(index)}>
                     <FaChevronDown size={12} />
                   </button>
                 </div>
@@ -280,8 +274,7 @@ const MainContent = (props) => {
                       activeLink.left === 0 && activeLink.right === 1
                         ? "pl-8"
                         : "pl-4"
-                    }`}
-                  >
+                    }`}>
                     {category.subCategories.map((subCategory) => {
                       const linkAddress = currentUrl.includes("edit")
                         ? `/wiki/edit/${subCategory.category_Id}`
@@ -292,17 +285,15 @@ const MainContent = (props) => {
                       return (
                         <div
                           key={subCategory.category_Id}
-                          className="flex justify-between items-center mt-2"
-                        >
+                          className="flex justify-between items-center mt-2 group hover:bg-white">
                           <Link
                             style={{ color: "#070F2B" }}
                             key={subCategory.category_Id}
                             className="text-black"
-                            to={linkAddress}
-                          >
+                            to={linkAddress}>
                             {subCategory.category}
                           </Link>
-                          <div>
+                          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-100">
                             <Tooltip
                               visible={copied === subCategory.category_Id}
                               placement="right"
@@ -312,8 +303,7 @@ const MainContent = (props) => {
                                   ? "Copied!"
                                   : ""
                               }
-                              arrow
-                            >
+                              arrow>
                               <FiCopy
                                 color="#00224D"
                                 fontSize={18}
@@ -345,20 +335,24 @@ const MainContent = (props) => {
       </div>
       <div className="flex justify-between items-center w-3/5 border-b border-gray-600 pb-1">
         <div>
-          {["Article", "Files"].map((link, index) => (
-            <a
-              key={index}
-              className={`p-2 cursor-pointer ${
-                activeLink.left === index
-                  ? "border-b-2 border-black font-bold"
-                  : ""
-              }`}
-              style={{ lineHeight: "2rem" }}
-              onClick={() => handleLink("left", index)}
-            >
-              {link}
-            </a>
-          ))}
+          {["Article", "Files"].map((link, index) => {
+            if (link === "Files") {
+              return null;
+            }
+            return (
+              <a
+                key={index}
+                className={`p-2 cursor-pointer ${
+                  activeLink.left === index
+                    ? "border-b-2 border-black font-bold"
+                    : ""
+                }`}
+                style={{ lineHeight: "2rem" }}
+                onClick={() => handleLink("left", index)}>
+                {link}
+              </a>
+            );
+          })}
         </div>
         <div>
           {["Read", "Edit", "History"].map((link, index) => {
@@ -375,8 +369,7 @@ const MainContent = (props) => {
                     : ""
                 }`}
                 style={{ lineHeight: "2rem" }}
-                onClick={() => handleLink("right", index)}
-              >
+                onClick={() => handleLink("right", index)}>
                 {link}
               </a>
             );
@@ -394,13 +387,11 @@ const MainContent = (props) => {
             <Button
               disabled={!submitActive}
               style={{ background: "#3B82f6", color: "white" }}
-              onClick={handleSubmit}
-            >
+              onClick={handleSubmit}>
               Add
             </Button>
           </>
-        )}
-      >
+        )}>
         <Form
           onFinish={addCategory}
           form={form}
@@ -416,8 +407,7 @@ const MainContent = (props) => {
           }}
           initialValues={{
             remember: false,
-          }}
-        >
+          }}>
           <Form.Item
             label="Category Title"
             name="category"
@@ -426,8 +416,7 @@ const MainContent = (props) => {
                 required: true,
                 message: "Please input Title!",
               },
-            ]}
-          >
+            ]}>
             <Input
               onChange={(e) => {
                 if (e.target.value !== "") setSubmitActive(true);
@@ -447,13 +436,11 @@ const MainContent = (props) => {
             <Button
               disabled={!submitActive}
               style={{ background: "#3B82f6", color: "white" }}
-              onClick={handleArticleSubmit}
-            >
+              onClick={handleArticleSubmit}>
               Add
             </Button>
           </>
-        )}
-      >
+        )}>
         <Form
           onFinish={addArticle}
           form={articleForm}
@@ -469,8 +456,7 @@ const MainContent = (props) => {
           }}
           initialValues={{
             remember: false,
-          }}
-        >
+          }}>
           <Form.Item
             label="Article Title"
             name="article"
@@ -479,8 +465,7 @@ const MainContent = (props) => {
                 required: true,
                 message: "Please input Title!",
               },
-            ]}
-          >
+            ]}>
             <Input
               onChange={(e) => {
                 if (e.target.value !== "") setSubmitActive(true);

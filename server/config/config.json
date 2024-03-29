@@ -1,26 +1,26 @@
 {
   "development": {
     "dialect": "mysql",
-    "username": "financeApp",
-    "password": "12345",
-    "database": "financeapp",
+    "username": "root",
+    "password": "1234",
+    "database": "wihinfo",
     "host": "localhost",
     "port": "3306",
     "logging": true
   },
   "test": {
     "dialect": "mysql",
-    "username": "financeApp",
-    "password": "12345",
-    "database": "financeapp",
+    "username": "root",
+    "password": "1234",
+    "database": "wihinfo",
     "host": "localhost",
     "port": "3306"
   },
   "production": {
     "dialect": "mysql",
-    "username": "financeApp",
-    "password": "12345",
-    "database": "financeapp",
+    "username": "root",
+    "password": "1234",
+    "database": "wihinfo",
     "host": "localhost",
     "port": "3306"
   }
