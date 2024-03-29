@@ -1,12 +1,15 @@
 import PrivateRoute from "../components/PrivateRoute";
 import QandAHome from "../components/QandA/QandAHome";
+import Questions from "../components/QandA/Questions/Questions";
 
 export const QandARoutes = [
   {
-    path: "qa",
+    path: "qa/questions",
     element: (
       <PrivateRoute>
-        <QandAHome />
+        <QandAHome>
+          <Questions />
+        </QandAHome>
       </PrivateRoute>
     ),
   },
