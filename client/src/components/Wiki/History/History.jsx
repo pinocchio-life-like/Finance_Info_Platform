@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Table } from "antd";
 import api from "../../../utils/api";
 import { useParams } from "react-router-dom";
@@ -6,21 +6,17 @@ import { useNavigate } from "react-router-dom";
 
 const History = () => {
   const param = useParams();
-  console.log("on history page", param);
-
   const navigate = useNavigate();
   const [versions, setVersions] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectionError, setSelectionError] = useState("");
-  console.log(versions);
   useEffect(() => {
     const fetchArticleVersions = async () => {
       setIsLoading(true);
       try {
         const response = await api.get(`/api/versions/${param.id}`);
-        console.log(response.data);
         const formattedData = Array.isArray(response.data.data)
           ? response.data.data.map((version, index) => ({
               key: version.articleVersionId,
@@ -57,13 +53,13 @@ const History = () => {
     },
   ];
 
-  const start = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-      setLoading(false);
-    }, 1000);
-  };
+  // const start = () => {
+  //   setLoading(true);
+  //   setTimeout(() => {
+  //     setSelectedRowKeys([]);
+  //     setLoading(false);
+  //   }, 1000);
+  // };
   const onSelectChange = (newSelectedRowKeys) => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     if (newSelectedRowKeys.length > 2) {
