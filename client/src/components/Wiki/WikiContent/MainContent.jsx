@@ -79,6 +79,8 @@ const MainContent = (props) => {
       setActiveLink({ left: 0, right: 1 });
     } else if (currentUrl.includes("/wiki/history")) {
       setActiveLink({ left: 0, right: 2 });
+    } else if (currentUrl.includes("/wiki/files")) {
+      setActiveLink({ left: 1, right: 0 });
     } else {
       setActiveLink({ left: 0, right: 0 });
     }
@@ -125,6 +127,18 @@ const MainContent = (props) => {
           break;
         case 2:
           navigate(`/wiki/history/${param.id}`);
+          break;
+        default:
+          break;
+      }
+    }
+    if (side === "left") {
+      switch (index) {
+        case 0:
+          navigate(`/wiki/articles/${param.id}`);
+          break;
+        case 1:
+          navigate(`/wiki/files/${param.id}`);
           break;
         default:
           break;
@@ -202,15 +216,62 @@ const MainContent = (props) => {
   }, [isOpen, activeDropdown]);
 
   return (
-    <div className="flex-grow flex flex-col items-center bg-white">
-      <div className="flex justify-between items-center w-3/5 border-b border-gray-600 relative pt-4">
+    <div className="flex-grow flex flex-col items-center mx-14 bg-white">
+      <div className="flex justify-between items-center w-full border-b border-gray-600 pb-1 pt-3">
+        <div>
+          {["Article", "Files"].map((link, index) => {
+            {
+              /* if (link === "Files") {
+              return null;
+            } */
+            }
+            return (
+              <a
+                key={index}
+                className={`p-2 cursor-pointer ${
+                  activeLink.left === index
+                    ? "border-b-2 border-black font-bold"
+                    : ""
+                }`}
+                style={{ lineHeight: "2rem" }}
+                onClick={() => handleLink("left", index)}>
+                {link}
+              </a>
+            );
+          })}
+        </div>
+        <div>
+          {["Read", "Edit", "History"].map((link, index) => {
+            if (userRole === "reader" && link === "Edit") {
+              return null;
+            }
+
+            return (
+              <a
+                key={index}
+                className={`p-2 cursor-pointer ${
+                  activeLink.right === index
+                    ? "border-b-2 border-black font-bold"
+                    : ""
+                }`}
+                style={{ lineHeight: "2rem" }}
+                onClick={() => handleLink("right", index)}>
+                {link}
+              </a>
+            );
+          })}
+        </div>
+      </div>
+      <div className="flex justify-between items-center w-full border-b px-2 border-gray-600 relative pt-1 pb-1">
         <h1 className="text-xl font-bold">
           {articleTitle ? articleTitle : "Current Title"}
         </h1>
         <button
           ref={buttonRef}
           className="flex items-center text-sm font-bold"
-          onClick={() => setIsOpen(!isOpen)}>
+          onClick={() => {
+            setIsOpen(true);
+          }}>
           <div className="flex flex-col space-y-1">
             <span className="w-4 h-0.5 bg-black"></span>
             <span className="w-4 h-0.5 bg-black"></span>
@@ -219,7 +280,7 @@ const MainContent = (props) => {
         </button>
         {isOpen && (
           <div
-            className="bg-gray-100 flex flex-col space-y-2 absolute left-full p-4 ml-1 text-black"
+            className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 bg-gray-200 flex flex-col space-y-2 absolute right-0 p-4 text-black z-50 mt-6 "
             style={{ width: "320px", top: buttonRef.current?.offsetTop }}>
             <div className="flex justify-between items-center">
               <div className="flex justify-start items-center">
@@ -333,50 +394,7 @@ const MainContent = (props) => {
           </div>
         )}
       </div>
-      <div className="flex justify-between items-center w-3/5 border-b border-gray-600 pb-1">
-        <div>
-          {["Article", "Files"].map((link, index) => {
-            if (link === "Files") {
-              return null;
-            }
-            return (
-              <a
-                key={index}
-                className={`p-2 cursor-pointer ${
-                  activeLink.left === index
-                    ? "border-b-2 border-black font-bold"
-                    : ""
-                }`}
-                style={{ lineHeight: "2rem" }}
-                onClick={() => handleLink("left", index)}>
-                {link}
-              </a>
-            );
-          })}
-        </div>
-        <div>
-          {["Read", "Edit", "History"].map((link, index) => {
-            if (userRole === "reader" && link === "Edit") {
-              return null;
-            }
-
-            return (
-              <a
-                key={index}
-                className={`p-2 cursor-pointer ${
-                  activeLink.right === index
-                    ? "border-b-2 border-black font-bold"
-                    : ""
-                }`}
-                style={{ lineHeight: "2rem" }}
-                onClick={() => handleLink("right", index)}>
-                {link}
-              </a>
-            );
-          })}
-        </div>
-      </div>
-      <div className="w-3/5">{props.children}</div>
+      <div className="w-full">{props.children}</div>
       <Modal
         title="Add New Category"
         open={open}

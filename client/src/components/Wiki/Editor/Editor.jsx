@@ -106,7 +106,7 @@ const Editor = () => {
           form.append("file", file);
 
           api
-            .post("/api/img/upload", form, {
+            .post("/api/article/img/upload", form, {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
