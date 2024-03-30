@@ -17,6 +17,8 @@ import Admin from "../components/Dashboard/Admin/Admin";
 import { useNavigate } from "react-router-dom";
 import History from "../components/Wiki/History/History";
 
+import Editor1 from './../components/Q&A/Editor';
+
 function AppRoutes() {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -53,7 +55,9 @@ function AppRoutes() {
           }
         />
 
-
+<Route
+   path="/q"
+   element={<Editor1/>}/>
        
 
         <Route
