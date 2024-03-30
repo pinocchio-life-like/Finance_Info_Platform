@@ -5,7 +5,7 @@ const Unanswered = () => {
     <div className="w-full">
       <div className="flex justify-between w-full p-4 pt-8 pb-3">
         <h1 className="font-bold text-2xl">
-          Explore Questions <span>|</span>{" "}
+          Unanswered Questions <span>|</span>{" "}
           <span className="font-light text-xl">648 questions</span>
         </h1>
         <button className="bg-[#008DDA] py-[1.5px] px-2 text-white rounded font-semibold">
