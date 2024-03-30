@@ -1,8 +1,8 @@
 const Question = require("./questionModel").Question;
 const Answer = require("./answerModel").Answer;
 const Comment = require("./commentModel").Comment;
-const User = require("../models").User;
-const Tag=require('./tagModel').Tag
+const User = require("../userModel").User;
+const Tag = require("./tagModel").Tag;
 
 User.hasMany(Question, {
   foreignKey: "userId",
@@ -42,43 +42,45 @@ Answer.hasMany(Comment, {
   foreignKey: "referred_id",
   constraints: false,
   scope: { referred_type: "answer" },
-})
+});
 Comment.belongsTo(Answer, {
   foreignKey: "referred_id",
   constraints: false,
   scope: { referred_type: "answer" },
 });
 
-Question.belongsToMany(Tag, { through: 'QuestionTag' });
-Tag.belongsToMany(Question, { through: 'QuestionTag' });
+Question.belongsToMany(Tag, { through: "QuestionTag" });
+Tag.belongsToMany(Question, { through: "QuestionTag" });
 const askQuestion = async (questionData, tagNames) => {
   try {
     if (!Array.isArray(tagNames)) {
-      throw new Error('tagNames must be an array');
+      throw new Error("tagNames must be an array");
     }
-  
+
     const question = await Question.create(questionData);
 
     for (const tagName of tagNames) {
-      let [tag, created] = await Tag.findOrCreate({ where: { tag_name: tagName } });
+      let [tag, created] = await Tag.findOrCreate({
+        where: { tag_name: tagName },
+      });
       await question.addTag(tag);
     }
 
     return question;
   } catch (error) {
-    throw new Error('Error while asking question: ' + error.message);
+    throw new Error("Error while asking question: " + error.message);
   }
-}
+};
 
 const updateQuestion = async (questionId, questionData, tagNames) => {
   try {
     if (!Array.isArray(tagNames)) {
-      throw new Error('tagNames must be an array');
+      throw new Error("tagNames must be an array");
     }
- 
+
     const question = await Question.findByPk(questionId);
     if (!question) {
-      throw new Error('Question not found');
+      throw new Error("Question not found");
     }
 
     await question.update(questionData);
@@ -86,66 +88,66 @@ const updateQuestion = async (questionId, questionData, tagNames) => {
     await question.removeTags();
 
     for (const tagName of tagNames) {
-      let [tag, created] = await Tag.findOrCreate({ where: { tag_name: tagName } });
+      let [tag, created] = await Tag.findOrCreate({
+        where: { tag_name: tagName },
+      });
       await question.addTag(tag);
     }
 
     return question;
   } catch (error) {
-    throw new Error('Error while updating question: ' + error.message);
+    throw new Error("Error while updating question: " + error.message);
   }
-}
+};
 
 const postComment = async (data) => {
   try {
     let referredItem;
-    if (data.referred_type === 'question') {
-      referredItem = await Question.findByPk(data.referred_id); 
-    } else if (data.referred_type === 'answer') {
-      referredItem = await Answer.findByPk(data.referred_id); 
+    if (data.referred_type === "question") {
+      referredItem = await Question.findByPk(data.referred_id);
+    } else if (data.referred_type === "answer") {
+      referredItem = await Answer.findByPk(data.referred_id);
     } else {
-      throw new Error('Invalid referred type');
+      throw new Error("Invalid referred type");
     }
 
     if (referredItem) {
       const comment = await Comment.create({
         ...data,
-        referred_id: data.referred_id
+        referred_id: data.referred_id,
       });
       return comment;
     } else {
-      throw new Error('Referred item not found');
+      throw new Error("Referred item not found");
     }
   } catch (error) {
     console.error("Error posting comment:", error);
     throw error;
   }
-}
+};
 const getComment = async (data) => {
   try {
     if (!data || !data.referred_id) {
-      throw new Error('Invalid data or referred_id is missing');
+      throw new Error("Invalid data or referred_id is missing");
     }
     const comment = await Comment.findAll({
       where: {
-        referred_id: data.referred_id
-      }
+        referred_id: data.referred_id,
+      },
     });
     return comment;
   } catch (error) {
     console.error("Error getting comment:", error);
     throw error;
   }
-}
-
+};
 
 module.exports = {
-    
-    Question,
-    Answer,
-    Comment,
-    postComment,
-    getComment,
-    askQuestion,
-    updateQuestion
-}
+  Question,
+  Answer,
+  Comment,
+  postComment,
+  getComment,
+  askQuestion,
+  updateQuestion,
+};
