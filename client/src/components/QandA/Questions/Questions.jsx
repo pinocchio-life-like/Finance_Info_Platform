@@ -74,7 +74,7 @@ const Questions = () => {
           </div>
         </div>
       </div>
-      <div className="relative flex justify-center items-end h-full">
+      <div className="relative flex justify-center items-end h-full pt-5">
         <Pagination
           total={50}
           itemRender={(_, type, originalElement) => {
