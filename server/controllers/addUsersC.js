@@ -3,7 +3,7 @@ const {
   getUserByUserName,
   getAllUsers,
   destroy,
-} = require("../models/models");
+} = require("../models/userModel");
 
 const createUsers = async (req, res) => {
   try {
