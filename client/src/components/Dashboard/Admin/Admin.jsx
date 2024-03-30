@@ -184,12 +184,10 @@ const Admin = () => {
       {contextHolder}
       <div
         style={{ width: "100%" }}
-        className="flex-grow flex flex-col items-center bg-white"
-      >
+        className="flex-grow flex flex-col items-center bg-white">
         <div
           style={{ width: "95%" }}
-          className="flex justify-between items-center border-b mt-3 border-gray-600 pb-1"
-        >
+          className="flex justify-between items-center border-b mt-3 border-gray-600 pb-1">
           <div>
             {["Company", "User"].map((link, index) => (
               <a
@@ -200,8 +198,7 @@ const Admin = () => {
                     : ""
                 }`}
                 style={{ lineHeight: "2rem" }}
-                onClick={() => handleLink("left", index)}
-              >
+                onClick={() => handleLink("left", index)}>
                 {link}
               </a>
             ))}
@@ -217,12 +214,10 @@ const Admin = () => {
               <div style={{ width: "15%" }}>
                 <div
                   style={{ width: "100%" }}
-                  className="flex items-center mt-2 pl-2 border-b border-gray-600 pb-1"
-                >
+                  className="flex items-center mt-2 pl-2 border-b border-gray-600 pb-1">
                   <button
                     onClick={handleAdd}
-                    className="flex items-center text-black hover:bg-white hover:text-green-500 rounded"
-                  >
+                    className="flex items-center text-black hover:bg-white hover:text-green-500 rounded">
                     <FaPlus size={12} style={{ marginRight: 4 }} /> Add New
                     company
                   </button>
@@ -240,20 +235,16 @@ const Admin = () => {
               </div>
               <div
                 style={{ width: "85%" }}
-                className="border-l border-gray-600"
-              >
+                className="border-l border-gray-600">
                 <div
                   style={{ width: "100%" }}
-                  className="flex flex-col justify-between items-center"
-                >
+                  className="flex flex-col justify-between items-center">
                   <div
                     style={{ width: "100%" }}
-                    className="flex items-center mt-2 pl-2 border-b border-gray-600 pb-1"
-                  >
+                    className="flex items-center mt-2 pl-2 border-b border-gray-600 pb-1">
                     <button
                       onClick={handleAdd}
-                      className="flex items-center text-black hover:bg-white hover:text-green-500 rounded"
-                    >
+                      className="flex items-center text-black hover:bg-white hover:text-green-500 rounded">
                       <FaPlus size={12} style={{ marginRight: 4 }} /> Add New
                     </button>
                     <button
@@ -263,8 +254,7 @@ const Admin = () => {
                         selectedRows.length === 0
                           ? "text-gray-400 cursor-not-allowed"
                           : "text-black hover:bg-white hover:text-red-500"
-                      }`}
-                    >
+                      }`}>
                       <FaTrash size={12} style={{ marginRight: 4 }} /> Delete
                     </button>
                   </div>
@@ -294,81 +284,25 @@ const Admin = () => {
             </div>
           )}
         </div>
-        <Drawer
-          width={500}
-          title="Update User"
-          onClose={onClose}
-          visible={open}
-        >
+        <Drawer width={500} title="Update User" onClose={onClose} open={open}>
           <Form
-            form={updateform}
             onFinish={onFinishUpdate}
-            layout="vertical"
-            initialValues={drawerData}
-          >
-            <Form.Item
-              label="Name"
-              name="firstName"
-              rules={[{ required: true, message: "Please input your name!" }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="User Name"
-              name="userName"
-              rules={[
-                { required: true, message: "Please input your username!" },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="User Role"
-              name="userRole"
-              rules={[{ required: true, message: "Please select a role!" }]}
-            >
-              <Select placeholder="Select a role">
-                <Select.Option value="admin">Admin</Select.Option>
-                <Select.Option value="user">User</Select.Option>
-                <Select.Option value="reader">Reader</Select.Option>
-              </Select>
-            </Form.Item>
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{ background: "#387ADF", color: "white" }}
-              >
-                Update User
-              </Button>
-            </Form.Item>
-          </Form>
-        </Drawer>
-        <Drawer
-          width={500}
-          title="Add New User"
-          onClose={onCloseAdd}
-          open={openAdd}
-        >
-          <Form
-            onFinish={onFinishAdd}
-            form={newform}
+            form={updateform}
             layout="vertical"
             variant="filled"
             style={{
               maxWidth: 600,
             }}
-          >
+            initialValues={drawerData || {}}>
             <Form.Item
               label="Name"
               name="firstName"
               rules={[
                 {
                   required: true,
-                  message: "Please input!", 
+                  message: "Please input!",
                 },
-              ]}
-            >
+              ]}>
               <Input />
             </Form.Item>
 
@@ -380,8 +314,75 @@ const Admin = () => {
                   required: true,
                   message: "Please input!",
                 },
-              ]}
-            >
+              ]}>
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="User Role"
+              name="userRole"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select a role!",
+                },
+              ]}>
+              <Select placeholder="Select a role">
+                <Select.Option value="admin">Admin</Select.Option>
+                <Select.Option value="user">User</Select.Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item label="Password" name="password">
+              <Input.Password />
+            </Form.Item>
+
+            <Form.Item
+              wrapperCol={{
+                offset: 0,
+                span: 24,
+              }}>
+              <Button
+                style={{ background: "#387ADF", color: "white", width: "100%" }}
+                htmlType="submit">
+                Update User
+              </Button>
+            </Form.Item>
+          </Form>
+        </Drawer>
+        <Drawer
+          width={500}
+          title="Add New User"
+          onClose={onCloseAdd}
+          open={openAdd}>
+          <Form
+            onFinish={onFinishAdd}
+            form={newform}
+            layout="vertical"
+            variant="filled"
+            style={{
+              maxWidth: 600,
+            }}>
+            <Form.Item
+              label="Name"
+              name="firstName"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input!",
+                },
+              ]}>
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="User Name"
+              name="userName"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input!",
+                },
+              ]}>
               <Input />
             </Form.Item>
 
@@ -393,8 +394,7 @@ const Admin = () => {
                   required: true,
                   message: "Please select a role!",
                 },
-              ]}
-            >
+              ]}>
               <Select placeholder="Select a role">
                 <Select.Option value="admin">Admin</Select.Option>
                 <Select.Option value="user">User</Select.Option>
@@ -410,8 +410,7 @@ const Admin = () => {
                   required: true,
                   message: "Please input!",
                 },
-              ]}
-            >
+              ]}>
               <Input.Password />
             </Form.Item>
 
@@ -419,12 +418,10 @@ const Admin = () => {
               wrapperCol={{
                 offset: 0,
                 span: 24,
-              }}
-            >
+              }}>
               <Button
                 style={{ background: "#387ADF", color: "white", width: "100%" }}
-                htmlType="submit"
-              >
+                htmlType="submit">
                 Save User
               </Button>
             </Form.Item>

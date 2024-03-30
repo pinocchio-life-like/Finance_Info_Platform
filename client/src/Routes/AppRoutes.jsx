@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { wikiRoutes } from "./wikiRoutes";
 import { QandARoutes } from "./QandARoutes";
 
-import Editor1 from './../components/Q&A/Editor';
+import Editor1 from "./../components/Q&A/Editor";
 
 function AppRoutes() {
   const location = useLocation();
@@ -52,19 +52,16 @@ function AppRoutes() {
           }
         />
 
-<Route
-   path="/q"
-   element={<Editor1/>}/>
-       
+        <Route path="/q" element={<Editor1 />} />
 
-        <Route
+        {/* <Route
           path="/"
           element={
             <PrivateRoute>
               <DashboardPage />
             </PrivateRoute>
           }
-        /> */}
+        />  */}
         {/* <Route
           path="dashboard"
           element={
