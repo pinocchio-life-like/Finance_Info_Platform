@@ -223,7 +223,8 @@ const Admin = () => {
                     onClick={handleAdd}
                     className="flex items-center text-black hover:bg-white hover:text-green-500 rounded"
                   >
-                    <FaPlus size={12} style={{ marginRight: 4 }} /> Add New company
+                    <FaPlus size={12} style={{ marginRight: 4 }} /> Add New
+                    company
                   </button>
                   <button
                     onClick={handleDelete}
@@ -281,6 +282,7 @@ const Admin = () => {
                       onClick: () => {
                         if (record.userName !== userName) {
                           // Check if the row is not disabled
+
                           setDrawerData(record);
                           showDrawer();
                         }
@@ -292,10 +294,56 @@ const Admin = () => {
             </div>
           )}
         </div>
-        <Drawer width={500} title="Update User" onClose={onClose} open={open}>
-       
-            
-         </Drawer> 
+        <Drawer
+          width={500}
+          title="Update User"
+          onClose={onClose}
+          visible={open}
+        >
+          <Form
+            form={updateform}
+            onFinish={onFinishUpdate}
+            layout="vertical"
+            initialValues={drawerData}
+          >
+            <Form.Item
+              label="Name"
+              name="firstName"
+              rules={[{ required: true, message: "Please input your name!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="User Name"
+              name="userName"
+              rules={[
+                { required: true, message: "Please input your username!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="User Role"
+              name="userRole"
+              rules={[{ required: true, message: "Please select a role!" }]}
+            >
+              <Select placeholder="Select a role">
+                <Select.Option value="admin">Admin</Select.Option>
+                <Select.Option value="user">User</Select.Option>
+                <Select.Option value="reader">Reader</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{ background: "#387ADF", color: "white" }}
+              >
+                Update User
+              </Button>
+            </Form.Item>
+          </Form>
+        </Drawer>
         <Drawer
           width={500}
           title="Add New User"
@@ -317,7 +365,7 @@ const Admin = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input!",
+                  message: "Please input!", 
                 },
               ]}
             >
