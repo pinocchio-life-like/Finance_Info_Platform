@@ -233,8 +233,7 @@ const Admin = () => {
                       selectedRows.length === 0
                         ? "text-gray-400 cursor-not-allowed"
                         : "text-black hover:bg-white hover:text-red-500"
-                    }`}
-                  >
+                    }`}>
                     <FaTrash size={12} style={{ marginRight: 4 }} /> Delete
                   </button>
                 </div>
