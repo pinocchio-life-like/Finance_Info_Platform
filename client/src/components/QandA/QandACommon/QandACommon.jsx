@@ -79,6 +79,9 @@ const QandACommon = (props) => {
                             </Checkbox>
                             <span>20</span>
                           </div>
+                          <button className="w-full flex justify-center text-left py-2 border-t hover:bg-[#008DDA] mb-1 rounded hover:text-white text-[#008DDA]">
+                            expand to see more tags
+                          </button>
                         </div>
                       </Checkbox.Group>
                     </ul>

@@ -1,3 +1,5 @@
+import { Pagination } from "antd";
+
 const Questions = () => {
   return (
     <div className="w-full">
@@ -71,6 +73,20 @@ const Questions = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="relative flex justify-center items-end h-full">
+        <Pagination
+          total={50}
+          itemRender={(_, type, originalElement) => {
+            if (type === "prev") {
+              return <a>Prev</a>;
+            }
+            if (type === "next") {
+              return <a>Next</a>;
+            }
+            return originalElement;
+          }}
+        />
       </div>
     </div>
   );
