@@ -1,3 +1,4 @@
+
 // const { DataTypes } = require("sequelize");
 // const sequelize = require("../config/db.config");
 // const company = sequelize.define("company", {
@@ -48,3 +49,4 @@
 //   createCompany,
 //   getAllCompanies,
 // };
+

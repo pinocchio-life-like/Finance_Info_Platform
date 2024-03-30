@@ -23,6 +23,7 @@ function Difference() {
         content: response.data.articleVersionContent,
         id: response.data.articleVersionId,
         updatedAt: response.data.updatedAt,
+        title: response.data.articleVersionTitle,
       })),
     ])
       .then(([oldArticle, newArticle]) => {
