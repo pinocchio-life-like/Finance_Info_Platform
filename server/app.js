@@ -19,8 +19,11 @@ const loginRoute = require("./routes/userLoginR");
 const userUpdateRoute = require("./routes/userUpdateR");
 const articleRoute = require("./routes/articleR");
 const categoryRoute = require("./routes/categoryRoute");
-const companyR=require('./routes/companyR')
+// const companyR=require('./routes/companyR')
 const versionRoute=require('./routes/articleVersionR')
+const questionRoutes=require('./routes/Q&ARoutes/questionRoute')
+const answerRoutes=require("./routes/Q&ARoutes/answerRoute")
+const commentRoutes=require('./routes/Q&ARoutes/commentRoute')
 
 const app = express();
 
@@ -45,8 +48,13 @@ app.use("/api", loginRoute);
 app.use("/api", userUpdateRoute);
 app.use("/api", articleRoute);
 app.use("/api", categoryRoute);
-app.use('/api',companyR)
+// app.use('/api',companyR)
 app.use('/api',versionRoute)
+app.use('/api',questionRoutes)
+app.use('/api',answerRoutes)
+app.use('/api',commentRoutes)
+
+
 
 // Set up multer for file storage
 const storage = multer.diskStorage({
