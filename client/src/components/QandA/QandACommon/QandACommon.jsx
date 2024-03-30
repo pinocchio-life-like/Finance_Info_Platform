@@ -7,6 +7,7 @@ import { RiQuestionnaireFill } from "react-icons/ri";
 import { Checkbox } from "antd";
 import "./checkboxStyle.css";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const QandACommon = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -26,8 +27,8 @@ const QandACommon = (props) => {
             <nav className="pt-8">
               <ul className="space-y-2 text-m ">
                 <li>
-                  <a
-                    href="#section1"
+                  <Link
+                    to="/qa/questions"
                     className={`flex items-center py-1 px-4 rounded ${
                       activeIndex === 0
                         ? "bg-[#ababab] font-bold"
@@ -39,7 +40,7 @@ const QandACommon = (props) => {
                       style={{ marginRight: 10 }}
                     />{" "}
                     Questions
-                  </a>
+                  </Link>
                 </li>
                 <li className="relative group">
                   <button
@@ -88,8 +89,8 @@ const QandACommon = (props) => {
                   )}
                 </li>
                 <li>
-                  <a
-                    href="#section3"
+                  <Link
+                    to="/qa/unanswered"
                     className={`flex items-center py-1 px-4 rounded ${
                       activeIndex === 2
                         ? "bg-[#ababab] font-bold"
@@ -101,7 +102,7 @@ const QandACommon = (props) => {
                       style={{ marginRight: 10 }}
                     />{" "}
                     Unanswered
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>
