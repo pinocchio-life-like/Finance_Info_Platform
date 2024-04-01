@@ -116,6 +116,17 @@ const WikiFiles = () => {
     }
   };
 
+  const handleFileDelete = async (key) => {
+    try {
+      await api.delete(`/api/files/article`, { data: { key } });
+      message.success(`file deleted successfully`);
+      fetchData();
+    } catch (error) {
+      message.error(`file deletion failed.`);
+      console.error(error);
+    }
+  };
+
   return (
     <div className="w-full border-x border-b px-2">
       <div className="w-full flex justify-start">
@@ -175,7 +186,7 @@ const WikiFiles = () => {
             <h2
               style={{ color: "#070F2B" }}
               className="text-lg pl-4 font-bold pt-4">
-              120 Files
+              {data.length} Files
             </h2>
             <div className="flex">
               <Button
@@ -264,7 +275,7 @@ const WikiFiles = () => {
                       cursor: "pointer",
                       marginRight: "2px",
                     }}
-                    // onClick={}
+                    onClick={() => handleFileDelete(item.url)}
                   />
                 </div>
               </List.Item>

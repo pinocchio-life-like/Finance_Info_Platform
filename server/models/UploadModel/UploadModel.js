@@ -49,7 +49,16 @@ const findAllFiles = async (category_Id) => {
   });
 };
 
+const deleteFile = async (key) => {
+  return await Upload.destroy({
+    where: {
+      url: key,
+    },
+  });
+};
+
 module.exports = {
   uploadFile,
   findAllFiles,
+  deleteFile,
 };

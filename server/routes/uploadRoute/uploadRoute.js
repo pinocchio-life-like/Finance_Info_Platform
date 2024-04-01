@@ -2,6 +2,7 @@ const router = require("express").Router();
 const {
   uploadFile,
   findAllFiles,
+  deleteFile,
 } = require("../../models/UploadModel/UploadModel");
 const multer = require("multer");
 const AWS = require("aws-sdk");
@@ -103,6 +104,31 @@ router.get("/article/file/:category_Id", async (req, res) => {
     console.error("Error fetching files:", error);
     res.status(500).send("Error fetching files");
   }
+});
+
+router.delete("/files/article", async (req, res) => {
+  const key = req.body.key;
+  console.log(key);
+  const params = {
+    Bucket: `wihfinanceapp/article/files`,
+    Key: key,
+  };
+
+  s3.deleteObject(params, async function (err, data) {
+    if (err) {
+      console.error("Error deleting file from S3:", err);
+      res.status(500).send("Error deleting file");
+    } else {
+      try {
+        await deleteFile(key);
+        res.send({ message: "File deleted successfully" });
+      } catch (dbError) {
+        console.error("Error deleting file from database:", dbError);
+        res.status(500).send("Error deleting file from database");
+      }
+      res.send({ message: "File deleted successfully" }); // This is the second res.send
+    }
+  });
 });
 
 module.exports = router;
