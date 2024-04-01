@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Questions = () => {
   return (
     <div className="w-full">
@@ -6,9 +8,11 @@ const Questions = () => {
           Explore Questions <span>|</span>{" "}
           <span className="font-light text-xl">648 questions</span>
         </h1>
-        <button className="bg-[#008DDA] py-[1.5px] px-2 text-white rounded font-semibold">
-          Ask Question
-        </button>
+        <Link to="/ask" className="">
+          <button className="bg-[#008DDA] py-[2px] px-2 text-white rounded font-semibold">
+            Ask Question
+          </button>
+        </Link>
       </div>
       <div className="w-full p-4 pt-3">
         <div className="border-t pt-3">
