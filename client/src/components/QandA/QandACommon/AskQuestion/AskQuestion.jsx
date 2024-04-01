@@ -4,6 +4,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { PoweroffOutlined } from "@ant-design/icons";
 import { Button, Flex } from "antd";
+import "./AskQuestion.css";
 
 const AskQuestion = () => {
   const [title, setTitle] = useState("");
@@ -72,11 +73,11 @@ const AskQuestion = () => {
           <div>
            
             <input
-              type="text"
-              className="questionTitle border w-full rounded-md p-3"
+              type="text" 
+              className="questionTitle border w-full  p-3" //rounded-md
               name="title"
               value={title}
-              placeholder="Enter your question title here"
+              placeholder="Title"
               onChange={handleInputChange}
               required
             />
@@ -87,7 +88,7 @@ const AskQuestion = () => {
               value={description}
               onChange={handleDescriptionChange}
               placeholder="Describe your question here"
-              className="rounded-md  bg-white  shadow"
+              className="rounded-md  bg-white "
               // modules={{
               //   toolbar: [
               //     [{ 'header': '1'}, {'header': '2'}],
