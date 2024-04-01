@@ -1,21 +1,56 @@
-import { Card, Tooltip } from "antd";
-import { FaPlus, FaTimes, FaChevronDown } from "react-icons/fa";
-import { FiCopy } from "react-icons/fi";
-import { useEffect, useState } from "react";
+import { Button, List, Tooltip, message } from "antd";
+import { AiOutlineDelete } from "react-icons/ai";
+import { FiDownload } from "react-icons/fi";
+import { FaChevronDown } from "react-icons/fa";
+import { useCallback, useEffect, useRef, useState } from "react";
 import api from "../../../utils/api";
 import { useParams } from "react-router";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-const { Meta } = Card;
+import { FiCopy } from "react-icons/fi";
+import { UploadOutlined } from "@ant-design/icons";
+import { jwtDecode } from "jwt-decode";
 
 const WikiFiles = () => {
   const [categories, setCategories] = useState([]);
-  const [initiateContent, setInitiateContent] = useState(false);
   const param = useParams();
-  const { status, drop } = useSelector((state) => state.contents);
-  const [isOpen, setIsOpen] = useState(status);
-  const [copied, setCopied] = useState(null);
+  const { drop } = useSelector((state) => state.contents);
   const [activeDropdown, setActiveDropdown] = useState(drop);
+  const [data, setData] = useState([]);
+  const [position] = useState("bottom");
+  const [align] = useState("center");
+  const [copied, setCopied] = useState(null);
+  const fileInputRef = useRef();
+  const [uploading, setUploading] = useState(false);
+
+  const token = localStorage.getItem("token");
+  let userName = null;
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      userName = decodedToken.userName;
+    } catch (error) {
+      console.error("Invalid token");
+    }
+  }
+
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await api.get(`/api/article/file/${param.id}`);
+      console.log(response.data);
+      const sortedData = response.data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      setData(sortedData);
+    } catch (error) {
+      console.error("An error occurred while fetching: ", error);
+    }
+  }, [param.id]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   useEffect(() => {
     const getCategories = async () => {
       try {
@@ -44,7 +79,7 @@ const WikiFiles = () => {
       }
     };
     getCategories();
-  }, [initiateContent, param.id]);
+  }, [param.id]);
 
   const handleDropdown = (index) => {
     if (activeDropdown === index) {
@@ -53,60 +88,47 @@ const WikiFiles = () => {
       setActiveDropdown(index);
     }
   };
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    const form = new FormData();
+    form.append("file", file);
+    form.append("category_Id", param.id);
+    form.append("user", userName);
+    setUploading(true);
+    try {
+      await api.post("/api/article/file/upload", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      fetchData();
+      message.success(`file uploaded successfully`);
+    } catch (error) {
+      message.error(`file upload failed.`);
+      console.error(error);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
-    <div className="w-full border-x border-b h-[80vh] px-6 pt-5">
-      <div className="w-full flex justify-start items-center">
-        <h1 className="font-bold text-2xl">Overview</h1>
-        <div className="flex px-4">
-          <Card
-            hoverable
-            style={{
-              width: 240,
-              margin: 10,
-            }}>
-            <Meta title="Europe Street beat" description="www.instagram.com" />
-          </Card>
-          <Card
-            hoverable
-            style={{
-              width: 240,
-              margin: 10,
-            }}>
-            <Meta title="Europe Street beat" description="www.instagram.com" />
-          </Card>
-          <Card
-            hoverable
-            style={{
-              width: 240,
-              margin: 10,
-            }}>
-            <Meta title="Europe Street beat" description="www.instagram.com" />
-          </Card>
-          <Card
-            hoverable
-            style={{
-              width: 240,
-              margin: 10,
-            }}>
-            <Meta title="Europe Street beat" description="www.instagram.com" />
-          </Card>
-        </div>
-      </div>
-      <div className="w-full flex justify-start items-center border-t">
-        <div className="border-r h-[65.3vh] w-[16%] pt-2">
+    <div className="w-full border-x border-b px-2">
+      <div className="w-full flex justify-start">
+        <div className="border-r w-[16%] pt-4">
           <div className="w-full flex flex-col">
             <div className="flex justify-between items-center">
               <div className="flex justify-start items-center">
-                <h2 style={{ color: "#070F2B" }} className="text-lg font-bold">
-                  Article Files
+                <h2
+                  style={{ color: "#070F2B" }}
+                  className="text-lg font-bold mb-4">
+                  Shared Article Files
                 </h2>
               </div>
-              <button
-                className="text-red-500 rounded-full w-6 h-6 flex items-center justify-center"
-                //   onClick={() => setIsOpen(false)}
-              >
-                {/* <FaTimes size={12} /> */}
-              </button>
             </div>
             {categories.map((category, index) => (
               <div key={index}>
@@ -127,14 +149,7 @@ const WikiFiles = () => {
                 {activeDropdown === index && (
                   <div className={`flex flex-col space-y-2 pl-4 $`}>
                     {category.subCategories.map((subCategory) => {
-                      {
-                        /* const linkAddress = currentUrl.includes("edit")
-                        ? `/wiki/edit/${subCategory.category_Id}`
-                        : currentUrl.includes("articles")
-                        ? `/wiki/articles/${subCategory.category_Id}`
-                        : `/wiki/history/${subCategory.category_Id}`; */
-                      }
-
+                      const linkAddress = `/wiki/files/${subCategory.category_Id}`;
                       return (
                         <div
                           key={subCategory.category_Id}
@@ -143,39 +158,9 @@ const WikiFiles = () => {
                             style={{ color: "#070F2B" }}
                             key={subCategory.category_Id}
                             className="text-black"
-                            to="">
+                            to={linkAddress}>
                             {subCategory.category}
                           </Link>
-                          {/* <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-100">
-                            <Tooltip
-                              visible={copied === subCategory.category_Id}
-                              placement="right"
-                              color="#00224D"
-                              title={
-                                copied === subCategory.category_Id
-                                  ? "Copied!"
-                                  : ""
-                              }
-                              arrow>
-                              <FiCopy
-                                color="#00224D"
-                                fontSize={18}
-                                style={{
-                                  cursor: "pointer",
-                                  marginRight: "2px",
-                                }}
-                                onClick={(event) => {
-                                  event.preventDefault();
-                                  navigator.clipboard.writeText(
-                                    window.location.origin +
-                                      `/wiki/articles/${subCategory.category_Id}`
-                                  );
-                                  setCopied(subCategory.category_Id);
-                                  setTimeout(() => setCopied(null), 2000);
-                                }}
-                              />
-                            </Tooltip>
-                          </div> */}
                         </div>
                       );
                     })}
@@ -185,7 +170,107 @@ const WikiFiles = () => {
             ))}
           </div>
         </div>
-        <div className="h-[65.3vh] w-[84%]">hello</div>
+        <div className="w-[84%] flex flex-col">
+          <div className="w-full flex justify-between border-b">
+            <h2
+              style={{ color: "#070F2B" }}
+              className="text-lg pl-4 font-bold pt-4">
+              120 Files
+            </h2>
+            <div className="flex">
+              <Button
+                disabled={uploading}
+                icon={<UploadOutlined />}
+                className="m-3 px-5 bg-[#008DDA] text-white right-0"
+                onClick={handleButtonClick}
+                loading={uploading}>
+                Click to Upload
+              </Button>
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+                accept=".pdf,.doc,.docx"
+              />
+            </div>
+          </div>
+
+          <List
+            className="pb-2"
+            size="small"
+            pagination={{ position, align, pageSize: 10 }}
+            dataSource={data}
+            renderItem={(item) => (
+              <List.Item key={item.upload_id}>
+                <List.Item.Meta
+                  // avatar={<Avatar src={item.picture.large} />}
+                  title={
+                    <a
+                      style={{ color: "#008DDA" }}
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      {item.originalname}
+                    </a>
+                  }
+                  description={
+                    <div className="flex">
+                      <p className="pr-4">by: {item.user}</p>
+                      <p className="pr-4">date: {item.createdAt}</p>
+                    </div>
+                  }
+                />
+                <div className="pr-3">
+                  <Tooltip
+                    open={copied === item.upload_id}
+                    placement="left"
+                    color="#00224D"
+                    title={"Copied!"}
+                    arrow>
+                    <FiCopy
+                      color="#00224D"
+                      fontSize={18}
+                      style={{
+                        cursor: "pointer",
+                        marginRight: "2px",
+                      }}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        navigator.clipboard.writeText(item.url);
+                        setCopied(item.upload_id);
+                        setTimeout(() => setCopied(null), 2000);
+                      }}
+                    />
+                  </Tooltip>
+                </div>
+                <div className="pr-3">
+                  <a href={item.url} target="_blank" rel="noopener noreferrer">
+                    <FiDownload
+                      color="#00224D"
+                      fontSize={18}
+                      style={{
+                        cursor: "pointer",
+                        marginRight: "2px",
+                      }}
+                    />
+                  </a>
+                </div>
+                <div className="pr-3">
+                  <AiOutlineDelete
+                    color="red"
+                    fontSize={18}
+                    style={{
+                      cursor: "pointer",
+                      marginRight: "2px",
+                    }}
+                    // onClick={}
+                  />
+                </div>
+              </List.Item>
+            )}
+          />
+        </div>
       </div>
     </div>
   );

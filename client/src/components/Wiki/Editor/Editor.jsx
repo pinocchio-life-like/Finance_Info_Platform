@@ -46,7 +46,6 @@ const Editor = () => {
       try {
         const res = await api.get(`/api/article/${param.id}`);
         const { data } = res.data;
-
         setText(data.articleContent);
       } finally {
         setIsLoading(false);
