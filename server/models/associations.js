@@ -1,18 +1,21 @@
-const sequelize = require('../config/db.config');
-const Article = require('./articleModel').Article; // Adjust paths as necessary
-const User = require('./models').User;
-const ArticleVersion = require('./articleVersionModel').ArticleVersion;
-
+const sequelize = require("../config/db.config");
+const Article = require("./articleModel").Article; // Adjust paths as necessary
+const User = require("./userModel").User;
+const ArticleVersion = require("./articleVersionModel").ArticleVersion;
 
 // Set up associations here
 
-User.hasMany(Article, { foreignKey: 'userId' ,
-  sourceKey: 'userId',});
-Article.belongsTo(User, { foreignKey: 'userId' ,
-  targetKey: 'userId',});
+User.hasMany(Article, { foreignKey: "userId", sourceKey: "userId" });
+Article.belongsTo(User, { foreignKey: "userId", targetKey: "userId" });
 
-Article.hasMany(ArticleVersion, { foreignKey: 'articleId', sourceKey: 'articleId' });
-ArticleVersion.belongsTo(Article, { foreignKey: 'articleId', targetKey: 'articleId' });
+Article.hasMany(ArticleVersion, {
+  foreignKey: "articleId",
+  sourceKey: "articleId",
+});
+ArticleVersion.belongsTo(Article, {
+  foreignKey: "articleId",
+  targetKey: "articleId",
+});
 const createArticle = async (article) => {
   try {
     const { articleTitle, articleContent, category_Id, userId } = article;

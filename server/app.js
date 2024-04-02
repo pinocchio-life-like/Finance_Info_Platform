@@ -1,13 +1,7 @@
 require("dotenv").config();
-
 const sequelize = require("./config/db.config");
 
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-
 const express = require("express");
-
 const cookieParser = require("cookie-parser");
 
 //cors
@@ -19,23 +13,39 @@ const loginRoute = require("./routes/userLoginR");
 const userUpdateRoute = require("./routes/userUpdateR");
 const articleRoute = require("./routes/articleR");
 const categoryRoute = require("./routes/categoryRoute");
-const companyR = require("./routes/companyR");
+// const companyR=require('./routes/companyR')
 const versionRoute = require("./routes/articleVersionR");
+const questionRoutes = require("./routes/Q&ARoutes/questionRoute");
+const answerRoutes = require("./routes/Q&ARoutes/answerRoute");
+const commentRoutes = require("./routes/Q&ARoutes/commentRoute");
+const uploadRoute = require("./routes/uploadRoute/uploadRoute");
 
 const app = express();
-
 // Middleware setup
 const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE"],
-  origin: "https://wihinfo.vercel.app",
+  origin: "http://localhost:4000",
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.use(express.json({ limit: "50mb" }));
 app.use(cors(corsOptions));
+
+/************ Test S3*********************** */
+
+const AWS = require("aws-sdk");
+
+// Configure AWS
+const s3 = new AWS.S3({
+  accessKeyId: "AKIA5TY3KKQWQYIFCI6G",
+  secretAccessKey: "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",
+  region: "us-east-1",
+});
+
+app.use(express.json());
 // Routes setup
 app.use("/api", userAddRoute);
 app.use("/api", loginRoute);
@@ -43,46 +53,21 @@ app.use("/api", loginRoute);
 app.use("/api", userUpdateRoute);
 app.use("/api", articleRoute);
 app.use("/api", categoryRoute);
-app.use("/api", companyR);
+// app.use('/api',companyR)
 app.use("/api", versionRoute);
+app.use("/api", questionRoutes);
+app.use("/api", answerRoutes);
+app.use("/api", commentRoutes);
+app.use("/api", uploadRoute);
 
-// Set up multer for file storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadsDir = "./uploads/";
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir);
-    }
-    cb(null, uploadsDir);
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
-  },
-});
-const upload = multer({ storage: storage });
-
-// Serve static files from the 'uploads' directory
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-app.post("/api/img/upload", upload.array("file"), (req, res) => {
+async function syncDatabase() {
   try {
-    const urls = req.files.map((file) => {
-      // Assuming that 'uploads' directory is in the public directory
-      return `${req.protocol}://${req.get("host")}/uploads/${file.filename}`;
-    });
-    res.status(200).json({ urls });
+    await sequelize.sync({ alter: true }); //edit this as needed
+    console.log("All models were synchronized successfully.");
   } catch (error) {
-    res.status(500).json({ error: error.toString() });
+    console.error("Error occurred during model synchronization:", error);
   }
-});
-// async function syncDatabase() {
-//   try {
-//     await sequelize.sync({ alter: true, force: false }); //edit this as needed
-//     console.log("All models were synchronized successfully.");
-//   } catch (error) {
-//     console.error("Error occurred during model synchronization:", error);
-//   }
-// }
+}
 
 // syncDatabase();
 

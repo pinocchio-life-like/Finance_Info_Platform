@@ -23,7 +23,7 @@ const ArticleVersion = sequelize.define("ArticleVersions", {
     },
   },
   articleVersionContent: {
-    type: DataTypes.TEXT,
+    type: DataTypes.TEXT("long"),
     allowNull: false,
     require: true,
   },

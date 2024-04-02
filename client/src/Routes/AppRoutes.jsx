@@ -4,18 +4,17 @@ import PrivateRoute from "../components/PrivateRoute";
 import LoginPage from "../components/Login/LoginPage";
 // import DashboardPage from "../components/Dashboard/DashboardPage";
 import ProfilePage from "../components/Profile/ProfilePage";
-import Difference from "../components/DiffViewer/DiffViewer";
-import Editor from "../components/Wiki/Editor/Editor";
-import Preview from "../components/Wiki/Preview/Preview";
 import RoleBasedRoute from "../components/RoleBasedRoute";
-import WikiHome from "../components/Wiki/WikiHome";
 import { useEffect, useState } from "react";
 import { authService } from "../services/authService";
 import { Result } from "antd";
 import NavBar from "../components/Common/NavBar/NavBar";
 import Admin from "../components/Dashboard/Admin/Admin";
 import { useNavigate } from "react-router-dom";
-import History from "../components/Wiki/History/History";
+import { wikiRoutes } from "./wikiRoutes";
+// import { QandARoutes } from "./QandARoutes";
+
+import Editor1 from "./../components/Q&A/Editor";
 
 function AppRoutes() {
   const location = useLocation();
@@ -53,6 +52,8 @@ function AppRoutes() {
           }
         />
 
+        <Route path="/q" element={<Editor1 />} />
+
         {/* <Route
           path="/"
           element={
@@ -60,15 +61,7 @@ function AppRoutes() {
               <DashboardPage />
             </PrivateRoute>
           }
-        /> */}
-        <Route
-          path="/"
-          element={<Navigate to={`/wiki/articles/${2}`} replace />}
-        />
-        <Route
-          path="dashboard"
-          element={<Navigate to={`/wiki/articles/${2}`} replace />}
-        />
+        />  */}
         {/* <Route
           path="dashboard"
           element={
@@ -85,46 +78,15 @@ function AppRoutes() {
             </PrivateRoute>
           }
         />
-        <Route
-          path="wiki/diffviewer/:category_Id/:id1/:id2"
-          element={
-            <PrivateRoute>
-              <Difference />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="wiki/edit/:id"
-          element={
-            <RoleBasedRoute roles={["admin", "user"]}>
-              <PrivateRoute>
-                <WikiHome>
-                  <Editor />
-                </WikiHome>
-              </PrivateRoute>
-            </RoleBasedRoute>
-          }
-        />
-        <Route
-          path="wiki/history/:id"
-          element={
-            <PrivateRoute>
-              <WikiHome>
-                <History />
-              </WikiHome>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="wiki/articles/:id"
-          element={
-            <PrivateRoute>
-              <WikiHome>
-                <Preview />
-              </WikiHome>
-            </PrivateRoute>
-          }
-        />
+
+        {wikiRoutes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
+
+        {/* {QandARoutes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))} */}
+
         <Route
           path="manage"
           element={

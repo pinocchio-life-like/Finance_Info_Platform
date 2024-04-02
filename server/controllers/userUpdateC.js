@@ -1,5 +1,4 @@
-const { User } = require("../models/models");
-const { updateUser } = require("../models/models");
+const { updateUser, User } = require("../models/userModel");
 
 const updateUsers = async (req, res) => {
   const { id } = req.params;
