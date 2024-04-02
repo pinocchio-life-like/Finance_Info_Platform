@@ -17,6 +17,7 @@
 //         allowNull:false
 //     }
 
+
 // });
 
 // mainCompany.hasMany(company, {

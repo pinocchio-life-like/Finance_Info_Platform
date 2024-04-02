@@ -22,7 +22,6 @@ const Editor = () => {
     try {
       const decodedToken = jwtDecode(token);
       userName = decodedToken.userName;
-      console.log(token)
     } catch (error) {
       console.error("Invalid token");
     }
@@ -30,7 +29,6 @@ const Editor = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState("");
   const param = useParams();
-  console.log("on edit page", param);
 
   const [open, setOpen] = useState(false);
 
@@ -48,7 +46,6 @@ const Editor = () => {
       try {
         const res = await api.get(`/api/article/${param.id}`);
         const { data } = res.data;
-
         setText(data.articleContent);
       } finally {
         setIsLoading(false);
@@ -108,7 +105,7 @@ const Editor = () => {
           form.append("file", file);
 
           api
-            .post("/api/img/upload", form, {
+            .post("/api/article/img/upload", form, {
               headers: {
                 "Content-Type": "multipart/form-data",
               },

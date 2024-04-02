@@ -70,7 +70,7 @@ const NavBar = () => {
   }, []);
 
   return (
-    <nav className="nav-bar-container bg-nav-bg px-12  h-20 ">
+    <nav className="nav-bar-container bg-nav-bg px-12  h-20 flex flex-col md:flex-row">
       <div className="nav flex justify-between w-full h-full items-center">
         <div className="logo flex items-center gap-2 w-3/5">
           <Link to="/" className="flex items-center gap-2">
@@ -115,7 +115,7 @@ const NavBar = () => {
             </li>
             <li>
               <Link
-                to="/qa"
+                to="/qa/questions"
                 className={`font-semibold hover:text-blue-700 ${
                   location.pathname.includes("qa")
                     ? "text-blue-800"

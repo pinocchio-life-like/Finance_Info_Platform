@@ -96,7 +96,7 @@ const CustomMdCatalog = ({ editorId, scrollElement, scrollChange }) => {
     <div
       style={{
         position: "relative",
-        width: "25%",
+        width: "16%",
         borderRight: "1px solid #EEEEEE",
       }}>
       <form
