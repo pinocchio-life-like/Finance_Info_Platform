@@ -24,7 +24,7 @@ const app = express();
 // Middleware setup
 const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE"],
-  origin: "http://localhost:4000",
+  origin: "http:wihinfo.vercel.app",
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],
 };
@@ -60,14 +60,14 @@ app.use("/api", answerRoutes);
 app.use("/api", commentRoutes);
 app.use("/api", uploadRoute);
 
-async function syncDatabase() {
-  try {
-    await sequelize.sync({ alter: true }); //edit this as needed
-    console.log("All models were synchronized successfully.");
-  } catch (error) {
-    console.error("Error occurred during model synchronization:", error);
-  }
-}
+// async function syncDatabase() {
+//   try {
+//     await sequelize.sync({ alter: true }); //edit this as needed
+//     console.log("All models were synchronized successfully.");
+//   } catch (error) {
+//     console.error("Error occurred during model synchronization:", error);
+//   }
+// }
 
 // syncDatabase();
 
