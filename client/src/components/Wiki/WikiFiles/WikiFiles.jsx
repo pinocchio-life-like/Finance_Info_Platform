@@ -113,6 +113,7 @@ const WikiFiles = () => {
       console.error(error);
     } finally {
       setUploading(false);
+      event.target.value = null;
     }
   };
 
