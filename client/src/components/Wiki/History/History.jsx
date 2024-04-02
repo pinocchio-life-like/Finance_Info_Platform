@@ -96,10 +96,7 @@ const History = () => {
 
   return (
     <div className="mt-4">
-      <div
-        style={{
-          marginBottom: 16,
-        }}>
+      <div className="mb-4">
         <Button
           //type="primary"
           onClick={compareSelectedVersions}
@@ -108,12 +105,7 @@ const History = () => {
         >
           Compare Versions
         </Button>
-        <span
-          style={{
-            marginLeft: 8,
-          }}>
-          {hasSelected ? selectionError : ""}
-        </span>
+        <span className="ml-4">{hasSelected ? selectionError : ""}</span>
       </div>
       <Table
         size="small"

@@ -1,4 +1,4 @@
-import { Button, List, Tooltip, message } from "antd";
+import { Button, List, Popconfirm, Tooltip, message } from "antd";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiDownload } from "react-icons/fi";
 import { FaChevronDown } from "react-icons/fa";
@@ -268,15 +268,23 @@ const WikiFiles = () => {
                   </a>
                 </div>
                 <div className="pr-3">
-                  <AiOutlineDelete
-                    color="red"
-                    fontSize={18}
-                    style={{
-                      cursor: "pointer",
-                      marginRight: "2px",
-                    }}
-                    onClick={() => handleFileDelete(item.url)}
-                  />
+                  <Popconfirm
+                    title="Are you sure to delete?"
+                    onConfirm={() => handleFileDelete(item.url)}
+                    okText="Yes"
+                    cancelText="No"
+                    okButtonProps={{
+                      style: { backgroundColor: "#008DDA", color: "white" },
+                    }}>
+                    <AiOutlineDelete
+                      color="red"
+                      fontSize={18}
+                      style={{
+                        cursor: "pointer",
+                        marginRight: "2px",
+                      }}
+                    />
+                  </Popconfirm>
                 </div>
               </List.Item>
             )}
