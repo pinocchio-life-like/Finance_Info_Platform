@@ -28,7 +28,9 @@ const AskQuestion = () => {
   };
 
   const handleDescriptionChange = (value) => {
+console.log(value)
     setDescription(value);
+
   };
 
   const handleSubmit = (event) => {

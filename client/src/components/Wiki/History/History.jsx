@@ -9,7 +9,7 @@ const History = () => {
   const navigate = useNavigate();
   const [versions, setVersions] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectionError, setSelectionError] = useState("");
   useEffect(() => {
@@ -18,7 +18,7 @@ const History = () => {
       try {
         const response = await api.get(`/api/versions/${param.id}`);
         const formattedData = Array.isArray(response.data.data)
-          ? response.data.data.map((version, index) => ({
+          ? response.data.data.map((version) => ({
               key: version.articleVersionId,
               articleVersionTitle: version.articleVersionTitle,
               createdAt: version.createdAt,
@@ -96,23 +96,16 @@ const History = () => {
 
   return (
     <div className="mt-4">
-      <div
-        style={{
-          marginBottom: 16,
-        }}>
+      <div className="mb-4">
         <Button
           //type="primary"
           onClick={compareSelectedVersions}
           disabled={selectedRowKeys.length !== 2}
-          loading={loading}>
+          // loading={loading}
+        >
           Compare Versions
         </Button>
-        <span
-          style={{
-            marginLeft: 8,
-          }}>
-          {hasSelected ? selectionError : ""}
-        </span>
+        <span className="ml-4">{hasSelected ? selectionError : ""}</span>
       </div>
       <Table
         size="small"

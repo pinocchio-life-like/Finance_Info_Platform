@@ -46,7 +46,6 @@ const Editor = () => {
       try {
         const res = await api.get(`/api/article/${param.id}`);
         const { data } = res.data;
-
         setText(data.articleContent);
       } finally {
         setIsLoading(false);
@@ -106,7 +105,7 @@ const Editor = () => {
           form.append("file", file);
 
           api
-            .post("/upload", form, {
+            .post("/api/article/img/upload", form, {
               headers: {
                 "Content-Type": "multipart/form-data",
               },

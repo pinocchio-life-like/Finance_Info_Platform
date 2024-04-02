@@ -1,20 +1,16 @@
 import { Pagination } from "antd";
 
-import { Link } from "react-router-dom";
-import { Button,  } from "antd";
-const Questions = () => {
+const Unanswered = () => {
   return (
     <div className="w-full">
       <div className="flex justify-between w-full p-4 pt-8 pb-3">
         <h1 className="font-bold text-2xl">
-          Explore Questions <span>|</span>{" "}
+          Unanswered Questions <span>|</span>{" "}
           <span className="font-light text-xl">648 questions</span>
         </h1>
-        <Link to="/ask" className="">
-          <Button className="qa-button font-semibold">
-            Ask Question
-          </Button>
-        </Link>
+        <button className="bg-[#008DDA] py-[1.5px] px-2 text-white rounded font-semibold">
+          Ask Question
+        </button>
       </div>
       <div className="w-full p-4 pt-3">
         <div className="border-t pt-3">
@@ -26,7 +22,7 @@ const Questions = () => {
           <div className="pt-4 flex justify-between items-center">
             <div>
               <span className="inline-block bg-white rounded border border-[#008DDA] px-2 py-[0.2px] text-sm text-[#008DDA] mr-2 font-semibold">
-                5 answers
+                0 answers
               </span>
               <span className="inline-block bg-gray-200 rounded px-3 py-[0.2px] text-sm font-semibold text-gray-700 mr-2">
                 Tag1
@@ -57,7 +53,7 @@ const Questions = () => {
           <div className="pt-4 flex justify-between items-center">
             <div>
               <span className="inline-block bg-white rounded border border-[#008DDA] px-2 py-[0.2px] text-sm text-[#008DDA] mr-2 font-semibold">
-                5 answers
+                0 answers
               </span>
               <span className="inline-block bg-gray-200 rounded px-3 py-[0.2px] text-sm font-semibold text-gray-700 mr-2">
                 Tag1
@@ -96,4 +92,4 @@ const Questions = () => {
   );
 };
 
-export default Questions;
+export default Unanswered;

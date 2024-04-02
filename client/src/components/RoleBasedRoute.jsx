@@ -18,7 +18,7 @@ const RoleBasedRoute = ({ children, roles }) => {
 
 RoleBasedRoute.propTypes = {
   children: PropTypes.node.isRequired,
-  roles: PropTypes.string.isRequired,
+  roles: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default RoleBasedRoute;

@@ -23,6 +23,7 @@ function Difference() {
         content: response.data.articleVersionContent,
         id: response.data.articleVersionId,
         updatedAt: response.data.updatedAt,
+        title: response.data.articleVersionTitle,
       })),
     ])
       .then(([oldArticle, newArticle]) => {
@@ -46,9 +47,9 @@ function Difference() {
     ? new Date(updatedAt).toLocaleDateString()
     : "";
   return (
-    <div className=" main-diff flex  justify-center m-10">
-      <div className="container  w-4/5">
-        <div className="article-title border-b border-gray-200 flex justify-between">
+    <div className=" main-diff flex w-full  justify-center mt-6">
+      <div className="w-full mx-14 mb-8">
+        <div className="border-b border-gray-200 flex justify-between">
           <div>
             <h2 className="text-xl font-semibold">
               {`Article Title: ${title}`}
@@ -64,7 +65,7 @@ function Difference() {
             </Link>
           </div>
         </div>
-        <div className="diff-viewer-container mt-8">
+        <div className="diff-viewer-container">
           <DiffViewer
             oldValue={oldValue}
             newValue={newValue}
