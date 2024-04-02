@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-
+import { Button,  } from "antd";
 const Questions = () => {
   return (
     <div className="w-full">
@@ -9,9 +9,9 @@ const Questions = () => {
           <span className="font-light text-xl">648 questions</span>
         </h1>
         <Link to="/ask" className="">
-          <button className="bg-[#008DDA] py-[2px] px-2 text-white rounded font-semibold">
+          <Button className="qa-button font-semibold">
             Ask Question
-          </button>
+          </Button>
         </Link>
       </div>
       <div className="w-full p-4 pt-3">

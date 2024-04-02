@@ -4,7 +4,6 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { PoweroffOutlined } from "@ant-design/icons";
 import { Button, Flex } from "antd";
-import "./AskQuestion.css";
 
 const AskQuestion = () => {
   const [title, setTitle] = useState("");
@@ -69,11 +68,10 @@ const AskQuestion = () => {
         </ul>
       </div>
       <div className="pt-4">
-        <form onSubmit={handleSubmit}  className="flex flex-col space-y-4">
+        <form onSubmit={handleSubmit} className="flex flex-col space-y-4 gap-4">
           <div>
-           
             <input
-              type="text" 
+              type="text"
               className="questionTitle border w-full  p-3" //rounded-md
               name="title"
               value={title}
@@ -82,13 +80,12 @@ const AskQuestion = () => {
               required
             />
           </div>
-          <div >
-           
+          <div className="">
             <ReactQuill
               value={description}
               onChange={handleDescriptionChange}
               placeholder="Describe your question here"
-              className="rounded-md  bg-white "
+              className="rounded-md  bg-white  "
               // modules={{
               //   toolbar: [
               //     [{ 'header': '1'}, {'header': '2'}],
@@ -102,9 +99,7 @@ const AskQuestion = () => {
           </div>
           <div>
             <Button
-              //type="primary"
-              // icon={<PoweroffOutlined />}
-              className="post-question"
+              className="qa-button semi-bold"
               loading={loadings[1]}
               onClick={() => enterLoading(1)}
             >
