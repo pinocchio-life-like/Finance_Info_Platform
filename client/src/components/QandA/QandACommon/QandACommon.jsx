@@ -29,14 +29,13 @@ const QandACommon = (props) => {
                 <li>
                   <Link
                     to="/qa/questions"
-                    className={`flex items-center py-1 px-4 rounded ${
+                    className={`flex items-center py-1 px-4 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 0 // ? "bg-[#ababab] font-bold"
                         ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
-                          "text-[#008DDA] hover:bg-gray-200 font-light"
+                          "text-[#008DDA] "
                         : ""
                     }`}
-                    onClick={() => setActiveIndex(0)}
-                  >
+                    onClick={() => setActiveIndex(0)}>
                     <RiQuestionAnswerFill
                       size={20}
                       style={{ marginRight: 10 }}
@@ -55,8 +54,7 @@ const QandACommon = (props) => {
                     `}
                     onClick={() => {
                       setDropdownOpen(!dropdownOpen);
-                    }}
-                  >
+                    }}>
                     <div className={`flex items-center`}>
                       <IoMdPricetags size={21} style={{ marginRight: 10 }} />{" "}
                       Tags
@@ -64,7 +62,7 @@ const QandACommon = (props) => {
                     {dropdownOpen ? <AiOutlineUp /> : <AiOutlineDown />}
                   </button>
                   {dropdownOpen && (
-                    <ul className="w-full px-1 pb-0 pt-2 space-y-1 bg- ">
+                    <ul className="w-full px-1 pb-0 pt-2 space-y-1 border ">
                       <Checkbox.Group className="w-full">
                         <div className="bg-white w-full px-3 border border-[#ababab] border-l-[3px] border-l-[#008DDA]">
                           <div className="flex justify-between items-center py-2">
@@ -85,10 +83,10 @@ const QandACommon = (props) => {
                             </Checkbox>
                             <span>20</span>
                           </div>
-                          <button className="w-full flex justify-center text-left py-2 border-t hover:bg-[#008DDA] mb-1 rounded hover:text-white text-[#008DDA]">
-                            expand to see more tags
-                          </button>
                         </div>
+                        <button className="w-full flex justify-center text-left py-2 mt-1 border hover:bg-[#008DDA] mb-1 rounded hover:text-white text-[#008DDA]">
+                          expand to see more tags
+                        </button>
                       </Checkbox.Group>
                     </ul>
                   )}
@@ -96,14 +94,13 @@ const QandACommon = (props) => {
                 <li>
                   <Link
                     to="/qa/unanswered"
-                    className={`flex items-center py-1 px-4 rounded ${
+                    className={`flex items-center py-1 px-4 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 2 // ? "bg-[#ababab] font-bold"
                         ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
-                          "text-[#008DDA] hover:bg-gray-200 font-light"
+                          "text-[#008DDA] "
                         : ""
                     }`}
-                    onClick={() => setActiveIndex(2)}
-                  >
+                    onClick={() => setActiveIndex(2)}>
                     <RiQuestionnaireFill
                       size={20}
                       style={{ marginRight: 10 }}

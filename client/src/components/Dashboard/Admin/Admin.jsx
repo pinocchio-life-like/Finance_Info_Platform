@@ -329,6 +329,7 @@ const Admin = () => {
               <Select placeholder="Select a role">
                 <Select.Option value="admin">Admin</Select.Option>
                 <Select.Option value="user">User</Select.Option>
+                <Select.Option value="reader">Reader</Select.Option>
               </Select>
             </Form.Item>
 
