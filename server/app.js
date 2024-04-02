@@ -24,7 +24,7 @@ const app = express();
 // Middleware setup
 const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE"],
-  origin: "http:wihinfo.vercel.app",
+  origin: "http://wihinfo.vercel.app",
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],
 };
