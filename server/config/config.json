@@ -1,27 +1,27 @@
 {
   "development": {
     "dialect": "mysql",
-    "username": "root",
-    "password": "1234",
-    "database": "wihinfo",
-    "host": "localhost",
+    "username": "admin",
+    "password": "12345678",
+    "database": "deploy_test",
+    "host": "fip-demodb.ckhs9i5s4dyl.us-east-1.rds.amazonaws.com",
     "port": "3306",
     "logging": true
   },
   "test": {
     "dialect": "mysql",
-    "username": "root",
-    "password": "1234",
-    "database": "wihinfo",
-    "host": "localhost",
+    "username": "admin",
+    "password": "12345678",
+    "database": "deploy_test",
+    "host": "fip-demodb.ckhs9i5s4dyl.us-east-1.rds.amazonaws.com",
     "port": "3306"
   },
   "production": {
     "dialect": "mysql",
-    "username": "root",
-    "password": "1234",
-    "database": "wihinfo",
-    "host": "localhost",
+    "username": "admin",
+    "password": "12345678",
+    "database": "deploy_test",
+    "host": "fip-demodb.ckhs9i5s4dyl.us-east-1.rds.amazonaws.com",
     "port": "3306"
   }
 }

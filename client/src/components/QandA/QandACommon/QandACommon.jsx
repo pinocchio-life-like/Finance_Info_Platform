@@ -14,14 +14,14 @@ const QandACommon = (props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
-    <div className="flex-grow flex flex-col items-center bg-white">
-      <div className="flex justify-between items-center w-3/5 border-b border-gray-600 relative pt-4 pb-2">
+    <div className="flex-grow w-full flex px-14 flex-col items-center bg-white">
+      <div className="flex justify-between items-center w-full border-b border-gray-600 relative pt-4 pb-2">
         <div className="flex justify-start items-center">
           <img className="w-10 h-10" src={zhihu} alt="My Icon" />{" "}
           <h1 className="ml-3 text-3xl font-bold">知乎</h1>{" "}
         </div>
       </div>
-      <div className="flex justify-start items-center w-3/5 border-x relative pb-2">
+      <div className="flex justify-start items-center w-full border-x relative pb-2">
         <div className="flex w-full">
           <div className="w-1/5 h-screen sticky top-0 border-r">
             <nav className="pt-8">
@@ -30,11 +30,13 @@ const QandACommon = (props) => {
                   <Link
                     to="/qa/questions"
                     className={`flex items-center py-1 px-4 rounded ${
-                      activeIndex === 0
-                        ? "bg-[#ababab] font-bold"
-                        : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
+                      activeIndex === 0 // ? "bg-[#ababab] font-bold"
+                        ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
+                          "text-[#008DDA] hover:bg-gray-200 font-light"
+                        : ""
                     }`}
-                    onClick={() => setActiveIndex(0)}>
+                    onClick={() => setActiveIndex(0)}
+                  >
                     <RiQuestionAnswerFill
                       size={20}
                       style={{ marginRight: 10 }}
@@ -44,14 +46,17 @@ const QandACommon = (props) => {
                 </li>
                 <li className="relative group">
                   <button
-                    className={`w-full flex justify-between items-center py-1 px-4 rounded ${
+                    className={`w-full flex justify-between items-center py-1 px-4 rounded 
+                    ${
                       activeIndex === 1
                         ? "bg-[#ababab] font-bold"
                         : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
-                    }`}
+                    }
+                    `}
                     onClick={() => {
                       setDropdownOpen(!dropdownOpen);
-                    }}>
+                    }}
+                  >
                     <div className={`flex items-center`}>
                       <IoMdPricetags size={21} style={{ marginRight: 10 }} />{" "}
                       Tags
@@ -92,11 +97,13 @@ const QandACommon = (props) => {
                   <Link
                     to="/qa/unanswered"
                     className={`flex items-center py-1 px-4 rounded ${
-                      activeIndex === 2
-                        ? "bg-[#ababab] font-bold"
-                        : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
+                      activeIndex === 2 // ? "bg-[#ababab] font-bold"
+                        ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
+                          "text-[#008DDA] hover:bg-gray-200 font-light"
+                        : ""
                     }`}
-                    onClick={() => setActiveIndex(2)}>
+                    onClick={() => setActiveIndex(2)}
+                  >
                     <RiQuestionnaireFill
                       size={20}
                       style={{ marginRight: 10 }}
@@ -107,7 +114,7 @@ const QandACommon = (props) => {
               </ul>
             </nav>
           </div>
-          <div className="w-4/5 bg-white">{props.children}</div>
+          <div className="w-full bg-white">{props.children}</div>
         </div>
       </div>
     </div>

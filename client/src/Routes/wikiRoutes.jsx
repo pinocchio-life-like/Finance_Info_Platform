@@ -6,6 +6,7 @@ import History from "../components/Wiki/History/History";
 import PrivateRoute from "../components/PrivateRoute";
 import RoleBasedRoute from "../components/RoleBasedRoute";
 import { Navigate } from "react-router-dom";
+import WikiFiles from "../components/Wiki/WikiFiles/WikiFiles";
 
 export const wikiRoutes = [
   {
@@ -52,6 +53,16 @@ export const wikiRoutes = [
       <PrivateRoute>
         <WikiHome>
           <Preview />
+        </WikiHome>
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "wiki/files/:id",
+    element: (
+      <PrivateRoute>
+        <WikiHome>
+          <WikiFiles />
         </WikiHome>
       </PrivateRoute>
     ),

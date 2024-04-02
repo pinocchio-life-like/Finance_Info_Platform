@@ -16,7 +16,7 @@ const Article = sequelize.define("Articles", {
     require: true,
   },
   articleContent: {
-    type: DataTypes.TEXT,
+    type: DataTypes.TEXT("long"),
     allowNull: false,
     require: true,
   },
