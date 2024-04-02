@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { RxDotFilled } from "react-icons/rx";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { PoweroffOutlined } from "@ant-design/icons";
-import { Button, Flex } from "antd";
+import { Button } from "antd";
 
 const AskQuestion = () => {
   const [title, setTitle] = useState("");
