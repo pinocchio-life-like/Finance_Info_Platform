@@ -28,9 +28,8 @@ const AskQuestion = () => {
   };
 
   const handleDescriptionChange = (value) => {
-console.log(value)
+    console.log(value);
     setDescription(value);
-
   };
 
   const handleSubmit = (event) => {
@@ -44,7 +43,7 @@ console.log(value)
   };
   return (
     <div className="p-8">
-      <div className="question-tips bg-gray-200 p-6 rounded-3xl mb-6">
+      <div className="question-tips bg-gray-200 p-6 rounded mb-6">
         <h3 className="text-2xl font-semibold pb-4">
           Tips on getting good answers quickly
         </h3>
@@ -103,8 +102,7 @@ console.log(value)
             <Button
               className="qa-button semi-bold"
               loading={loadings[1]}
-              onClick={() => enterLoading(1)}
-            >
+              onClick={() => enterLoading(1)}>
               Post Question
             </Button>
           </div>

@@ -216,7 +216,7 @@ const Editor = () => {
             defToolbars={[
               // eslint-disable-next-line react/jsx-key
               <NormalToolbar
-                title="save"
+                title="post"
                 trigger={
                   <Popconfirm
                     title="Do you want to post this Article?"
@@ -224,9 +224,9 @@ const Editor = () => {
                     okText="Yes"
                     cancelText="No"
                     okButtonProps={{
-                      style: { backgroundColor: "#008DDA", color: "white" },
+                      style: { backgroundColor: "#155CA2", color: "white" },
                     }}>
-                    <span className="px-2 flex items-center justify-center text-center bg-[#008DDA] text-white rounded hover:bg-[#214355]">
+                    <span className="px-2 flex items-center justify-center text-center bg-[#155CA2] text-white rounded hover:bg-[#214355]">
                       Post
                     </span>
                   </Popconfirm>

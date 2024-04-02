@@ -199,7 +199,7 @@ const WikiFiles = () => {
               <Button
                 disabled={uploading}
                 icon={<UploadOutlined />}
-                className="m-3 px-5 bg-[#008DDA] text-white right-0"
+                className="m-3 px-5 bg-[#155CA2] text-white right-0"
                 onClick={handleButtonClick}
                 loading={uploading}>
                 Click to Upload
@@ -281,7 +281,7 @@ const WikiFiles = () => {
                     okText="Yes"
                     cancelText="No"
                     okButtonProps={{
-                      style: { backgroundColor: "#008DDA", color: "white" },
+                      style: { backgroundColor: "#155CA2", color: "white" },
                     }}>
                     <AiOutlineDelete
                       color="red"
