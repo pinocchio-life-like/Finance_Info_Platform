@@ -126,7 +126,6 @@ router.delete("/files/article", async (req, res) => {
         console.error("Error deleting file from database:", dbError);
         res.status(500).send("Error deleting file from database");
       }
-      res.send({ message: "File deleted successfully" }); // This is the second res.send
     }
   });
 });
