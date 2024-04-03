@@ -2,14 +2,18 @@ import { useState } from "react";
 import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 import logo from "../../assets/Images/wihLogo.png";
 import PropTypes from "prop-types";
+import loader from "../../assets/Images/loading.png"
 function LoginForm({ onSubmit, error }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSubmit({ username, password });
+    setIsLoading(true)
+    onSubmit({ username, password }).finally(() => {
+      setIsLoading(false); 
+    });
   };
 
   return (
@@ -17,7 +21,8 @@ function LoginForm({ onSubmit, error }) {
       <form
         style={{ width: "450px", height: "470px" }}
         onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col items-center">
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col items-center"
+      >
         <img
           style={{ width: "80px", height: "68px" }}
           src={logo}
@@ -59,14 +64,27 @@ function LoginForm({ onSubmit, error }) {
           )}
         </div>
         <div className="mb-6 w-full">
-          <input
+          <button
             style={{
               background: "linear-gradient(to right, #013E7A, #0057A6)",
             }}
             type="submit"
-            value="LOGIN"
-            className=" text-white font-bold py-3 px-4 w-full rounded focus:outline-none focus:shadow-outline"
-          />
+            className="text-white font-bold py-3 px-4 w-full rounded focus:outline-none focus:shadow-outline"
+            disabled={isLoading} 
+          >
+            {isLoading ? (
+              <div className="flex justify-center items-center">
+                <img
+                  src={loader} 
+                  alt="Loading"
+                  className="animate-spin h-5 w-5 mr-3" 
+                />
+                Loading...
+              </div>
+            ) : (
+              "LOGIN"
+            )}
+          </button>
         </div>
         {error && <p className="text-red-500 text-xs italic">{error}</p>}
       </form>
