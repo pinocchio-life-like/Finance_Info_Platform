@@ -176,7 +176,7 @@ const NavBar = () => {
             {menuActive && (
               <div className="menu z-50 absolute top-full right-0 bg-white shadow-md mt-1 py-2 w-48 rounded">
                 <Link
-                  to="#"
+                  to="/profile"
                   className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
                   Profile
                 </Link>

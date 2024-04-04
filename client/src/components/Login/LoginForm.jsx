@@ -79,7 +79,7 @@ function LoginForm({ onSubmit, error }) {
                   alt="Loading"
                   className="animate-spin h-5 w-5 mr-3" 
                 />
-                Loading...
+                LOGIN...
               </div>
             ) : (
               "LOGIN"
