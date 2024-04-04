@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import api from "../../../utils/api";
 const Questions = () => {
   const [questions, setQuestions] = useState([]);
+  const [showFullDescriptions, setShowFullDescriptions] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     const getQuestions = async () => {
@@ -13,6 +14,7 @@ const Questions = () => {
         const response = await api.get("/api/questions");
         if (response.data && response.data.data) {
           setQuestions(response.data.data);
+          setShowFullDescriptions(Array(response.data.data.length).fill(false));
         } else {
           console.error("Unexpected API response:", response);
         }
@@ -24,8 +26,16 @@ const Questions = () => {
     getQuestions();
   }, []);
 
-  console.log(questions);
+  
+ 
 
+  const toggleDescription = (index) => {
+    setShowFullDescriptions((prevState) => {
+      const updatedStates = [...prevState];
+      updatedStates[index] = !updatedStates[index];
+      return updatedStates;
+    });
+  };
   const questionIdSeter = (id) => {
     localStorage.setItem("questionId", id);
     navigate("/answer");
@@ -52,9 +62,24 @@ const Questions = () => {
                   {q.question_title}
                 </Link>
               </h2>
-              <p className="text-gray-700 truncate">
-                {q.question_description}
-                <button className="text-[#008DDA]">...see more</button>
+              <p className="text-gray-700 truncate"
+               style={{
+                maxHeight: showFullDescriptions[i] ? "none" : "60px",
+                overflow: "hidden",
+                whiteSpace: "pre-line", 
+                
+              }}
+              
+              >
+                {showFullDescriptions[i]
+                  ? q.question_description
+                  : q.question_description.trim().substring(0, 60)}
+                <button
+                  className="text-[#008DDA]"
+                  onClick={() => toggleDescription(i)}
+                >
+                  {showFullDescriptions[i] ? "See Less" : "...See More"}
+                </button>
               </p>
               <div className="pt-4 flex justify-between items-center">
                 <div>

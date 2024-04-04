@@ -17,7 +17,7 @@ const AskQuestion = () => {
   // const [tagNames,setTagNames]=useState([])
   const [inputValue, setInputValue] = useState("");
   const [tags, setTags] = useState([]);
-  console.log(Array.isArray(tags));
+  // console.log(Array.isArray(tags));
   // console.log(tags)
   // console.log(title)
   // console.log(description)
@@ -59,10 +59,11 @@ const AskQuestion = () => {
   }
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const cleanDescription = description.replace(/<[^>]*>/g, '');
     const tagNames = Array.isArray(tags) ? tags : [];
     const questionData = {
       question_title: title,
-      question_description: description,
+      question_description: cleanDescription,
       tagNames,
       userName,
     };
