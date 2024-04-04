@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { RxDotFilled } from "react-icons/rx";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { PoweroffOutlined } from "@ant-design/icons";
-import { Button, Flex } from "antd";
+import { Button } from "antd";
 
 const AskQuestion = () => {
   const [title, setTitle] = useState("");
@@ -28,9 +27,8 @@ const AskQuestion = () => {
   };
 
   const handleDescriptionChange = (value) => {
-console.log(value)
+    console.log(value);
     setDescription(value);
-
   };
 
   const handleSubmit = (event) => {
@@ -44,7 +42,7 @@ console.log(value)
   };
   return (
     <div className="p-8">
-      <div className="question-tips bg-gray-200 p-6 rounded-3xl mb-6">
+      <div className="question-tips bg-gray-200 p-6 rounded mb-6">
         <h3 className="text-2xl font-semibold pb-4">
           Tips on getting good answers quickly
         </h3>
@@ -103,8 +101,7 @@ console.log(value)
             <Button
               className="qa-button semi-bold"
               loading={loadings[1]}
-              onClick={() => enterLoading(1)}
-            >
+              onClick={() => enterLoading(1)}>
               Post Question
             </Button>
           </div>

@@ -10,6 +10,8 @@ import { Link } from "react-router-dom";
 import { FiCopy } from "react-icons/fi";
 import { UploadOutlined } from "@ant-design/icons";
 import { jwtDecode } from "jwt-decode";
+import store from "../../../redux/store";
+import { changeTableOfContentsState } from "../../../redux/slices/contentsSlice";
 
 const WikiFiles = () => {
   const [categories, setCategories] = useState([]);
@@ -113,6 +115,7 @@ const WikiFiles = () => {
       console.error(error);
     } finally {
       setUploading(false);
+      event.target.value = null;
     }
   };
 
@@ -126,6 +129,10 @@ const WikiFiles = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    store.dispatch(changeTableOfContentsState({ drop: activeDropdown }));
+  }, [activeDropdown]);
 
   return (
     <div className="w-full border-x border-b px-2">
@@ -192,7 +199,7 @@ const WikiFiles = () => {
               <Button
                 disabled={uploading}
                 icon={<UploadOutlined />}
-                className="m-3 px-5 bg-[#008DDA] text-white right-0"
+                className="m-3 px-5 bg-[#155CA2] text-white right-0"
                 onClick={handleButtonClick}
                 loading={uploading}>
                 Click to Upload
@@ -274,7 +281,7 @@ const WikiFiles = () => {
                     okText="Yes"
                     cancelText="No"
                     okButtonProps={{
-                      style: { backgroundColor: "#008DDA", color: "white" },
+                      style: { backgroundColor: "#155CA2", color: "white" },
                     }}>
                     <AiOutlineDelete
                       color="red"

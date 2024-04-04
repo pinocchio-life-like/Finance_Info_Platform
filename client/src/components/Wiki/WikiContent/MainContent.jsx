@@ -215,12 +215,16 @@ const MainContent = (props) => {
     );
   }, [isOpen, activeDropdown]);
 
+  useEffect(() => {
+    setActiveDropdown(drop);
+  }, [drop]);
+
   return (
     <div className="flex-grow flex flex-col items-center mx-14 bg-white">
       <div className="flex justify-between items-center w-full border-b border-gray-600 pb-1 pt-3">
         <div>
           {["Article", "Files"].map((link, index) => {
-            if (userRole === "reader" && link === "Files") {
+            if (userRole !== "admin" && link === "Files") {
               return null;
             }
             return (
@@ -268,7 +272,7 @@ const MainContent = (props) => {
           ref={buttonRef}
           className="flex items-center text-sm font-bold"
           onClick={() => {
-            setIsOpen(true);
+            setIsOpen((state) => !state);
           }}>
           <div className="flex flex-col space-y-1">
             <span className="w-4 h-0.5 bg-black"></span>
@@ -339,6 +343,8 @@ const MainContent = (props) => {
                         ? `/wiki/edit/${subCategory.category_Id}`
                         : currentUrl.includes("articles")
                         ? `/wiki/articles/${subCategory.category_Id}`
+                        : currentUrl.includes("files")
+                        ? `/wiki/articles/${subCategory.category_Id}`
                         : `/wiki/history/${subCategory.category_Id}`;
 
                       return (
@@ -349,6 +355,9 @@ const MainContent = (props) => {
                             style={{ color: "#070F2B" }}
                             key={subCategory.category_Id}
                             className="text-black"
+                            onClick={() =>
+                              setTimeout(() => setIsOpen(false), 1000)
+                            }
                             to={linkAddress}>
                             {subCategory.category}
                           </Link>
