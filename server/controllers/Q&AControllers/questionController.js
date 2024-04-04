@@ -1,15 +1,25 @@
-const {getAllQuestions,deleteQuestions,getSingleQ} = require("../../models/Q&AModel/questionModel");
-const{ askQuestion,updateQuestion}=require('../../models/Q&AModel/associations')
+const {
+  getAllQuestions,
+  deleteQuestions,
+  getSingleQ,
+} = require("../../models/Q&AModel/questionModel");
+const {
+  askQuestion,
+  updateQuestion,
+} = require("../../models/Q&AModel/associations");
 const askQuestionC = async (req, res) => {
   try {
-    const { question_title, question_description, userId, tagNames } = req.body;
-    console.log(req.body)
-const question = await askQuestion({
-  question_title,
-  question_description,
-  userId,
-
-},  tagNames)
+    const { question_title, question_description, userName, tagNames } =
+      req.body;
+    console.log(req.body);
+    const question = await askQuestion(
+      {
+        question_title,
+        question_description,
+        userName,
+      },
+      tagNames
+    );
     if (!question) {
       return res.status(500).json({ message: "something went wrong" });
     } else {
@@ -46,7 +56,8 @@ const updateQuestionC = async (req, res) => {
         .status(500)
         .json({ message: "there is no question to be updated" });
     } else {
-      const { question_title, question_description, tagNames, userId } = req.body;
+      const { question_title, question_description, tagNames, userId } =
+        req.body;
       const question = await updateQuestion(id, {
         question_title,
         question_description,

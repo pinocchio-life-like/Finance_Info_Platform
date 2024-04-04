@@ -1,9 +1,9 @@
 const { Sequelize } = require("sequelize"); // Create Sequelize instance
 const sequelize = new Sequelize({
   dialect: "mysql", // Change to your database dialect
-  username: "root",
-  password: "1234",
-  database: "wihinfo",
+  username: "financeApp",
+  password: "12345",
+  database: "financeapp",
   host: "localhost",
   port: "3306",
 });
