@@ -10,17 +10,17 @@
   },
   "test": {
     "dialect": "mysql",
-    "username": "admin",
+    "username": "financeApp",
     "password": "12345",
-    "database": "wihinfo",
+    "database": "financeapp",
     "host": "localhost",
     "port": "3306"
   },
   "production": {
     "dialect": "mysql",
-    "username": "admin",
+    "username": "financeApp",
     "password": "12345",
-    "database": "wihinfo",
+    "database": "financeapp",
     "host": "localhost",
     "port": "3306"
   }
