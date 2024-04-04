@@ -2,6 +2,7 @@ const { Category } = require("../models/categoryModel");
 
 const addCategory = async (req, res) => {
   try {
+    console.log("hello");
     const { category } = req.body;
 
     // Count the number of existing categories

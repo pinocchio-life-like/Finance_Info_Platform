@@ -1,0 +1,29 @@
+.search-highlight {
+  /* background-color: #b2f1dc !important;  */
+  color: #7fd54d !important;
+}
+.catalog-highlight {
+  color: #7fd54d !important;
+}
+
+/* QA-Buttons*/
+.qa-button {
+  background-color: #155CA2!important;
+  border-color: #155CA2!important;
+  color: #fff!important;
+  cursor: pointer;
+}
+.qa-button:hover,
+.qa-button:focus {
+  background-color: #053F87!important;
+  border-color: #053F87!important;
+  transition: all 0.3s ease!important;
+}
+.qa-button[loading="true"] {
+  background-color: #053F87!important;
+  border-color: #053F87!important;
+}
+
+/* .ql-container{
+height: 100px!important;
+} */

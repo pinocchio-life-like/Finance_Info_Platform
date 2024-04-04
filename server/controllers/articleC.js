@@ -1,12 +1,11 @@
 const {
   Article,
-  createArticle,
   getAllArticles,
-  updateArticle,
   deleteArticle,
 } = require("../models/articleModel");
+const { createArticle, updateArticle } = require("../models/associations");
 const { Category } = require("../models/categoryModel");
-const { User } = require("../models/models");
+const { User } = require("../models/userModel");
 
 const articleC = async (req, res) => {
   const { articleTitle, articleContent, parent_Id, userName } = req.body;
@@ -97,7 +96,7 @@ const updateArticleC = async (req, res) => {
       articleTitle,
       articleContent,
       category_Id: id,
-      userId: user.userId
+      userId: user.userId,
     });
 
     return res.status(200).json({

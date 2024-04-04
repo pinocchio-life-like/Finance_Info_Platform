@@ -3,15 +3,19 @@ import api from "../utils/api";
 const authService = {
   login: async function (data) {
     const response = await api.post("/api/login", {
-      data,
+      data: data,
     });
     const { token } = response.data;
     localStorage.setItem("token", token);
     return response;
   },
-  logout: function () {
-    api.post("/api/logout");
-    localStorage.removeItem("token");
+  logout: async function () {
+    try {
+      await api.post("/api/logout");
+      localStorage.removeItem("token");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   },
   isAuthenticated: function () {
     const token = localStorage.getItem("token");
@@ -33,17 +37,24 @@ const authService = {
     return localStorage.getItem("token");
   },
   refreshToken: async function () {
-    try {
-      const response = await api.post("/api/refreshToken");
-      const { token } = response.data;
-      localStorage.setItem("token", token);
-      return token;
-    } catch (error) {
-      // If the refresh token is expired or undefined, log the user out
-      if (error.response && error.response.status === 401) {
-        this.logout();
+    const token = localStorage.getItem("token");
+    // Only attempt to refresh the token if one exists
+    if (token) {
+      try {
+        const response = await api.post("/api/refreshToken");
+        const { token } = response.data;
+        localStorage.setItem("token", token);
+        return token;
+      } catch (error) {
+        // If the refresh token is expired or undefined, log the user out
+        if (error.response && error.response.status === 401) {
+          this.logout();
+        }
+        throw error;
       }
-      throw error;
+    } else {
+      // If there's no token, throw an error or handle this case as needed
+      throw new Error("No token available to refresh");
     }
   },
 };
