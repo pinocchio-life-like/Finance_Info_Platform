@@ -47,6 +47,21 @@ const getAllQuestionsC = async (req, res) => {
     console.error(error.message);
   }
 };
+const getSingleQuestionC = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const question = await getSingleQ(id);
+
+    if (!question) {
+      return res.status(404).json({ message: "Question not found" });
+    } else {
+      return res.status(200).json({ message: "Question found", data: question });
+    }
+  } catch (error) {
+    console.error("Error fetching single question:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 const updateQuestionC = async (req, res) => {
   try {
     const { id } = req.params;
@@ -98,4 +113,4 @@ const deleteQC = async (req, res) => {
     console.error(error);
   }
 };
-module.exports = { askQuestionC, getAllQuestionsC, updateQuestionC, deleteQC };
+module.exports = { askQuestionC, getAllQuestionsC, updateQuestionC, deleteQC, getSingleQ, getSingleQuestionC };

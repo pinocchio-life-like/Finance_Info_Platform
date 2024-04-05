@@ -4,7 +4,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { PoweroffOutlined } from "@ant-design/icons";
 import { Button, Flex } from "antd";
-import api from "../../../../utils/api";
+import api from "../../../utils/api";
 import { jwtDecode } from "jwt-decode";
 import { Input, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -167,7 +167,7 @@ const AskQuestion = () => {
               placeholder="Add a tag"
             />
             {tags.map((tag) => (
-              <Tag key={tag} closable onClose={() => handleTagClose(tag)}>
+              <Tag key={tag} className="inline-block bg-gray-200 rounded px-3 py-1 text-xs font-normal text-gray-700 mr-2 mb-2" closable onClose={() => handleTagClose(tag)} >
                 {tag}
               </Tag>
             ))}

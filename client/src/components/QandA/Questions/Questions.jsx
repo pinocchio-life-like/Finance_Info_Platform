@@ -57,12 +57,12 @@ const Questions = () => {
         <div className="border-t pt-3">
           {questions.map((q, i) => (
             <div className={i === 0 ? `pt-0` : `pt-3`} key={i}>
-              <h2 className="font-bold text-lg">
+              <h2 className="font-semibold text-lg ">
                 <Link to={`/question/${q.question_id}`}>
                   {q.question_title}
                 </Link>
               </h2>
-              <p className="text-gray-700 truncate"
+              <p className="text-gray-700 truncate text-sm"
                style={{
                 maxHeight: showFullDescriptions[i] ? "none" : "60px",
                 overflow: "hidden",
@@ -73,7 +73,7 @@ const Questions = () => {
               >
                 {showFullDescriptions[i]
                   ? q.question_description
-                  : q.question_description.trim().substring(0, 60)}
+                  : q.question_description.trim().substring(0, 100)}
                 <button
                   className="text-[#008DDA]"
                   onClick={() => toggleDescription(i)}
@@ -83,13 +83,13 @@ const Questions = () => {
               </p>
               <div className="pt-4 flex justify-between items-center">
                 <div>
-                  <span className="inline-block bg-white rounded border border-[#008DDA] px-2 py-[0.2px] text-sm text-[#008DDA] mr-2 font-semibold">
+                  <span className="inline-block bg-white rounded border border-[#008DDA] px-3 py-1 text-sm text-[#008DDA] mr-2 font-semibold">
                     {q.count} Answers
                   </span>
                   {q.Tags.map((t) => (
                     <span
                       key={t.tag_id}
-                      className="inline-block bg-gray-200 rounded px-3 py-[0.2px] text-sm font-semibold text-gray-700 mr-2"
+                      className="inline-block bg-gray-200 rounded px-3 py-1 text-xs font-normal text-gray-700 mr-2 mb-2"
                     >
                       {t.tag_name}
                     </span>

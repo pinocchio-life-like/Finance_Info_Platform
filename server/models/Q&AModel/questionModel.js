@@ -43,7 +43,9 @@ const getAllQuestions = async () => {
 };
 
 const getSingleQ = async (id) => {
-  return await Question.findByPk(id);
+  return await Question.findByPk(id, {
+    include: [Tag] 
+  });
 };
 
 const deleteQuestions = async (id) => {
