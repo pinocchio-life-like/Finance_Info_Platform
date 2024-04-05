@@ -156,7 +156,8 @@ const Editor = () => {
             alignItems: "center",
             margin: "auto",
             height: "86vh",
-          }}>
+          }}
+        >
           <Bars
             height="100"
             width="100"
@@ -202,7 +203,6 @@ const Editor = () => {
               0,
               "=",
               "pageFullscreen",
-              "fullscreen",
               "preview",
               "catalog",
             ]}
@@ -225,7 +225,8 @@ const Editor = () => {
                     cancelText="No"
                     okButtonProps={{
                       style: { backgroundColor: "#155CA2", color: "white" },
-                    }}>
+                    }}
+                  >
                     <span className="px-2 flex items-center justify-center text-center bg-[#155CA2] text-white rounded hover:bg-[#214355]">
                       Post
                     </span>
@@ -242,7 +243,8 @@ const Editor = () => {
                       icon={<UploadOutlined />}
                       className="border-none mt-[0.5px]"
                       onClick={handleButtonClick}
-                      loading={uploading}></Button>
+                      loading={uploading}
+                    ></Button>
                     <input
                       type="file"
                       ref={fileInputRef}
