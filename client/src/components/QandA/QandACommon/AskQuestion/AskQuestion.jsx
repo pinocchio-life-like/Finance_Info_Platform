@@ -2,8 +2,7 @@ import { useState } from "react";
 import { RxDotFilled } from "react-icons/rx";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { PoweroffOutlined } from "@ant-design/icons";
-import { Button, Flex } from "antd";
+import { Button } from "antd";
 import api from "../../../../utils/api";
 import { jwtDecode } from "jwt-decode";
 import { Input, Tag } from "antd";
@@ -60,7 +59,7 @@ const AskQuestion = () => {
   }
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const cleanDescription = description.replace(/<[^>]*>/g, '');
+    const cleanDescription = description.replace(/<[^>]*>/g, "");
     const tagNames = Array.isArray(tags) ? tags : [];
     const questionData = {
       question_title: title,
@@ -82,9 +81,9 @@ const AskQuestion = () => {
   };
 
   const handleInputChange = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault(); 
-      handleInputConfirm(); 
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleInputConfirm();
     } else {
       setInputValue(e.target.value);
     }
@@ -177,8 +176,7 @@ const AskQuestion = () => {
               className="qa-button semi-bold"
               loading={loadings[1]}
               onClick={() => enterLoading(1)}
-              htmlType="submit"
-            >
+              htmlType="submit">
               Post Question
             </Button>
           </div>
