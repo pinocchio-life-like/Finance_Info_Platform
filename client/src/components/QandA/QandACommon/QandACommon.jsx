@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import zhihu from "../../../assets/Svgs/zhihu-svgrepo-com.svg";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { IoMdPricetags } from "react-icons/io";
@@ -12,6 +12,11 @@ import { Link } from "react-router-dom";
 const QandACommon = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [type, setType] = useState("all");
+
+  const typeToggler = (typ) => {
+    setType(typ);
+  };
 
   return (
     <div className="flex-grow w-full flex px-14 flex-col items-center bg-white">
@@ -35,7 +40,11 @@ const QandACommon = (props) => {
                           "text-[#008DDA] "
                         : ""
                     }`}
-                    onClick={() => setActiveIndex(0)}>
+                    onClick={() => {
+                      setActiveIndex(0);
+                      typeToggler("all");
+                    }}
+                  >
                     <RiQuestionAnswerFill
                       size={20}
                       style={{ marginRight: 10 }}
@@ -43,7 +52,7 @@ const QandACommon = (props) => {
                     Questions
                   </Link>
                 </li>
-                <li className="relative group">
+                {/* <li className="relative group">
                   <button
                     className={`w-full flex justify-between items-center py-1 px-4 rounded 
                     ${
@@ -54,7 +63,8 @@ const QandACommon = (props) => {
                     `}
                     onClick={() => {
                       setDropdownOpen(!dropdownOpen);
-                    }}>
+                    }}
+                  >
                     <div className={`flex items-center`}>
                       <IoMdPricetags size={21} style={{ marginRight: 10 }} />{" "}
                       Tags
@@ -90,17 +100,38 @@ const QandACommon = (props) => {
                       </Checkbox.Group>
                     </ul>
                   )}
+                </li> */}
+                <li>
+                  <Link
+                    to="/qa/tags"
+                    className={`flex items-center py-1 px-4 rounded hover:bg-gray-200 font-light ${
+                      activeIndex === 1 // ? "bg-[#ababab] font-bold"
+                        ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
+                          "text-[#008DDA] "
+                        : ""
+                    }`}
+                    onClick={() => {
+                      setActiveIndex(1);
+                    }}
+                  >
+                    <IoMdPricetags size={21} style={{ marginRight: 10 }} />
+                    Tags
+                  </Link>
                 </li>
                 <li>
                   <Link
-                    to="/qa/unanswered"
+                    to="/qa/questions"
                     className={`flex items-center py-1 px-4 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 2 // ? "bg-[#ababab] font-bold"
                         ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
                           "text-[#008DDA] "
                         : ""
                     }`}
-                    onClick={() => setActiveIndex(2)}>
+                    onClick={() => {
+                      setActiveIndex(2);
+                      typeToggler("ununs");
+                    }}
+                  >
                     <RiQuestionnaireFill
                       size={20}
                       style={{ marginRight: 10 }}
@@ -111,7 +142,11 @@ const QandACommon = (props) => {
               </ul>
             </nav>
           </div>
-          <div className="w-full bg-white">{props.children}</div>
+          <div className="w-full bg-white">
+            {React.Children.map(props.children, (child) =>
+              React.cloneElement(child, { type: type })
+            )}
+          </div>
         </div>
       </div>
     </div>

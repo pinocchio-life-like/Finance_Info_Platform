@@ -4,30 +4,49 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "antd";
 import { useEffect, useState } from "react";
 import api from "../../../utils/api";
-const Questions = () => {
+const Questions = (props) => {
   const [questions, setQuestions] = useState([]);
   const [showFullDescriptions, setShowFullDescriptions] = useState([]);
   const navigate = useNavigate();
-  useEffect(() => {
-    const getQuestions = async () => {
-      try {
-        const response = await api.get("/api/questions");
-        if (response.data && response.data.data) {
-          setQuestions(response.data.data);
-          setShowFullDescriptions(Array(response.data.data.length).fill(false));
-        } else {
-          console.error("Unexpected API response:", response);
-        }
-      } catch (error) {
-        console.error("Error fetching questions:", error);
+  const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const itemsPerPage = 10; // Number of questions per page
+
+  const getQuestions = async (type) => {
+    try {
+      const response = await api.get("/api/questions");
+      if (response.data && response.data.data) {
+        const values = response.data.data.filter((d) => {
+          return type === "all" ? d : d.count === 0;
+        });
+
+        const sorted = values.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setQuestions(sorted);
+        setShowFullDescriptions(Array(values.length).fill(false));
+      } else {
+        console.error("Unexpected API response:", response);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    }
+  };
 
-    getQuestions();
-  }, []);
+  useEffect(() => {
+    getQuestions(props.type);
+  }, [props.type]);
 
-  
- 
+  const getQuestionsForPage = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return questions.slice(startIndex, endIndex);
+  };
+
+  // This function will be called when the page changes
+  const handlePageChange = (page) => {
+    console.log("page", page);
+    setCurrentPage(page);
+  };
 
   const toggleDescription = (index) => {
     setShowFullDescriptions((prevState) => {
@@ -55,21 +74,20 @@ const Questions = () => {
       </div>
       <div className="w-full p-4 pt-3">
         <div className="border-t pt-3">
-          {questions.map((q, i) => (
+          {getQuestionsForPage().map((q, i) => (
             <div className={i === 0 ? `pt-0` : `pt-3`} key={i}>
               <h2 className="font-bold text-lg">
                 <Link to={`/question/${q.question_id}`}>
                   {q.question_title}
                 </Link>
               </h2>
-              <p className="text-gray-700 truncate"
-               style={{
-                maxHeight: showFullDescriptions[i] ? "none" : "60px",
-                overflow: "hidden",
-                whiteSpace: "pre-line", 
-                
-              }}
-              
+              <p
+                className="text-gray-700 truncate"
+                style={{
+                  maxHeight: showFullDescriptions[i] ? "none" : "60px",
+                  overflow: "hidden",
+                  whiteSpace: "pre-line",
+                }}
               >
                 {showFullDescriptions[i]
                   ? q.question_description
@@ -134,16 +152,10 @@ const Questions = () => {
 
       <div className="relative flex justify-center items-end h-full pt-5">
         <Pagination
-          total={50}
-          itemRender={(_, type, originalElement) => {
-            if (type === "prev") {
-              return <a>Prev</a>;
-            }
-            if (type === "next") {
-              return <a>Next</a>;
-            }
-            return originalElement;
-          }}
+          current={currentPage}
+          total={questions.length} // Total number of questions
+          pageSize={itemsPerPage}
+          onChange={handlePageChange} // Handle page changes
         />
       </div>
     </div>
