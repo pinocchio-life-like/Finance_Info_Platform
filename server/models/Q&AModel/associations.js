@@ -4,22 +4,22 @@ const Comment = require("./commentModel").Comment;
 const User = require("../userModel").User;
 const Tag = require("./tagModel").Tag;
 
-User.hasMany(Question, {
-  foreignKey: "userId",
-  sourceKey: "userId",
-});
-Question.belongsTo(User, {
-  foreignKey: "userId",
-  targetKey: "userId",
-});
-User.hasMany(Answer, {
-  foreignKey: "userId",
-  sourceKey: "userId",
-});
-Answer.belongsTo(User, {
-  foreignKey: "userId",
-  targetKey: "userId",
-});
+// User.hasMany(Question, {
+//   foreignKey: "userId",
+//   sourceKey: "userId",
+// });
+// Question.belongsTo(User, {
+//   foreignKey: "userId",
+//   targetKey: "userId",
+// });
+// User.hasMany(Answer, {
+//   foreignKey: "userId",
+//   sourceKey: "userId",
+// });
+// Answer.belongsTo(User, {
+//   foreignKey: "userId",
+//   targetKey: "userId",
+// });
 Question.hasMany(Answer, {
   foreignKey: "question_id",
   sourceKey: "question_id",
@@ -61,7 +61,7 @@ const askQuestion = async (questionData, tagNames) => {
 
     for (const tagName of tagNames) {
       let [tag, created] = await Tag.findOrCreate({
-        where: { tag_name: tagName },
+        where: { tag_name: tagName.toLowerCase() },
       });
       await question.addTag(tag);
     }

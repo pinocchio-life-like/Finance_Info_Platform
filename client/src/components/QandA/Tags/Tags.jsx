@@ -1,6 +1,6 @@
 import { Pagination } from "antd";
 
-const Unanswered = () => {
+const Tags = () => {
   return (
     <div className="w-full">
       <div className="flex justify-between w-full p-4 pt-8 pb-3">
@@ -92,4 +92,4 @@ const Unanswered = () => {
   );
 };
 
-export default Unanswered;
+export default Tags;
