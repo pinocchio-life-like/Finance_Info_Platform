@@ -11,13 +11,10 @@ const Answer = sequelize.define('Answer', {
     type: DataTypes.TEXT,
     allowNull: false
   },
-  userId: {
-    type: DataTypes.INTEGER,
+  userName: {
+    type: DataTypes.STRING,
     allowNull: false,
-    references: {
-        model: "Users",
-        key: "userId",
-      },
+   
   },
   question_id: {
     type: DataTypes.INTEGER,
@@ -28,11 +25,11 @@ const Answer = sequelize.define('Answer', {
   }
 });
 const answerQuestion=async(ans)=>{
-  const {content,question_id,userId}=ans
+  const {content,question_id,userName}=ans
   const answer=await Answer.create({
       content,
       question_id,
-      userId
+      userName
   })
   return answer
 

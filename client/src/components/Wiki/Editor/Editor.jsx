@@ -171,6 +171,7 @@ const Editor = () => {
       ) : (
         <>
           <MdEditor
+  // className={pageFullscreen ? "mt-32" : ""}
             // readOnly={true}
             ref={editorRef}
             toolbars={[
@@ -219,6 +220,8 @@ const Editor = () => {
                 title="post"
                 trigger={
                   <Popconfirm
+                    placement="bottom"
+             
                     title="Do you want to post this Article?"
                     onConfirm={saveArticleHandler}
                     okText="Yes"
