@@ -9,12 +9,15 @@ import { GoChevronDown } from "react-icons/go";
 import useAuth from "../../../hooks/useAuth";
 import api from "../../../utils/api";
 import { jwtDecode } from "jwt-decode";
+import "./Navbar.css";
+import { GrMenu } from "react-icons/gr";
 
 const NavBar = () => {
   const { logout } = useAuth();
   const [menuActive, setMenuActive] = useState(false);
   const [categoryId, setCategoryId] = useState(null);
   const location = useLocation();
+  const[toggle,setToggle]=useState(false)
   const token = localStorage.getItem("token");
   let userRole = null;
   if (token) {
@@ -29,6 +32,23 @@ const NavBar = () => {
   const toggleMenu = () => {
     setMenuActive(!menuActive);
   };
+  const toggler =()=>{
+   
+    
+  
+  
+    const ele = document.getElementById('small');
+    if (ele) {
+      ele.addEventListener('click', () => {
+        ele.classList.toggle('toggler');
+      });
+    } 
+ 
+  console.log('right')
+  setToggle(!toggle)
+}
+
+    
 
   useEffect(() => {
     const getFirstArticle = async () => {
@@ -70,16 +90,18 @@ const NavBar = () => {
   }, []);
 
   return (
-    <nav className="nav-bar-container bg-nav-bg px-12  h-20 flex flex-col md:flex-row">
+    <nav className="nav-bar-container bg-nav-bg px-12  h-20 flex flex-col md:flex-row left">
       <div className="nav flex justify-between w-full h-full items-center">
-        <div className="logo flex items-center gap-2 w-3/5">
+        <div className="logo flex items-center gap-2 w-3/5 ">
           <Link to="/" className="flex items-center gap-2">
             <div className="logo-img w-12">
               <img src={logo} alt="" className="w-full" />
             </div>
             <span className="font-bold text-xl">WIH FINANCE DEPARTMENT</span>
           </Link>
-          <ul className="flex gap-10 ml-36">
+          <ul className="flex gap-10 lg:ml-36 md:gap-13 sm:ml-4 "
+          id="left"
+          >
             <li>
               <Link
                 to={`/wiki/articles/${categoryId}`}
@@ -87,7 +109,8 @@ const NavBar = () => {
                   location.pathname.includes("wiki")
                     ? "text-blue-800"
                     : "text-black"
-                }`}>
+                }`}
+              >
                 Wiki
               </Link>
             </li>
@@ -98,7 +121,8 @@ const NavBar = () => {
                   location.pathname.includes("ftp")
                     ? "text-blue-800"
                     : "text-black"
-                }`}>
+                }`}
+              >
                 FTP
               </Link>
             </li>
@@ -109,7 +133,8 @@ const NavBar = () => {
                   location.pathname.includes("notice")
                     ? "text-blue-800"
                     : "text-black"
-                }`}>
+                }`}
+              >
                 Notice
               </Link>
             </li>
@@ -120,7 +145,8 @@ const NavBar = () => {
                   location.pathname.includes("qa")
                     ? "text-blue-800"
                     : "text-black"
-                }`}>
+                }`}
+              >
                 Q&A
               </Link>
             </li>
@@ -132,7 +158,8 @@ const NavBar = () => {
                     location.pathname.includes("Manage")
                       ? "text-blue-800"
                       : "text-black"
-                  }`}>
+                  }`}
+                >
                   Manage
                 </Link>
               </li>
@@ -140,17 +167,20 @@ const NavBar = () => {
           </ul>
         </div>
         {/* {add other menus here} */}
-        <div className="nav-left flex items-center gap-6 w-3/6 justify-end h-11">
+        <div className="nav-left flex items-center gap-6 w-3/6 justify-end h-11 right"
+        id="right"
+        >
           <div className="search-input  w-2/4 h-10">
             <div className="flex items-center justify-end  h-full">
               <div className="flex w-full mx-8 rounded bg-white h-full">
                 <input
-                  className=" w-full border-none bg-transparent px-4 py-1 text-gray-400 outline-none focus:outline-none "
+                  className="w-full border-none bg-transparent px-4 py-1 text-gray-400 
+                  outline-none focus:outline-none"
                   type="search"
                   name="search"
                   placeholder="Search..."
                 />
-                <button type="submit" className="rounded  px-4  text-gray">
+                <button type="submit" className="rounded px-4 text-gray">
                   <CiSearch size={26} />
                 </button>
               </div>
@@ -166,9 +196,10 @@ const NavBar = () => {
             <button
               id="dropdownInformationButton"
               data-dropdown-toggle="dropdownInformation"
-              className="text-white bg-gray-100 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:bg-gray-400 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center "
+              className="text-white bg-gray-100 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:bg-gray-400 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center"
               type="button"
-              onClick={toggleMenu}>
+              onClick={toggleMenu}
+            >
               <FaRegCircleUser size={26} color="#241F1F" className="mr-2" />
               <GoChevronDown size={26} color="#241F1F" />
             </button>
@@ -177,24 +208,15 @@ const NavBar = () => {
               <div className="menu z-50 absolute top-full right-0 bg-white shadow-md mt-1 py-2 w-48 rounded">
                 <Link
                   to="#"
-                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white"
+                >
                   Profile
                 </Link>
-                {/* may be we need to set our own email app */}
-                {/* <Link
-                  to="#"
-                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
-                  Inbox
-                </Link> */}
-                {/* <Link
-                  to="#"
-                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
-                  Manage
-                </Link> */}
-                {/* this is to give some articles and demo */}
+
                 <Link
                   to="#"
-                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white"
+                >
                   Help
                 </Link>
                 <Link
@@ -202,12 +224,124 @@ const NavBar = () => {
                     await logout();
                   }}
                   to="#"
-                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white"
+                >
                   Logout
                 </Link>
               </div>
             )}
           </div>
+        </div>
+        <div className="small"  id="small"  >
+           <button    onClick={toggler}>
+              <GrMenu /> 
+              {toggle && (
+              <div className="list">
+            <ul className="flex gap-10 lg:ml-36 md:gap-13 sm:ml-4" >
+              <li>
+                <Link
+                  to={`/wiki/articles/${categoryId}`}
+                  className={`font-bold hover:text-blue-700 ${
+                    location.pathname.includes("wiki")
+                      ? "text-blue-800"
+                      : "text-black"
+                  }`}
+                >
+                  Wiki
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/ftp"
+                  className={`font-bold hover:text-blue-700 ${
+                    location.pathname.includes("ftp")
+                      ? "text-blue-800"
+                      : "text-black"
+                  }`}
+                >
+                  FTP
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/notice"
+                  className={`font-bold hover:text-blue-700 ${
+                    location.pathname.includes("notice")
+                      ? "text-blue-800"
+                      : "text-black"
+                  }`}
+                >
+                  Notice
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/qa/questions"
+                  className={`font-semibold hover:text-blue-700 ${
+                    location.pathname.includes("qa")
+                      ? "text-blue-800"
+                      : "text-black"
+                  }`}
+                >
+                  Q&A
+                </Link>
+              </li>
+            <li>
+                {userRole === "admin" && (
+                <li>
+                  <Link
+                    to="/manage"
+                    className={`font-semibold hover:text-blue-700 ${
+                      location.pathname.includes("Manage")
+                        ? "text-blue-800"
+                        : "text-black"
+                    }`}
+                  >
+                    Manage
+                  </Link>
+                </li>
+              )}
+            </li>
+            <li>
+            <input
+                      className="w-full border-none bg-transparent px-4 py-1 
+                      text-gray-400 outline-none focus:outline-none"
+                      type="search"
+                      name="search"
+                      placeholder="Search..."
+                    />
+            </li>
+            <li>
+            <button type="submit" className="rounded px-4 text-gray">
+                      <CiSearch size={26} />
+                    </button>
+            </li>
+            <li>
+            <BsBellFill color="white" size={26} />
+            </li>
+            <li>
+            <IoLanguageOutline color="white" size={26} />
+            </li>
+            <li>
+            <button
+                  id="dropdownInformationButton"
+                  data-dropdown-toggle="dropdownInformation"
+                  className="text-white bg-gray-100 hover:bg-gray-300 focus:ring-4 
+                  focus:outline-none focus:bg-gray-400 font-medium rounded-lg text-sm px-5 
+                  py-2 text-center inline-flex items-center"
+                  type="button"
+                >
+                  <FaRegCircleUser size={26} color="#241F1F" className="mr-2" />
+                  <GoChevronDown size={26} color="#241F1F" />
+                </button>
+            </li>
+           
+            </ul>
+            
+          </div>)}
+
+           
+           </button>
         </div>
       </div>
     </nav>

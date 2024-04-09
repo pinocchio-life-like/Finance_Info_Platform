@@ -1,7 +1,9 @@
 const{createCompany,getAllCompanies}=require('../models/companyModel')
-const companyC=(req,res)=>{
-    const {company_name,maincompany_id}=req.body
-    const comp=createCompany({company_name,maincompany_id})
+const companyC=async(req,res)=>{
+    console.log(req.body)
+    const {company_name,parentCompany}=req.body
+    const comp=await createCompany({company_name,parentCompany})
+    
     if(!comp){
         return res.status(500).json(
             {
@@ -10,7 +12,7 @@ const companyC=(req,res)=>{
         )
     }
     else{
-        return res.status(2001).json({
+        return res.status(201).json({
             message:"company created",
             data:comp
         })
@@ -19,8 +21,8 @@ const companyC=(req,res)=>{
 
 }
 const getAllCompaniesC = async (req, res) => {
-    const { maincompany_id } = req.params;
-    const companies = await getAllCompanies(maincompany_id);
+    // const { maincompany_id } = req.params;
+    const companies = await getAllCompanies();
     
     if (!companies) {
         return res.status(500).json({

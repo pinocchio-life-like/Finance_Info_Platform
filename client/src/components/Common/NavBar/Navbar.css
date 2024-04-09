@@ -1,0 +1,49 @@
+.small {
+    display: none;
+}
+.toggler{
+    display:none;
+}
+.list{
+    display: none;
+}
+
+@media screen and (max-width: 1050px) {
+    #right {
+        display: none;
+    }
+    .left ul{
+        display: none;
+    }
+ 
+    .small   {
+        display:block;
+    }
+    .toggler .list ul{
+
+        background-color: #f1f1f1;
+            color: #008DDA;
+            display: block;
+            position: absolute;
+            width: 35rem;
+            height: 10vh;
+          
+            margin-left: -180px;
+            
+        z-index: 9999;
+    
+    
+    }
+    
+
+   
+}
+
+/* @media screen and (max-width: 920px) {
+  .left ul{
+        display: none;
+    }
+} */
+/* .toggler{
+    display: block
+} */

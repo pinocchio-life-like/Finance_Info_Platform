@@ -87,6 +87,7 @@ const Questions = (props) => {
                   maxHeight: showFullDescriptions[i] ? "none" : "60px",
                   overflow: "hidden",
                   whiteSpace: "pre-line",
+          
                 }}
               >
                 {showFullDescriptions[i]

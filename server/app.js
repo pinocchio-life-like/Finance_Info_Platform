@@ -13,7 +13,7 @@ const loginRoute = require("./routes/userLoginR");
 const userUpdateRoute = require("./routes/userUpdateR");
 const articleRoute = require("./routes/articleR");
 const categoryRoute = require("./routes/categoryRoute");
-// const companyR=require('./routes/companyR')
+const companyR=require('./routes/companyR')
 const versionRoute = require("./routes/articleVersionR");
 const questionRoutes = require("./routes/Q&ARoutes/questionRoute");
 const answerRoutes = require("./routes/Q&ARoutes/answerRoute");
@@ -53,7 +53,7 @@ app.use("/api", loginRoute);
 app.use("/api", userUpdateRoute);
 app.use("/api", articleRoute);
 app.use("/api", categoryRoute);
-// app.use('/api',companyR)
+app.use('/api',companyR)
 app.use("/api", versionRoute);
 app.use("/api", questionRoutes);
 app.use("/api", answerRoutes);
@@ -69,8 +69,11 @@ async function syncDatabase() {
   }
 }
 
-// syncDatabase();
+syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));
+
+
+
 
 
