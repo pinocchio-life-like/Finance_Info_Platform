@@ -53,7 +53,7 @@ const AskQuestion = () => {
       const decodedToken = jwtDecode(token);
       // console.log("Decoded Token:", decodedToken);
       userName = decodedToken.userName;
-      // console.log("User ID:", userId);
+      console.log("User ID:", userId);
     } catch (error) {
       console.error("Error decoding token:", error);
     }

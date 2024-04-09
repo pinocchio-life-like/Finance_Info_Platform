@@ -3,8 +3,8 @@ const {
   answerQuestion,
 } = require("../../models/Q&AModel/answerModel");
 const answerC = async (req, res) => {
-  const { content, question_id, userId } = req.body;
-  const answer = await answerQuestion({ content, question_id, userId });
+  const { content, question_id, userName } = req.body;
+  const answer = await answerQuestion({ content, question_id, userName });
   if (!answer) {
     return res.status(500).json({
       message: "something went wrong",

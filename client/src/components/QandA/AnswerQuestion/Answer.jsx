@@ -52,49 +52,65 @@ const Answer = () => {
 
   const token = localStorage.getItem("token");
   //let userName = null;
-  let userId = null;
+  let userName = null;
   if (token) {
-    // console.log("Token:", token);
+    console.log("Token:", token);
     try {
       const decodedToken = jwtDecode(token);
       // console.log("Decoded Token:", decodedToken);
       //userName = decodedToken.userName;
-      userId = decodedToken.userId;
-      // console.log("User ID:", userId);
+      userName = decodedToken.userName;
+      console.log("User Name:", userName);
     } catch (error) {
       console.error("Error decoding token:", error);
     }
   }
   // Fetch All Answers
 
-  // useEffect(() => {
-  //   const fetchAnsers = async () => {
-  //     try {
-  //       const response = await api.get(`/api/answers/${id}`);
-  //       if (response.data && response.data.data) {
-  //         setAnswers(response.data.data);
-  //       } else {
-  //         console.log("Error while fetching all answers");
-  //       }
-  //     } catch (error) {
-  //       console.log("Error fetching all ansers", error);
-  //     }
-  //   };
-  //   //getSingleQuestion();
-  //   fetchAnsers();
-  // });
+  useEffect(() => {
+    const fetchAnsers = async () => {
+      try {
+        const ansRresponse = await api.get(`/api/answers/${id}`);
+        console.log(ansRresponse);
+        if (ansRresponse.data && ansRresponse.data.data) {
+          const formattedAnswers = ansRresponse.data.data.map((answer) => ({
+            ...answer,
+            ansCreatedAt: format(
+              parseISO(answer.createdAt),
+              "MMM dd, yyyy 'at' HH:mm"
+            ),
+          }));
+          setAnswers(formattedAnswers);
+        } else {
+          console.log("Error while fetching all answers");
+        }
+      } catch (error) {
+        console.log("Error fetching all ansers", error);
+      }
+    };
+    //getSingleQuestion();
+    fetchAnsers();
+  }, [id]);
 
   // Post Answer
   const handleSubmitAnswer = async (event) => {
     event.preventDefault();
-    if (!userId) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token not found.");
+      return;
+    }
+    const decodedToken = jwtDecode(token);
+    const userName = decodedToken.userName;
+    const cleanAnswer = answer.replace(/<[^>]*>/g, "");
+    if (!userName) {
       console.error("User ID is required");
       return;
-  }
+    }
     const response = await api.post("/api/answers", {
-      content: answer,
+      content: cleanAnswer,
       question_id: id,
-      userId,
+      userName: userName,
     });
     setAnswer("");
     const answersResponse = await api.get(`/api/answers/${id}`);
@@ -107,7 +123,7 @@ const Answer = () => {
   return (
     <div className="p-4 pt-8">
       <div className="question-and-answers">
-        <div className="single-question">
+        <div className="single-question mb-12">
           <h2 className="font-semibold text-lg mb-2">
             {singleQuestion.question_title}
           </h2>
@@ -130,19 +146,27 @@ const Answer = () => {
           </p>
         </div>
         <div className="all-answers">
-          <div className="answers">
-            <h3 className="text-2xl pb-5">Answers</h3>
+          <div className="answers ">
+            <h3 className="text-lg pb-5 font-medium">
+              {answers.length} Answers
+            </h3>
             {answers.map((a) => (
-              <div key={a.answer_id} className="mb-4">
-                <p>{a.content}</p>
-                <p>Answered by: {a.userName}</p>
+              <div className="mb-4">
+                <div key={a.answer_id} className="mb-3 border-b">
+                  <p className="mb-6">{a.content}</p>
+                  <p className="	text-blue-700 text-sm text-right mb-2">
+                    By: {a.userName} | {a.ansCreatedAt}
+                  </p>
+                </div>
+                <div className="comment text-sm text-gray-400">Add comment</div>
               </div>
+              
             ))}
           </div>
         </div>
         <div className="post-answer">
           <div className="answers mt-12">
-            <h3 className="text-2xl pb-5">Your Answer</h3>
+            <h3 className="text-lg pb-5 font-medium">Your Answer</h3>
           </div>
           <form
             onSubmit={handleSubmitAnswer}
