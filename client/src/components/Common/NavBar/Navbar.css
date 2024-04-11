@@ -18,32 +18,37 @@
  
     .small   {
         display:block;
+        color: #008DDA;
+        margin: auto;
+        position: relative;
     }
-    .toggler .list ul{
+    .toggler{
 
         background-color: #f1f1f1;
             color: #008DDA;
             display: block;
-            position: absolute;
-            width: 35rem;
-            height: 10vh;
+            position: relative;
+            width: 15rem;
+            height: 50vh;
           
-            margin-left: -180px;
+            margin-top: 30px ;
+            margin-left: 0;
             
         z-index: 9999;
     
     
     }
     
+    .small ul{
+        display: block;
+     }
+    
 
    
 }
 
-/* @media screen and (max-width: 920px) {
-  .left ul{
-        display: none;
-    }
-} */
-/* .toggler{
-    display: block
-} */
+@media screen and (max-width: 920px) {
+  .small-screen{
+    margin-left: -30px;
+  }
+}

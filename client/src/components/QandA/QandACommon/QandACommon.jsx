@@ -8,6 +8,7 @@ import { Checkbox } from "antd";
 import "./checkboxStyle.css";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import "../../Common/NavBar/Navbar.css";
 
 const QandACommon = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -34,7 +35,7 @@ const QandACommon = (props) => {
                 <li>
                   <Link
                     to="/qa/questions"
-                    className={`flex items-center py-1 px-4 rounded hover:bg-gray-200 font-light ${
+                    className={`flex items-center py-1 px-4 small-screen sm:ml-0 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 0 // ? "bg-[#ababab] font-bold"
                         ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
                           "text-[#008DDA] "
@@ -104,7 +105,7 @@ const QandACommon = (props) => {
                 <li>
                   <Link
                     to="/qa/tags"
-                    className={`flex items-center py-1 px-4 rounded hover:bg-gray-200 font-light ${
+                    className={`flex items-center py-1  small-screen px-4 sm:ml-0 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 1 // ? "bg-[#ababab] font-bold"
                         ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
                           "text-[#008DDA] "
@@ -121,7 +122,7 @@ const QandACommon = (props) => {
                 <li>
                   <Link
                     to="/qa/questions"
-                    className={`flex items-center py-1 px-4 rounded hover:bg-gray-200 font-light ${
+                    className={`flex items-center py-1 px-4 small-screen sm:ml-0 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 2 // ? "bg-[#ababab] font-bold"
                         ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
                           "text-[#008DDA] "
