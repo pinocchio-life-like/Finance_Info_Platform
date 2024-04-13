@@ -14,6 +14,7 @@ const NavBar = () => {
   const { logout } = useAuth();
   const [menuActive, setMenuActive] = useState(false);
   const [categoryId, setCategoryId] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const token = localStorage.getItem("token");
   let userRole = null;

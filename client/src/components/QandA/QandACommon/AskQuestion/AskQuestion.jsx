@@ -7,6 +7,7 @@ import api from "../../../../utils/api";
 import { jwtDecode } from "jwt-decode";
 import { Input, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
+import "react-quill/dist/quill.snow.css";
 
 const AskQuestion = () => {
   const [title, setTitle] = useState("");
@@ -59,11 +60,10 @@ const AskQuestion = () => {
   }
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const cleanDescription = description.replace(/<[^>]*>/g, "");
     const tagNames = Array.isArray(tags) ? tags : [];
     const questionData = {
       question_title: title,
-      question_description: cleanDescription,
+      question_description: description,
       tagNames,
       userName,
     };
@@ -142,18 +142,38 @@ const AskQuestion = () => {
           <div className="">
             <ReactQuill
               value={description}
+              theme="snow"
               onChange={handleDescriptionChange}
               placeholder="Describe your question here"
               className="rounded-md  bg-white  "
-              // modules={{
-              //   toolbar: [
-              //     [{ 'header': '1'}, {'header': '2'}],
-              //     ['bold', 'italic', 'underline', 'blockquote'],
-              //     [{'list': 'ordered'}, {'list': 'bullet'}],
-              //     ['link', 'image'],
-              //     ['clean']
-              //   ]
-              // }}
+              modules={{
+                toolbar: [
+                  [{ header: [1, 2, false] }],
+                  ["bold", "italic", "underline", "blockquote"],
+                  [
+                    { list: "ordered" },
+                    { list: "bullet" },
+                    { indent: "-1" },
+                    { indent: "+1" },
+                  ],
+                  ["link", "image", "video"],
+                  ["clean"],
+                ],
+              }}
+              formats={[
+                "header",
+                "bold",
+                "italic",
+                "underline",
+                "strike",
+                "blockquote",
+                "list",
+                "bullet",
+                "indent",
+                "link",
+                "image",
+                "video",
+              ]}
             />
           </div>{" "}
           <div>

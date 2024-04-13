@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "antd";
 import { useEffect, useState } from "react";
 import api from "../../../utils/api";
+import ReactQuill from "react-quill";
 const Questions = (props) => {
   const [questions, setQuestions] = useState([]);
   const [showFullDescriptions, setShowFullDescriptions] = useState([]);
@@ -18,10 +19,8 @@ const Questions = (props) => {
           return type === "all" ? d : d.count === 0;
         });
 
-        const sorted = values.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-        setQuestions(sorted);
+        values.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setQuestions(values);
         setShowFullDescriptions(Array(values.length).fill(false));
       } else {
         console.error("Unexpected API response:", response);
@@ -80,7 +79,19 @@ const Questions = (props) => {
                     {q.question_title}
                   </Link>
                 </h2>
-                <p
+                <ReactQuill
+                  readOnly
+                  value={q.question_description}
+                  theme="bubble"
+                  className="block bg-white"
+                  style={{ paddingLeft: -10, marginLeft: -1 }}
+                />
+                <button
+                  className="text-[#008DDA]"
+                  onClick={() => toggleDescription(i)}>
+                  {showFullDescriptions[i] ? "See Less" : "...See More"}
+                </button>
+                {/* <p
                   className="text-gray-700 truncate"
                   style={{
                     maxHeight: showFullDescriptions[i] ? "none" : "60px",
@@ -95,7 +106,7 @@ const Questions = (props) => {
                     onClick={() => toggleDescription(i)}>
                     {showFullDescriptions[i] ? "See Less" : "...See More"}
                   </button>
-                </p>
+                </p> */}
                 <div className="pt-4 flex justify-between items-center">
                   <div>
                     <span className="inline-block bg-white rounded border border-[#008DDA] px-2 py-[0.2px] text-sm text-[#008DDA] mr-2 font-semibold">
