@@ -2,7 +2,7 @@ import PrivateRoute from "../components/PrivateRoute";
 import AskQuestion from "../components/QandA/QandACommon/AskQuestion/AskQuestion";
 import QandAHome from "../components/QandA/QandAHome";
 import Questions from "../components/QandA/Questions/Questions";
-import Unanswered from "../components/QandA/Unanswered/Unanswered";
+import Tags from "../components/QandA/Tags/Tags";
 
 export const QandARoutes = [
   {
@@ -16,11 +16,11 @@ export const QandARoutes = [
     ),
   },
   {
-    path: "qa/unanswered",
+    path: "qa/tags",
     element: (
       <PrivateRoute>
         <QandAHome>
-          <Unanswered />
+          <Tags />
         </QandAHome>
       </PrivateRoute>
     ),
@@ -30,7 +30,7 @@ export const QandARoutes = [
     element: (
       <PrivateRoute>
         <QandAHome>
-          <AskQuestion/>
+          <AskQuestion />
         </QandAHome>
       </PrivateRoute>
     ),

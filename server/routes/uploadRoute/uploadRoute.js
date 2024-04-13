@@ -58,6 +58,10 @@ router.post("/article/file/upload", upload.single("file"), async (req, res) => {
   const user = req.body.user;
   const category_Id = req.body.category_Id;
 
+  if (!file) {
+    return res.status(400).send("No file was uploaded.");
+  }
+
   const timestamp = Date.now();
   const name = `${timestamp}`;
   console.log(file.originalname);

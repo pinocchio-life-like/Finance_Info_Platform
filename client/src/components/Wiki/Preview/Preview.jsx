@@ -66,6 +66,7 @@ const Preview = () => {
               }}
               editorId={id}
               modelValue={state.text}
+              showCodeRowNumber={true}
             />
             <CustomMdCatalog
               editorId={id}

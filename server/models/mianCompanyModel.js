@@ -2,23 +2,23 @@
 // const sequelize = require("../config/db.config");
 // const company = require("./companyModel").company;
 
-// const mainCompany = sequelize.define("mainCompany", {
-//     maincompany_id: {
-//         type: DataTypes.INTEGER,
-//         primaryKey: true,
-//         autoIncrement: true
-//     },
-//     maincompany_name: {
-//         type: DataTypes.STRING,
-//         allowNull: false
-//     },
-//     Address:{
-//         type:DataTypes.STRING,
-//         allowNull:false
-//     }
+const mainCompany = sequelize.define("mainCompany", {
+    maincompany_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+ 
+        autoIncrement: true
+    },
+    maincompany_name: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    Address:{
+        type:DataTypes.STRING,
+        allowNull:false
+    }
 
-
-// });
+ });
 
 // mainCompany.hasMany(company, {
 //     foreignKey: "maincompany_id",
