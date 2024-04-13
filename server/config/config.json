@@ -1,27 +1,29 @@
 {
   "development": {
     "dialect": "mysql",
-    "username": "financeApp",
-    "password": "12345",
-    "database": "financeapp",
-    "host": "localhost",
+    "username": "admin",
+    "password": "12345678",
+    "database": "deploy_test",
+    "host": "fip-demodb.ckhs9i5s4dyl.us-east-1.rds.amazonaws.com",
     "port": "3306",
     "logging": true
   },
   "test": {
     "dialect": "mysql",
-    "username": "financeApp",
-    "password": "12345",
-    "database": "financeapp",
-    "host": "localhost",
-    "port": "3306"
+    "username": "admin",
+    "password": "12345678",
+    "database": "deploy_test",
+    "host": "fip-demodb.ckhs9i5s4dyl.us-east-1.rds.amazonaws.com",
+    "port": "3306",
+    "logging": true
   },
   "production": {
     "dialect": "mysql",
-    "username": "financeApp",
-    "password": "12345",
-    "database": "financeapp",
-    "host": "localhost",
-    "port": "3306"
+    "username": "admin",
+    "password": "12345678",
+    "database": "deploy_test",
+    "host": "fip-demodb.ckhs9i5s4dyl.us-east-1.rds.amazonaws.com",
+    "port": "3306",
+    "logging": true
   }
 }
