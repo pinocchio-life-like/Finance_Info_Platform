@@ -7,7 +7,6 @@ import api from "../../../utils/api";
 import ReactQuill from "react-quill";
 const Questions = (props) => {
   const [questions, setQuestions] = useState([]);
-  // const [showFullDescriptions, setShowFullDescriptions] = useState([]);
   const [isFull, setIsFull] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // Track current page
   const itemsPerPage = 10; // Number of questions per page
@@ -22,7 +21,6 @@ const Questions = (props) => {
 
         values.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setQuestions(values);
-        // setShowFullDescriptions(Array(values.length).fill(false));
       } else {
         console.error("Unexpected API response:", response);
       }
@@ -41,7 +39,6 @@ const Questions = (props) => {
     return questions.slice(startIndex, endIndex);
   };
 
-  // This function will be called when the page changes
   const handlePageChange = (page) => {
     console.log("page", page);
     setCurrentPage(page);
@@ -104,23 +101,6 @@ const Questions = (props) => {
                       {isFull[i] ? "see less" : "...see more"}
                     </button>
                   </div>
-
-                  {/* <p
-                  className="text-gray-700 truncate"
-                  style={{
-                    maxHeight: showFullDescriptions[i] ? "none" : "60px",
-                    overflow: "hidden",
-                    whiteSpace: "pre-line",
-                  }}>
-                  {showFullDescriptions[i]
-                    ? q.question_description
-                    : q.question_description.trim().substring(0, 60)}
-                  <button
-                    className="text-[#008DDA]"
-                    onClick={() => toggleDescription(i)}>
-                    {showFullDescriptions[i] ? "See Less" : "...See More"}
-                  </button>
-                </p> */}
                   <div className="flex justify-between items-center">
                     <div>
                       <span className="inline-block bg-white rounded border border-[#008DDA] px-2 py-[0.2px] text-sm text-[#008DDA] mr-2 font-semibold">
@@ -148,26 +128,6 @@ const Questions = (props) => {
                   </div>
                   <hr className="my-2" />
                 </div>
-
-                // <div key={i}>
-                //   {/* <Link to={`/question/${q.id}`}>{q.question_title}</Link>
-                //   {q.userId && <div>{q.userId.userName}</div>} */}
-                //   <span className="inline-block ">
-                //     <p
-                //       onClick={() => questionIdSeter(q.question_id)}
-                //       className="inline-block mr-32"
-                //     >
-                //       {q.question_title}
-                //     </p>
-                //     <p
-                //       className="inline-block ml-22"
-                //       style={{ fontWeight: "normal" ,marginLeft: '300px'}}
-                //     >
-                //       asked by {q.user.userName} |{" "}
-                //       {new Date(q.createdAt).toLocaleDateString()}
-                //     </p>
-                //   </span>
-                // </div>
               );
             })
           )}
