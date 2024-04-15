@@ -7,7 +7,8 @@ import api from "../../../utils/api";
 import ReactQuill from "react-quill";
 const Questions = (props) => {
   const [questions, setQuestions] = useState([]);
-  const [showFullDescriptions, setShowFullDescriptions] = useState([]);
+  // const [showFullDescriptions, setShowFullDescriptions] = useState([]);
+  const [isFull, setIsFull] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // Track current page
   const itemsPerPage = 10; // Number of questions per page
 
@@ -21,7 +22,7 @@ const Questions = (props) => {
 
         values.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setQuestions(values);
-        setShowFullDescriptions(Array(values.length).fill(false));
+        // setShowFullDescriptions(Array(values.length).fill(false));
       } else {
         console.error("Unexpected API response:", response);
       }
@@ -47,10 +48,10 @@ const Questions = (props) => {
   };
 
   const toggleDescription = (index) => {
-    setShowFullDescriptions((prevState) => {
-      const updatedStates = [...prevState];
-      updatedStates[index] = !updatedStates[index];
-      return updatedStates;
+    setIsFull((prev) => {
+      const newIsFull = [...prev];
+      newIsFull[index] = !newIsFull[index];
+      return newIsFull;
     });
   };
 
@@ -72,30 +73,37 @@ const Questions = (props) => {
           {questions.length === 0 ? (
             <Empty className="mt-10" description="What do you have in mind!" />
           ) : (
-            getQuestionsForPage().map((q, i) => (
-              <div className={i === 0 ? `pt-0` : `pt-3`} key={i}>
-                <h2 className="font-bold text-lg">
-                  <Link to={`/question/${q.question_id}`}>
-                    {q.question_title}
-                  </Link>
-                </h2>
-                <ReactQuill
-                  readOnly
-                  value={q.question_description}
-                  theme="bubble"
-                  className="mt-auto bg-white"
-                  style={{
-                    marginLeft: -14,
-                    marginBottom: -30,
-                  }}
-                />
-                <button
-                  className="text-[#008DDA]"
-                  onClick={() => toggleDescription(i)}>
-                  {showFullDescriptions[i] ? "See Less" : "...See More"}
-                </button>
+            getQuestionsForPage().map((q, i) => {
+              let matches = q.question_description.match(
+                /<[^>]*>[^<]*<\/[^>]*>/g
+              );
+              let description = matches ? matches.slice(0, 4).join("") : "";
+              return (
+                <div className={i === 0 ? `pt-0` : `pt-3`} key={i}>
+                  <h2 className="font-bold text-lg">
+                    <Link to={`/question/${q.question_id}`}>
+                      {q.question_title}
+                    </Link>
+                  </h2>
+                  <ReactQuill
+                    readOnly
+                    value={isFull[i] ? q.question_description : description}
+                    theme="bubble"
+                    className="mt-auto bg-white"
+                    style={{
+                      marginLeft: -14,
+                      // marginBottom: -30,
+                    }}
+                  />
+                  <button
+                    className="text-[#008DDA]"
+                    onClick={() => {
+                      toggleDescription(i);
+                    }}>
+                    {isFull[i] ? "See Less" : "...See More"}
+                  </button>
 
-                {/* <p
+                  {/* <p
                   className="text-gray-700 truncate"
                   style={{
                     maxHeight: showFullDescriptions[i] ? "none" : "60px",
@@ -111,54 +119,55 @@ const Questions = (props) => {
                     {showFullDescriptions[i] ? "See Less" : "...See More"}
                   </button>
                 </p> */}
-                <div className="pt-4 flex justify-between items-center">
-                  <div>
-                    <span className="inline-block bg-white rounded border border-[#008DDA] px-2 py-[0.2px] text-sm text-[#008DDA] mr-2 font-semibold">
-                      {q.count} Answers
-                    </span>
-                    {q.Tags.map((t) => (
-                      <span
-                        key={t.tag_id}
-                        className="inline-block bg-gray-200 rounded px-3 py-[0.2px] text-sm font-semibold text-gray-700 mr-2">
-                        {t.tag_name}
+                  <div className="pt-4 flex justify-between items-center">
+                    <div>
+                      <span className="inline-block bg-white rounded border border-[#008DDA] px-2 py-[0.2px] text-sm text-[#008DDA] mr-2 font-semibold">
+                        {q.count} Answers
                       </span>
-                    ))}
+                      {q.Tags.map((t) => (
+                        <span
+                          key={t.tag_id}
+                          className="inline-block bg-gray-200 rounded px-3 py-[0.2px] text-sm font-semibold text-gray-700 mr-2">
+                          {t.tag_name}
+                        </span>
+                      ))}
+                    </div>
+                    <div>
+                      <span className="mr-2">
+                        {q.userName}
+                        <span className="font-semibold"> | </span>
+                        {new Date(q.createdAt).toLocaleDateString("en-CA", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="mr-2">
-                      {q.userName}
-                      <span className="font-semibold"> | </span>
-                      {new Date(q.createdAt).toLocaleDateString("en-CA", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                      })}
-                    </span>
-                  </div>
+                  <hr className="my-2" />
                 </div>
-                <hr className="my-2" />
-              </div>
 
-              // <div key={i}>
-              //   {/* <Link to={`/question/${q.id}`}>{q.question_title}</Link>
-              //   {q.userId && <div>{q.userId.userName}</div>} */}
-              //   <span className="inline-block ">
-              //     <p
-              //       onClick={() => questionIdSeter(q.question_id)}
-              //       className="inline-block mr-32"
-              //     >
-              //       {q.question_title}
-              //     </p>
-              //     <p
-              //       className="inline-block ml-22"
-              //       style={{ fontWeight: "normal" ,marginLeft: '300px'}}
-              //     >
-              //       asked by {q.user.userName} |{" "}
-              //       {new Date(q.createdAt).toLocaleDateString()}
-              //     </p>
-              //   </span>
-              // </div>
-            ))
+                // <div key={i}>
+                //   {/* <Link to={`/question/${q.id}`}>{q.question_title}</Link>
+                //   {q.userId && <div>{q.userId.userName}</div>} */}
+                //   <span className="inline-block ">
+                //     <p
+                //       onClick={() => questionIdSeter(q.question_id)}
+                //       className="inline-block mr-32"
+                //     >
+                //       {q.question_title}
+                //     </p>
+                //     <p
+                //       className="inline-block ml-22"
+                //       style={{ fontWeight: "normal" ,marginLeft: '300px'}}
+                //     >
+                //       asked by {q.user.userName} |{" "}
+                //       {new Date(q.createdAt).toLocaleDateString()}
+                //     </p>
+                //   </span>
+                // </div>
+              );
+            })
           )}
         </div>
       </div>
