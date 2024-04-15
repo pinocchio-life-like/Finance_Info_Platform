@@ -146,15 +146,16 @@ const AskQuestion = () => {
               onChange={handleDescriptionChange}
               placeholder="Describe your question here"
               className="rounded-md  bg-white  "
-              // modules={{
-              //   toolbar: [
-              //     [{ 'header': '1'}, {'header': '2'}],
-              //     ['bold', 'italic', 'underline', 'blockquote'],
-              //     [{'list': 'ordered'}, {'list': 'bullet'}],
-              //     ['link', 'image'],
-              //     ['clean']
-              //   ]
-              // }}
+              modules={{
+                toolbar: [
+                  [{ 'header': '1'}, {'header': '2'}],
+                  ['bold', 'italic', 'underline', 'blockquote'],
+                  [{'list': 'ordered'}, {'list': 'bullet'}],
+                  ['link', 'image'],
+                  ['clean']
+                ]
+              }}
+              formats={['header', 'bold', 'italic', 'underline', 'list', 'bullet', 'link', 'image']}
             />
           </div>{" "}
           <div>
