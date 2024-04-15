@@ -85,23 +85,25 @@ const Questions = (props) => {
                       {q.question_title}
                     </Link>
                   </h2>
-                  <ReactQuill
-                    readOnly
-                    value={isFull[i] ? q.question_description : description}
-                    theme="bubble"
-                    className="mt-auto bg-white"
-                    style={{
-                      marginLeft: -14,
-                      // marginBottom: -30,
-                    }}
-                  />
-                  <button
-                    className="text-[#008DDA]"
-                    onClick={() => {
-                      toggleDescription(i);
-                    }}>
-                    {isFull[i] ? "See Less" : "...See More"}
-                  </button>
+                  <div style={{ position: "relative" }}>
+                    <ReactQuill
+                      readOnly
+                      value={isFull[i] ? q.question_description : description}
+                      theme="bubble"
+                      className="mt-auto bg-white"
+                      style={{
+                        marginLeft: -14,
+                      }}
+                    />
+                    <button
+                      className="text-[#008DDA]"
+                      style={{ position: "absolute", bottom: 20, left: 0 }}
+                      onClick={() => {
+                        toggleDescription(i);
+                      }}>
+                      {isFull[i] ? "see less" : "...see more"}
+                    </button>
+                  </div>
 
                   {/* <p
                   className="text-gray-700 truncate"
@@ -119,7 +121,7 @@ const Questions = (props) => {
                     {showFullDescriptions[i] ? "See Less" : "...See More"}
                   </button>
                 </p> */}
-                  <div className="pt-4 flex justify-between items-center">
+                  <div className="flex justify-between items-center">
                     <div>
                       <span className="inline-block bg-white rounded border border-[#008DDA] px-2 py-[0.2px] text-sm text-[#008DDA] mr-2 font-semibold">
                         {q.count} Answers
