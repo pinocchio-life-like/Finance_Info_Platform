@@ -12,6 +12,7 @@ const Questions = (props) => {
   const itemsPerPage = 10; // Number of questions per page
 
   const getQuestions = async (type) => {
+    console.log("type", type);
     try {
       const response = await api.get("/api/questions");
       if (response.data && response.data.data) {
@@ -56,7 +57,10 @@ const Questions = (props) => {
     <div className="w-full">
       <div className="flex justify-between w-full p-4 pt-8 pb-3">
         <h1 className="font-bold text-2xl">
-          Explore Questions <span>|</span>{" "}
+          {props.type === "ununs"
+            ? "Unanswered Questions"
+            : "Explore Questions"}{" "}
+          <span>|</span>{" "}
           <span className="font-light text-xl">
             {questions.length} questions
           </span>
