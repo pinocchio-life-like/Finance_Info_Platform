@@ -83,14 +83,18 @@ const Questions = (props) => {
                   readOnly
                   value={q.question_description}
                   theme="bubble"
-                  className="block bg-white"
-                  style={{ marginLeft: -14 }}
+                  className="mt-auto bg-white"
+                  style={{
+                    marginLeft: -14,
+                    marginBottom: -30,
+                  }}
                 />
                 <button
                   className="text-[#008DDA]"
                   onClick={() => toggleDescription(i)}>
                   {showFullDescriptions[i] ? "See Less" : "...See More"}
                 </button>
+
                 {/* <p
                   className="text-gray-700 truncate"
                   style={{
@@ -132,6 +136,7 @@ const Questions = (props) => {
                     </span>
                   </div>
                 </div>
+                <hr className="my-2" />
               </div>
 
               // <div key={i}>
