@@ -156,7 +156,11 @@ const AskQuestion = () => {
                     { indent: "-1" },
                     { indent: "+1" },
                   ],
-                  ["link", "image", "video"],
+                  [
+                    "link",
+                    "image",
+                    // "video"
+                  ],
                   ["clean"],
                 ],
               }}
@@ -172,7 +176,7 @@ const AskQuestion = () => {
                 "indent",
                 "link",
                 "image",
-                "video",
+                // "video",
               ]}
             />
           </div>{" "}
