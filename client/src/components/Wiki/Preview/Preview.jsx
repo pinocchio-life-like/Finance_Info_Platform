@@ -15,7 +15,7 @@ const Preview = () => {
     scrollElement: document.documentElement,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [isCatalogOpen, setIsCatalogOpen] = useState(true);
+  const [isCatalogOpen, setIsCatalogOpen] = useState(false);
 
   useEffect(() => {
     const getMainArticle = async () => {
@@ -60,30 +60,32 @@ const Preview = () => {
             />
           </div>
         ) : (
-          <>
+          <div style={{ overflow: "hidden", height: "100vh" }}>
             <MdPreview
               style={{
                 borderLeft: "1px solid #EEEEEE",
                 // borderRight: "1px solid #EEEEEE",
               }}
+              className="h-screen z-10"
               editorId={id}
               modelValue={state.text}
               showCodeRowNumber={true}
             />
             <div
-              className="sticky top-0 right-0 h-screen flex"
+              className="absolute top-0 right-0 flex z-10"
               style={{
                 // borderLeft: "1px solid #EEEEEE",
                 borderRight: "1px solid #EEEEEE",
+                height: "100vh",
               }}>
               <div className={`mr-1 right-2"`}>
                 <button
-                  className="mt-3 mr-[2px]"
+                  className="mt-[2px] mr-[2px]"
                   onClick={() => setIsCatalogOpen(!isCatalogOpen)}>
                   {isCatalogOpen ? (
-                    <LuPanelRightClose size={22} />
+                    <LuPanelRightClose className="bg-white rounded" size={22} />
                   ) : (
-                    <LuPanelRightOpen size={22} />
+                    <LuPanelRightOpen className="bg-white rounded" size={22} />
                   )}
                 </button>
               </div>
@@ -100,7 +102,7 @@ const Preview = () => {
                 </div>
               )}
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>

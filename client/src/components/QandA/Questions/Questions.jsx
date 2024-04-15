@@ -84,7 +84,7 @@ const Questions = (props) => {
                   value={q.question_description}
                   theme="bubble"
                   className="block bg-white"
-                  style={{ paddingLeft: -10, marginLeft: -1 }}
+                  style={{ marginLeft: -14 }}
                 />
                 <button
                   className="text-[#008DDA]"
