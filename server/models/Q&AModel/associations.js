@@ -62,7 +62,13 @@ const askQuestion = async (questionData, tagNames) => {
     for (const tagName of tagNames) {
       let [tag, created] = await Tag.findOrCreate({
         where: { tag_name: tagName.toLowerCase() },
+        defaults: { useCount: 1 },
       });
+
+      if (!created) {
+        await tag.increment("useCount");
+      }
+
       await question.addTag(tag);
     }
 

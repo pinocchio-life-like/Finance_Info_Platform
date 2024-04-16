@@ -120,7 +120,7 @@ const NavBar = () => {
           </li>
           <li>
             <Link
-              to="/qa/questions"
+              to="/qa/questions/all"
               className={`font-semibold hover:text-blue-700 ${
                 location.pathname.includes("qa")
                   ? "text-blue-800"

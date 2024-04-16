@@ -1,24 +1,39 @@
 import { Empty, Pagination } from "antd";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Button } from "antd";
 import { useEffect, useState } from "react";
 import api from "../../../utils/api";
 import ReactQuill from "react-quill";
-const Questions = (props) => {
+const Questions = () => {
+  const param = useParams();
+  console.log("param", param);
   const [questions, setQuestions] = useState([]);
   const [isFull, setIsFull] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // Track current page
   const itemsPerPage = 10; // Number of questions per page
 
-  const getQuestions = async (type) => {
-    console.log("type", type);
+  const getQuestions = async (param) => {
     try {
       const response = await api.get("/api/questions");
       if (response.data && response.data.data) {
+        if (param === "all") {
+          console.log("all");
+        } else if (param === "ununs") {
+          console.log("ununs");
+        } else {
+          console.log("Unexpected API response:");
+        }
+
         const values = response.data.data.filter((d) => {
-          return type === "all" ? d : d.count === 0;
+          return param === "all"
+            ? true
+            : param === "ununs"
+            ? d.count === 0
+            : d.Tags.some((tag) => tag.tag_name === param);
         });
+
+        console.log("values", values);
 
         values.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setQuestions(values);
@@ -31,8 +46,8 @@ const Questions = (props) => {
   };
 
   useEffect(() => {
-    getQuestions(props.type);
-  }, [props.type]);
+    getQuestions(param.tag);
+  }, [param.tag]);
 
   const getQuestionsForPage = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -41,7 +56,6 @@ const Questions = (props) => {
   };
 
   const handlePageChange = (page) => {
-    console.log("page", page);
     setCurrentPage(page);
   };
 
@@ -57,9 +71,7 @@ const Questions = (props) => {
     <div className="w-full">
       <div className="flex justify-between w-full p-4 pt-8 pb-3">
         <h1 className="font-bold text-2xl">
-          {props.type === "ununs"
-            ? "Unanswered Questions"
-            : "Explore Questions"}{" "}
+          {param === "ununs" ? "Unanswered Questions" : "Explore Questions"}{" "}
           <span>|</span>{" "}
           <span className="font-light text-xl">
             {questions.length} questions
