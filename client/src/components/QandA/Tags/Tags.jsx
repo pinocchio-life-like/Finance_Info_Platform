@@ -24,7 +24,7 @@ const Tags = () => {
           const oneMonthAgo = new Date();
           oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
           data = data.filter((tag) => new Date(tag.createdAt) > oneMonthAgo);
-          data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+          data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         }
         setTags(data);
       } else {
