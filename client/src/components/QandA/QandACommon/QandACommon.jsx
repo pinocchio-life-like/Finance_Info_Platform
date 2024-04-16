@@ -16,25 +16,27 @@ const QandACommon = (props) => {
   // };
 
   return (
-    <div className="flex-grow flex justify-center lg:px-14 px-1 flex-col items-center bg-white">
-      <div className="flex w-full justify-between items-center border-b border-gray-600 relative pt-4 pb-2">
+    <div className="flex justify-center lg:px-14 px-1 flex-col bg-white">
+      <div className="flex w-full justify-between items-center border-b border-gray-600 relative md:pt-4 pt-2 pb-2">
         <div className="flex justify-start items-center">
-          <img className="w-10 h-10" src={zhihu} alt="My Icon" />{" "}
-          <h1 className="ml-3 text-3xl font-bold">知乎 | Q and A</h1>{" "}
+          <img className="w-8 h-8 md:w-10 md:h-10" src={zhihu} alt="My Icon" />{" "}
+          <h1 className="ml-2 md:ml-3 text-2xl md:text-3xl font-bold">
+            知乎 | Q and A
+          </h1>{" "}
         </div>
       </div>
       <div className="flex w-full justify-center items-center relative border-x pb-2">
-        <div className="flex w-full justify-center">
-          <div className="w-1/5 h-screen sticky top-0 border-r">
-            <nav className="pt-8">
-              <ul className="space-y-2 text-m ">
+        <div className="w-full flex flex-col md:flex-row md:justify-center">
+          <div className="md:min-w-1/5 md:h-screen h-4 sticky top-0 border-r z-50">
+            <nav className="min-w-1 md:pt-8 pt-2 md:pb-0 pb-2 md:bg-white bg-[#D6D6D6] z-50">
+              <ul className="min-w-1 flex flex-row md:items-start items-center md:justify-start justify-between md:px-0 px-1 space-x-2 text-m sm:space-y-2 md:flex-col sm:space-x-0">
                 <li>
                   <Link
                     to="/qa/questions/all"
-                    className={`flex items-center py-1 px-4 rounded hover:bg-gray-200 font-light ${
+                    className={`flex items-center py-1 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 0 // ? "bg-[#ababab] font-bold"
                         ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
-                          "text-[#008DDA] "
+                          "text-[#155CA2] "
                         : ""
                     }`}
                     onClick={() => {
@@ -51,10 +53,10 @@ const QandACommon = (props) => {
                 <li>
                   <Link
                     to="/qa/tags"
-                    className={`flex items-center py-1 px-4 rounded hover:bg-gray-200 font-light ${
+                    className={`flex items-center py-1 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 1 // ? "bg-[#ababab] font-bold"
                         ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
-                          "text-[#008DDA] "
+                          "text-[#155CA2] "
                         : ""
                     }`}
                     onClick={() => {
@@ -67,10 +69,10 @@ const QandACommon = (props) => {
                 <li>
                   <Link
                     to="/qa/questions/ununs"
-                    className={`flex items-center py-1 px-4 rounded hover:bg-gray-200 font-light ${
+                    className={`flex items-center py-1 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 2 // ? "bg-[#ababab] font-bold"
                         ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
-                          "text-[#008DDA] "
+                          "text-[#155CA2] "
                         : ""
                     }`}
                     onClick={() => {
@@ -87,7 +89,7 @@ const QandACommon = (props) => {
               </ul>
             </nav>
           </div>
-          <div className="w-full bg-white">{props.children}</div>
+          <div className="w-full bg-white md:mt-0 mt-2">{props.children}</div>
         </div>
       </div>
     </div>

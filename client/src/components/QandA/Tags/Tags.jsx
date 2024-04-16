@@ -12,11 +12,9 @@ const Tags = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const getTags = async (type) => {
-    console.log("type", type);
     try {
       const response = await api.get("/api/tags/getall");
       let data = response.data.data;
-      console.log("response", response);
       if (response.data && response.data.data) {
         if (type === "Popular") {
           data.sort((a, b) => b.useCount - a.useCount);
@@ -60,19 +58,21 @@ const Tags = () => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between w-full p-4 pt-8 pb-3">
-        <h1 className="font-bold text-2xl">
+      <div className="flex justify-between w-full p-4 md:pt-8 pt-9 md:pb-3 pb-1">
+        <h1 className="font-bold text-xl sm:text-2xl">
           Tags <span>|</span>{" "}
-          <span className="font-light text-xl">{tags.length}</span>
+          <span className="font-light text-sm sm:text-xl">
+            {tags.length} tags
+          </span>
         </h1>
       </div>
-      <p className="px-4">
+      <p className="px-4 hidden md:block">
         A tag is a keyword or label that categorizes your question with other,
         similar questions. Using the right tags makes it easier for others to
         find and answer your question.
       </p>
-      <div className="flex p-4 justify-between">
-        <div>
+      <div className="flex px-4 md:py-4 py-1 justify-between">
+        <div className="z-10">
           <Search
             placeholder="input search text"
             // onSearch={onSearch}
@@ -80,12 +80,14 @@ const Tags = () => {
             style={{
               width: 200,
             }}
+            className="z-10"
           />
         </div>
         <ul
-          className="flex justify-between items-center border cursor-pointer border-gray-300 rounded-lg px-1 py-[5px]"
+          className="flex justify-between items-center border cursor-pointer border-gray-300 rounded-lg px-1 py-[6px]"
           style={{
             width: 200,
+            marginLeft: 4,
           }}>
           <li
             className={`w-1/3 rounded text-sm flex justify-center ${
@@ -103,7 +105,7 @@ const Tags = () => {
           </li>
           <li
             className={`w-1/3 rounded text-sm flex justify-center ${
-              activeLink === "Hello" ? "bg-[#D9D9D9]" : ""
+              activeLink === "New" ? "bg-[#D9D9D9]" : ""
             }`}
             onClick={() => setActiveLink("New")}>
             New

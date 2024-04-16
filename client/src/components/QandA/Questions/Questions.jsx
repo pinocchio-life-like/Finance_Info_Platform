@@ -1,5 +1,4 @@
 import { Empty, Pagination } from "antd";
-import PropTypes from "prop-types";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "antd";
 import { useEffect, useState } from "react";
@@ -7,7 +6,6 @@ import api from "../../../utils/api";
 import ReactQuill from "react-quill";
 const Questions = () => {
   const param = useParams();
-  console.log("param", param);
   const [questions, setQuestions] = useState([]);
   const [isFull, setIsFull] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // Track current page
@@ -17,14 +15,6 @@ const Questions = () => {
     try {
       const response = await api.get("/api/questions");
       if (response.data && response.data.data) {
-        if (param === "all") {
-          console.log("all");
-        } else if (param === "ununs") {
-          console.log("ununs");
-        } else {
-          console.log("Unexpected API response:");
-        }
-
         const values = response.data.data.filter((d) => {
           return param === "all"
             ? true
@@ -32,8 +22,6 @@ const Questions = () => {
             ? d.count === 0
             : d.Tags.some((tag) => tag.tag_name === param);
         });
-
-        console.log("values", values);
 
         values.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setQuestions(values);
@@ -69,11 +57,10 @@ const Questions = () => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between w-full p-4 pt-8 pb-3">
-        <h1 className="font-bold text-2xl">
-          {param === "ununs" ? "Unanswered Questions" : "Explore Questions"}{" "}
-          <span>|</span>{" "}
-          <span className="font-light text-xl">
+      <div className="flex justify-between w-full p-4 pt-8 pb-3 md:mt-0 mt-2">
+        <h1 className="font-bold text-xl sm:text-2xl">
+          {param === "ununs" ? "Unanswered" : "Questions"} <span>|</span>{" "}
+          <span className="font-light text-sm sm:text-xl">
             {questions.length} questions
           </span>
         </h1>
@@ -81,7 +68,7 @@ const Questions = () => {
           <Button className="qa-button font-semibold">Ask Question</Button>
         </Link>
       </div>
-      <div className="w-full p-4 pt-3">
+      <div className="w-full md:py-4 py-1 px-4">
         <div className="border-t pt-3">
           {questions.length === 0 ? (
             <Empty className="mt-10" description="What do you have in mind!" />
@@ -93,7 +80,7 @@ const Questions = () => {
               let description = matches ? matches.slice(0, 4).join("") : "";
               return (
                 <div className={i === 0 ? `pt-0` : `pt-3`} key={i}>
-                  <h2 className="font-bold text-lg">
+                  <h2 className="font-bold text-sm md:text-lg text-[#155CA2]">
                     <Link to={`/question/${q.question_id}`}>
                       {q.question_title}
                     </Link>
@@ -160,10 +147,6 @@ const Questions = () => {
       </div>
     </div>
   );
-};
-
-Questions.propTypes = {
-  type: PropTypes.string.isRequired,
 };
 
 export default Questions;
