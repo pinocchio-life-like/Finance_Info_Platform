@@ -74,7 +74,7 @@ const Tags = () => {
       <div className="flex px-4 md:py-4 py-1 justify-between">
         <div className="z-10">
           <Search
-            placeholder="input search text"
+            placeholder="search tags"
             // onSearch={onSearch}
             onChange={handleSearch}
             style={{
