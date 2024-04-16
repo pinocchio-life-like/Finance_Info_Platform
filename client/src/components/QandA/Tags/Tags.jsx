@@ -75,7 +75,6 @@ const Tags = () => {
         <div className="z-10">
           <Search
             placeholder="search tags"
-            // onSearch={onSearch}
             onChange={handleSearch}
             style={{
               width: 200,
