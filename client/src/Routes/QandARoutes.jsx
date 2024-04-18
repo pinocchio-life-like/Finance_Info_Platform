@@ -6,7 +6,7 @@ import Tags from "../components/QandA/Tags/Tags";
 
 export const QandARoutes = [
   {
-    path: "qa/questions",
+    path: "qa/questions/:tag",
     element: (
       <PrivateRoute>
         <QandAHome>

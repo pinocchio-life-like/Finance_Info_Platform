@@ -215,22 +215,7 @@ const Admin = () => {
                 <div
                   style={{ width: "100%" }}
                   className="flex items-center mt-2 pl-2 border-b border-gray-600 pb-1">
-                  <button
-                    onClick={handleAdd}
-                    className="flex items-center text-black hover:bg-white hover:text-green-500 rounded">
-                    <FaPlus size={12} style={{ marginRight: 4 }} /> Add New
-                    company
-                  </button>
-                  <button
-                    onClick={handleDelete}
-                    disabled={selectedRows.length === 0}
-                    className={`flex items-center rounded pl-4 ${
-                      selectedRows.length === 0
-                        ? "text-gray-400 cursor-not-allowed"
-                        : "text-black hover:bg-white hover:text-red-500"
-                    }`}>
-                    <FaTrash size={12} style={{ marginRight: 4 }} /> Delete
-                  </button>
+                  Companies List
                 </div>
               </div>
               <div

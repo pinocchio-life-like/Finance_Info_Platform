@@ -2,12 +2,12 @@ import { useState } from "react";
 import { RxDotFilled } from "react-icons/rx";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { PoweroffOutlined } from "@ant-design/icons";
-import { Button, Flex } from "antd";
+import { Button } from "antd";
 import api from "../../../../utils/api";
 import { jwtDecode } from "jwt-decode";
 import { Input, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
+import "react-quill/dist/quill.snow.css";
 
 const AskQuestion = () => {
   const [title, setTitle] = useState("");
@@ -60,11 +60,10 @@ const AskQuestion = () => {
   }
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const cleanDescription = description.replace(/<[^>]*>/g, '');
     const tagNames = Array.isArray(tags) ? tags : [];
     const questionData = {
       question_title: title,
-      question_description: cleanDescription,
+      question_description: description,
       tagNames,
       userName,
     };
@@ -82,9 +81,9 @@ const AskQuestion = () => {
   };
 
   const handleInputChange = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault(); 
-      handleInputConfirm(); 
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleInputConfirm();
     } else {
       setInputValue(e.target.value);
     }
@@ -143,18 +142,42 @@ const AskQuestion = () => {
           <div className="">
             <ReactQuill
               value={description}
+              theme="snow"
               onChange={handleDescriptionChange}
               placeholder="Describe your question here"
               className="rounded-md  bg-white  "
-              // modules={{
-              //   toolbar: [
-              //     [{ 'header': '1'}, {'header': '2'}],
-              //     ['bold', 'italic', 'underline', 'blockquote'],
-              //     [{'list': 'ordered'}, {'list': 'bullet'}],
-              //     ['link', 'image'],
-              //     ['clean']
-              //   ]
-              // }}
+              modules={{
+                toolbar: [
+                  [{ header: [1, 2, false] }],
+                  ["bold", "italic", "underline", "blockquote"],
+                  [
+                    { list: "ordered" },
+                    { list: "bullet" },
+                    { indent: "-1" },
+                    { indent: "+1" },
+                  ],
+                  [
+                    "link",
+                    "image",
+                    // "video"
+                  ],
+                  ["clean"],
+                ],
+              }}
+              formats={[
+                "header",
+                "bold",
+                "italic",
+                "underline",
+                "strike",
+                "blockquote",
+                "list",
+                "bullet",
+                "indent",
+                "link",
+                "image",
+                // "video",
+              ]}
             />
           </div>{" "}
           <div>
@@ -177,8 +200,7 @@ const AskQuestion = () => {
               className="qa-button semi-bold"
               loading={loadings[1]}
               onClick={() => enterLoading(1)}
-              htmlType="submit"
-            >
+              htmlType="submit">
               Post Question
             </Button>
           </div>
