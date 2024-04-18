@@ -28,7 +28,7 @@ const QandACommon = (props) => {
       </div>
       <div className="flex w-full justify-center items-center relative border-x pb-2">
         <div className="w-full flex flex-col md:flex-row md:justify-center">
-          <div className="md:min-w-1/5 md:h-screen h-4 sticky top-0 border-r z-50">
+          <div className="md:min-w-1/5 md:h-screen h-4 sticky top-0 border-r z-40">
             <nav className="min-w-1 md:pt-8 pt-2 md:pb-0 pb-2 md:bg-white bg-[#D6D6D6] z-50">
               <ul className="min-w-1 flex flex-row md:items-start items-center md:justify-start justify-between md:px-0 px-1 space-x-2 text-m sm:space-y-2 md:flex-col sm:space-x-0">
                 <li>
