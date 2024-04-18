@@ -70,7 +70,7 @@ const AskQuestion = () => {
 
     console.log(questionData);
 
-    const response = await api.post("/api/questions", questionData);
+    const response = await api.post("/api/questions/all", questionData);
     console.log(response.data);
     if (response && response.data) {
       setTitle("");
@@ -200,7 +200,8 @@ const AskQuestion = () => {
               className="qa-button semi-bold"
               loading={loadings[1]}
               onClick={() => enterLoading(1)}
-              htmlType="submit">
+              htmlType="submit"
+            >
               Post Question
             </Button>
           </div>
