@@ -70,13 +70,13 @@ const AskQuestion = () => {
 
     console.log(questionData);
 
-    const response = await api.post("/api/questions/all", questionData);
+    const response = await api.post("/api/questions", questionData);
     console.log(response.data);
     if (response && response.data) {
       setTitle("");
       setDescription("");
       setTags([]);
-      navigate("/qa/questions");
+      navigate("/qa/questions/all");
     }
   };
 
