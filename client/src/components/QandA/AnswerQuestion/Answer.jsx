@@ -151,6 +151,7 @@ const Answer = () => {
           comments: [...prevQuestion.comments, response.data.data],
         }));
         setNewQuestionComment("");
+        document.getElementById("qc-input").value = "";
       }
     } catch (error) {
       console.error("Failed to post comment:", error);
@@ -196,6 +197,7 @@ const Answer = () => {
         );
 
         setNewComment("");
+        document.getElementById("ac-input").value = "";
       }
     } catch (error) {
       console.error("Failed to post comment:", error);
@@ -228,15 +230,16 @@ const Answer = () => {
               Posted by: {singleQuestion.userName} | {singleQuestion.createdAt}
             </p>
           </div>
-          <div className="question-comments">
-            <h3 className="text-lg font-medium">Comments</h3>
+          <div className="question-comments px-8">
             <div>
               {singleQuestion.comments?.map((comment) => (
                 <div
                   key={comment.comment_id}
-                  className="comment flex gap-1 items-center border-b border-gray-100 py-3 "
+                  className="comment flex gap-1 items-center border-b border-gray-200 py-3 px-5"
                 >
-                  <p className="text-commentText text-comment">{comment.content}</p>
+                  <p className="text-commentText text-comment">
+                    {comment.content}
+                  </p>
                   <span>–</span>
                   <p className="text-xs text-userName">
                     {comment.userName} | {comment.createdAt}
@@ -246,7 +249,7 @@ const Answer = () => {
             </div>
           </div>
           <div
-            className="comment text-xs text-gray-400 cursor-pointer mt-4"
+            className="comment text-xs text-gray-500 cursor-pointer mt-4 px-8"
             onClick={toggleQuestionCommentInput}
           >
             Add comment
@@ -255,6 +258,7 @@ const Answer = () => {
             <div className="comment-input-area mt-2">
               <input
                 type="text"
+                id="qc-input"
                 placeholder="Type your comment here..."
                 className="border rounded p-2 w-full"
                 value={newQuestionComment}
@@ -276,7 +280,7 @@ const Answer = () => {
               {singleQuestion.answers?.length} Answers
             </h3>
             {singleQuestion.answers?.map((a) => (
-              <div className="mb-10 bg-gray-50 p-4 rounded-md">
+              <div className="mb-10 bg-gray-100 p-4 rounded-md">
                 <div
                   key={a.answer_id}
                   className="mb-2 border-b border-gray-200 "
@@ -290,18 +294,19 @@ const Answer = () => {
                   {a.comments?.map((c) => (
                     <div
                       key={c.comment_id}
-                      className="comment flex gap-1  border-b border-gray-100 py-3 items-center"
+                      className="comment flex gap-1  border-b border-gray-200 py-3 items-center "
                     >
-                      <p className="text-commentText text-comment">{c.content}</p>
-                      <>–</>
-                      <p className="text-xs text-userName">
-                        {c.userName} | {c.createdAt}
+                      <p className="text-commentText text-comment pl-3">
+                        {c.content} –
+                        <span className="text-xs text-userName px-1">
+                          {c.userName} | {c.createdAt}
+                        </span>
                       </p>
                     </div>
                   ))}
                 </div>
                 <div
-                  className="comment text-xs text-gray-400 cursor-pointer mt-4"
+                  className="comment text-xs text-gray-500 cursor-pointer mt-4 px-8"
                   onClick={() => toggleCommentInput(a.answer_id)}
                 >
                   Add comment
@@ -310,6 +315,7 @@ const Answer = () => {
                   <div className="comment-input-area mt-2">
                     <input
                       type="text"
+                      id="ac-input"
                       placeholder="Type your comment here..."
                       className="border rounded p-2 w-full"
                       onChange={(e) => setNewComment(e.target.value)}
