@@ -200,8 +200,7 @@ const AskQuestion = () => {
               className="qa-button semi-bold"
               loading={loadings[1]}
               onClick={() => enterLoading(1)}
-              htmlType="submit"
-            >
+              htmlType="submit">
               Post Question
             </Button>
           </div>
