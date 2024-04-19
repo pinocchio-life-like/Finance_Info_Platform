@@ -6,6 +6,9 @@ const {
 const {
   askQuestion,
   updateQuestion,
+  Answer,
+  Comment,
+  getComment,
 } = require("../../models/Q&AModel/associations");
 const askQuestionC = async (req, res) => {
   try {
@@ -55,13 +58,44 @@ const getSingleQuestionC = async (req, res) => {
     if (!question) {
       return res.status(404).json({ message: "Question not found" });
     } else {
-      return res.status(200).json({ message: "Question found", data: question });
+      const questionComment = await getComment({ referred_id: id, referred_type: "question", });
+      const answers = await Answer.findAll({ where: { question_id: id } });
+
+      let commentPromises = answers.map(async (answer) => {
+        const comments = await Comment.findAll({
+          where: {
+            referred_id: answer.dataValues.answer_id,
+            referred_type: "answer",
+          },
+        });
+
+        return {
+          ...answer.dataValues,
+          comments: comments.map((comment) => ({
+            content: comment.dataValues.content,
+            createdAt: comment.dataValues.createdAt,
+            userName:comment.dataValues.userName,
+            // You can include other properties of the comment as needed
+          })),
+        };
+      });
+
+      const answersWithComments = await Promise.all(commentPromises);
+
+      // Include the answers with comments in the question object
+      question.dataValues.answers = answersWithComments;
+      question.dataValues.comments = questionComment;
+
+      return res
+        .status(200)
+        .json({ message: "Question found", data: question });
     }
   } catch (error) {
     console.error("Error fetching single question:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
 const updateQuestionC = async (req, res) => {
   try {
     const { id } = req.params;
@@ -113,4 +147,11 @@ const deleteQC = async (req, res) => {
     console.error(error);
   }
 };
-module.exports = { askQuestionC, getAllQuestionsC, updateQuestionC, deleteQC, getSingleQ, getSingleQuestionC };
+module.exports = {
+  askQuestionC,
+  getAllQuestionsC,
+  updateQuestionC,
+  deleteQC,
+  getSingleQ,
+  getSingleQuestionC,
+};

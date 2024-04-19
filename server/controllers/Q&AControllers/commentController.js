@@ -25,10 +25,11 @@ const commentC = async (req, res) => {
 const getCommentC = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({ message: "ID parameter is missing" });
-    }
-    const comment = await getComment({ referred_id: id });
+    // const { referred_type } = req.query;
+    // if ( !referred_type) {
+    //   return res.status(400).json({ message: "ID parameter is missing" });
+    // }
+    const comment = await getComment({ referred_id: id, referred_type: "question", });
     if (!comment || comment.length === 0) {
       return res.status(404).json({ message: "No comments found" });
     }

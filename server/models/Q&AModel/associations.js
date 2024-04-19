@@ -136,6 +136,7 @@ const getComment = async (data) => {
     const comment = await Comment.findAll({
       where: {
         referred_id: data.referred_id,
+        referred_type: data.referred_type,
       },
     });
     return comment;

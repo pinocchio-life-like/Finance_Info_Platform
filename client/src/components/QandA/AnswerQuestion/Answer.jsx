@@ -5,11 +5,15 @@ import api from "../../../utils/api";
 import ReactQuill from "react-quill";
 import { Button } from "antd";
 import { jwtDecode } from "jwt-decode";
+import { LuMinus } from "react-icons/lu";
 const Answer = () => {
   const [singleQuestion, setSingleQuestion] = useState({});
   const [answer, setAnswer] = useState("");
   const [answers, setAnswers] = useState([]);
   const [commentVisibility, setCommentVisibility] = useState({});
+  const [commentVisibilityQuestion, setCommentVisibilityQuestion] =
+    useState(false);
+  const [newQuestionComment, setNewQuestionComment] = useState("");
   const [newComment, setNewComment] = useState("");
   const [loadings, setLoadings] = useState([]);
   const { id } = useParams();
@@ -35,14 +39,37 @@ const Answer = () => {
       try {
         const response = await api.get(`/api/questions/${id}`);
         if (response.data && response.data.data) {
+          console.log("Result", response.data.data);
           const formattedQuestion = {
             ...response.data.data,
             createdAt: format(
               parseISO(response.data.data.createdAt),
               "MMM dd, yyyy 'at' HH:mm"
             ),
+            comments: response.data.data.comments.map((comment) => ({
+              ...comment,
+              createdAt: format(
+                parseISO(comment.createdAt),
+                "MMM dd, yyyy 'at' HH:mm"
+              ),
+            })),
+            answers: response.data.data.answers.map((answer) => ({
+              ...answer,
+              createdAt: format(
+                parseISO(answer.createdAt),
+                "MMM dd, yyyy 'at' HH:mm"
+              ),
+              comments: answer.comments.map((comment) => ({
+                ...comment,
+                createdAt: format(
+                  parseISO(comment.createdAt),
+                  "MMM dd, yyyy 'at' HH:mm"
+                ),
+              })),
+            })),
           };
           setSingleQuestion(formattedQuestion);
+          console.log(formattedQuestion);
         } else {
           console.log("Error while fetching single question");
         }
@@ -65,33 +92,6 @@ const Answer = () => {
       console.error("Error decoding token:", error);
     }
   }
-  // Fetch All Answers
-
-  useEffect(() => {
-    const fetchAnsers = async () => {
-      try {
-        const ansRresponse = await api.get(`/api/answers/${id}`);
-        console.log(ansRresponse);
-        if (ansRresponse.data && ansRresponse.data.data) {
-          const formattedAnswers = ansRresponse.data.data.map((answer) => ({
-            ...answer,
-            ansCreatedAt: format(
-              parseISO(answer.createdAt),
-              "MMM dd, yyyy 'at' HH:mm"
-            ),
-            comments: []
-          }));
-          setAnswers(formattedAnswers);
-        } else {
-          console.log("Error while fetching all answers");
-        }
-      } catch (error) {
-        console.log("Error fetching all ansers", error);
-      }
-    };
-    //getSingleQuestion();
-    fetchAnsers();
-  }, [id]);
 
   // Post Answer
   const handleSubmitAnswer = async (event) => {
@@ -119,6 +119,41 @@ const Answer = () => {
       setAnswers(answersResponse.data.data);
     } else {
       console.log("Error while fetching all answers");
+    }
+  };
+
+  // Question Comment
+
+  const toggleQuestionCommentInput = () => {
+    setCommentVisibilityQuestion(!commentVisibilityQuestion);
+  };
+  const postQuestionComment = async () => {
+    if (!newQuestionComment.trim()) return;
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token not found.");
+      return;
+    }
+
+    try {
+      const decodedToken = jwtDecode(token);
+      const userName = decodedToken.userName;
+      const response = await api.post("/api/comments", {
+        userName: userName,
+        content: newQuestionComment,
+        referred_id: id,
+        referred_type: "question",
+      });
+
+      if (response.data && response.data.data) {
+        setSingleQuestion((prevQuestion) => ({
+          ...prevQuestion,
+          comments: [...prevQuestion.comments, response.data.data],
+        }));
+        setNewQuestionComment("");
+      }
+    } catch (error) {
+      console.error("Failed to post comment:", error);
     }
   };
   const toggleCommentInput = (answerId) => {
@@ -166,6 +201,7 @@ const Answer = () => {
       console.error("Failed to post comment:", error);
     }
   };
+
   return (
     <div className="p-4 pt-8">
       <div className="question-and-answers">
@@ -174,7 +210,7 @@ const Answer = () => {
             <h2 className="font-semibold text-lg mb-2">
               {singleQuestion.question_title}
             </h2>
-            <p className="text-gray-700 text-xs ">
+            <p className="text-gray-700 text-sm ">
               {singleQuestion.question_description}
             </p>
             <div className="tags mt-6">
@@ -187,33 +223,85 @@ const Answer = () => {
                 </span>
               ))}
             </div>
-            <p className="text-gray-300 text-sm text-right mb-3">
+            <p className="text-userName text-sm text-right mb-3">
               {" "}
               Posted by: {singleQuestion.userName} | {singleQuestion.createdAt}
             </p>
           </div>
-          <div className="comment text-xs text-gray-400 cursor-pointer">
+          <div className="question-comments">
+            <h3 className="text-lg font-medium">Comments</h3>
+            <div>
+              {singleQuestion.comments?.map((comment) => (
+                <div
+                  key={comment.comment_id}
+                  className="comment flex gap-1 items-center border-b border-gray-100 py-3 "
+                >
+                  <p className="text-commentText text-comment">{comment.content}</p>
+                  <span>–</span>
+                  <p className="text-xs text-userName">
+                    {comment.userName} | {comment.createdAt}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div
+            className="comment text-xs text-gray-400 cursor-pointer mt-4"
+            onClick={toggleQuestionCommentInput}
+          >
             Add comment
           </div>
+          {commentVisibilityQuestion && (
+            <div className="comment-input-area mt-2">
+              <input
+                type="text"
+                placeholder="Type your comment here..."
+                className="border rounded p-2 w-full"
+                value={newQuestionComment}
+                onChange={(e) => setNewQuestionComment(e.target.value)}
+              />
+              <Button
+                className="mt-2 qa-button semi-bold"
+                onClick={postQuestionComment}
+                loading={loadings[0]}
+              >
+                Post Comment
+              </Button>
+            </div>
+          )}
         </div>
         <div className="all-answers">
           <div className="answers ">
             <h3 className="text-lg pb-5 font-medium">
-              {answers.length} Answers
+              {singleQuestion.answers?.length} Answers
             </h3>
-            {answers.map((a) => (
-              <div className="mb-4">
+            {singleQuestion.answers?.map((a) => (
+              <div className="mb-10 bg-gray-50 p-4 rounded-md">
                 <div
                   key={a.answer_id}
-                  className="mb-2 border-b border-gray-200"
+                  className="mb-2 border-b border-gray-200 "
                 >
                   <p className="mb-6">{a.content}</p>
-                  <p className="	text-blue-700 text-sm text-right mb-2">
-                    By: {a.userName} | {a.ansCreatedAt}
+                  <p className="	text-userName text-sm text-right mb-2">
+                    By: {a.userName} | {a.createdAt}
                   </p>
                 </div>
+                <div className="px-8">
+                  {a.comments?.map((c) => (
+                    <div
+                      key={c.comment_id}
+                      className="comment flex gap-1  border-b border-gray-100 py-3 items-center"
+                    >
+                      <p className="text-commentText text-comment">{c.content}</p>
+                      <>–</>
+                      <p className="text-xs text-userName">
+                        {c.userName} | {c.createdAt}
+                      </p>
+                    </div>
+                  ))}
+                </div>
                 <div
-                  className="comment text-xs text-gray-400 cursor-pointer"
+                  className="comment text-xs text-gray-400 cursor-pointer mt-4"
                   onClick={() => toggleCommentInput(a.answer_id)}
                 >
                   Add comment
@@ -235,19 +323,6 @@ const Answer = () => {
                     </Button>
                   </div>
                 )}
-                {a.comments &&
-                  Array.isArray(a.comments) &&
-                  a.comments.map((comment) => (
-                    <div
-                      key={comment.comment_id}
-                      className="border-l-4 border-blue-500 pl-4 mb-2"
-                    >
-                      <p>{comment.content}</p>
-                      <p className="text-xs text-gray-500">
-                        {comment.userName} | {comment.createdAt}
-                      </p>
-                    </div>
-                  ))}
               </div>
             ))}
           </div>
