@@ -16,6 +16,7 @@ const Answer = () => {
   const [newQuestionComment, setNewQuestionComment] = useState("");
   const [newComment, setNewComment] = useState("");
   const [loadings, setLoadings] = useState([]);
+  const [commentLoading, setCommentLoading] = useState(false);
   const { id } = useParams();
 
   const enterLoading = (index) => {
@@ -32,6 +33,7 @@ const Answer = () => {
       });
     }, 6000);
   };
+  
 
   // Fetch The Question by ID
   useEffect(() => {
@@ -166,6 +168,7 @@ const Answer = () => {
 
   const postCommentAns = async (content, answerId) => {
     if (!content.trim()) return;
+    setCommentLoading(true);
     const token = localStorage.getItem("token");
     if (!token) {
       console.error("Token not found.");
@@ -201,6 +204,9 @@ const Answer = () => {
       }
     } catch (error) {
       console.error("Failed to post comment:", error);
+    }
+    finally{
+      setCommentLoading(false);
     }
   };
 
@@ -323,7 +329,7 @@ const Answer = () => {
                     <Button
                       className="mt-2 qa-button semi-bold"
                       onClick={() => postCommentAns(newComment, a.answer_id)}
-                      loading={loadings[1]}
+                      loading={commentLoading[1]}
                     >
                       Post Comment
                     </Button>
