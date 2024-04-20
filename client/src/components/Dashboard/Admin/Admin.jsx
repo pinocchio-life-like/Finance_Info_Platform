@@ -2,7 +2,6 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { Button, Drawer, Form, Input, Select, Table, message } from "antd";
 import api from "../../../utils/api";
-const secretKey = import.meta.env.VITE_SECRET_KEY;
 import { jwtDecode } from "jwt-decode";
 import MainCompanyAdmin from "./MainCompanyAdmin";
 
@@ -61,8 +60,15 @@ const Admin = () => {
   const [updateform] = Form.useForm();
   const [newform] = Form.useForm();
   const token = localStorage.getItem("token");
-  const decodedToken = jwtDecode(token, secretKey);
-  const { userName } = decodedToken;
+  let userName = null;
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      userName = decodedToken.userName;
+    } catch (error) {
+      console.error("Invalid token");
+    }
+  }
 
   useEffect(() => {
     const fetchUsers = async () => {
