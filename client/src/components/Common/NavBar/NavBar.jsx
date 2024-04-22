@@ -9,8 +9,8 @@ import { GoChevronDown } from "react-icons/go";
 import useAuth from "../../../hooks/useAuth";
 import api from "../../../utils/api";
 import { jwtDecode } from "jwt-decode";
-import "./Navbar.css";
-import { GrMenu } from "react-icons/gr";
+
+
 
 const NavBar = () => {
   const { logout } = useAuth();
@@ -392,144 +392,7 @@ const NavBar = () => {
             </>
           )}
         </div>
-        <div className="small" id="small">
-          <button onClick={toggler}>
-            <GrMenu />
-            {toggle && (
-              // <div className="list">
-              <ul className="flex gap-10 lg:ml-36 md:gap-13 sm:ml-4">
-                <li>
-                  <Link
-                    to={`/wiki/articles/${categoryId}`}
-                    className={`font-bold hover:text-blue-700 ${
-                      location.pathname.includes("wiki")
-                        ? "text-blue-800"
-                        : "text-black"
-                    }`}
-                  >
-                    Wiki
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/ftp"
-                    className={`font-bold hover:text-blue-700 ${
-                      location.pathname.includes("ftp")
-                        ? "text-blue-800"
-                        : "text-black"
-                    }`}
-                  >
-                    FTP
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/notice"
-                    className={`font-bold hover:text-blue-700 ${
-                      location.pathname.includes("notice")
-                        ? "text-blue-800"
-                        : "text-black"
-                    }`}
-                  >
-                    Notice
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/qa/questions"
-                    className={`font-semibold hover:text-blue-700 ${
-                      location.pathname.includes("qa")
-                        ? "text-blue-800"
-                        : "text-black"
-                    }`}
-                  >
-                    Q&A
-                  </Link>
-                </li>
-                <li>
-                  {userRole === "admin" && (
-                    <li>
-                      <Link
-                        to="/manage"
-                        className={`font-semibold hover:text-blue-700 ${
-                          location.pathname.includes("Manage")
-                            ? "text-blue-800"
-                            : "text-black"
-                        }`}
-                      >
-                        Manage
-                      </Link>
-                    </li>
-                  )}
-                </li>
-                <li>
-                  <input
-                    className="w-full border-none bg-transparent px-4 py-1 
-                      text-gray-400 outline-none focus:outline-none"
-                    type="search"
-                    name="search"
-                    placeholder="Search..."
-                  />
-                </li>
-                <li>
-                  <button type="submit" className="rounded px-4 text-gray">
-                    <CiSearch size={26} />
-                  </button>
-                </li>
-                <li>
-                  <BsBellFill color="gray" size={26} />
-                </li>
-                <li>
-                  <IoLanguageOutline color="gray" size={26} />
-                </li>
-                {/* <li>
-            <button
-                  id="dropdownInformationButton"
-                  data-dropdown-toggle="dropdownInformation"
-                  className="text-white bg-gray-100 hover:bg-gray-300 focus:ring-4 
-                  focus:outline-none focus:bg-gray-400 font-medium rounded-lg text-sm px-5 
-                  py-2 text-center inline-flex items-center"
-                  type="button"
-                >
-                  <FaRegCircleUser size={26} color="#241F1F" className="mr-2" /> 
-                  <GoChevronDown size={26} color="#241F1F" />
-                </button>
-                
-            </li>  */}
-
-                <li>
-                  <Link
-                    to="#"
-                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white"
-                  >
-                    Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="#"
-                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white"
-                  >
-                    Help
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    onClick={async () => {
-                      await logout();
-                    }}
-                    to="#"
-                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white"
-                  >
-                    Logout
-                  </Link>
-                </li>
-              </ul>
-
-              //  </div>
-            )}
-          </button>
-        </div>
+        
       </div>
     </nav>
   );
