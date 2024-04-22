@@ -81,6 +81,13 @@ const getSingleQuestionC = async (req, res) => {
       });
 
       const answersWithComments = await Promise.all(commentPromises);
+      // const answerCount = answers.length;
+
+      // Attach the count property to each answer object
+      // const answersWithCount = answersWithComments.map((answer) => ({
+      //   ...answer,
+      //   count: answerCount,
+      // }));
 
       // Include the answers with comments in the question object
       question.dataValues.answers = answersWithComments;

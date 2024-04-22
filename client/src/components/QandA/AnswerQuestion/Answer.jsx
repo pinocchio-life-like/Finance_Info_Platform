@@ -9,7 +9,7 @@ import { LuMinus } from "react-icons/lu";
 const Answer = () => {
   const [singleQuestion, setSingleQuestion] = useState({});
   const [answer, setAnswer] = useState("");
-  // const [answers, setAnswers] = useState([]);
+  const [answers, setAnswers] = useState([]);
   const [commentVisibility, setCommentVisibility] = useState({});
   const [commentVisibilityQuestion, setCommentVisibilityQuestion] =
     useState(false);
@@ -18,7 +18,8 @@ const Answer = () => {
   const [loadings, setLoadings] = useState([]);
   const [commentLoading, setCommentLoading] = useState(false);
   const { id } = useParams();
-  const[flag,setFlag]=useState(false)
+  const [flag, setFlag] = useState(false);
+  const[answerCount,setAnswerCount]=useState()
 
   const enterLoading = (index) => {
     setLoadings((prevLoadings) => {
@@ -34,7 +35,6 @@ const Answer = () => {
       });
     }, 6000);
   };
-  
 
   // Fetch The Question by ID
   useEffect(() => {
@@ -57,6 +57,7 @@ const Answer = () => {
               ),
             })),
             answers: response.data.data.answers.map((answer) => ({
+              
               ...answer,
               createdAt: format(
                 parseISO(answer.createdAt),
@@ -81,7 +82,7 @@ const Answer = () => {
       }
     };
     getSingleQuestion();
-  }, [id,flag]);
+  }, [id, flag]);
 
   const token = localStorage.getItem("token");
   let userName = null;
@@ -117,13 +118,13 @@ const Answer = () => {
       userName: userName,
     });
     setAnswer("");
-    setFlag(!flag)
-    // const answersResponse = await api.get(`/api/answers/${id}`);
-    // if (answersResponse.data && answersResponse.data.data) {
-    //   setAnswers(answersResponse.data.data);
-    // } else {
-    //   console.log("Error while fetching all answers");
-    // }
+    setFlag(!flag);
+    const answersResponse = await api.get(`/api/answers/${id}`);
+    if (answersResponse.data && answersResponse.data.data) {
+      setAnswers(answersResponse.data.data);
+    } else {
+      console.log("Error while fetching all answers");
+    }
   };
 
   // Question Comment
@@ -206,8 +207,7 @@ const Answer = () => {
       }
     } catch (error) {
       console.error("Failed to post comment:", error);
-    }
-    finally{
+    } finally {
       setCommentLoading(false);
     }
   };
