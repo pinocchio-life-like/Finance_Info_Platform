@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../config/db.config");
-
+const User = require("../userModel").User;
 const Answer = sequelize.define("Answer", {
   answer_id: {
     type: DataTypes.INTEGER,
@@ -8,16 +8,24 @@ const Answer = sequelize.define("Answer", {
     autoIncrement: true,
   },
   content: {
-    type: DataTypes.TEXT("long"),
+    type: DataTypes.TEXT,
     allowNull: false,
   },
-  userId: {
-    type: DataTypes.INTEGER,
+  // userId: {
+  //   type: DataTypes.INTEGER,
+  //   allowNull: false,
+  //   references: {
+  //       model: "Users",
+  //       key: "userId",
+  //     },
+  // },
+  userName: {
+    type: DataTypes.STRING,
     allowNull: false,
-    references: {
-      model: "Users",
-      key: "userId",
-    },
+    // references: {
+    //   model: "Users",
+    //   key: "userName",
+    // },
   },
   question_id: {
     type: DataTypes.INTEGER,
@@ -28,12 +36,14 @@ const Answer = sequelize.define("Answer", {
     },
   },
 });
+
+//Answer.belongsTo(User, { foreignKey: "userName" });
 const answerQuestion = async (ans) => {
-  const { content, question_id, userId } = ans;
+  const { content, question_id, userName } = ans;
   const answer = await Answer.create({
     content,
     question_id,
-    userId,
+    userName,
   });
   return answer;
 };
@@ -42,6 +52,12 @@ const getAllAnswerOfAquestion = async (qId) => {
     where: {
       question_id: qId,
     },
+    // include: [
+    //   {
+    //     model: User,
+    //     attributes: ['userName'],
+    //   },
+    // ],
   });
   return answer;
 };

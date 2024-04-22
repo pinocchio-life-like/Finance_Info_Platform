@@ -3,7 +3,7 @@ import { RxDotFilled } from "react-icons/rx";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Button } from "antd";
-import api from "../../../../utils/api";
+import api from "../../../utils/api";
 import { jwtDecode } from "jwt-decode";
 import { Input, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -53,7 +53,6 @@ const AskQuestion = () => {
       const decodedToken = jwtDecode(token);
       // console.log("Decoded Token:", decodedToken);
       userName = decodedToken.userName;
-      // console.log("User ID:", userId);
     } catch (error) {
       console.error("Error decoding token:", error);
     }
@@ -190,7 +189,11 @@ const AskQuestion = () => {
               placeholder="Add a tag"
             />
             {tags.map((tag) => (
-              <Tag key={tag} closable onClose={() => handleTagClose(tag)}>
+              <Tag
+                key={tag}
+                className="inline-block bg-gray-200 rounded px-3 py-1 text-xs font-normal text-gray-700 mr-2 mb-2"
+                closable
+                onClose={() => handleTagClose(tag)}>
                 {tag}
               </Tag>
             ))}
