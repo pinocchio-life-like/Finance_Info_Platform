@@ -1,39 +1,22 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 import api from "../../../utils/api";
 import ReactQuill from "react-quill";
 import { Button } from "antd";
 import { jwtDecode } from "jwt-decode";
-import { LuMinus } from "react-icons/lu";
 const Answer = () => {
   const [singleQuestion, setSingleQuestion] = useState({});
   const [answer, setAnswer] = useState("");
-  const [answers, setAnswers] = useState([]);
   const [commentVisibility, setCommentVisibility] = useState({});
   const [commentVisibilityQuestion, setCommentVisibilityQuestion] =
     useState(false);
   const [newQuestionComment, setNewQuestionComment] = useState("");
   const [newComment, setNewComment] = useState("");
-  const [loadings, setLoadings] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [commentLoading, setCommentLoading] = useState(false);
+  const [refetch, setRefetch] = useState(false);
   const { id } = useParams();
-
-  const enterLoading = (index) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
-    setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }, 6000);
-  };
-  
 
   // Fetch The Question by ID
   useEffect(() => {
@@ -41,7 +24,6 @@ const Answer = () => {
       try {
         const response = await api.get(`/api/questions/${id}`);
         if (response.data && response.data.data) {
-          console.log("Result", response.data.data);
           const formattedQuestion = {
             ...response.data.data,
             createdAt: format(
@@ -71,7 +53,6 @@ const Answer = () => {
             })),
           };
           setSingleQuestion(formattedQuestion);
-          console.log(formattedQuestion);
         } else {
           console.log("Error while fetching single question");
         }
@@ -80,51 +61,36 @@ const Answer = () => {
       }
     };
     getSingleQuestion();
-  }, [id]);
-
-  const token = localStorage.getItem("token");
-  let userName = null;
-  if (token) {
-    console.log("Token:", token);
-    try {
-      const decodedToken = jwtDecode(token);
-      userName = decodedToken.userName;
-      console.log("User Name:", userName);
-    } catch (error) {
-      console.error("Error decoding token:", error);
-    }
-  }
+  }, [id, refetch]);
 
   // Post Answer
   const handleSubmitAnswer = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Token not found.");
-      return;
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("Token not found.");
+        return;
+      }
+      const decodedToken = jwtDecode(token);
+      const userName = decodedToken.userName;
+      if (!userName) {
+        console.error("User ID is required");
+        return;
+      }
+      await api.post("/api/answers", {
+        content: answer,
+        question_id: id,
+        userName: userName,
+      });
+      setAnswer("");
+      setRefetch((prev) => !prev);
+    } catch (error) {
+      console.error("An error occurred while fetching the answers:", error);
     }
-    const decodedToken = jwtDecode(token);
-    const userName = decodedToken.userName;
-    const cleanAnswer = answer.replace(/<[^>]*>/g, "");
-    if (!userName) {
-      console.error("User ID is required");
-      return;
-    }
-    const response = await api.post("/api/answers", {
-      content: cleanAnswer,
-      question_id: id,
-      userName: userName,
-    });
-    setAnswer("");
-    const answersResponse = await api.get(`/api/answers/${id}`);
-    if (answersResponse.data && answersResponse.data.data) {
-      setAnswers(answersResponse.data.data);
-    } else {
-      console.log("Error while fetching all answers");
-    }
+    setIsLoading(false);
   };
-
-  // Question Comment
 
   const toggleQuestionCommentInput = () => {
     setCommentVisibilityQuestion(!commentVisibilityQuestion);
@@ -153,6 +119,7 @@ const Answer = () => {
           comments: [...prevQuestion.comments, response.data.data],
         }));
         setNewQuestionComment("");
+        setCommentVisibilityQuestion(false);
         document.getElementById("qc-input").value = "";
       }
     } catch (error) {
@@ -179,33 +146,15 @@ const Answer = () => {
       const decodedToken = jwtDecode(token);
       const userName = decodedToken.userName;
       console.log(userName);
-      const response = await api.post("/api/comments", {
+      await api.post("/api/comments", {
         userName: userName,
         content: content,
         referred_id: answerId,
         referred_type: "answer",
       });
-
-      if (response.data && response.data.data) {
-        setAnswers((prevAnswers) =>
-          prevAnswers.map((answer) => {
-            if (answer.answer_id === answerId) {
-              return {
-                ...answer,
-                comments: [...answer.comments, response.data.data],
-              };
-            }
-            return answer;
-          })
-        );
-
-        setNewComment("");
-        document.getElementById("ac-input").value = "";
-      }
     } catch (error) {
       console.error("Failed to post comment:", error);
-    }
-    finally{
+    } finally {
       setCommentLoading(false);
     }
   };
@@ -213,55 +162,65 @@ const Answer = () => {
   return (
     <div className="p-4 pt-8">
       <div className="question-and-answers">
-        <div className="single-question mb-12 ">
+        <div className="single-question mb-8">
           <div className="border-b mb-2 border-gray-200">
             <h2 className="font-semibold text-lg mb-2">
               {singleQuestion.question_title}
             </h2>
-            <p className="text-gray-700 text-sm ">
-              {singleQuestion.question_description}
-            </p>
-            <div className="tags mt-6">
-              {singleQuestion.Tags?.map((tag) => (
-                <span
-                  key={tag.tag_id}
-                  className="inline-block bg-gray-200 rounded px-3 py-1 text-xs font-normal text-gray-700 mr-2 mb-2"
-                >
-                  {tag.tag_name}
-                </span>
-              ))}
+            <div style={{ position: "relative" }}>
+              <ReactQuill
+                readOnly
+                value={singleQuestion.question_description}
+                theme="bubble"
+                className="mt-auto bg-white"
+                style={{
+                  marginLeft: -14,
+                }}
+              />
+              <div className="absolute w-full" style={{ bottom: 10, left: 0 }}>
+                <div className="w-full flex items-center justify-between">
+                  <div className="tags">
+                    {singleQuestion.Tags?.map((tag) => (
+                      <span
+                        key={tag.tag_id}
+                        className="inline-block bg-gray-200 rounded px-3 py-1 text-xs font-normal text-gray-700 mr-2">
+                        {tag.tag_name}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-userName text-sm text-right">
+                    {" "}
+                    Posted by: {singleQuestion.userName} |{" "}
+                    {singleQuestion.createdAt}
+                  </p>
+                </div>
+              </div>
             </div>
-            <p className="text-userName text-sm text-right mb-3">
-              {" "}
-              Posted by: {singleQuestion.userName} | {singleQuestion.createdAt}
-            </p>
           </div>
-          <div className="question-comments px-8">
+          <div className="question-comments px-6">
             <div>
               {singleQuestion.comments?.map((comment) => (
                 <div
                   key={comment.comment_id}
-                  className="comment flex gap-1 items-center border-b border-gray-200 py-3 px-5"
-                >
-                  <p className="text-commentText text-comment">
+                  className="flex justify-between items-center border-b border-gray-200 py-1">
+                  <p className="text-commentText text-comment items-center">
                     {comment.content}
-                  </p>
-                  <span>–</span>
-                  <p className="text-xs text-userName">
-                    {comment.userName} | {comment.createdAt}
+                    <span> -</span>
+                    <span className="text-xs text-userName">
+                      {comment.userName} | {comment.createdAt}
+                    </span>
                   </p>
                 </div>
               ))}
             </div>
           </div>
           <div
-            className="comment text-xs text-gray-500 cursor-pointer mt-4 px-8"
-            onClick={toggleQuestionCommentInput}
-          >
+            className="comment text-xs text-gray-500 cursor-pointer my-5 px-6"
+            onClick={toggleQuestionCommentInput}>
             Add comment
           </div>
           {commentVisibilityQuestion && (
-            <div className="comment-input-area mt-2">
+            <div className="comment-input-area px-5">
               <input
                 type="text"
                 id="qc-input"
@@ -273,8 +232,7 @@ const Answer = () => {
               <Button
                 className="mt-2 qa-button semi-bold"
                 onClick={postQuestionComment}
-                loading={loadings[0]}
-              >
+                loading={commentLoading}>
                 Post Comment
               </Button>
             </div>
@@ -282,86 +240,122 @@ const Answer = () => {
         </div>
         <div className="all-answers">
           <div className="answers ">
-            <h3 className="text-lg pb-5 font-medium">
+            <h3 className="text-lg font-medium py-3">
               {singleQuestion.answers?.length} Answers
             </h3>
             {singleQuestion.answers?.map((a) => (
-              <div className="mb-10 bg-gray-100 p-4 rounded-md">
-                <div
-                  key={a.answer_id}
-                  className="mb-2 border-b border-gray-200 "
-                >
-                  <p className="mb-6">{a.content}</p>
-                  <p className="	text-userName text-sm text-right mb-2">
-                    By: {a.userName} | {a.createdAt}
-                  </p>
-                </div>
-                <div className="px-8">
-                  {a.comments?.map((c) => (
-                    <div
-                      key={c.comment_id}
-                      className="comment flex gap-1  border-b border-gray-200 py-3 items-center "
-                    >
-                      <p className="text-commentText text-comment pl-3">
-                        {c.content} –
-                        <span className="text-xs text-userName px-1">
-                          {c.userName} | {c.createdAt}
-                        </span>
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <div
-                  className="comment text-xs text-gray-500 cursor-pointer mt-4 px-8"
-                  onClick={() => toggleCommentInput(a.answer_id)}
-                >
-                  Add comment
-                </div>
-                {commentVisibility[a.answer_id] && (
-                  <div className="comment-input-area mt-2">
-                    <input
-                      type="text"
-                      id="ac-input"
-                      placeholder="Type your comment here..."
-                      className="border rounded p-2 w-full"
-                      onChange={(e) => setNewComment(e.target.value)}
+              <div key={a.answer_id} className="p-4 rounded-sm mt-4">
+                <div className="">
+                  <div key={a.answer_id} className=" border-t">
+                    <ReactQuill
+                      readOnly
+                      value={a.content}
+                      theme="bubble"
+                      className="block mt-auto bg-white"
+                      style={{
+                        marginLeft: -14,
+                        marginBottom: -45,
+                      }}
                     />
-                    <Button
-                      className="mt-2 qa-button semi-bold"
-                      onClick={() => postCommentAns(newComment, a.answer_id)}
-                      loading={commentLoading[1]}
-                    >
-                      Post Comment
-                    </Button>
+                    <p className="text-xs text-userName pb-2 border-b">
+                      By: {a.userName} | {a.createdAt}
+                    </p>
                   </div>
-                )}
+                  <div className="px-4">
+                    {a.comments?.map((c) => (
+                      <div
+                        key={c.comment_id}
+                        className="comment flex gap-1  border-b border-gray-200 py-3 items-center ">
+                        <p className="text-commentText text-comment items-center">
+                          {c.content}
+                          <span> -</span>
+                          <span className="text-xs text-userName">
+                            {c.userName} | {c.createdAt}
+                          </span>
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  <div
+                    className="comment text-xs text-gray-500 cursor-pointer p-4"
+                    onClick={() => toggleCommentInput(a.answer_id)}>
+                    Add comment
+                  </div>
+                  {commentVisibility[a.answer_id] && (
+                    <div className="comment-input-area mt-2">
+                      <input
+                        type="text"
+                        id="ac-input"
+                        placeholder="Type your comment here..."
+                        className="border rounded p-2 w-full"
+                        onChange={(e) => setNewComment(e.target.value)}
+                      />
+                      <Button
+                        className="mt-2 qa-button semi-bold"
+                        onClick={() => postCommentAns(newComment, a.answer_id)}
+                        loading={commentLoading[1]}>
+                        Post Comment
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>
         </div>
-        <div className="post-answer">
-          <div className="answers mt-12">
-            <h3 className="text-lg pb-5 font-medium">Your Answer</h3>
+        <div className="post-answer border-t mt-6">
+          <div className="answers ">
+            <h3 className="text-lg py-4 font-medium">Your Answer</h3>
           </div>
           <form
             onSubmit={handleSubmitAnswer}
-            className="flex flex-col space-y-4 gap-4"
-          >
+            className="flex flex-col space-y-4 gap-4">
             <div className="">
               <ReactQuill
                 value={answer}
+                theme="snow"
                 onChange={setAnswer}
                 placeholder="Add your answer here"
-                className="rounded-md  bg-white  "
+                className="rounded-md  bg-white"
+                modules={{
+                  toolbar: [
+                    [{ header: [1, 2, false] }],
+                    ["bold", "italic", "underline", "blockquote"],
+                    [
+                      { list: "ordered" },
+                      { list: "bullet" },
+                      { indent: "-1" },
+                      { indent: "+1" },
+                    ],
+                    [
+                      "link",
+                      "image",
+                      // "video"
+                    ],
+                    ["clean"],
+                  ],
+                }}
+                formats={[
+                  "header",
+                  "bold",
+                  "italic",
+                  "underline",
+                  "strike",
+                  "blockquote",
+                  "list",
+                  "bullet",
+                  "indent",
+                  "link",
+                  "image",
+                  // "video",
+                ]}
               />
             </div>{" "}
             <div>
               <Button
                 className="qa-button semi-bold"
-                loading={loadings[1]}
-                onClick={() => enterLoading(1)}
-                htmlType="submit"
-              >
+                loading={isLoading}
+                htmlType="submit">
                 Post Answer
               </Button>
             </div>

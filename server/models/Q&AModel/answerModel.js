@@ -8,7 +8,7 @@ const Answer = sequelize.define("Answer", {
     autoIncrement: true,
   },
   content: {
-    type: DataTypes.TEXT,
+    type: DataTypes.TEXT("long"),
     allowNull: false,
   },
   // userId: {

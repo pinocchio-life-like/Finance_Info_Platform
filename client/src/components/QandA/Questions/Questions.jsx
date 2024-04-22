@@ -24,6 +24,7 @@ const Questions = () => {
         });
 
         values.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        console.log(values);
         setQuestions(values);
       } else {
         console.error("Unexpected API response:", response);
