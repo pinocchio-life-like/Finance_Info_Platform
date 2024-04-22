@@ -77,7 +77,7 @@ const AskQuestion = () => {
       setTitle("");
       setDescription("");
       setTags([]);
-      navigate("/qa/questions");
+      navigate("/qa/questions/all");
     }
   };
 
