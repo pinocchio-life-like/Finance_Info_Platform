@@ -2,12 +2,12 @@ import { useState } from "react";
 import { RxDotFilled } from "react-icons/rx";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { Button } from "antd";
-import api from "../../../../utils/api";
+import { PoweroffOutlined } from "@ant-design/icons";
+import { Button, Flex } from "antd";
+import api from "../../../utils/api";
 import { jwtDecode } from "jwt-decode";
 import { Input, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
-import "react-quill/dist/quill.snow.css";
 
 const AskQuestion = () => {
   const [title, setTitle] = useState("");
@@ -53,17 +53,18 @@ const AskQuestion = () => {
       const decodedToken = jwtDecode(token);
       // console.log("Decoded Token:", decodedToken);
       userName = decodedToken.userName;
-      // console.log("User ID:", userId);
+      console.log("User ID:", userId);
     } catch (error) {
       console.error("Error decoding token:", error);
     }
   }
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const cleanDescription = description.replace(/<[^>]*>/g, '');
     const tagNames = Array.isArray(tags) ? tags : [];
     const questionData = {
       question_title: title,
-      question_description: description,
+      question_description: cleanDescription,
       tagNames,
       userName,
     };
@@ -76,14 +77,14 @@ const AskQuestion = () => {
       setTitle("");
       setDescription("");
       setTags([]);
-      navigate("/qa/questions/all");
+      navigate("/qa/questions");
     }
   };
 
   const handleInputChange = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleInputConfirm();
+    if (e.key === 'Enter') {
+      e.preventDefault(); 
+      handleInputConfirm(); 
     } else {
       setInputValue(e.target.value);
     }
@@ -142,42 +143,19 @@ const AskQuestion = () => {
           <div className="">
             <ReactQuill
               value={description}
-              theme="snow"
               onChange={handleDescriptionChange}
               placeholder="Describe your question here"
               className="rounded-md  bg-white  "
               modules={{
                 toolbar: [
-                  [{ header: [1, 2, false] }],
-                  ["bold", "italic", "underline", "blockquote"],
-                  [
-                    { list: "ordered" },
-                    { list: "bullet" },
-                    { indent: "-1" },
-                    { indent: "+1" },
-                  ],
-                  [
-                    "link",
-                    "image",
-                    // "video"
-                  ],
-                  ["clean"],
-                ],
+                  [{ 'header': '1'}, {'header': '2'}],
+                  ['bold', 'italic', 'underline', 'blockquote'],
+                  [{'list': 'ordered'}, {'list': 'bullet'}],
+                  ['link', 'image'],
+                  ['clean']
+                ]
               }}
-              formats={[
-                "header",
-                "bold",
-                "italic",
-                "underline",
-                "strike",
-                "blockquote",
-                "list",
-                "bullet",
-                "indent",
-                "link",
-                "image",
-                // "video",
-              ]}
+              formats={['header', 'bold', 'italic', 'underline', 'list', 'bullet', 'link', 'image']}
             />
           </div>{" "}
           <div>
@@ -190,7 +168,7 @@ const AskQuestion = () => {
               placeholder="Add a tag"
             />
             {tags.map((tag) => (
-              <Tag key={tag} closable onClose={() => handleTagClose(tag)}>
+              <Tag key={tag} className="inline-block bg-gray-200 rounded px-3 py-1 text-xs font-normal text-gray-700 mr-2 mb-2" closable onClose={() => handleTagClose(tag)} >
                 {tag}
               </Tag>
             ))}
@@ -200,7 +178,8 @@ const AskQuestion = () => {
               className="qa-button semi-bold"
               loading={loadings[1]}
               onClick={() => enterLoading(1)}
-              htmlType="submit">
+              htmlType="submit"
+            >
               Post Question
             </Button>
           </div>

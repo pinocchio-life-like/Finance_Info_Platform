@@ -13,13 +13,21 @@ const Comment = sequelize.define('Comment', {
     type: DataTypes.TEXT,
     allowNull: false
   },
-  userId: {
-    type: DataTypes.INTEGER,
+  // userId: {
+  //   type: DataTypes.INTEGER,
+  //   allowNull: false,
+  //   references: {
+  //     model: "Users",
+  //     key: "userId"
+  //   }
+  // },
+  userName: {
+    type: DataTypes.STRING,
     allowNull: false,
-    references: {
-      model: "Users",
-      key: "userId"
-    }
+    // references: {
+    //   model: "Users",
+    //   key: "userName",
+    // },
   },
   referred_id: {
     type: DataTypes.INTEGER
