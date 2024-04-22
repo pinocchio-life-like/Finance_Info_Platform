@@ -9,7 +9,7 @@ import { LuMinus } from "react-icons/lu";
 const Answer = () => {
   const [singleQuestion, setSingleQuestion] = useState({});
   const [answer, setAnswer] = useState("");
-  const [answers, setAnswers] = useState([]);
+  // const [answers, setAnswers] = useState([]);
   const [commentVisibility, setCommentVisibility] = useState({});
   const [commentVisibilityQuestion, setCommentVisibilityQuestion] =
     useState(false);
@@ -18,6 +18,7 @@ const Answer = () => {
   const [loadings, setLoadings] = useState([]);
   const [commentLoading, setCommentLoading] = useState(false);
   const { id } = useParams();
+  const[flag,setFlag]=useState(false)
 
   const enterLoading = (index) => {
     setLoadings((prevLoadings) => {
@@ -80,7 +81,7 @@ const Answer = () => {
       }
     };
     getSingleQuestion();
-  }, [id]);
+  }, [id,flag]);
 
   const token = localStorage.getItem("token");
   let userName = null;
@@ -116,12 +117,13 @@ const Answer = () => {
       userName: userName,
     });
     setAnswer("");
-    const answersResponse = await api.get(`/api/answers/${id}`);
-    if (answersResponse.data && answersResponse.data.data) {
-      setAnswers(answersResponse.data.data);
-    } else {
-      console.log("Error while fetching all answers");
-    }
+    setFlag(!flag)
+    // const answersResponse = await api.get(`/api/answers/${id}`);
+    // if (answersResponse.data && answersResponse.data.data) {
+    //   setAnswers(answersResponse.data.data);
+    // } else {
+    //   console.log("Error while fetching all answers");
+    // }
   };
 
   // Question Comment
