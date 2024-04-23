@@ -1,50 +1,48 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import zhihu from "../../../assets/Svgs/zhihu-svgrepo-com.svg";
-import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { IoMdPricetags } from "react-icons/io";
 import { RiQuestionAnswerFill } from "react-icons/ri";
 import { RiQuestionnaireFill } from "react-icons/ri";
-import { Checkbox } from "antd";
 import "./checkboxStyle.css";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 const QandACommon = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [type, setType] = useState("all");
+  // const [type, setType] = useState("all");
 
-  const typeToggler = (typ) => {
-    setType(typ);
-  };
+  // const typeToggler = (typ) => {
+  //   setType(typ);
+  // };
 
   return (
-    <div className="flex-grow w-full flex px-14 flex-col items-center bg-white">
-      <div className="flex justify-between items-center w-full border-b border-gray-600 relative pt-4 pb-2">
+    <div className="flex justify-center lg:px-14 px-1 flex-col bg-white">
+      <div className="flex w-full justify-between items-center border-b border-gray-600 relative md:pt-4 pt-2 pb-2">
         <div className="flex justify-start items-center">
-          <img className="w-10 h-10" src={zhihu} alt="My Icon" />{" "}
-          <h1 className="ml-3 text-3xl font-bold">知乎</h1>{" "}
+          <img className="w-8 h-8 md:w-10 md:h-10" src={zhihu} alt="My Icon" />{" "}
+          <h1 className="ml-2 md:ml-3 text-2xl md:text-3xl font-bold">
+            知乎 | Q and A
+          </h1>{" "}
         </div>
       </div>
-      <div className="flex justify-start items-center w-full border-x relative pb-2">
-        <div className="flex w-full">
-          <div className="w-1/5 h-screen sticky top-0 border-r">
-            <nav className="pt-8">
-              <ul className="space-y-2 text-m ">
+      <div className="flex w-full justify-center items-center relative border-x pb-2">
+        <div className="w-full flex flex-col md:flex-row md:justify-center">
+          <div className="md:min-w-1/5 md:h-screen h-4 sticky top-0 border-r z-40">
+            <nav className="min-w-1 md:pt-8 pt-2 md:pb-0 pb-2 md:bg-white bg-[#D6D6D6] z-50">
+              <ul className="min-w-1 flex flex-row md:items-start items-center md:justify-start justify-between md:px-0 px-1 space-x-2 text-m sm:space-y-2 md:flex-col sm:space-x-0">
                 <li>
                   <Link
-                    to="/qa/questions"
-                    className={`flex items-center py-1 px-4 rounded hover:bg-gray-200 font-light ${
+                    to="/qa/questions/all"
+                    className={`flex items-center py-1 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 0 // ? "bg-[#ababab] font-bold"
                         ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
-                          "text-[#008DDA] "
+                          "text-[#155CA2] "
                         : ""
                     }`}
                     onClick={() => {
                       setActiveIndex(0);
-                      typeToggler("all");
-                    }}
-                  >
+                      // typeToggler("all");
+                    }}>
                     <RiQuestionAnswerFill
                       size={20}
                       style={{ marginRight: 10 }}
@@ -52,86 +50,35 @@ const QandACommon = (props) => {
                     Questions
                   </Link>
                 </li>
-                {/* <li className="relative group">
-                  <button
-                    className={`w-full flex justify-between items-center py-1 px-4 rounded 
-                    ${
-                      activeIndex === 1
-                        ? "bg-[#ababab] font-bold"
-                        : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
-                    }
-                    `}
-                    onClick={() => {
-                      setDropdownOpen(!dropdownOpen);
-                    }}
-                  >
-                    <div className={`flex items-center`}>
-                      <IoMdPricetags size={21} style={{ marginRight: 10 }} />{" "}
-                      Tags
-                    </div>
-                    {dropdownOpen ? <AiOutlineUp /> : <AiOutlineDown />}
-                  </button>
-                  {dropdownOpen && (
-                    <ul className="w-full px-1 pb-0 pt-2 space-y-1 border ">
-                      <Checkbox.Group className="w-full">
-                        <div className="bg-white w-full px-3 border border-[#ababab] border-l-[3px] border-l-[#008DDA]">
-                          <div className="flex justify-between items-center py-2">
-                            <Checkbox value="subsection1" className="leading-8">
-                              Tag 1
-                            </Checkbox>
-                            <span>20</span>
-                          </div>
-                          <div className="flex justify-between items-center py-2">
-                            <Checkbox value="subsection2" className="leading-8">
-                              Tag 2
-                            </Checkbox>
-                            <span>20</span>
-                          </div>
-                          <div className="flex justify-between items-center py-2">
-                            <Checkbox value="subsection3" className="leading-8">
-                              Tag 3
-                            </Checkbox>
-                            <span>20</span>
-                          </div>
-                        </div>
-                        <button className="w-full flex justify-center text-left py-2 mt-1 border hover:bg-[#008DDA] mb-1 rounded hover:text-white text-[#008DDA]">
-                          expand to see more tags
-                        </button>
-                      </Checkbox.Group>
-                    </ul>
-                  )}
-                </li> */}
                 <li>
                   <Link
                     to="/qa/tags"
-                    className={`flex items-center py-1 px-4 rounded hover:bg-gray-200 font-light ${
+                    className={`flex items-center py-1 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 1 // ? "bg-[#ababab] font-bold"
                         ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
-                          "text-[#008DDA] "
+                          "text-[#155CA2] "
                         : ""
                     }`}
                     onClick={() => {
                       setActiveIndex(1);
-                    }}
-                  >
+                    }}>
                     <IoMdPricetags size={21} style={{ marginRight: 10 }} />
                     Tags
                   </Link>
                 </li>
                 <li>
                   <Link
-                    to="/qa/questions"
-                    className={`flex items-center py-1 px-4 rounded hover:bg-gray-200 font-light ${
+                    to="/qa/questions/ununs"
+                    className={`flex items-center py-1 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 2 // ? "bg-[#ababab] font-bold"
                         ? // : "bg-[#f1f2f3]  hover:bg-gray-200 font-light"
-                          "text-[#008DDA] "
+                          "text-[#155CA2] "
                         : ""
                     }`}
                     onClick={() => {
                       setActiveIndex(2);
-                      typeToggler("ununs");
-                    }}
-                  >
+                      // typeToggler("ununs");
+                    }}>
                     <RiQuestionnaireFill
                       size={20}
                       style={{ marginRight: 10 }}
@@ -142,11 +89,7 @@ const QandACommon = (props) => {
               </ul>
             </nav>
           </div>
-          <div className="w-full bg-white">
-            {React.Children.map(props.children, (child) =>
-              React.cloneElement(child, { type: type })
-            )}
-          </div>
+          <div className="w-full bg-white md:mt-0 mt-2">{props.children}</div>
         </div>
       </div>
     </div>

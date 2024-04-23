@@ -14,7 +14,7 @@ const Question = sequelize.define("Question", {
     allowNull: false,
   },
   question_description: {
-    type: DataTypes.TEXT,
+    type: DataTypes.TEXT("long"),
     allowNull: false,
   },
   userName: {
@@ -33,7 +33,7 @@ const getAllQuestions = async () => {
       ...resp.toJSON(),
       count: await Answer.count({
         where: {
-          answer_id: resp.question_id,
+          question_id: resp.question_id,
         },
       }),
     }))
@@ -43,7 +43,9 @@ const getAllQuestions = async () => {
 };
 
 const getSingleQ = async (id) => {
-  return await Question.findByPk(id);
+  return await Question.findByPk(id, {
+    include: [Tag],
+  });
 };
 
 const deleteQuestions = async (id) => {

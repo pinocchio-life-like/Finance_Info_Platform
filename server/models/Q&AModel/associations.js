@@ -62,7 +62,13 @@ const askQuestion = async (questionData, tagNames) => {
     for (const tagName of tagNames) {
       let [tag, created] = await Tag.findOrCreate({
         where: { tag_name: tagName.toLowerCase() },
+        defaults: { useCount: 1 },
       });
+
+      if (!created) {
+        await tag.increment("useCount");
+      }
+
       await question.addTag(tag);
     }
 
@@ -102,6 +108,7 @@ const updateQuestion = async (questionId, questionData, tagNames) => {
 
 const postComment = async (data) => {
   try {
+    const { content, referred_id, referred_type , userName } = data;
     let referredItem;
     if (data.referred_type === "question") {
       referredItem = await Question.findByPk(data.referred_id);
@@ -113,8 +120,10 @@ const postComment = async (data) => {
 
     if (referredItem) {
       const comment = await Comment.create({
-        ...data,
-        referred_id: data.referred_id,
+        content,
+        referred_id,
+        referred_type,
+        userName
       });
       return comment;
     } else {
@@ -133,6 +142,7 @@ const getComment = async (data) => {
     const comment = await Comment.findAll({
       where: {
         referred_id: data.referred_id,
+        referred_type: data.referred_type,
       },
     });
     return comment;

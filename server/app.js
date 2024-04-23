@@ -15,6 +15,7 @@ const versionRoute = require("./routes/articleVersionR");
 const questionRoutes = require("./routes/Q&ARoutes/questionRoute");
 const answerRoutes = require("./routes/Q&ARoutes/answerRoute");
 const commentRoutes = require("./routes/Q&ARoutes/commentRoute");
+const tagsRoutes = require("./routes/Q&ARoutes/tagsRoute");
 const uploadRoute = require("./routes/uploadRoute/uploadRoute");
 
 const app = express();
@@ -42,6 +43,7 @@ app.use("/api", questionRoutes);
 app.use("/api", answerRoutes);
 app.use("/api", commentRoutes);
 app.use("/api", uploadRoute);
+app.use("/api", tagsRoutes);
 
 async function syncDatabase() {
   try {
@@ -52,6 +54,6 @@ async function syncDatabase() {
   }
 }
 
-// syncDatabase();
+//  syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));
