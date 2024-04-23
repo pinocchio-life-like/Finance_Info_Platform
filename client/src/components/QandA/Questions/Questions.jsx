@@ -26,6 +26,7 @@ const Questions = () => {
         });
 
         values.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        console.log(values);
         setQuestions(values);
       } else {
         console.error("Unexpected API response:", response);
@@ -76,6 +77,7 @@ const Questions = () => {
             <Empty className="mt-10" description="What do you have in mind!" />
           ) : (
             getQuestionsForPage().map((q, i) => {
+              console.log("what is", q);
               let matches = q.question_description.match(
                 /<[^>]*>[^<]*<\/[^>]*>/g
               );
