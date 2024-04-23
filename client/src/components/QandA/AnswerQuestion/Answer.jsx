@@ -190,8 +190,7 @@ const Answer = () => {
                   </div>
                   <p className="text-userName text-sm text-right">
                     {" "}
-                    Posted by: {singleQuestion.userName} |{" "}
-                    {singleQuestion.createdAt}
+                    {singleQuestion.userName} | {singleQuestion.createdAt}
                   </p>
                 </div>
               </div>
@@ -258,7 +257,7 @@ const Answer = () => {
                       }}
                     />
                     <p className="text-xs text-userName pb-2 border-b">
-                      By: {a.userName} | {a.createdAt}
+                      {a.userName} | {a.createdAt}
                     </p>
                   </div>
                   <div className="px-4">

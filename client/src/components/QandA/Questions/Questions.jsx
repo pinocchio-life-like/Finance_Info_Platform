@@ -75,6 +75,7 @@ const Questions = () => {
             <Empty className="mt-10" description="What do you have in mind!" />
           ) : (
             getQuestionsForPage().map((q, i) => {
+              console.log("what is", q);
               let matches = q.question_description.match(
                 /<[^>]*>[^<]*<\/[^>]*>/g
               );

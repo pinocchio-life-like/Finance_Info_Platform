@@ -41,7 +41,7 @@ export const QandARoutes = [
     element: (
       <PrivateRoute>
         <QandAHome>
-          <Answer/>
+          <Answer />
         </QandAHome>
       </PrivateRoute>
     ),

@@ -99,9 +99,9 @@ const AskQuestion = () => {
     setTags(updatedTags);
   };
   return (
-    <div className="p-8">
-      <div className="question-tips bg-gray-200 p-6 rounded mb-6">
-        <h3 className="text-2xl font-semibold pb-4">
+    <div className="md:px-8  md:py-8 px-1 py-7">
+      <div className="question-tips bg-gray-200 p-2 md:p-6 rounded mb-2 md:mb-6">
+        <h3 className="text-xl md:text-2xl font-semibold pb-4">
           Tips on getting good answers quickly
         </h3>
         <ul className="pl-6">
