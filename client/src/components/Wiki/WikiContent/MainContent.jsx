@@ -215,18 +215,22 @@ const MainContent = (props) => {
     );
   }, [isOpen, activeDropdown]);
 
+  useEffect(() => {
+    setActiveDropdown(drop);
+  }, [drop]);
+
   return (
-    <div className="flex-grow flex flex-col items-center mx-14 bg-white">
+    <div className="flex-grow flex flex-col items-center lg:mx-14 mx-1 bg-white">
       <div className="flex justify-between items-center w-full border-b border-gray-600 pb-1 pt-3">
         <div>
           {["Article", "Files"].map((link, index) => {
-            if (userRole === "reader" && link === "Files") {
+            if (userRole !== "admin" && link === "Files") {
               return null;
             }
             return (
               <a
                 key={index}
-                className={`p-2 cursor-pointer ${
+                className={`lg:p-2 px-1 py-2 cursor-pointer ${
                   activeLink.left === index
                     ? "border-b-2 border-black font-bold"
                     : ""
@@ -247,7 +251,7 @@ const MainContent = (props) => {
             return (
               <a
                 key={index}
-                className={`p-2 cursor-pointer ${
+                className={`lg:p-2 px-1 py-2  cursor-pointer ${
                   activeLink.right === index
                     ? "border-b-2 border-black font-bold"
                     : ""
@@ -268,7 +272,7 @@ const MainContent = (props) => {
           ref={buttonRef}
           className="flex items-center text-sm font-bold"
           onClick={() => {
-            setIsOpen(true);
+            setIsOpen((state) => !state);
           }}>
           <div className="flex flex-col space-y-1">
             <span className="w-4 h-0.5 bg-black"></span>
@@ -278,8 +282,8 @@ const MainContent = (props) => {
         </button>
         {isOpen && (
           <div
-            className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 bg-gray-200 flex flex-col space-y-2 absolute right-0 p-4 text-black z-50 mt-6 "
-            style={{ width: "320px", top: buttonRef.current?.offsetTop }}>
+            className="w-full sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 bg-nav-bg flex flex-col space-y-2 absolute right-0 p-4 text-black z-50 mt-6 "
+            style={{ top: buttonRef.current?.offsetTop }}>
             <div className="flex justify-between items-center">
               <div className="flex justify-start items-center">
                 {userRole !== "reader" &&
@@ -339,6 +343,8 @@ const MainContent = (props) => {
                         ? `/wiki/edit/${subCategory.category_Id}`
                         : currentUrl.includes("articles")
                         ? `/wiki/articles/${subCategory.category_Id}`
+                        : currentUrl.includes("files")
+                        ? `/wiki/files/${subCategory.category_Id}`
                         : `/wiki/history/${subCategory.category_Id}`;
 
                       return (
@@ -349,6 +355,9 @@ const MainContent = (props) => {
                             style={{ color: "#070F2B" }}
                             key={subCategory.category_Id}
                             className="text-black"
+                            onClick={() =>
+                              setTimeout(() => setIsOpen(false), 300)
+                            }
                             to={linkAddress}>
                             {subCategory.category}
                           </Link>

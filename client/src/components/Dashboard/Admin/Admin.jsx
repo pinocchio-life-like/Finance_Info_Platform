@@ -2,7 +2,6 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { Button, Drawer, Form, Input, Select, Table, message } from "antd";
 import api from "../../../utils/api";
-const secretKey = import.meta.env.VITE_SECRET_KEY;
 import { jwtDecode } from "jwt-decode";
 import MainCompanyAdmin from "./MainCompanyAdmin";
 
@@ -61,8 +60,15 @@ const Admin = () => {
   const [updateform] = Form.useForm();
   const [newform] = Form.useForm();
   const token = localStorage.getItem("token");
-  const decodedToken = jwtDecode(token, secretKey);
-  const { userName } = decodedToken;
+  let userName = null;
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      userName = decodedToken.userName;
+    } catch (error) {
+      console.error("Invalid token");
+    }
+  }
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -215,22 +221,7 @@ const Admin = () => {
                 <div
                   style={{ width: "100%" }}
                   className="flex items-center mt-2 pl-2 border-b border-gray-600 pb-1">
-                  <button
-                    onClick={handleAdd}
-                    className="flex items-center text-black hover:bg-white hover:text-green-500 rounded">
-                    <FaPlus size={12} style={{ marginRight: 4 }} /> Add New
-                    company
-                  </button>
-                  <button
-                    onClick={handleDelete}
-                    disabled={selectedRows.length === 0}
-                    className={`flex items-center rounded pl-4 ${
-                      selectedRows.length === 0
-                        ? "text-gray-400 cursor-not-allowed"
-                        : "text-black hover:bg-white hover:text-red-500"
-                    }`}>
-                    <FaTrash size={12} style={{ marginRight: 4 }} /> Delete
-                  </button>
+                  Companies List
                 </div>
               </div>
               <div
@@ -329,6 +320,7 @@ const Admin = () => {
               <Select placeholder="Select a role">
                 <Select.Option value="admin">Admin</Select.Option>
                 <Select.Option value="user">User</Select.Option>
+                <Select.Option value="reader">Reader</Select.Option>
               </Select>
             </Form.Item>
 

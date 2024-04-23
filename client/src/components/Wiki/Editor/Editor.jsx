@@ -1,17 +1,24 @@
-import { useEffect, useState } from "react";
-import { MdEditor } from "md-editor-rt";
+import { useEffect, useRef, useState } from "react";
+import { MdEditor, NormalToolbar } from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
 import "md-editor-rt/lib/preview.css";
 import { useSelector } from "react-redux";
-import { Button, Modal } from "antd";
+import { Button, Popconfirm, message } from "antd";
 import api from "../../../utils/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { Bars } from "react-loader-spinner";
 import store from "../../../redux/store";
 import { addArticleState } from "../../../redux/slices/articleSlice";
 import { jwtDecode } from "jwt-decode";
+import { UploadOutlined } from "@ant-design/icons";
 
 const Editor = () => {
+  const editorRef = useRef();
+  const fileInputRef = useRef();
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+  const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
   const { articleName, articleContent, category_Id, action } = useSelector(
     (state) => state.article
@@ -27,18 +34,9 @@ const Editor = () => {
     }
   }
   const [isLoading, setIsLoading] = useState(false);
+  const [isPreview, setIsPreview] = useState(true);
   const [text, setText] = useState("");
   const param = useParams();
-
-  const [open, setOpen] = useState(false);
-
-  const showModal = () => {
-    setOpen(true);
-  };
-
-  const hideModal = () => {
-    setOpen(false);
-  };
 
   useEffect(() => {
     const getMainArticle = async () => {
@@ -53,6 +51,21 @@ const Editor = () => {
     };
     getMainArticle();
   }, [param.id]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsPreview(false);
+      } else {
+        setIsPreview(true);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     setText(articleContent);
@@ -92,8 +105,6 @@ const Editor = () => {
       }
     } catch (error) {
       console.error("An error occurred while saving the article: ", error);
-    } finally {
-      hideModal();
     }
   };
 
@@ -116,6 +127,39 @@ const Editor = () => {
       })
     );
     callback(res.map((item) => item.data.urls[0]));
+  };
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    const form = new FormData();
+    form.append("file", file);
+    form.append("category_Id", param.id);
+    form.append("user", userName);
+    setUploading(true);
+    try {
+      const response = await api.post("/api/article/file/upload", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      message.success(`file uploaded successfully`);
+
+      editorRef.current.insert((selectedText) => {
+        return {
+          targetValue: `${selectedText}[${file.name}](${response.data.url})`,
+          select: true,
+          deviationStart: 0,
+          deviationEnd: 0,
+        };
+      });
+    } catch (error) {
+      message.error(`file upload failed.`);
+      console.error(error);
+    } finally {
+      setUploading(false);
+      event.target.value = null;
+    }
   };
 
   return (
@@ -142,34 +186,90 @@ const Editor = () => {
       ) : (
         <>
           <MdEditor
+            preview={isPreview}
+            ref={editorRef}
+            toolbars={[
+              "bold",
+              "underline",
+              "italic",
+              "-",
+              "strikeThrough",
+              "sub",
+              "sup",
+              "quote",
+              "unorderedList",
+              "orderedList",
+              "task",
+              "-",
+              "codeRow",
+              "code",
+              "link",
+              "-",
+              "image",
+              1,
+              "-",
+              "table",
+              "mermaid",
+              "katex",
+              "-",
+              "revoke",
+              "next",
+              "-",
+              0,
+              "=",
+              "pageFullscreen",
+              "preview",
+              "catalog",
+            ]}
             style={{
               height: "80vh",
             }}
             modelValue={text}
             onChange={setText}
             language="en-US"
-            onSave={() => {
-              showModal();
-            }}
-            showCodeRowNumber
             onUploadImg={onUploadImg}
+            defToolbars={[
+              // eslint-disable-next-line react/jsx-key
+              <NormalToolbar
+                title="post"
+                trigger={
+                  <Popconfirm
+                    title="Do you want to post this Article?"
+                    onConfirm={saveArticleHandler}
+                    okText="Yes"
+                    cancelText="No"
+                    okButtonProps={{
+                      style: { backgroundColor: "#155CA2", color: "white" },
+                    }}>
+                    <span className="px-2 flex items-center justify-center text-center bg-[#155CA2] text-white rounded hover:bg-[#214355]">
+                      Post
+                    </span>
+                  </Popconfirm>
+                }
+              />,
+              // eslint-disable-next-line react/jsx-key
+              <NormalToolbar
+                title="upload"
+                trigger={
+                  <div className="flex">
+                    <Button
+                      disabled={uploading}
+                      icon={<UploadOutlined />}
+                      className="border-none mt-[0.5px]"
+                      onClick={handleButtonClick}
+                      loading={uploading}></Button>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      style={{ display: "none" }}
+                      onChange={handleFileChange}
+                      accept=".pdf,.doc,.docx"
+                    />
+                  </div>
+                }
+              />,
+            ]}
           />
-          <Modal
-            title="Save Article:"
-            open={open}
-            onCancel={hideModal}
-            footer={(_, { CancelBtn }) => (
-              <>
-                <CancelBtn />
-                <Button
-                  style={{ background: "#3B82f6", color: "white" }}
-                  onClick={saveArticleHandler}>
-                  Save
-                </Button>
-              </>
-            )}>
-            <p>Do you want to save this article?</p>
-          </Modal>
         </>
       )}
     </div>

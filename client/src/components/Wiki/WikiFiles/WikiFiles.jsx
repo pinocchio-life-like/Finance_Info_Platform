@@ -1,21 +1,23 @@
 import { Button, List, Popconfirm, Tooltip, message } from "antd";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiDownload } from "react-icons/fi";
-import { FaChevronDown } from "react-icons/fa";
+// import { FaChevronDown } from "react-icons/fa";
 import { useCallback, useEffect, useRef, useState } from "react";
 import api from "../../../utils/api";
 import { useParams } from "react-router";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+// import { useSelector } from "react-redux";
+// import { Link } from "react-router-dom";
 import { FiCopy } from "react-icons/fi";
 import { UploadOutlined } from "@ant-design/icons";
 import { jwtDecode } from "jwt-decode";
+// import store from "../../../redux/store";
+// import { changeTableOfContentsState } from "../../../redux/slices/contentsSlice";
 
 const WikiFiles = () => {
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
   const param = useParams();
-  const { drop } = useSelector((state) => state.contents);
-  const [activeDropdown, setActiveDropdown] = useState(drop);
+  // const { drop } = useSelector((state) => state.contents);
+  // const [activeDropdown, setActiveDropdown] = useState(drop);
   const [data, setData] = useState([]);
   const [position] = useState("bottom");
   const [align] = useState("center");
@@ -51,43 +53,43 @@ const WikiFiles = () => {
     fetchData();
   }, [fetchData]);
 
-  useEffect(() => {
-    const getCategories = async () => {
-      try {
-        const response = await api.post("/api/category/getCategories");
+  // useEffect(() => {
+  //   const getCategories = async () => {
+  //     try {
+  //       const response = await api.post("/api/category/getCategories");
 
-        const mainCategories = response.data.filter(
-          (category) => category.parent_Id === null
-        );
-        const subCategories = response.data.filter(
-          (category) => category.parent_Id !== null
-        );
+  //       const mainCategories = response.data.filter(
+  //         (category) => category.parent_Id === null
+  //       );
+  //       const subCategories = response.data.filter(
+  //         (category) => category.parent_Id !== null
+  //       );
 
-        mainCategories.sort((a, b) => a.order - b.order);
-        subCategories.sort(
-          (a, b) => a.order_within_parent - b.order_within_parent
-        );
+  //       mainCategories.sort((a, b) => a.order - b.order);
+  //       subCategories.sort(
+  //         (a, b) => a.order_within_parent - b.order_within_parent
+  //       );
 
-        mainCategories.forEach((mainCategory) => {
-          mainCategory.subCategories = subCategories.filter(
-            (subCategory) => subCategory.parent_Id === mainCategory.category_Id
-          );
-        });
-        setCategories(mainCategories);
-      } catch (error) {
-        console.error("An error occurred while fetching: ", error);
-      }
-    };
-    getCategories();
-  }, [param.id]);
+  //       mainCategories.forEach((mainCategory) => {
+  //         mainCategory.subCategories = subCategories.filter(
+  //           (subCategory) => subCategory.parent_Id === mainCategory.category_Id
+  //         );
+  //       });
+  //       setCategories(mainCategories);
+  //     } catch (error) {
+  //       console.error("An error occurred while fetching: ", error);
+  //     }
+  //   };
+  //   getCategories();
+  // }, [param.id]);
 
-  const handleDropdown = (index) => {
-    if (activeDropdown === index) {
-      setActiveDropdown(null);
-    } else {
-      setActiveDropdown(index);
-    }
-  };
+  // const handleDropdown = (index) => {
+  //   if (activeDropdown === index) {
+  //     setActiveDropdown(null);
+  //   } else {
+  //     setActiveDropdown(index);
+  //   }
+  // };
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -113,6 +115,7 @@ const WikiFiles = () => {
       console.error(error);
     } finally {
       setUploading(false);
+      event.target.value = null;
     }
   };
 
@@ -127,12 +130,16 @@ const WikiFiles = () => {
     }
   };
 
+  // useEffect(() => {
+  //   store.dispatch(changeTableOfContentsState({ drop: activeDropdown }));
+  // }, [activeDropdown]);
+
   return (
     <div className="w-full border-x border-b px-2">
       <div className="w-full flex justify-start">
-        <div className="border-r w-[16%] pt-4">
-          <div className="w-full flex flex-col">
-            <div className="flex justify-between items-center">
+        {/* <div className="border-r w-[16%] pt-4">
+          <div className="w-full flex flex-col"> */}
+        {/* <div className="flex justify-between items-center">
               <div className="flex justify-start items-center">
                 <h2
                   style={{ color: "#070F2B" }}
@@ -140,8 +147,8 @@ const WikiFiles = () => {
                   Shared Article Files
                 </h2>
               </div>
-            </div>
-            {categories.map((category, index) => (
+            </div> */}
+        {/* {categories.map((category, index) => (
               <div key={index}>
                 <div className="flex justify-start items-center">
                   <a
@@ -178,10 +185,10 @@ const WikiFiles = () => {
                   </div>
                 )}
               </div>
-            ))}
-          </div>
-        </div>
-        <div className="w-[84%] flex flex-col">
+            ))} */}
+        {/* </div>
+        </div> */}
+        <div className="w-full flex flex-col">
           <div className="w-full flex justify-between border-b">
             <h2
               style={{ color: "#070F2B" }}
@@ -192,7 +199,7 @@ const WikiFiles = () => {
               <Button
                 disabled={uploading}
                 icon={<UploadOutlined />}
-                className="m-3 px-5 bg-[#008DDA] text-white right-0"
+                className="m-3 px-5 bg-[#155CA2] text-white right-0"
                 onClick={handleButtonClick}
                 loading={uploading}>
                 Click to Upload
@@ -274,7 +281,7 @@ const WikiFiles = () => {
                     okText="Yes"
                     cancelText="No"
                     okButtonProps={{
-                      style: { backgroundColor: "#008DDA", color: "white" },
+                      style: { backgroundColor: "#155CA2", color: "white" },
                     }}>
                     <AiOutlineDelete
                       color="red"

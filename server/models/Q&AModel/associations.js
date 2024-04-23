@@ -4,22 +4,22 @@ const Comment = require("./commentModel").Comment;
 const User = require("../userModel").User;
 const Tag = require("./tagModel").Tag;
 
-User.hasMany(Question, {
-  foreignKey: "userId",
-  sourceKey: "userId",
-});
-Question.belongsTo(User, {
-  foreignKey: "userId",
-  targetKey: "userId",
-});
-User.hasMany(Answer, {
-  foreignKey: "userId",
-  sourceKey: "userId",
-});
-Answer.belongsTo(User, {
-  foreignKey: "userId",
-  targetKey: "userId",
-});
+// User.hasMany(Question, {
+//   foreignKey: "userId",
+//   sourceKey: "userId",
+// });
+// Question.belongsTo(User, {
+//   foreignKey: "userId",
+//   targetKey: "userId",
+// });
+// User.hasMany(Answer, {
+//   foreignKey: "userId",
+//   sourceKey: "userId",
+// });
+// Answer.belongsTo(User, {
+//   foreignKey: "userId",
+//   targetKey: "userId",
+// });
 Question.hasMany(Answer, {
   foreignKey: "question_id",
   sourceKey: "question_id",
@@ -61,8 +61,14 @@ const askQuestion = async (questionData, tagNames) => {
 
     for (const tagName of tagNames) {
       let [tag, created] = await Tag.findOrCreate({
-        where: { tag_name: tagName },
+        where: { tag_name: tagName.toLowerCase() },
+        defaults: { useCount: 1 },
       });
+
+      if (!created) {
+        await tag.increment("useCount");
+      }
+
       await question.addTag(tag);
     }
 
@@ -102,6 +108,7 @@ const updateQuestion = async (questionId, questionData, tagNames) => {
 
 const postComment = async (data) => {
   try {
+    const { content, referred_id, referred_type , userName } = data;
     let referredItem;
     if (data.referred_type === "question") {
       referredItem = await Question.findByPk(data.referred_id);
@@ -113,8 +120,10 @@ const postComment = async (data) => {
 
     if (referredItem) {
       const comment = await Comment.create({
-        ...data,
-        referred_id: data.referred_id,
+        content,
+        referred_id,
+        referred_type,
+        userName
       });
       return comment;
     } else {
@@ -133,6 +142,7 @@ const getComment = async (data) => {
     const comment = await Comment.findAll({
       where: {
         referred_id: data.referred_id,
+        referred_type: data.referred_type,
       },
     });
     return comment;
