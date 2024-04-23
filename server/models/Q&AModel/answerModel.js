@@ -1,50 +1,66 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/db.config');
-
-const Answer = sequelize.define('Answer', {
+const { DataTypes } = require("sequelize");
+const sequelize = require("../../config/db.config");
+const User = require("../userModel").User;
+const Answer = sequelize.define("Answer", {
   answer_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
   },
   content: {
-    type: DataTypes.TEXT,
-    allowNull: false
-  },
-  userId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.TEXT("long"),
     allowNull: false,
-    references: {
-        model: "Users",
-        key: "userId",
-      },
+  },
+  // userId: {
+  //   type: DataTypes.INTEGER,
+  //   allowNull: false,
+  //   references: {
+  //       model: "Users",
+  //       key: "userId",
+  //     },
+  // },
+  userName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    // references: {
+    //   model: "Users",
+    //   key: "userName",
+    // },
   },
   question_id: {
     type: DataTypes.INTEGER,
-    allowNull: false,references: {
-        model: "Questions",
-        key: "question_id",
-      },
-  }
+    allowNull: false,
+    references: {
+      model: "Questions",
+      key: "question_id",
+    },
+  },
 });
-const answerQuestion=async(ans)=>{
-  const {content,question_id,userId}=ans
-  const answer=await Answer.create({
-      content,
-      question_id,
-      userId
-  })
-  return answer
 
-}
-const getAllAnswerOfAquestion=async(qId)=>{
-    const answer=await Answer.findAll({
-        where:{
-            question_id:qId
-        }
-    })
-    return answer
-}
+//Answer.belongsTo(User, { foreignKey: "userName" });
+const answerQuestion = async (ans) => {
+  const { content, question_id, userName } = ans;
+  const answer = await Answer.create({
+    content,
+    question_id,
+    userName,
+  });
+  return answer;
+};
+const getAllAnswerOfAquestion = async (qId) => {
+  const answer = await Answer.findAll({
+    where: {
+      question_id: qId,
+    },
+    // include: [
+    //   {
+    //     model: User,
+    //     attributes: ['userName'],
+    //   },
+    // ],
+  });
+  return answer;
+};
 // const editAnswer=async(data)=>{
 //     const {answer_id,content,userId}=data
 //     return await Answer.update({
@@ -54,10 +70,6 @@ const getAllAnswerOfAquestion=async(qId)=>{
 
 //     })
 
-
 // }
 
-module.exports = {Answer,
-    getAllAnswerOfAquestion,
-    answerQuestion,
-};
+module.exports = { Answer, getAllAnswerOfAquestion, answerQuestion };

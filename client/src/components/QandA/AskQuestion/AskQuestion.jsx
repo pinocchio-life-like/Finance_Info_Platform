@@ -3,10 +3,11 @@ import { RxDotFilled } from "react-icons/rx";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Button } from "antd";
-import api from "../../../../utils/api";
+import api from "../../../utils/api";
 import { jwtDecode } from "jwt-decode";
 import { Input, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
+import "react-quill/dist/quill.snow.css";
 
 const AskQuestion = () => {
   const [title, setTitle] = useState("");
@@ -52,18 +53,16 @@ const AskQuestion = () => {
       const decodedToken = jwtDecode(token);
       // console.log("Decoded Token:", decodedToken);
       userName = decodedToken.userName;
-      // console.log("User ID:", userId);
     } catch (error) {
       console.error("Error decoding token:", error);
     }
   }
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const cleanDescription = description.replace(/<[^>]*>/g, "");
     const tagNames = Array.isArray(tags) ? tags : [];
     const questionData = {
       question_title: title,
-      question_description: cleanDescription,
+      question_description: description,
       tagNames,
       userName,
     };
@@ -76,7 +75,7 @@ const AskQuestion = () => {
       setTitle("");
       setDescription("");
       setTags([]);
-      navigate("/qa/questions");
+      navigate("/qa/questions/all");
     }
   };
 
@@ -100,9 +99,9 @@ const AskQuestion = () => {
     setTags(updatedTags);
   };
   return (
-    <div className="p-8">
-      <div className="question-tips bg-gray-200 p-6 rounded mb-6">
-        <h3 className="text-2xl font-semibold pb-4">
+    <div className="md:px-8  md:py-8 px-1 py-7">
+      <div className="question-tips bg-gray-200 p-2 md:p-6 rounded mb-2 md:mb-6">
+        <h3 className="text-xl md:text-2xl font-semibold pb-4">
           Tips on getting good answers quickly
         </h3>
         <ul className="pl-6">
@@ -142,18 +141,42 @@ const AskQuestion = () => {
           <div className="">
             <ReactQuill
               value={description}
+              theme="snow"
               onChange={handleDescriptionChange}
               placeholder="Describe your question here"
               className="rounded-md  bg-white  "
-              // modules={{
-              //   toolbar: [
-              //     [{ 'header': '1'}, {'header': '2'}],
-              //     ['bold', 'italic', 'underline', 'blockquote'],
-              //     [{'list': 'ordered'}, {'list': 'bullet'}],
-              //     ['link', 'image'],
-              //     ['clean']
-              //   ]
-              // }}
+              modules={{
+                toolbar: [
+                  [{ header: [1, 2, false] }],
+                  ["bold", "italic", "underline", "blockquote"],
+                  [
+                    { list: "ordered" },
+                    { list: "bullet" },
+                    { indent: "-1" },
+                    { indent: "+1" },
+                  ],
+                  [
+                    "link",
+                    "image",
+                    // "video"
+                  ],
+                  ["clean"],
+                ],
+              }}
+              formats={[
+                "header",
+                "bold",
+                "italic",
+                "underline",
+                "strike",
+                "blockquote",
+                "list",
+                "bullet",
+                "indent",
+                "link",
+                "image",
+                // "video",
+              ]}
             />
           </div>{" "}
           <div>
@@ -166,7 +189,11 @@ const AskQuestion = () => {
               placeholder="Add a tag"
             />
             {tags.map((tag) => (
-              <Tag key={tag} closable onClose={() => handleTagClose(tag)}>
+              <Tag
+                key={tag}
+                className="inline-block bg-gray-200 rounded px-3 py-1 text-xs font-normal text-gray-700 mr-2 mb-2"
+                closable
+                onClose={() => handleTagClose(tag)}>
                 {tag}
               </Tag>
             ))}

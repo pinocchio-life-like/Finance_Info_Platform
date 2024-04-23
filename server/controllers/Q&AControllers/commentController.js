@@ -6,28 +6,30 @@ const {
 const commentC = async (req, res) => {
   try {
     const { id } = req.params;
-    const comment = await postComment(id, req.body);
-    if (!comment) {
-      res.status(500).json({
-        message: "you can't post comment",
-      });
-    } else {
-      res.status(200).json({
-        message: "comment posted successfully",
-        data: comment,
-      });
-    }
+    // const comment = await postComment(id, req.body);
+    const { content, referred_id, referred_type, userName } = req.body;
+    const comment = await postComment({ content, referred_id, referred_type, userName });
+
+    res.status(200).json({
+      message: "Comment posted successfully",
+      data: comment,
+    });
   } catch (error) {
-    console.log(error);
+    console.error("Error posting comment:", error);
+    res.status(500).json({
+      message: "Failed to post comment",
+      error: error.message, 
+    });
   }
 };
 const getCommentC = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({ message: "ID parameter is missing" });
-    }
-    const comment = await getComment({ referred_id: id });
+    // const { referred_type } = req.query;
+    // if ( !referred_type) {
+    //   return res.status(400).json({ message: "ID parameter is missing" });
+    // }
+    const comment = await getComment({ referred_id: id, referred_type: "question", });
     if (!comment || comment.length === 0) {
       return res.status(404).json({ message: "No comments found" });
     }
