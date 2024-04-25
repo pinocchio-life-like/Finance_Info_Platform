@@ -93,12 +93,7 @@ const CustomMdCatalog = ({ editorId, scrollElement, scrollChange }) => {
     }
   };
   return (
-    <div
-      style={{
-        position: "relative",
-        width: "16%",
-        borderRight: "1px solid #EEEEEE",
-      }}>
+    <div>
       <form
         className="flex items-center justify-center px-2 mb-2 mt-1 pr-1 bg-white rounded border-b"
         onSubmit={executeSearch}>
@@ -117,30 +112,7 @@ const CustomMdCatalog = ({ editorId, scrollElement, scrollChange }) => {
           <CiSearch size={26} color="gray" />
         </button>
       </form>
-      <MdCatalog
-        editorId={editorId}
-        scrollElement={scrollElement}
-        style={{
-          height: "100vh",
-          overflow: "auto",
-          position: "sticky",
-          top: 0,
-          scrollbarWidth: "thin",
-          scrollbarColor: "#888 #f2f2f2",
-          // "&::-webkit-scrollbar": {
-          //   width: "5px",
-          // },
-          // "&::-webkit-scrollbar-track": {
-          //   background: "#f2f2f2",
-          // },
-          // "&::-webkit-scrollbar-thumb": {
-          //   background: "#888",
-          // },
-          // "&::-webkit-scrollbar-thumb:hover": {
-          //   background: "#555",
-          // },
-        }}
-      />
+      <MdCatalog editorId={editorId} scrollElement={scrollElement} />
     </div>
   );
 };

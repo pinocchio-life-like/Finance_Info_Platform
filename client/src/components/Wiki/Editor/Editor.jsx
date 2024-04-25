@@ -34,6 +34,7 @@ const Editor = () => {
     }
   }
   const [isLoading, setIsLoading] = useState(false);
+  const [isPreview, setIsPreview] = useState(true);
   const [text, setText] = useState("");
   const param = useParams();
 
@@ -50,6 +51,21 @@ const Editor = () => {
     };
     getMainArticle();
   }, [param.id]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsPreview(false);
+      } else {
+        setIsPreview(true);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     setText(articleContent);
@@ -170,7 +186,7 @@ const Editor = () => {
       ) : (
         <>
           <MdEditor
-            // readOnly={true}
+            preview={isPreview}
             ref={editorRef}
             toolbars={[
               "bold",
@@ -202,7 +218,6 @@ const Editor = () => {
               0,
               "=",
               "pageFullscreen",
-              "fullscreen",
               "preview",
               "catalog",
             ]}

@@ -9,6 +9,23 @@ function Difference() {
   const [newValue, setNewValue] = useState("");
   const [title, setTitle] = useState("");
   const [updatedAt, setUpdatedAt] = useState("");
+  const [isMobile, setIsMobile] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsMobile(false);
+      } else {
+        setIsMobile(true);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   // const { id1, id2 } = useParams();
   const { category_Id, id1, id2 } = useParams();
   useEffect(() => {
@@ -47,8 +64,8 @@ function Difference() {
     ? new Date(updatedAt).toLocaleDateString()
     : "";
   return (
-    <div className=" main-diff flex w-full  justify-center mt-6">
-      <div className="w-full mx-14 mb-8">
+    <div className=" main-diff flex w-full justify-center lg:mt-6 mt-3">
+      <div className="w-full lg:mx-14 mx-1 mb-8">
         <div className="border-b border-gray-200 flex justify-between">
           <div>
             <h2 className="text-xl font-semibold">
@@ -69,7 +86,7 @@ function Difference() {
           <DiffViewer
             oldValue={oldValue}
             newValue={newValue}
-            splitView={true}
+            splitView={isMobile}
           />
         </div>
       </div>

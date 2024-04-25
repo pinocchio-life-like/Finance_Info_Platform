@@ -6,19 +6,13 @@ const Answer = sequelize.define("Answer", {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
+    autoIncrement: true,
   },
   content: {
-    type: DataTypes.TEXT,
+    type: DataTypes.TEXT("long"),
     allowNull: false,
   },
-  // userId: {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  //   references: {
-  //       model: "Users",
-  //       key: "userId",
-  //     },
-  // },
+
   userName: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -71,5 +65,7 @@ const getAllAnswerOfAquestion = async (qId) => {
 //     })
 
 // }
+
+module.exports = { Answer, getAllAnswerOfAquestion, answerQuestion };
 
 module.exports = { Answer, getAllAnswerOfAquestion, answerQuestion };

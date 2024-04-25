@@ -14,6 +14,7 @@ const NavBar = () => {
   const { logout } = useAuth();
   const [menuActive, setMenuActive] = useState(false);
   const [categoryId, setCategoryId] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const token = localStorage.getItem("token");
   let userRole = null;
@@ -70,144 +71,312 @@ const NavBar = () => {
   }, []);
 
   return (
-    <nav className="nav-bar-container bg-nav-bg px-12  h-20 flex flex-col md:flex-row">
+    <nav className="nav-bar-container bg-nav-bg lg:px-12 px-2 h-14 lg:h-20 flex flex-col lg:flex-row">
       <div className="nav flex justify-between w-full h-full items-center">
-        <div className="logo flex items-center gap-2 w-3/5">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="logo-img w-12">
+        <div className=" flex items-center">
+          <Link to="/" className="flex items-center lg:gap-1 gap-2">
+            <div className="w-6 lg:w-12">
               <img src={logo} alt="" className="w-full" />
             </div>
-            <span className="font-bold text-xl">WIH FINANCE DEPARTMENT</span>
+            <span className="font-bold text-xl lg:hidden">WFD</span>
+            <span className="font-bold text-xl hidden lg:block mr-2">
+              WIH FINANCE DEPARTMENT
+            </span>
           </Link>
-          <ul className="flex gap-10 ml-36">
-            <li>
-              <Link
-                to={`/wiki/articles/${categoryId}`}
-                className={`font-bold hover:text-blue-700 ${
-                  location.pathname.includes("wiki")
-                    ? "text-blue-800"
-                    : "text-black"
-                }`}>
-                Wiki
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/ftp"
-                className={`font-bold hover:text-blue-700 ${
-                  location.pathname.includes("ftp")
-                    ? "text-blue-800"
-                    : "text-black"
-                }`}>
-                FTP
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/notice"
-                className={`font-bold hover:text-blue-700 ${
-                  location.pathname.includes("notice")
-                    ? "text-blue-800"
-                    : "text-black"
-                }`}>
-                Notice
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/qa/questions"
-                className={`font-semibold hover:text-blue-700 ${
-                  location.pathname.includes("qa")
-                    ? "text-blue-800"
-                    : "text-black"
-                }`}>
-                Q&A
-              </Link>
-            </li>
-            {userRole === "admin" && (
-              <li>
-                <Link
-                  to="/manage"
-                  className={`font-semibold hover:text-blue-700 ${
-                    location.pathname.includes("Manage")
-                      ? "text-blue-800"
-                      : "text-black"
-                  }`}>
-                  Manage
-                </Link>
-              </li>
-            )}
-          </ul>
         </div>
+        <ul className="hidden lg:flex gap-10">
+          <li>
+            <Link
+              to={`/wiki/articles/${categoryId}`}
+              className={`font-bold hover:text-blue-700 ${
+                location.pathname.includes("wiki")
+                  ? "text-blue-800"
+                  : "text-black"
+              }`}>
+              Wiki
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/ftp"
+              className={`font-bold hover:text-blue-700 ${
+                location.pathname.includes("ftp")
+                  ? "text-blue-800"
+                  : "text-black"
+              }`}>
+              FTP
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/notice"
+              className={`font-bold hover:text-blue-700 ${
+                location.pathname.includes("notice")
+                  ? "text-blue-800"
+                  : "text-black"
+              }`}>
+              Notice
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/qa/questions/all"
+              className={`font-semibold hover:text-blue-700 ${
+                location.pathname.includes("qa")
+                  ? "text-blue-800"
+                  : "text-black"
+              }`}>
+              Q&A
+            </Link>
+          </li>
+          {userRole === "admin" && (
+            <li>
+              <Link
+                to="/manage"
+                className={`font-semibold hover:text-blue-700 ${
+                  location.pathname.includes("Manage")
+                    ? "text-blue-800"
+                    : "text-black"
+                }`}>
+                Manage
+              </Link>
+            </li>
+          )}
+        </ul>
+
         {/* {add other menus here} */}
-        <div className="nav-left flex items-center gap-6 w-3/6 justify-end h-11">
-          <div className="search-input  w-2/4 h-10">
-            <div className="flex items-center justify-end  h-full">
-              <div className="flex w-full mx-8 rounded bg-white h-full">
-                <input
-                  className=" w-full border-none bg-transparent px-4 py-1 text-gray-400 outline-none focus:outline-none "
-                  type="search"
-                  name="search"
-                  placeholder="Search..."
-                />
-                <button type="submit" className="rounded  px-4  text-gray">
-                  <CiSearch size={26} />
-                </button>
+        <div className="flex">
+          <div className="nav-left flex items-center lg:h-11 h-10 lg:mr-2 ">
+            <div className="search-input lg:h-10 h-9">
+              <div className="flex items-center justify-end  h-full">
+                <div className="flex w-full mx-2 rounded bg-white h-full">
+                  <input
+                    className=" w-full border-none bg-transparent px-4 py-1 text-gray-400 outline-none focus:outline-none "
+                    type="search"
+                    name="search"
+                    placeholder="Search..."
+                  />
+                  <button type="submit" className="rounded  px-4  text-gray">
+                    <CiSearch size={26} />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="notification bg-gray-800 rounded-full p-1">
-            <BsBellFill color="white" size={26} />
-          </div>
-          <div className="lang bg-gray-800 rounded-full p-1">
-            <IoLanguageOutline color="white" size={26} />
-          </div>
-          <div className="login-info relative">
-            <button
-              id="dropdownInformationButton"
-              data-dropdown-toggle="dropdownInformation"
-              className="text-white bg-gray-100 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:bg-gray-400 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center "
-              type="button"
-              onClick={toggleMenu}>
-              <FaRegCircleUser size={26} color="#241F1F" className="mr-2" />
-              <GoChevronDown size={26} color="#241F1F" />
-            </button>
+            <div className="hidden lg:flex relative">
+              <button
+                id="dropdownInformationButton"
+                data-dropdown-toggle="dropdownInformation"
+                className="lg:h-10 h-9 text-white bg-gray-100 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:bg-gray-400 font-medium rounded text-sm  lg:px-5 px-2 text-center inline-flex items-center "
+                type="button"
+                onClick={toggleMenu}>
+                <FaRegCircleUser size={26} color="#241F1F" className="mr-2" />
+                <GoChevronDown size={26} color="#241F1F" />
+              </button>
 
-            {menuActive && (
-              <div className="menu z-50 absolute top-full right-0 bg-white shadow-md mt-1 py-2 w-48 rounded">
-                <Link
-                  to="/profile"
-                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
-                  Profile
-                </Link>
-                {/* may be we need to set our own email app */}
-                {/* <Link
+              {menuActive && (
+                <div className="hidden lg:flex flex-col menu z-50 absolute top-full right-0 bg-white shadow-md mt-1 py-2 w-48 rounded">
+                  <div className="notification p-1 flex items-center px-4">
+                    <BsBellFill
+                      color="white"
+                      className="bg-gray-800 rounded mr-2"
+                      size={20}
+                    />{" "}
+                    notifications
+                  </div>
+                  <div className="lang p-1 flex items-center px-4">
+                    <IoLanguageOutline
+                      className="bg-gray-800 rounded mr-2"
+                      color="white"
+                      size={20}
+                    />{" "}
+                    language
+                  </div>
+                  <Link
+                    to="#"
+                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                    Profile
+                  </Link>
+                  {/* may be we need to set our own email app */}
+                  {/* <Link
                   to="#"
                   className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
                   Inbox
                 </Link> */}
-                {/* <Link
+                  {/* <Link
                   to="#"
                   className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
                   Manage
                 </Link> */}
-                {/* this is to give some articles and demo */}
-                <Link
-                  to="#"
-                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
-                  Help
-                </Link>
-                <Link
-                  onClick={async () => {
-                    await logout();
-                  }}
-                  to="#"
-                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
-                  Logout
-                </Link>
-              </div>
-            )}
+                  {/* this is to give some articles and demo */}
+                  <Link
+                    to="#"
+                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                    Help
+                  </Link>
+                  <Link
+                    onClick={async () => {
+                      await logout();
+                    }}
+                    to="#"
+                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                    Logout
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
+          <button
+            className="lg:hidden flex items-center ml-auto"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="h-9 w-9">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={3}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+          {isMobileMenuOpen && (
+            <>
+              <div
+                className="fixed z-50 inset-0 lg:hidden bg-black opacity-70"
+                onClick={() => setIsMobileMenuOpen(false)}></div>
+              <div className="fixed top-0 right-0 h-full w-56 bg-nav-bg z-50 shadow-lg lg:hidden">
+                <button
+                  className="p-4 text-red-500 font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}>
+                  Close
+                </button>
+                {/* Add your drawer content here */}
+                <hr className="mx-2" />
+                <ul
+                  className="flex flex-col gap-2 my-4"
+                  onClick={() => setIsMobileMenuOpen(false)}>
+                  <div className="notification p-1 flex items-center px-4">
+                    <BsBellFill
+                      color="white"
+                      className="bg-gray-800 rounded mr-2"
+                      size={20}
+                    />{" "}
+                    notifications
+                  </div>
+                  <div className="lang p-1 flex items-center px-4">
+                    <IoLanguageOutline
+                      className="bg-gray-800 rounded mr-2"
+                      color="white"
+                      size={20}
+                    />{" "}
+                    language
+                  </div>
+                  <hr className="mx-2" />
+                  <li>
+                    <Link
+                      to={`/wiki/articles/${categoryId}`}
+                      className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
+                        location.pathname.includes("wiki")
+                          ? "text-blue-800"
+                          : "text-black"
+                      }`}>
+                      Wiki
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/ftp"
+                      className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
+                        location.pathname.includes("ftp")
+                          ? "text-blue-800"
+                          : "text-black"
+                      }`}>
+                      FTP
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/notice"
+                      className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
+                        location.pathname.includes("notice")
+                          ? "text-blue-800"
+                          : "text-black"
+                      }`}>
+                      Notice
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/qa/questions/all"
+                      className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
+                        location.pathname.includes("qa")
+                          ? "text-blue-800"
+                          : "text-black"
+                      }`}>
+                      Q&A
+                    </Link>
+                  </li>
+                  {userRole === "admin" && (
+                    <li>
+                      <Link
+                        to="/manage"
+                        className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
+                          location.pathname.includes("Manage")
+                            ? "text-blue-800"
+                            : "text-black"
+                        }`}>
+                        Manage
+                      </Link>
+                    </li>
+                  )}
+                  <hr className="mx-2" />
+
+                  <Link
+                    to="#"
+                    className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
+                      location.pathname.includes("profile")
+                        ? "text-blue-800"
+                        : "text-black"
+                    }`}>
+                    Profile
+                  </Link>
+                  {/* may be we need to set our own email app */}
+                  {/* <Link
+                  to="#"
+                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                  Inbox
+                </Link> */}
+                  {/* <Link
+                  to="#"
+                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                  Manage
+                </Link> */}
+                  {/* this is to give some articles and demo */}
+                  <Link
+                    to="#"
+                    className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
+                      location.pathname.includes("help")
+                        ? "text-blue-800"
+                        : "text-black"
+                    }`}>
+                    Help
+                  </Link>
+                  <Link
+                    onClick={async () => {
+                      await logout();
+                    }}
+                    to="#"
+                    className="font-semibold block px-4 py-2 text-black hover:bg-blue-500 hover:text-white">
+                    Logout
+                  </Link>
+                </ul>
+                <hr className="mx-2" />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </nav>

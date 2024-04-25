@@ -14,8 +14,6 @@ import { useNavigate } from "react-router-dom";
 import { wikiRoutes } from "./wikiRoutes";
 import { QandARoutes } from "./QandARoutes";
 
-import Editor1 from "./../components/Q&A/Editor";
-
 function AppRoutes() {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -51,25 +49,6 @@ function AppRoutes() {
             isAuthenticated ? <Navigate to="/" replace /> : <LoginPage />
           }
         />
-
-        <Route path="/q" element={<Editor1 />} />
-
-        {/* <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <DashboardPage />
-            </PrivateRoute>
-          }
-        />  */}
-        {/* <Route
-          path="dashboard"
-          element={
-            <PrivateRoute>
-              <DashboardPage />
-            </PrivateRoute>
-          }
-        /> */}
         <Route
           path="profile"
           element={

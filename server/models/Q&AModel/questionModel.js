@@ -14,7 +14,7 @@ const Question = sequelize.define("Question", {
     allowNull: false,
   },
   question_description: {
-    type: DataTypes.TEXT,
+    type: DataTypes.TEXT("long"),
     allowNull: false,
   },
   userName: {
