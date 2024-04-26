@@ -12,7 +12,7 @@ import NavBar from "../components/Common/NavBar/NavBar";
 import Admin from "../components/Dashboard/Admin/Admin";
 import { useNavigate } from "react-router-dom";
 import { wikiRoutes } from "./wikiRoutes";
-// import { QandARoutes } from "./QandARoutes";
+import { QandARoutes } from "./QandARoutes";
 
 function AppRoutes() {
   const location = useLocation();
@@ -62,9 +62,9 @@ function AppRoutes() {
           <Route key={index} path={route.path} element={route.element} />
         ))}
 
-        {/* {QandARoutes.map((route, index) => (
+        {QandARoutes.map((route, index) => (
           <Route key={index} path={route.path} element={route.element} />
-        ))} */}
+        ))}
 
         <Route
           path="manage"
