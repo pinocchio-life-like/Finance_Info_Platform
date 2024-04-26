@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://finance-info-platform.onrender.com",
+  baseURL: "http://172.31.9.108:5000",
   withCredentials: true,
 });
 

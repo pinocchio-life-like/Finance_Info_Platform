@@ -21,7 +21,7 @@ const uploadRoute = require("./routes/uploadRoute/uploadRoute");
 const app = express();
 const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE"],
-  origin: "https://wihinfo.vercel.app",
+  origin: "*", //https://wihinfo.vercel.app
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],
 };
