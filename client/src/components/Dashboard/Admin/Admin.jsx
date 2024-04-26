@@ -212,9 +212,7 @@ const Admin = () => {
         </div>
         <div style={{ width: "95%" }}>
           {activeLink.left === 0 ? (
-            <div>
-              <MainCompanyAdmin />
-            </div>
+            <div>{/* <MainCompanyAdmin /> */}Soon</div>
           ) : (
             <div style={{ width: "100%" }} className="flex flex-row">
               <div style={{ width: "15%" }}>
