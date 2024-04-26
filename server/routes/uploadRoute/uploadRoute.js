@@ -9,9 +9,9 @@ const AWS = require("aws-sdk");
 
 // Configure AWS
 const s3 = new AWS.S3({
-  accessKeyId: "AKIA5TY3KKQWQYIFCI6G",
-  secretAccessKey: "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",
-  region: "us-east-1",
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  region: process.env.ACCESS_REGION,
 });
 
 const upload = multer({ storage: multer.memoryStorage() });

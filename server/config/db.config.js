@@ -1,11 +1,11 @@
 const { Sequelize } = require("sequelize"); // Create Sequelize instance
 const sequelize = new Sequelize({
-  dialect: "mysql", // Change to your database dialect
-  username: "admin",
-  password: "12345678",
-  database: "deploy_test",
-  host: "fip-demodb.ckhs9i5s4dyl.us-east-1.rds.amazonaws.com",
-  port: "3306",
+  dialect: process.env.DB_DIALECT,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
 });
 
 //Check if the connection is successful
