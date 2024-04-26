@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../config/db.config");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const ArticleVersion = require("./articleVersionModel").ArticleVersion;
 const { Op } = require("sequelize");
 //define user mmodel
@@ -45,7 +45,7 @@ ArticleVersion.belongsTo(User, {
   targetKey: "userId",
 });
 // User.sync({ force
-  
+
 //   : true }).then(() => {
 //   console.log("users table created");
 // })
@@ -74,12 +74,12 @@ const getUserByUserName = async (userName) => {
 const getAllUsers = async () => {
   return User.findAll();
 };
-const getUserById=async(id)=>{
-  const usebyId=await User.findOne({
-    where:{userId:id}
-  })
-  return usebyId
-}
+const getUserById = async (id) => {
+  const usebyId = await User.findOne({
+    where: { userId: id },
+  });
+  return usebyId;
+};
 
 //update user
 const updateUser = async (id, userData) => {
@@ -129,5 +129,5 @@ module.exports = {
   updateUser,
   destroy,
   User,
-  getUserById
+  getUserById,
 };
