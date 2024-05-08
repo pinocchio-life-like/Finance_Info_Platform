@@ -3,6 +3,7 @@ const sequelize = require("./config/db.config");
 
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 const cors = require("cors");
 
@@ -17,6 +18,7 @@ const answerRoutes = require("./routes/Q&ARoutes/answerRoute");
 const commentRoutes = require("./routes/Q&ARoutes/commentRoute");
 const tagsRoutes = require("./routes/Q&ARoutes/tagsRoute");
 const uploadRoute = require("./routes/uploadRoute/uploadRoute");
+const searchRoutes = require("./routes/searchRoute");
 
 const app = express();
 const corsOptions = {
@@ -44,6 +46,17 @@ app.use("/api", answerRoutes);
 app.use("/api", commentRoutes);
 app.use("/api", uploadRoute);
 app.use("/api", tagsRoutes);
+app.use("/api", searchRoutes);
+
+app.use(
+  "/Article/Images",
+  express.static(path.join(__dirname, "Article/Images"))
+);
+
+app.use(
+  "/Article/Files",
+  express.static(path.join(__dirname, "Article/Files"))
+);
 
 async function syncDatabase() {
   try {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import logo from "../../../assets/Images/wihLogo.png";
 import { BsBellFill } from "react-icons/bs";
@@ -17,6 +17,9 @@ const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const token = localStorage.getItem("token");
+  const [articles, setArticles] = useState([]);
+  const [questions, setQuestions] = useState([]);
+
   let userRole = null;
   if (token) {
     try {
@@ -47,11 +50,28 @@ const NavBar = () => {
         (a, b) => a.order_within_parent - b.order_within_parent
       );
 
+      const articles = subCategories.map((subCategory) => ({
+        label: subCategory.category,
+        value: subCategory.category_Id,
+      }));
+
+      setArticles(articles);
+
       mainCategories.forEach((mainCategory) => {
         mainCategory.subCategories = subCategories.filter(
           (subCategory) => subCategory.parent_Id === mainCategory.category_Id
         );
       });
+
+      const forSearch = await api.get("/api/questions");
+      const values = forSearch.data.data;
+
+      const questions = values.map((value) => ({
+        label: value.question_title,
+        value: value.question_id,
+      }));
+
+      setQuestions(questions);
 
       const sortedCategories = [...mainCategories].sort(
         (a, b) => a.parent_Id - b.parent_Id
@@ -68,6 +88,34 @@ const NavBar = () => {
     };
 
     getFirstArticle();
+  }, []);
+
+  const [search, setSearch] = useState("");
+  const [showOptions, setShowOptions] = useState(false);
+  const searchRef = useRef();
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+    setShowOptions(true);
+  };
+
+  const handleOptionClick = (option) => {
+    setSearch(option);
+    setShowOptions(false);
+  };
+
+  // Handle click outside to close the dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowOptions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   return (
@@ -149,16 +197,59 @@ const NavBar = () => {
           <div className="nav-left flex items-center lg:h-11 h-10 lg:mr-2 ">
             <div className="search-input lg:h-10 h-9">
               <div className="flex items-center justify-end  h-full">
-                <div className="flex w-full mx-2 rounded bg-white h-full">
-                  <input
-                    className=" w-full border-none bg-transparent px-4 py-1 text-gray-400 outline-none focus:outline-none "
-                    type="search"
-                    name="search"
-                    placeholder="Search..."
-                  />
-                  <button type="submit" className="rounded  px-4  text-gray">
-                    <CiSearch size={26} />
-                  </button>
+                <div
+                  className="flex w-full mx-2 rounded bg-white h-full relative"
+                  ref={searchRef}>
+                  <div className="relative w-full">
+                    <input
+                      className="w-full border-none bg-transparent px-4 py-2 items-center text-gray-400 outline-none focus:outline-none pl-10"
+                      type="search"
+                      name="search"
+                      placeholder="Search..."
+                      value={search}
+                      onChange={handleSearchChange}
+                    />
+                    <CiSearch
+                      size={26}
+                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray"
+                    />
+                    {showOptions && (
+                      <div className="absolute w-full z-50 bg-white border border-gray-200 rounded mt-1">
+                        <div className="px-4 py-2 font-bold">Articles</div>
+                        {articles
+                          .filter((article) =>
+                            article.label
+                              .toLowerCase()
+                              .includes(search.toLowerCase())
+                          )
+                          .map((article, index) => (
+                            <Link
+                              key={index}
+                              to={`/wiki/articles/${article.value}`}
+                              onClick={() => handleOptionClick(article.label)}
+                              className="block px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                              {article.label}
+                            </Link>
+                          ))}
+                        <div className="px-4 py-2 font-bold">Questions</div>
+                        {questions
+                          .filter((question) =>
+                            question.label
+                              .toLowerCase()
+                              .includes(search.toLowerCase())
+                          )
+                          .map((question, index) => (
+                            <Link
+                              key={index}
+                              to={`/question/${question.value}`}
+                              onClick={() => handleOptionClick(question.label)}
+                              className="block px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                              {question.label}
+                            </Link>
+                          ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

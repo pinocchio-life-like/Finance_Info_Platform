@@ -121,7 +121,7 @@ const WikiFiles = () => {
 
   const handleFileDelete = async (key) => {
     try {
-      await api.delete(`/api/files/article`, { data: { key } });
+      await api.delete(`/api/article/file/delete/`, { data: { key } });
       message.success(`file deleted successfully`);
       fetchData();
     } catch (error) {
