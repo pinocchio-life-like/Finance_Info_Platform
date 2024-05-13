@@ -381,12 +381,51 @@ const MainContent = (props) => {
                                 }}
                                 onClick={(event) => {
                                   event.preventDefault();
-                                  navigator.clipboard.writeText(
+                                  const link =
                                     window.location.origin +
-                                      `/wiki/articles/${subCategory.category_Id}`
-                                  );
-                                  setCopied(subCategory.category_Id);
-                                  setTimeout(() => setCopied(null), 2000);
+                                    `/wiki/articles/${subCategory?.category_Id}`;
+                                  if (
+                                    navigator.clipboard &&
+                                    window.isSecureContext
+                                  ) {
+                                    // Use the Clipboard API if available
+                                    navigator.clipboard
+                                      .writeText(link)
+                                      .then(() => {
+                                        setCopied(subCategory?.category_Id);
+                                        setTimeout(() => setCopied(null), 2000);
+                                      })
+                                      .catch((err) =>
+                                        console.error(
+                                          "Could not copy text: ",
+                                          err
+                                        )
+                                      );
+                                  } else if (
+                                    document.queryCommandSupported("copy")
+                                  ) {
+                                    // Fallback to document.execCommand('copy')
+                                    const textarea =
+                                      document.createElement("textarea");
+                                    textarea.value = link;
+                                    document.body.appendChild(textarea);
+                                    textarea.select();
+                                    try {
+                                      document.execCommand("copy");
+                                      setCopied(subCategory?.category_Id);
+                                      setTimeout(() => setCopied(null), 2000);
+                                    } catch (err) {
+                                      console.error(
+                                        "Could not copy text: ",
+                                        err
+                                      );
+                                    }
+                                    document.body.removeChild(textarea);
+                                  } else {
+                                    console.error(
+                                      "Clipboard API or HTTPS is required to copy text."
+                                    );
+                                  }
                                 }}
                               />
                             </Tooltip>
