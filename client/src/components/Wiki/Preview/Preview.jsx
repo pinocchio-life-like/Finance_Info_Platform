@@ -60,11 +60,12 @@ const Preview = () => {
             />
           </div>
         ) : (
-          <div style={{ overflow: "hidden", height: "100vh" }}>
+          <div style={{ overflow: "hidden", height: "100vh", width: "100%" }}>
             <MdPreview
               style={{
                 borderLeft: "1px solid #EEEEEE",
                 // borderRight: "1px solid #EEEEEE",
+                width: "100%",
               }}
               className="h-screen z-10"
               editorId={id}
@@ -72,7 +73,7 @@ const Preview = () => {
               showCodeRowNumber={true}
             />
             <div
-              className="absolute top-0 right-0 flex z-10"
+              className="absolute top-0 right-2 flex z-10"
               style={{
                 // borderLeft: "1px solid #EEEEEE",
                 borderRight: "1px solid #EEEEEE",

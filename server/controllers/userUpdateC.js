@@ -2,7 +2,7 @@ const { updateUser, User } = require("../models/userModel");
 
 const updateUsers = async (req, res) => {
   const { id } = req.params;
-  const { firstName, userName, password, userRole } = req.body;
+  const { firstName, userName, password, userRole, company_Id } = req.body;
 
   try {
     const existingUser = await User.findByPk(id);
@@ -15,6 +15,7 @@ const updateUsers = async (req, res) => {
       userName,
       password,
       userRole,
+      company_Id,
     });
 
     if (!updatedUser) {

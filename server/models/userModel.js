@@ -33,6 +33,13 @@ const User = sequelize.define("Users", {
     allowNull: false,
     require: true,
   },
+  company_Id: {
+    type: Sequelize.STRING,
+    references: {
+      model: "Companies",
+      key: "company_Id",
+    },
+  },
 });
 
 // User.hasMany(ArticleVersion,{foreignKey:'userId'})
@@ -51,7 +58,7 @@ ArticleVersion.belongsTo(User, {
 // })
 const createUser = async (user) => {
   let users = {};
-  const { firstName, userName, password, userRole } = user;
+  const { firstName, userName, password, userRole, company_Id } = user;
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -60,6 +67,7 @@ const createUser = async (user) => {
     userName,
     password: hashedPassword,
     userRole,
+    company_Id,
   });
 
   return users;
@@ -74,6 +82,7 @@ const getUserByUserName = async (userName) => {
 const getAllUsers = async () => {
   return User.findAll();
 };
+
 const getUserById = async (id) => {
   const usebyId = await User.findOne({
     where: { userId: id },
@@ -83,7 +92,7 @@ const getUserById = async (id) => {
 
 //update user
 const updateUser = async (id, userData) => {
-  const { firstName, userName, password, userRole } = userData;
+  const { firstName, userName, password, userRole, company_Id } = userData;
   try {
     let hashedPassword;
     if (password) {
@@ -91,7 +100,7 @@ const updateUser = async (id, userData) => {
       hashedPassword = await bcrypt.hash(password, salt);
     }
 
-    const updateData = { firstName, userName, userRole };
+    const updateData = { firstName, userName, userRole, company_Id };
     if (hashedPassword) {
       updateData.password = hashedPassword;
     }

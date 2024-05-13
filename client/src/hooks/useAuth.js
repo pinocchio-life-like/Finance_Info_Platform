@@ -3,6 +3,7 @@ import { authService } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import store from "../redux/store";
 import { persistStore } from "redux-persist";
+import api from "../utils/api";
 
 function useAuth() {
   const [error, setError] = useState(null);
@@ -10,7 +11,17 @@ function useAuth() {
   const login = async (credentials) => {
     try {
       await authService.login(credentials);
-      navigate("/dashboard");
+      try {
+        const firstArticle = await api.get("/api/articles/first");
+        if (firstArticle.data.data) {
+          navigate(`/wiki/articles/17`);
+        } else {
+          navigate(`/wiki/articles/2`);
+        }
+      } catch (error) {
+        console.error("Failed to fetch first article:", error);
+        navigate(`/wiki/articles/2`);
+      }
     } catch (error) {
       setError("Failed to login. Please check your username and password.");
     }

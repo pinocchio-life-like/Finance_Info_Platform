@@ -1,9 +1,13 @@
 const sequelize = require("../config/db.config");
+const Company = require("./CompanyModel/CompanyModel").Company;
 const Article = require("./articleModel").Article; // Adjust paths as necessary
 const User = require("./userModel").User;
 const ArticleVersion = require("./articleVersionModel").ArticleVersion;
 
 // Set up associations here
+
+Company.hasMany(User, { foreignKey: "company_Id", sourceKey: "company_Id" });
+User.belongsTo(Company, { foreignKey: "company_Id", targetKey: "company_Id" });
 
 User.hasMany(Article, { foreignKey: "userId", sourceKey: "userId" });
 Article.belongsTo(User, { foreignKey: "userId", targetKey: "userId" });
@@ -94,6 +98,7 @@ const getallversionsOFAnArticle = async (id) => {
 
 module.exports = {
   sequelize,
+  Company,
   Article,
   User,
   ArticleVersion,

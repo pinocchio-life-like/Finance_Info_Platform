@@ -45,7 +45,7 @@ const MainContent = (props) => {
   useEffect(() => {
     const getCategories = async () => {
       try {
-        const response = await api.post("/api/category/getCategories");
+        const response = await api.get("/api/category/getCategories");
 
         const mainCategories = response.data.filter(
           (category) => category.parent_Id === null

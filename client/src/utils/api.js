@@ -1,7 +1,7 @@
 import axios from "axios";
-
+const VITE_BACKEND_API_ENDPOINT = import.meta.env.VITE_BACKEND_API_ENDPOINT;
 const api = axios.create({
-  baseURL: "https://finance-info-platform.onrender.com",
+  baseURL: String(VITE_BACKEND_API_ENDPOINT),
   withCredentials: true,
 });
 

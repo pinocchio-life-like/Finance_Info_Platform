@@ -6,6 +6,6 @@ const {
 const router = require("express").Router();
 
 router.post("/category/addCategory", addCategory);
-router.post("/category/getCategories", getCategories);
+router.get("/category/getCategories", getCategories);
 
 module.exports = router;
