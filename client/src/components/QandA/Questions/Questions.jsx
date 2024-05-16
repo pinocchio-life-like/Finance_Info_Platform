@@ -4,14 +4,12 @@ import { Button } from "antd";
 import { useEffect, useState } from "react";
 import api from "../../../utils/api";
 import ReactQuill from "react-quill";
-
 const Questions = () => {
   const param = useParams();
   const [questions, setQuestions] = useState([]);
   const [isFull, setIsFull] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // Track current page
   const itemsPerPage = 10; // Number of questions per page
-  console.log(questions);
 
   const getQuestions = async (param) => {
     try {
@@ -81,6 +79,7 @@ const Questions = () => {
               let matches = q.question_description.match(
                 /<[^>]*>[^<]*<\/[^>]*>/g
               );
+              // console.log(matches)
               let description = matches ? matches.slice(0, 4).join("") : "";
               return (
                 <div className={i === 0 ? `pt-0` : `pt-3`} key={i}>
@@ -104,8 +103,7 @@ const Questions = () => {
                       style={{ position: "absolute", bottom: 20, left: 0 }}
                       onClick={() => {
                         toggleDescription(i);
-                      }}
-                    >
+                      }}>
                       {isFull[i] ? "see less" : "...see more"}
                     </button>
                   </div>
@@ -117,8 +115,7 @@ const Questions = () => {
                       {q.Tags.map((t) => (
                         <span
                           key={t.tag_id}
-                          className="inline-block bg-gray-200 rounded px-3 py-[0.2px] text-sm font-semibold text-gray-700 mr-2"
-                        >
+                          className="inline-block bg-gray-200 rounded px-3 py-[0.2px] text-sm font-semibold text-gray-700 mr-2">
                           {t.tag_name}
                         </span>
                       ))}

@@ -17,6 +17,7 @@ const answerRoutes = require("./routes/Q&ARoutes/answerRoute");
 const commentRoutes = require("./routes/Q&ARoutes/commentRoute");
 const tagsRoutes = require("./routes/Q&ARoutes/tagsRoute");
 const uploadRoute = require("./routes/uploadRoute/uploadRoute");
+const ftpRoute=require('./routes/ftpRoutes/FtpR')
 
 const app = express();
 const corsOptions = {
@@ -44,6 +45,7 @@ app.use("/api", answerRoutes);
 app.use("/api", commentRoutes);
 app.use("/api", uploadRoute);
 app.use("/api", tagsRoutes);
+app.use("/api", ftpRoute);
 
 async function syncDatabase() {
   try {
@@ -57,6 +59,7 @@ async function syncDatabase() {
 //  syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));
+
 
 
 

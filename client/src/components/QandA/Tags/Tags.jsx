@@ -21,9 +21,9 @@ const Tags = () => {
         } else if (type === "Name") {
           data.sort((a, b) => a.tag_name.localeCompare(b.tag_name));
         } else if (type === "New") {
-          const oneMonthAgo = new Date();
-          oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-          data = data.filter((tag) => new Date(tag.createdAt) > oneMonthAgo);
+          // const oneMonthAgo = new Date();
+          // oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+          // data = data.filter((tag) => new Date(tag.createdAt) > oneMonthAgo);
           data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         }
         setTags(data);
@@ -87,26 +87,30 @@ const Tags = () => {
           style={{
             width: 200,
             marginLeft: 4,
-          }}>
+          }}
+        >
           <li
             className={`w-1/3 rounded text-sm flex justify-center ${
               activeLink === "Popular" ? "bg-[#D9D9D9]" : ""
             }`}
-            onClick={() => setActiveLink("Popular")}>
+            onClick={() => setActiveLink("Popular")}
+          >
             Popular
           </li>
           <li
             className={`w-1/3 rounded text-sm flex justify-center ${
               activeLink === "Name" ? "bg-[#D9D9D9]" : ""
             }`}
-            onClick={() => setActiveLink("Name")}>
+            onClick={() => setActiveLink("Name")}
+          >
             Name
           </li>
           <li
             className={`w-1/3 rounded text-sm flex justify-center ${
               activeLink === "New" ? "bg-[#D9D9D9]" : ""
             }`}
-            onClick={() => setActiveLink("New")}>
+            onClick={() => setActiveLink("New")}
+          >
             New
           </li>
         </ul>
@@ -116,7 +120,8 @@ const Tags = () => {
           <div key={tag.tag_id} className="bg-white p-4 rounded border">
             <Link
               to={`/qa/questions/${tag.tag_name}`}
-              className="inline-block border text-sm text-blue-600 bg-blue-100 rounded px-1">
+              className="inline-block border text-sm text-blue-600 bg-blue-100 rounded px-1"
+            >
               {tag.tag_name}
             </Link>
             <div className="flex justify-between pt-4">
