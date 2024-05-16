@@ -20,7 +20,8 @@ const NavBar = () => {
   const searchRef = useRef();
   const location = useLocation();
   const token = localStorage.getItem("token");
-  const [articles, setArticles] = useState([]);
+  // const [articles, setArticles] = useState([]);
+  const [allArticles, setAllArticles] = useState([]);
   const [questions, setQuestions] = useState([]);
 
   let userRole = null;
@@ -48,12 +49,23 @@ const NavBar = () => {
         (a, b) => a.order_within_parent - b.order_within_parent
       );
 
-      const articles = subCategories.map((subCategory) => ({
-        label: subCategory.category,
-        value: subCategory.category_Id,
+      // const articles = subCategories.map((subCategory) => ({
+      //   label: subCategory.category,
+      //   value: subCategory.category_Id,
+      // }));
+
+      // setArticles(articles);
+
+      const allArticles = await api.get("/api/articles");
+      const all = allArticles.data.data;
+
+      const articlesAll = all.map((value) => ({
+        label: value.articleTitle,
+        value: value.category_Id,
+        articleContent: value.articleContent,
       }));
 
-      setArticles(articles);
+      setAllArticles(articlesAll);
 
       const forSearch = await api.get("/api/questions");
       const values = forSearch.data.data;
@@ -196,13 +208,20 @@ const NavBar = () => {
                       className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray"
                     />
                     {showOptions && (
-                      <div className="absolute w-full z-50 bg-white border border-gray-200 rounded mt-1">
+                      <div
+                        className="absolute w-full z-50 bg-white border border-gray-200 rounded mt-1 overflow-y-auto"
+                        style={{ maxHeight: "80vh" }}>
                         <div className="px-4 py-2 font-bold">Articles</div>
-                        {articles
-                          .filter((article) =>
-                            article.label
-                              .toLowerCase()
-                              .includes(search.toLowerCase())
+                        {allArticles
+                          .filter(
+                            (article) =>
+                              article.label
+                                .toLowerCase()
+                                .includes(search.toLowerCase()) ||
+                              (article.articleContent &&
+                                article.articleContent
+                                  .toLowerCase()
+                                  .includes(search.toLowerCase()))
                           )
                           .map((article, index) => (
                             <Link

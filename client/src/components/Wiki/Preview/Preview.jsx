@@ -95,7 +95,7 @@ const Preview = () => {
                 <div className="px-1 overflow-auto w-60 bg-[#F6F6F6] scrollbar-thin scrollbar-thumb-[#888] scrollbar-track-[#f2f2f2]">
                   <CustomMdCatalog
                     editorId={id}
-                    scrollElement={state.scrollElement}
+                    scrollElement={document.scrollElement}
                     scrollChange={(element) => {
                       setState({ ...state, scrollElement: element });
                     }}
