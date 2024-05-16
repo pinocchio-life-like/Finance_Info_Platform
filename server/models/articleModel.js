@@ -1,7 +1,6 @@
 const sequelize = require("../config/db.config");
 const { DataTypes } = require("sequelize");
 const User = require("./userModel").User;
-const ArticleVersion = require("./articleVersionModel").ArticleVersion;
 
 const Article = sequelize.define("Articles", {
   articleId: {

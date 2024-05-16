@@ -1,36 +1,18 @@
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { Button, Drawer, Form, Input, Select, Table, message } from "antd";
+import {
+  Button,
+  Cascader,
+  Drawer,
+  Form,
+  Input,
+  Select,
+  Table,
+  message,
+} from "antd";
 import api from "../../../utils/api";
 import { jwtDecode } from "jwt-decode";
-import MainCompanyAdmin from "./MainCompanyAdmin";
 
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sydney No. 1 Lake Park",
-  },
-  {
-    key: "4",
-    name: "Disabled User",
-    age: 99,
-    address: "Sydney No. 1 Lake Park",
-  },
-];
 const columns = [
   {
     title: "Name",
@@ -52,11 +34,13 @@ const columns = [
 ];
 
 const Admin = () => {
-  const [activeLink, setActiveLink] = useState({ left: 1, right: 0 });
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [drawerData, setDrawerData] = useState(null);
   const [users, setUsers] = useState([]);
+  const [tableData, setTableData] = useState([]);
+  const [companyId, setCompanyId] = useState(null);
+  const [companies, setCompanies] = useState([]);
   const [updateform] = Form.useForm();
   const [newform] = Form.useForm();
   const token = localStorage.getItem("token");
@@ -70,20 +54,61 @@ const Admin = () => {
     }
   }
 
+  function transformDataToHierarchy(data) {
+    let map = {},
+      node,
+      roots = [],
+      i;
+
+    for (i = 0; i < data.length; i += 1) {
+      map[data[i].company_Id] = i; // initialize the map
+      data[i].children = []; // initialize the children
+    }
+
+    for (i = 0; i < data.length; i += 1) {
+      node = data[i];
+      if (node.company_parent_Id !== null) {
+        // if you have dangling branches check that map[node.company_parent_Id] exists
+        data[map[node.company_parent_Id]].children.push({
+          value: node.company_Id,
+          label: node.company_Name,
+          children: node.children,
+        });
+      } else {
+        roots.push({
+          value: node.company_Id,
+          label: node.company_Name,
+          children: node.children,
+        });
+      }
+    }
+    return roots;
+  }
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response = await api.get("/api/users/getall");
         setUsers(response.data.data);
+        setTableData(response.data.data);
       } catch (error) {
         console.error(error);
       }
     };
+    fetchUsers();
 
-    if (activeLink.left === 1) {
-      fetchUsers();
-    }
-  }, [activeLink.left]);
+    const fetcComapanies = async () => {
+      try {
+        const response = await api.get("/api/companies/getAll");
+        const transformedData = transformDataToHierarchy(response.data.data);
+        setCompanies(transformedData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetcComapanies();
+  }, []);
+
   useEffect(() => {
     updateform.setFieldsValue(drawerData);
   }, [drawerData, updateform]);
@@ -102,9 +127,6 @@ const Admin = () => {
     });
   };
 
-  const handleLink = (side, index) => {
-    setActiveLink((prevState) => ({ ...prevState, [side]: index }));
-  };
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(
@@ -136,6 +158,7 @@ const Admin = () => {
       error("Failed to delete users");
     }
   };
+
   const [open, setOpen] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
   const showDrawer = () => {
@@ -155,14 +178,34 @@ const Admin = () => {
     try {
       const response = await api.get("/api/users/getall");
       setUsers(response.data.data);
+
+      // check if companyId is not null before filtering
+      if (companyId !== null) {
+        // filter the users data
+        const filteredUsersData = response.data.data.filter(
+          (user) => user.company_Id === companyId
+        );
+        setTableData(filteredUsersData);
+      } else {
+        // if companyId is null, display all users data
+        setTableData(response.data.data);
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   const onFinishUpdate = async (values) => {
+    const lastCompanyId = values.company_Id[values.company_Id.length - 1];
+    const newValues = {
+      ...values,
+      company_Id: lastCompanyId,
+    };
+
+    console.log(lastCompanyId);
+
     try {
-      await api.put(`/api/user/update/${drawerData.userId}`, values);
+      await api.put(`/api/user/update/${drawerData.userId}`, newValues);
       success("User updated successfully");
       onClose();
       fetchUsers();
@@ -174,8 +217,14 @@ const Admin = () => {
   };
 
   const onFinishAdd = async (values) => {
+    const lastCompanyId = values.company_Id[values.company_Id.length - 1];
+    const newValues = {
+      ...values,
+      company_Id: lastCompanyId,
+    };
+
     try {
-      await api.post("/api/users", values);
+      await api.post("/api/users", newValues);
       onCloseAdd();
       success("User added successfully");
       fetchUsers();
@@ -185,6 +234,19 @@ const Admin = () => {
       );
     }
   };
+
+  const onChange = (value) => {
+    const company_Id = value[value.length - 1];
+    setCompanyId(company_Id);
+    // filter the users data
+    const filteredUsersData = users.filter(
+      (user) => user.company_Id === company_Id
+    );
+
+    // update the users data state
+    setTableData(filteredUsersData);
+  };
+
   return (
     <>
       {contextHolder}
@@ -195,44 +257,23 @@ const Admin = () => {
           style={{ width: "95%" }}
           className="flex justify-between items-center border-b mt-3 border-gray-600 pb-1">
           <div>
-            {["Company", "User"].map((link, index) => (
-              <a
-                key={index}
-                className={`p-2 cursor-pointer ${
-                  activeLink.left === index
-                    ? "border-b-2 border-black font-bold"
-                    : ""
-                }`}
-                style={{ lineHeight: "2rem" }}
-                onClick={() => handleLink("left", index)}>
-                {link}
-              </a>
-            ))}
+            <a
+              className={"p-2 cursor-pointer border-b-2 border-black font-bold"}
+              style={{ lineHeight: "2rem" }}>
+              User
+            </a>
           </div>
         </div>
         <div style={{ width: "95%" }}>
-          {activeLink.left === 0 ? (
-            <div>
-              <MainCompanyAdmin />
-            </div>
-          ) : (
-            <div style={{ width: "100%" }} className="flex flex-row">
-              <div style={{ width: "15%" }}>
-                <div
-                  style={{ width: "100%" }}
-                  className="flex items-center mt-2 pl-2 border-b border-gray-600 pb-1">
-                  Companies List
-                </div>
-              </div>
+          <div style={{ width: "100%" }} className="flex flex-row">
+            <div style={{ width: "100%" }} className="">
               <div
-                style={{ width: "85%" }}
-                className="border-l border-gray-600">
+                style={{ width: "100%" }}
+                className="flex flex-col justify-between items-center">
                 <div
                   style={{ width: "100%" }}
-                  className="flex flex-col justify-between items-center">
-                  <div
-                    style={{ width: "100%" }}
-                    className="flex items-center mt-2 pl-2 border-b border-gray-600 pb-1">
+                  className="flex items-center justify-between mt-1 pl-2 border-b border-gray-600 pb-1">
+                  <div className="flex">
                     <button
                       onClick={handleAdd}
                       className="flex items-center text-black hover:bg-white hover:text-green-500 rounded">
@@ -249,31 +290,37 @@ const Admin = () => {
                       <FaTrash size={12} style={{ marginRight: 4 }} /> Delete
                     </button>
                   </div>
-                  <Table
-                    size="small"
-                    style={{ width: "100%" }}
-                    rowSelection={{
-                      type: "checkbox",
-                      ...rowSelection,
-                    }}
-                    columns={columns}
-                    dataSource={activeLink.left === 1 ? users : data}
-                    rowKey={activeLink.left === 1 ? "userId" : "firstName"}
-                    onRow={(record) => ({
-                      onClick: () => {
-                        if (record.userName !== userName) {
-                          // Check if the row is not disabled
-
-                          setDrawerData(record);
-                          showDrawer();
-                        }
-                      },
-                    })}
-                  />
+                  <div style={{ width: "400px" }}>
+                    <Cascader
+                      style={{ width: "400px" }}
+                      options={companies}
+                      onChange={onChange}
+                      changeOnSelect
+                    />
+                  </div>
                 </div>
+                <Table
+                  size="small"
+                  style={{ width: "100%" }}
+                  rowSelection={{
+                    type: "checkbox",
+                    ...rowSelection,
+                  }}
+                  columns={columns}
+                  dataSource={tableData}
+                  rowKey={"userId"}
+                  onRow={(record) => ({
+                    onClick: () => {
+                      if (record.userName !== userName) {
+                        setDrawerData(record);
+                        showDrawer();
+                      }
+                    },
+                  })}
+                />
               </div>
             </div>
-          )}
+          </div>
         </div>
         <Drawer width={500} title="Update User" onClose={onClose} open={open}>
           <Form
@@ -308,6 +355,19 @@ const Admin = () => {
               ]}>
               <Input />
             </Form.Item>
+
+            <Form.Item
+              label="Company of Employment"
+              name="company_Id"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input!",
+                },
+              ]}>
+              <Cascader options={companies} changeOnSelect />
+            </Form.Item>
+
             <Form.Item
               label="User Role"
               name="userRole"
@@ -376,6 +436,18 @@ const Admin = () => {
                 },
               ]}>
               <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Company of Employment"
+              name="company_Id"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input!",
+                },
+              ]}>
+              <Cascader options={companies} changeOnSelect />
             </Form.Item>
 
             <Form.Item

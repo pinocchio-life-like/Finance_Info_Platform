@@ -4,7 +4,7 @@ const contentsSlice = createSlice({
   name: "tableOfContents",
   initialState: {
     status: false,
-    drop: null,
+    drop: [],
   },
   reducers: {
     changeTableOfContentsState: (state, action) => {

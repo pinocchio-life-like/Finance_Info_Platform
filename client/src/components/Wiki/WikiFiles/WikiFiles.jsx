@@ -121,7 +121,7 @@ const WikiFiles = () => {
 
   const handleFileDelete = async (key) => {
     try {
-      await api.delete(`/api/files/article`, { data: { key } });
+      await api.delete(`/api/article/file/delete/`, { data: { key } });
       message.success(`file deleted successfully`);
       fetchData();
     } catch (error) {
@@ -255,9 +255,36 @@ const WikiFiles = () => {
                       }}
                       onClick={(event) => {
                         event.preventDefault();
-                        navigator.clipboard.writeText(item.url);
-                        setCopied(item.upload_id);
-                        setTimeout(() => setCopied(null), 2000);
+                        if (navigator.clipboard && window.isSecureContext) {
+                          // Use the Clipboard API if available
+                          navigator.clipboard
+                            .writeText(item.url)
+                            .then(() => {
+                              setCopied(item.upload_id);
+                              setTimeout(() => setCopied(null), 2000);
+                            })
+                            .catch((err) =>
+                              console.error("Could not copy text: ", err)
+                            );
+                        } else if (document.queryCommandSupported("copy")) {
+                          // Fallback to document.execCommand('copy')
+                          const textarea = document.createElement("textarea");
+                          textarea.value = item.url;
+                          document.body.appendChild(textarea);
+                          textarea.select();
+                          try {
+                            document.execCommand("copy");
+                            setCopied(item.upload_id);
+                            setTimeout(() => setCopied(null), 2000);
+                          } catch (err) {
+                            console.error("Could not copy text: ", err);
+                          }
+                          document.body.removeChild(textarea);
+                        } else {
+                          console.error(
+                            "Clipboard API or HTTPS is required to copy text."
+                          );
+                        }
                       }}
                     />
                   </Tooltip>

@@ -23,6 +23,7 @@ const History = () => {
               articleVersionTitle: version.articleVersionTitle,
               createdAt: version.createdAt,
               dateModified: version.updatedAt,
+              userId: version.User.userName,
             }))
           : [];
         setVersions(formattedData);
@@ -50,6 +51,10 @@ const History = () => {
       title: "Date Modified",
       dataIndex: "dateModified",
       render: (date) => (date ? new Date(date).toLocaleDateString() : ""),
+    },
+    {
+      title: "Modified By",
+      dataIndex: "userId",
     },
   ];
 

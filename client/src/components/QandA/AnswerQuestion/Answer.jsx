@@ -152,9 +152,8 @@ const Answer = () => {
         referred_id: answerId,
         referred_type: "answer",
       });
-      setNewComment("");
-      setRefetch(!refetch);
       toggleCommentInput(answerId);
+      setRefetch((prev) => !prev);
     } catch (error) {
       console.error("Failed to post comment:", error);
     } finally {
