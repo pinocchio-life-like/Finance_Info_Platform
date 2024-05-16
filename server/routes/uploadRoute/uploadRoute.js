@@ -21,7 +21,16 @@ const imgStorage = multer.diskStorage({
     cb(null, uploadsDir);
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
+    cb(
+      null,
+      Date.now() +
+        path.extname(
+          (file.originalname = Buffer.from(
+            file.originalname,
+            "latin1"
+          ).toString("utf8"))
+        )
+    ); //Appending extension
   },
 });
 
@@ -49,7 +58,16 @@ const fileStorage = multer.diskStorage({
     cb(null, uploadsDir);
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
+    cb(
+      null,
+      Date.now() +
+        path.extname(
+          (file.originalname = Buffer.from(
+            file.originalname,
+            "latin1"
+          ).toString("utf8"))
+        )
+    ); //Appending extension
   },
 });
 
