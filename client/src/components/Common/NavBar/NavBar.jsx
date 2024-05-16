@@ -101,7 +101,8 @@ const NavBar = () => {
       <div className="nav flex justify-between w-full h-full items-center">
         <div className=" flex items-center">
           <Link
-            to={`/wiki/articles/${categoryId}`}
+            // to={`/wiki/articles/${categoryId}`}
+            to={`/wiki/articles/17`}
             className="flex items-center lg:gap-1 gap-2">
             <div className="w-6 lg:w-12">
               <img src={logo} alt="" className="w-full" />
