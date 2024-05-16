@@ -86,10 +86,17 @@ const getallversionsOFAnArticle = async (id) => {
     where: { articleId: article.articleId },
     attributes: [
       "articleVersionId",
+      "userId",
       "articleVersionContent",
       "articleVersionTitle",
       "updatedAt",
       "createdAt",
+    ],
+    include: [
+      {
+        model: User,
+        attributes: ["userName"],
+      },
     ],
     order: [["updatedAt", "DESC"]],
   });

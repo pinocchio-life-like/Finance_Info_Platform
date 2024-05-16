@@ -28,6 +28,7 @@ const articleC = async (req, res) => {
       category: articleTitle,
       parent_Id,
       order_within_parent,
+      type: "article",
     });
 
     const category_Id = newCategory.category_Id;
