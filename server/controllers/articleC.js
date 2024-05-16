@@ -28,6 +28,7 @@ const articleC = async (req, res) => {
       category: articleTitle,
       parent_Id,
       order_within_parent,
+      type: "article",
     });
 
     const category_Id = newCategory.category_Id;
@@ -68,6 +69,25 @@ const getSingleArticleC = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+//get First Articel
+const getFirstArticleC = async (req, res) => {
+  try {
+    const article = await Article.findOne({ order: [["createdAt", "ASC"]] });
+
+    if (!article) {
+      return res.status(404).json({ message: "Article not found" });
+    }
+    res.json({
+      message: "Article retrieved successfully",
+      data: article.category_Id,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 //article getter
 const getAllArticlesC = async (req, res) => {
   try {
@@ -135,4 +155,5 @@ module.exports = {
   updateArticleC,
   deleteArticleC,
   getSingleArticleC,
+  getFirstArticleC,
 };

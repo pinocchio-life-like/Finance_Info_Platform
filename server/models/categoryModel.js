@@ -29,6 +29,11 @@ const Category = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    type: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      require: true,
+    },
   },
   {
     timestamps: false,

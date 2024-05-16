@@ -10,40 +10,7 @@ const CustomMdCatalog = ({ editorId, scrollElement, scrollChange }) => {
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value.trim().toLowerCase());
   };
-  // useEffect(() => {
-  //   const highlightMatches = () => {
-  //     const headers = document.querySelectorAll(
-  //       ".md-editor-preview h1, .md-editor-preview h2, .md-editor-preview h3, .md-editor-preview h4, .md-editor-preview h5, .md-editor-preview h6"
-  //     );
 
-  //     headers.forEach((header) => {
-  //       header.style.backgroundColor = "";
-  //       header.classList.remove("search-highlight");
-  //     });
-
-  //     if (!searchQuery) return;
-
-  //     const matchingHeaders = Array.from(headers).filter((header) =>
-  //       header.textContent.toLowerCase().includes(searchQuery)
-  //     );
-
-  //     if (matchingHeaders.length > 0) {
-  //       // Highlight matching headers
-  //       matchingHeaders.forEach((header) => {
-  //         header.style.backgroundColor = " #b2f1dc";
-  //         header.classList.add("search-highlight");
-  //       });
-
-  //       // Scroll the first matching header into view
-  //       matchingHeaders[0].scrollIntoView({
-  //         behavior: "smooth",
-  //         block: "center",
-  //       });
-  //     }
-  //   };
-
-  //   highlightMatches();
-  // }, [searchQuery]);
   const executeSearch = (event) => {
     event.preventDefault();
     const headers = document.querySelectorAll(

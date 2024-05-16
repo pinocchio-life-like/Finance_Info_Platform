@@ -19,6 +19,7 @@ const commentRoutes = require("./routes/Q&ARoutes/commentRoute");
 const tagsRoutes = require("./routes/Q&ARoutes/tagsRoute");
 const uploadRoute = require("./routes/uploadRoute/uploadRoute");
 const searchRoutes = require("./routes/searchRoute");
+const companyRoutes = require("./routes/CompanyRoute/companyRoutes");
 
 const app = express();
 const corsOptions = {
@@ -47,6 +48,7 @@ app.use("/api", commentRoutes);
 app.use("/api", uploadRoute);
 app.use("/api", tagsRoutes);
 app.use("/api", searchRoutes);
+app.use("/api", companyRoutes);
 
 app.use(
   "/Article/Images",
@@ -67,6 +69,6 @@ async function syncDatabase() {
   }
 }
 
-//  syncDatabase();
+syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));

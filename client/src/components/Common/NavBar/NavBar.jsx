@@ -17,7 +17,8 @@ const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const token = localStorage.getItem("token");
-  const [articles, setArticles] = useState([]);
+  // const [articles, setArticles] = useState([]);
+  const [allArticles, setAllArticles] = useState([]);
   const [questions, setQuestions] = useState([]);
 
   let userRole = null;
@@ -36,32 +37,32 @@ const NavBar = () => {
 
   useEffect(() => {
     const getFirstArticle = async () => {
-      const response = await api.post("/api/category/getCategories");
+      const response = await api.get("/api/category/getCategories");
 
-      const mainCategories = response.data.filter(
-        (category) => category.parent_Id === null
-      );
       const subCategories = response.data.filter(
         (category) => category.parent_Id !== null
       );
-
-      mainCategories.sort((a, b) => a.order - b.order);
       subCategories.sort(
         (a, b) => a.order_within_parent - b.order_within_parent
       );
 
-      const articles = subCategories.map((subCategory) => ({
-        label: subCategory.category,
-        value: subCategory.category_Id,
+      // const articles = subCategories.map((subCategory) => ({
+      //   label: subCategory.category,
+      //   value: subCategory.category_Id,
+      // }));
+
+      // setArticles(articles);
+
+      const allArticles = await api.get("/api/articles");
+      const all = allArticles.data.data;
+
+      const articlesAll = all.map((value) => ({
+        label: value.articleTitle,
+        value: value.category_Id,
+        articleContent: value.articleContent,
       }));
 
-      setArticles(articles);
-
-      mainCategories.forEach((mainCategory) => {
-        mainCategory.subCategories = subCategories.filter(
-          (subCategory) => subCategory.parent_Id === mainCategory.category_Id
-        );
-      });
+      setAllArticles(articlesAll);
 
       const forSearch = await api.get("/api/questions");
       const values = forSearch.data.data;
@@ -73,18 +74,8 @@ const NavBar = () => {
 
       setQuestions(questions);
 
-      const sortedCategories = [...mainCategories].sort(
-        (a, b) => a.parent_Id - b.parent_Id
-      );
-      const categoryWithSmallestParentId = sortedCategories[0];
-
-      if (categoryWithSmallestParentId) {
-        const sortedSubCategories = [
-          ...categoryWithSmallestParentId.subCategories,
-        ].sort((a, b) => a.order_within_parent - b.order_within_parent);
-        const subCategoryWithSmallestOrder = sortedSubCategories[0];
-        setCategoryId(subCategoryWithSmallestOrder.category_Id);
-      }
+      const firstArticle = await api.get("/api/articles/first");
+      setCategoryId(firstArticle.data.data);
     };
 
     getFirstArticle();
@@ -122,7 +113,9 @@ const NavBar = () => {
     <nav className="nav-bar-container bg-nav-bg lg:px-12 px-2 h-14 lg:h-20 flex flex-col lg:flex-row">
       <div className="nav flex justify-between w-full h-full items-center">
         <div className=" flex items-center">
-          <Link to="/" className="flex items-center lg:gap-1 gap-2">
+          <Link
+            to={`/wiki/articles/${categoryId}`}
+            className="flex items-center lg:gap-1 gap-2">
             <div className="w-6 lg:w-12">
               <img src={logo} alt="" className="w-full" />
             </div>
@@ -214,13 +207,20 @@ const NavBar = () => {
                       className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray"
                     />
                     {showOptions && (
-                      <div className="absolute w-full z-50 bg-white border border-gray-200 rounded mt-1">
+                      <div
+                        className="absolute w-full z-50 bg-white border border-gray-200 rounded mt-1 overflow-y-auto"
+                        style={{ maxHeight: "80vh" }}>
                         <div className="px-4 py-2 font-bold">Articles</div>
-                        {articles
-                          .filter((article) =>
-                            article.label
-                              .toLowerCase()
-                              .includes(search.toLowerCase())
+                        {allArticles
+                          .filter(
+                            (article) =>
+                              article.label
+                                .toLowerCase()
+                                .includes(search.toLowerCase()) ||
+                              (article.articleContent &&
+                                article.articleContent
+                                  .toLowerCase()
+                                  .includes(search.toLowerCase()))
                           )
                           .map((article, index) => (
                             <Link
