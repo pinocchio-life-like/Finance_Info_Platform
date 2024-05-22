@@ -4,6 +4,8 @@ const sequelize = require("./config/db.config");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+const multer = require("multer");
+const fs = require("fs");
 
 const cors = require("cors");
 
@@ -60,6 +62,38 @@ app.use(
   express.static(path.join(__dirname, "Article/Files"))
 );
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const index = parseInt(
+      file.fieldname.replace("files[", "").replace("]", "")
+    );
+    const dir = `TestFolder/${path.dirname(req.body.paths[index])}`;
+    fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);
+  },
+  filename: function (req, file, cb) {
+    const index = parseInt(
+      file.fieldname.replace("files[", "").replace("]", "")
+    );
+    cb(null, path.basename(req.body.paths[index]));
+  },
+});
+
+const upload = multer({ storage: storage }).any();
+
+app.post("/test_upload/file", (req, res, next) => {
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      console.error("Multer error:", err);
+      return res.status(500).json(err);
+    } else if (err) {
+      console.error("Other error:", err);
+      return res.status(500).json(err);
+    }
+    return res.status(200).send("Files have been uploaded.");
+  });
+});
+
 async function syncDatabase() {
   try {
     await sequelize.sync({ alter: true }); //edit this as needed
@@ -69,6 +103,6 @@ async function syncDatabase() {
   }
 }
 
-syncDatabase();
+// syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));

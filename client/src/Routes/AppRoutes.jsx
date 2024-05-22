@@ -13,6 +13,7 @@ import Admin from "../components/Dashboard/Admin/Admin";
 import { useNavigate } from "react-router-dom";
 import { wikiRoutes } from "./wikiRoutes";
 import { QandARoutes } from "./QandARoutes";
+import { FTPRoutes } from "./FileTransferRoutes";
 
 function AppRoutes() {
   const location = useLocation();
@@ -63,6 +64,10 @@ function AppRoutes() {
         ))}
 
         {QandARoutes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
+
+        {FTPRoutes.map((route, index) => (
           <Route key={index} path={route.path} element={route.element} />
         ))}
 

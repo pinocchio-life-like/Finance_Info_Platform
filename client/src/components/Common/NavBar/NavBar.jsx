@@ -139,7 +139,7 @@ const NavBar = () => {
           </li>
           <li>
             <Link
-              to="/ftp"
+              to="/ftp/home"
               className={`font-bold hover:text-blue-700 ${
                 location.pathname.includes("ftp")
                   ? "text-blue-800"
@@ -379,7 +379,7 @@ const NavBar = () => {
                   </li>
                   <li>
                     <Link
-                      to="/ftp"
+                      to="/ftp/home"
                       className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
                         location.pathname.includes("ftp")
                           ? "text-blue-800"
