@@ -20,7 +20,7 @@ const tagsRoutes = require("./routes/Q&ARoutes/tagsRoute");
 const uploadRoute = require("./routes/uploadRoute/uploadRoute");
 const searchRoutes = require("./routes/searchRoute");
 const companyRoutes = require("./routes/CompanyRoute/companyRoutes");
-const ftpRoute=require('./routes/ftpRoutes/FtpR')
+const ftpRoute = require("./routes/ftpRoutes/FtpR");
 
 const app = express();
 const corsOptions = {
@@ -74,9 +74,3 @@ async function syncDatabase() {
 syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));
-
-
-
-
-
-
