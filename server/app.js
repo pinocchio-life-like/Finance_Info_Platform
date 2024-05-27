@@ -32,7 +32,7 @@ const corsOptions = {
 
 app.use(cookieParser());
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
-app.use(express.json({ limit: "50mb" }));
+// app.use(express.json({ limit: "50mb" }));
 app.use(cors(corsOptions));
 
 app.use(express.json());
@@ -71,6 +71,6 @@ async function syncDatabase() {
   }
 }
 
-syncDatabase();
+// syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));

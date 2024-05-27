@@ -1,115 +1,71 @@
-// const{createFolder,getFolders}=require('../../models/FtpModel/FolderModel')
-// const folderController=async(req,res)=>{
-
-//     try{
-//         // const {folder_name,folder_parentId,folder_url}=req.body
-//         let folder_name = req.file.filename;
-//         let folder_url = req.file.path
-//         let folder_parentId=req.body
-
-//         const folder=await createFolder({folder_name,folder_parentId,folder_url})
-//         if(!folder){
-//             res.json({
-//                 success:false
-
-//             })
-
-//         }
-//         res.json({
-//             success:true,
-//             data:folder
-//         })
-
-//     }catch(error){
-//         console.log(error)
-//     }
-// }
-// const foldergetcontroller=async(req,res)=>{
-
-//     try{
-//         const folders=await getFolders()
-//         if(!folders){
-//             res.json({
-//                 success:false
-//             })
-//         }
-
-//         res.json({
-//             success:true,
-//             data:folders
-//         })
-//     }
-//     catch(error){
-//         console.log(error)
-//     }
-// }
-
-// exports.module={
-//     folderController,
-//     foldergetcontroller
-// }
-const {
-  createFolder,
-  getFolders,
-  uploadFolder,
-} = require("../../models/FtpModel/FolderModel");
 const path = require("path");
-const { Folder } = require("../../models/FtpModel/FolderModel");
-const { createFile } = require("../../models/FtpModel/FileModel");
+const fs = require("fs");
+const { createFolder, getFolders,} = require("../../models/FtpModel/FolderModel");
+const{uploadFolder}=require('../../models/FtpModel/associations')
+const Folder = require("../../models/FtpModel/FolderModel");
+const File = require("../../models/FtpModel/FileModel");
 
-const uploadFolderC = async (req, res) => {
+const uploadFolderC = async (req, res, next) => {
   try {
-    const parentFolderId = req.body.parent_folder_id;
-    const parentFolder = parentFolderId ? await Folder.findByPk(parentFolderId) : null;
+    // console.log(req.body, 'Body:');
+    console.log(req.files, 'Files: from controller');
+    
+    const parentFolder = req.body.parentFolder ? JSON.parse(req.body.parentFolder) : null;
+    const folder_url = req.body.folder_url;
+    const folder_name = req.body.folder_name;
+    const files = req.files;
 
-    // Check if parent folder exists
-    if (parentFolderId && !parentFolder) {
-      return res.status(404).send("Parent folder not found.");
+    // Check if folder_url or folder_name is undefined
+    if (!folder_url || !folder_name) {
+      return res.status(400).send("Folder URL and name are required.");
     }
 
-    // Create folder entry
-    const newFolder = await Folder.create({
-      name: req.body.folder_name,
-      parentId: parentFolderId,
+    // Call uploadFolder function with correct arguments
+    const uploadedFolder = await uploadFolder(parentFolder, folder_url, folder_name, files);
+
+    res.status(201).json({
+      message: "Folder uploaded successfully.",
+      folder: uploadedFolder,
     });
-
-    // Upload files to the created folder
-    for (const file of req.files) {
-      const filePath = path.join(newFolder.folder_url, file.originalname);
-
-      // Move file to folder path
-      fs.renameSync(file.path, filePath);
-
-      // Create file entry
-      await File.create({
-        name: file.originalname,
-        folderId: newFolder.id,
-      });
-    }
-
-    res.status(201).send("Folder uploaded successfully.");
   } catch (error) {
     console.error(error);
     res.status(500).send("Error uploading folder.");
   }
 };
-const crteateFolderC=(req,res)=>{
-  const {parentFolder,folder_url, folder_name}=req.body
-  const folder=  createFolder(parentFolder,folder_url, folder_name)
-  if(!folder){
-    
-  }
-  // createfolder
 
-}
-const uploadFile = async (req, res) => {
-  console.log("hello");
+const createFolderC = async (req, res) => {
   try {
-    //   const user = await User.findByPk(req.body.user_id);
+    const { parent_folder_id, folder_url, folder_name } = req.body;
+
+    const parentFolder = parent_folder_id ? await Folder.findByPk(parent_folder_id) : null;
+
+    if (parent_folder_id && !parentFolder) {
+      return res.status(404).send("Parent folder not found.");
+    }
+
+    const newFolder = await createFolder(folder_name, parentFolder, folder_url);
+    res.status(201).json(newFolder);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error creating folder.");
+  }
+};
+
+const uploadFile = async (req, res) => {
+  try {
     const folder = await Folder.findByPk(req.body.folder_id);
 
-    const newFile = await createFile(req.file, folder);
-    // await user.addFile(newFile);
+    if (!folder) {
+      return res.status(404).send("Folder not found.");
+    }
+
+    const filePath = path.join(folder.folder_url, req.file.originalname);
+    fs.renameSync(req.file.path, filePath);
+
+    const newFile = await File.create({
+      name: req.file.originalname,
+      folder_id: folder.folder_id,
+    });
 
     res.status(201).send("File uploaded successfully.");
   } catch (error) {
@@ -118,4 +74,4 @@ const uploadFile = async (req, res) => {
   }
 };
 
-module.exports = { uploadFolderC, uploadFile };
+module.exports = { uploadFolderC, uploadFile, createFolderC };

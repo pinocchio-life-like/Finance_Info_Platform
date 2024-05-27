@@ -43,6 +43,7 @@ router.post("/article/img/upload", imgUpload.array("file"), (req, res) => {
         file.filename
       }`;
     });
+
     res.status(200).json({ urls });
   } catch (error) {
     res.status(500).json({ error: error.toString() });
