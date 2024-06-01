@@ -1,13 +1,44 @@
 import { Table } from "antd";
-import { UserOutlined, FileOutlined } from "@ant-design/icons";
+import PropTypes from "prop-types";
+import { UserOutlined } from "@ant-design/icons";
 import { DotsVerticalIcon, UserAddIcon } from "@heroicons/react/solid";
 import { useRef, useState } from "react";
 import { PencilAltIcon, TrashIcon } from "@heroicons/react/solid";
+import { FcFolder } from "react-icons/fc";
+import { PiFilePdfBold } from "react-icons/pi";
+import { TbFileTypeDocx } from "react-icons/tb";
+import { FaRegImages } from "react-icons/fa6";
+import { PiFilePptBold } from "react-icons/pi";
+import { LuTextSelect } from "react-icons/lu";
+import { GrStatusUnknown } from "react-icons/gr";
+
+const getIconForMimeType = (mimeType) => {
+  switch (mimeType) {
+    case "folder":
+      return <FcFolder size={25} className="mr-4" />;
+    case "application/pdf":
+      return <PiFilePdfBold size={25} color="#00215E" className="mr-4" />;
+    case "application/msword":
+    case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+      return <TbFileTypeDocx color="#0B60B0" size={25} className="mr-4" />;
+    case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+      return <PiFilePptBold color="#E72929" size={25} className="mr-4" />;
+    case "text/plain":
+      return <LuTextSelect color="#0C0C0C" size={25} className="mr-4" />;
+    case "image/jpeg":
+    case "image/png":
+      return <FaRegImages color="#0C0C0C" size={25} className="mr-4" />;
+    // Add more cases as needed....
+    default:
+      return <GrStatusUnknown size={25} className="mr-4" />;
+  }
+};
 
 const TableComponent = (props) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
   const dropdownRef = useRef(null);
+  const data = props.data;
 
   const shareHandler = (record) => {
     setDropdownVisible(false);
@@ -21,10 +52,10 @@ const TableComponent = (props) => {
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
       sortDirections: ["descend", "ascend"],
-      render: (text) => (
-        <>
-          <FileOutlined /> {text}
-        </>
+      render: (text, record) => (
+        <span className="flex flex-row items-center">
+          {getIconForMimeType(record.type)} {text}
+        </span>
       ),
     },
     {
@@ -39,13 +70,13 @@ const TableComponent = (props) => {
     },
     {
       title: "Last Modified",
-      dataIndex: "lastModified",
-      key: "lastModified",
+      dataIndex: "updatedAt",
+      key: "updatedAt",
     },
     {
       title: "File Size",
-      dataIndex: "fileSize",
-      key: "fileSize",
+      dataIndex: "size",
+      key: "size",
     },
     {
       title: (
@@ -104,46 +135,25 @@ const TableComponent = (props) => {
     },
   ];
 
-  const data = [
-    {
-      key: "1",
-      name: "File 1",
-      owner: "Owner 1",
-      lastModified: "2022-01-01",
-      fileSize: "1MB",
-    },
-    {
-      key: "2",
-      name: "File 2",
-      owner: "Owner 1",
-      lastModified: "2022-01-01",
-      fileSize: "1MB",
-    },
-    {
-      key: "3",
-      name: "File 3",
-      owner: "Owner 3",
-      lastModified: "2022-01-01",
-      fileSize: "1MB",
-    },
-    {
-      key: "4",
-      name: "File 4",
-      owner: "Owner 4",
-      lastModified: "2022-01-01",
-      fileSize: "1MB",
-    },
-    {
-      key: "5",
-      name: "File 5",
-      owner: "Owner 5",
-      lastModified: "2022-01-01",
-      fileSize: "1MB",
-    },
-    // Add more data here
-  ];
+  return (
+    <Table
+      rowKey="id"
+      onRow={(record) => {
+        return {
+          onClick: () => {
+            console.log("Row key:", record.id);
+          },
+        };
+      }}
+      columns={columns}
+      dataSource={data}
+    />
+  );
+};
 
-  return <Table columns={columns} dataSource={data} />;
+TableComponent.propTypes = {
+  shareHandler: PropTypes.func.isRequired,
+  data: PropTypes.array.isRequired,
 };
 
 export default TableComponent;

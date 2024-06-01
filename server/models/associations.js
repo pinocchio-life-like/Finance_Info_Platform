@@ -1,4 +1,6 @@
 const sequelize = require("../config/db.config");
+const { Folder } = require("./FtpModel/FolderModel");
+const { FolderUser } = require("./FtpModel/FolderUserModel");
 const Company = require("./CompanyModel/CompanyModel").Company;
 const Article = require("./articleModel").Article; // Adjust paths as necessary
 const User = require("./userModel").User;
@@ -20,6 +22,9 @@ ArticleVersion.belongsTo(Article, {
   foreignKey: "articleId",
   targetKey: "articleId",
 });
+
+User.belongsToMany(Folder, { through: FolderUser, foreignKey: "userId" });
+
 const createArticle = async (article) => {
   try {
     const { articleTitle, articleContent, category_Id, userId } = article;

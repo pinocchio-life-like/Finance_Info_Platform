@@ -1,3 +1,4 @@
+// import FileTransfer from "../components/FileTransfer/FTPComponents/FileTransfer";
 import FTPHome from "../components/FileTransfer/FTPHome/FTPHome";
 import FTPTemplates from "../components/FileTransfer/FTPTemplates/FTPTemplates";
 import FileTransferHome from "../components/FileTransfer/FileTransferHome";
@@ -29,7 +30,7 @@ export const FTPRoutes = [
     element: (
       <PrivateRoute>
         <FileTransferHome>
-          <div>Ceratin Directory</div>
+          <FTPHome />
         </FileTransferHome>
       </PrivateRoute>
     ),
