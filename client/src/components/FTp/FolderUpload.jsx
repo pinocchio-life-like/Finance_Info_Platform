@@ -12,31 +12,46 @@ const FolderUpload = () => {
     folder_url: "",
     visible: false,
   });
+  const[fileUpload,setFile]=useState({
+    file_name:"",
+    file_url:"",
+    mime_type:"",
+    folder_id:""
+
+  })
 
   const handleFolderInput = (event) => {
     const selectedFiles = Array.from(event.target.files);
     console.log("Selected Files:", selectedFiles);
 
-    if (selectedFiles.length > 0) {
-      const directoryPath = selectedFiles[0].webkitRelativePath;
-      const directoryParts = directoryPath.split("/");
-      const folderURL = directoryParts.slice(0, -1).join("/");
-      const folderName = directoryParts.slice(-2, -1)[0];
+    const formDataArray = [];
 
-      setFormData({
-        ...formData,
-        files: selectedFiles,
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const file = selectedFiles[i];
+      const directoryPath = file.webkitRelativePath;
+      const directoryParts = directoryPath.split("/");
+      const folderURL = directoryParts.join("/");
+      const folderName = directoryParts.slice(-2, -1)[0];
+      const mime_type=file.type
+      console.log(mime_type)
+
+      console.log("File:", file);
+      console.log("Parent Folder URL:", folderURL);
+
+      formDataArray.push({
+        file,
         folder_name: folderName,
         folder_url: folderURL,
       });
-    } else {
-      setFormData({
-        ...formData,
-        files: selectedFiles,
-      });
     }
-  };
 
+    setFormData({
+      ...formData,
+      files: formDataArray,
+      folder_name: formDataArray.length > 0 ? formDataArray[0].folder_name : "",
+      folder_url: formDataArray.length > 0 ? formDataArray[0].folder_url : "",
+    });
+  };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -63,6 +78,9 @@ const FolderUpload = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    console.log(formData.folder_name);
+    console.log(formData.folder_url);
+
     if (!formData.folder_name || !formData.folder_url) {
       message.error("Folder URL and name are required.");
       return;
@@ -70,10 +88,12 @@ const FolderUpload = () => {
 
     const formDataObject = new FormData();
     formData.files.forEach((file) => {
-      formDataObject.append("files", file);
+   
+      formDataObject.append("files", file.file);
     });
     formDataObject.append("folder_name", formData.folder_name);
-    formDataObject.append("folder_url", formData.folder_url);
+    formDataObject.append("folder_url", formData.folder_url.slice(0, -1));
+    console.log(formDataObject,"testttttttttttt")
 
     try {
       const response = await api.post("/api/upload/folder", formDataObject, {
@@ -81,13 +101,29 @@ const FolderUpload = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+      console.log(response)
       if (response) {
         message.success("Folder uploaded successfully!");
+        // formDataObject.files.map((file)=>{
+        //   // setFile({
+        //   //   ...file,
+        //   //   folder_id:response.data.id,
+        //   //   mime_type:file.type,
+        //   //   file_name:file.name,
+        //   //   file_url:response.data.url
+        //   // })
+
+        // })
+        // const responseFile=await api.post('api/upload/file',fileUpload)
+        //   if(responseFile){
+        //     message.success("file uploaded successfully!");
+        //   }
+       
       } else {
         message.error("Error uploading folder");
       }
     } catch (error) {
-      console.error("Error uploading folder:", error);
+      console.error("Error uploading folder:", error.message);
       if (error.response) {
         message.error(error.response.data || "Error uploading folder");
       } else {
@@ -95,6 +131,8 @@ const FolderUpload = () => {
       }
     }
   };
+
+
 
   const handleOk = () => {
     setFormData({
