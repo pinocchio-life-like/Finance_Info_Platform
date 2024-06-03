@@ -42,7 +42,6 @@ const getIconForMimeType = (mimeType) => {
 };
 
 const TableComponent = (props) => {
-  const [activeIndex, setActiveIndex] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
   const dropdownRefs = useRef([]);
   const data = props.data;
@@ -81,7 +80,6 @@ const TableComponent = (props) => {
   }, [dropdownRefs, data.length]);
 
   const shareHandler = (record) => {
-    // setDropdownVisible(false);
     props.shareHandler(record);
   };
 

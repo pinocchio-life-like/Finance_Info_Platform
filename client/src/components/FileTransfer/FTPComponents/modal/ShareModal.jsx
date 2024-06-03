@@ -1,70 +1,114 @@
-import { Button, Modal, Input, List, Avatar } from "antd";
-import { useRef, useState } from "react";
+import { Button, Modal, Input, List, Avatar, Radio } from "antd";
+import { useEffect, useRef, useState } from "react";
 import { UserOutlined } from "@ant-design/icons";
 import { LockFilled } from "@ant-design/icons";
 import { FaUnlockAlt } from "react-icons/fa";
 import { IoMdCheckboxOutline } from "react-icons/io";
 import { DeleteOutlined } from "@ant-design/icons";
-
-const dummyData = [
-  {
-    name: "John Doe",
-    email: "john.doe@example.com",
-  },
-  {
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-  },
-  {
-    name: "Bob Johnson",
-    email: "bob.johnson@example.com",
-  },
-  {
-    name: "Bob Johnson",
-    email: "bob.johnson@example.com",
-  },
-  {
-    name: "Bob Johnson",
-    email: "bob.johnson@example.com",
-  },
-  {
-    name: "Bob Johnson",
-    email: "bob.johnson@example.com",
-  },
-];
+import api from "../../../../utils/api";
+import { Link } from "react-router-dom";
+import { Checkbox } from "antd";
 
 const ShareModal = (props) => {
   const [submitActive, setSubmitActive] = useState(false);
-  const [inputValue, setInputValue] = useState("");
   const searchRef = useRef();
   const [showOptions, setShowOptions] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownAccessOpen, setDropdownAccessOpen] = useState(null);
   const [selectedOption, setSelectedOption] = useState("Restricted");
   const [selectedAccessOption, setSelectedAccessOption] = useState("Read Only");
-  const [data, setData] = useState(dummyData);
+  const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState("");
+  const [checkedValues, setCheckedValues] = useState([]);
+  const [folderUsers, setFolderUsers] = useState([]);
+  const [data, setData] = useState([]);
+
+  const handleAccessOptionChange = (e) => {
+    setSelectedAccessOption(e.target.value);
+    setDropdownAccessOpen(null);
+  };
+
+  const handleOptionClick = (e) => {
+    setSelectedOption(e.target.value);
+    setDropdownOpen(false);
+  };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await api.get("/api/users/getall");
+        const users = response.data.data;
+
+        setData(users);
+
+        const data = users.map((user) => {
+          const permissionUser = props.users.users.find(
+            (p) => p.userId === user.userId
+          );
+          return {
+            label: user.firstName,
+            value: user.userId,
+            permission: permissionUser ? permissionUser.permission : null,
+          };
+        });
+        console.log("users: ", data);
+        setUsers(data);
+        setFolderUsers(props.users.users);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUsers();
+  }, [props.users.users]);
 
   const handleDropdownClick = () => {
     setDropdownOpen(!dropdownOpen);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+    setShowOptions(true);
+    setSubmitActive(e.target.value !== "");
   };
 
   const handleDropdownAccessClick = (index) => {
     setDropdownAccessOpen(dropdownAccessOpen === index ? null : index);
   };
 
-  const handleOptionClick = (option) => {
-    setSelectedOption(option);
-    setDropdownOpen(false);
-  };
+  // Handle click outside to close the dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowOptions(false);
+      }
+    };
 
-  const handleAccessOptionClick = (option) => {
-    setSelectedAccessOption(option);
-    setDropdownAccessOpen(null);
-  };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-    setSubmitActive(e.target.value !== "");
+  const handleCheckboxChange = (checkedValues) => {
+    console.log("checked = ", checkedValues);
+    setCheckedValues(checkedValues);
+
+    // Update folderUsers state
+    const updatedFolderUsers = data
+      .filter((user) => checkedValues.includes(user.userId))
+      .map((user) => {
+        const permissionUser = props.users.users.find(
+          (p) => p.userId === user.userId
+        );
+        return {
+          userName: user.userName,
+          userId: user.userId,
+          firstName: user.firstName,
+          permission: permissionUser ? permissionUser.permission : "read",
+        };
+      });
+
+    setFolderUsers(updatedFolderUsers);
   };
 
   return (
@@ -72,9 +116,9 @@ const ShareModal = (props) => {
       <Modal
         onCancel={props.onCancelHandler}
         footer={null}
-        title={`Share "${props.data.name}"`}
+        title={`Share "${props.users.name}"`}
         centered
-        visible={props.isOpen}>
+        open={props.isOpen}>
         <div
           className="flex w-full rounded bg-white h-full relative border border-gray-200"
           ref={searchRef}>
@@ -84,27 +128,42 @@ const ShareModal = (props) => {
               type="search"
               name="search"
               placeholder="Search..."
-              //   value={search}
-              //   onChange={handleSearchChange}
+              value={search}
+              onChange={handleSearchChange}
             />
             {showOptions && (
               <div
                 className="absolute w-full bg-white border border-gray-200 rounded mt-1 overflow-y-auto z-50"
-                style={{ maxHeight: "80vh" }}>
-                <div className="px-4 py-2 font-bold">Contacts</div>
-                {/* {questions
-                  .filter((question) =>
-                    question.label.toLowerCase().includes(search.toLowerCase())
-                  )
-                  .map((question, index) => (
-                    <Link
-                      key={index}
-                      to={`/question/${question.value}`}
-                      onClick={() => handleOptionClick(question.label)}
-                      className="block px-4 py-2 hover:bg-gray-200 cursor-pointer">
-                      {question.label}
-                    </Link>
-                  ))}  */}
+                style={{ maxHeight: 300 }}>
+                <div className="px-4 py-2 font-bold">Users</div>
+                <Checkbox.Group
+                  defaultValue={users
+                    .filter((user) => user.permission !== null)
+                    .map((user) => user.value)}
+                  onChange={handleCheckboxChange}>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(3, 1fr)",
+                      gap: "10px",
+                    }}>
+                    {users
+                      .filter((user) =>
+                        user.label.toLowerCase().includes(search.toLowerCase())
+                      )
+                      .map((user) => (
+                        <div
+                          key={user.value}
+                          className="block px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                          <Checkbox
+                            value={user.value}
+                            disabled={user.permission === "admin"}>
+                            {user.label}
+                          </Checkbox>
+                        </div>
+                      ))}
+                  </div>
+                </Checkbox.Group>
               </div>
             )}
           </div>
@@ -114,15 +173,15 @@ const ShareModal = (props) => {
         </div>
         <List
           itemLayout="horizontal"
-          className="ml-2 max-h-80 overflow-auto"
-          dataSource={data}
+          className="ml-2 max-h-80 overflow-auto py-10"
+          dataSource={folderUsers}
           renderItem={(item, index) => (
             <List.Item
+              className="flex items-center"
               actions={[
                 <div
-                  key={1}
-                  onClick={() => handleDropdownAccessClick(index)}
-                  className="pt-1">
+                  key={index}
+                  onClick={() => handleDropdownAccessClick(index)}>
                   <span className="font-semibold text-[15px] flex items-center hover:bg-gray-300 w-fit h-fit px-1 rounded">
                     {selectedAccessOption}
                     <span
@@ -134,47 +193,32 @@ const ShareModal = (props) => {
                 </div>,
               ]}>
               {dropdownAccessOpen === index && (
-                <div className="absolute bg-white border border-gray-200 rounded mt-28 right-4 py-2 w-64 z-50">
-                  <div
-                    className="hover:bg-gray-200 px-1 py-2 flex flex-row items-center"
-                    onClick={() => handleAccessOptionClick("Read Only")}>
-                    {selectedAccessOption === "Read Only" && (
-                      <IoMdCheckboxOutline
-                        size={20}
-                        color="green"
-                        className="mr-1"
-                      />
-                    )}
-                    <span
-                      className={`pl-${
-                        selectedAccessOption === "Read Only" ? 0 : 7
-                      }`}>
+                <div className="absolute bg-white border border-gray-200 rounded mt-40 right-4 py-1 z-50 px-1">
+                  <Radio.Group
+                    className="flex flex-col"
+                    onChange={handleAccessOptionChange}
+                    value={selectedAccessOption}>
+                    <Radio
+                      className="hover:bg-gray-200 px-1 py-2 flex flex-row items-center"
+                      value="Read Only">
                       Read Only
-                    </span>
-                  </div>
-                  <div
-                    className="hover:bg-gray-200 px-1 py-2 flex flex-row items-center"
-                    onClick={() => handleAccessOptionClick("Read and Write")}>
-                    {selectedAccessOption !== "Read Only" && (
-                      <IoMdCheckboxOutline
-                        size={20}
-                        color="green"
-                        className="mr-1"
-                      />
-                    )}
-                    <span
-                      className={`pl-${
-                        selectedAccessOption === "Read Only" ? 7 : 0
-                      }`}>
+                    </Radio>
+                    <Radio
+                      className="hover:bg-gray-200 px-1 py-2 flex flex-row items-center"
+                      value="Read and Write">
                       Read and Write
-                    </span>
-                  </div>
+                    </Radio>
+                    <Radio
+                      className="hover:bg-gray-200 px-1 py-2 flex flex-row items-center"
+                      value="Revoke">
+                      Remove User Access
+                    </Radio>
+                  </Radio.Group>
                 </div>
               )}
               <List.Item.Meta
                 avatar={<Avatar icon={<UserOutlined />} />}
-                title={item.name}
-                description={item.email}
+                title={item.userName}
               />
             </List.Item>
           )}
@@ -198,37 +242,22 @@ const ShareModal = (props) => {
               </span>
             </div>
             {dropdownOpen && (
-              <div className="absolute bg-white border border-gray-200 rounded mt-7 py-2 w-64 z-50">
-                <div
-                  className="hover:bg-gray-200 px-1 py-3 flex flex-row items-center"
-                  onClick={() => handleOptionClick("Restricted")}>
-                  {selectedOption === "Restricted" && (
-                    <IoMdCheckboxOutline
-                      size={20}
-                      color="green"
-                      className="mr-1"
-                    />
-                  )}
-                  <span
-                    className={`pl-${selectedOption === "Restricted" ? 0 : 7}`}>
+              <div className="absolute bg-white border border-gray-200 rounded mt-7 py-2 z-50 px-1">
+                <Radio.Group
+                  className="flex flex-col"
+                  onChange={handleOptionClick}
+                  value={selectedOption}>
+                  <Radio
+                    className="hover:bg-gray-200 px-1 py-3 flex flex-row items-center"
+                    value="Restricted">
                     Restricted
-                  </span>
-                </div>
-                <div
-                  className="hover:bg-gray-200 px-1 py-3 flex flex-row items-center"
-                  onClick={() => handleOptionClick("Anyone with the link")}>
-                  {selectedOption !== "Restricted" && (
-                    <IoMdCheckboxOutline
-                      size={20}
-                      color="green"
-                      className="mr-1"
-                    />
-                  )}
-                  <span
-                    className={`pl-${selectedOption === "Restricted" ? 7 : 0}`}>
+                  </Radio>
+                  <Radio
+                    className="hover:bg-gray-200 px-1 py-3 flex flex-row items-center"
+                    value="Anyone with the link">
                     Anyone with the link
-                  </span>
-                </div>
+                  </Radio>
+                </Radio.Group>
               </div>
             )}
             <div className="px-1">
@@ -246,9 +275,7 @@ const ShareModal = (props) => {
           </Button>
           <Button
             disabled={!submitActive}
-            style={{ background: "#3B82f6", color: "white", width: "50%" }}
-            // onClick=
-          >
+            style={{ background: "#3B82f6", color: "white", width: "50%" }}>
             Done
           </Button>
         </div>

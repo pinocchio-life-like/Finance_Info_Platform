@@ -12,12 +12,18 @@ const FTPHome = (props) => {
   const location = useLocation();
   const currentURL = location.pathname;
   const onSearch = (value, _e, info) => console.log(info?.source, value);
-  const [currentFolder, setCurrentFolder] = useState({});
   const [data, setData] = useState([]); // [folders, files]
-  const shareHandler = (file) => {
+  const [currentUsers, setCurrentUsers] = useState({}); // [users, files]
+
+  const shareHandler = (record) => {
     setOpenModal(!openModal);
-    setCurrentFolder(file);
+    setCurrentUsers({
+      users: record.users,
+      folder_id: record.id,
+      name: record.name,
+    });
   };
+
   const [openModal, setOpenModal] = useState(false);
   const onCancelHandler = () => setOpenModal(false);
 
@@ -44,8 +50,6 @@ const FTPHome = (props) => {
           },
         });
 
-        console.log(response.data.data);
-
         const mergedData = [
           ...response.data.data.folders.map((folder) => ({
             updatedAt: new Date(folder.updatedAt).toLocaleString(),
@@ -54,6 +58,7 @@ const FTPHome = (props) => {
             owner: folder.owner,
             type: folder.type,
             url: folder.folder_url,
+            users: folder.Users,
           })),
           ...response.data.data.files.map((file) => ({
             updatedAt: new Date(file.updatedAt).toLocaleString(),
@@ -92,7 +97,7 @@ const FTPHome = (props) => {
       <ShareModal
         isOpen={openModal}
         onCancelHandler={onCancelHandler}
-        data={currentFolder}
+        users={currentUsers}
       />
     </div>
   );

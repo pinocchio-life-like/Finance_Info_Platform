@@ -264,17 +264,48 @@ const getUserFoldersController = async (req, res) => {
         ? null
         : folder_parent_id;
 
+    // Check if user has relation with parentFolder only if parentFolder is not null
+    if (parentFolder !== null) {
+      const userFolderRelation = await FolderUser.findOne({
+        where: { userId: user.userId, folder_id: parentFolder },
+      });
+
+      if (!userFolderRelation) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+    }
+
+    // Get folder_ids from FolderUser table
+    const folderUsers = await FolderUser.findAll({
+      where: { userId: user.userId },
+      attributes: ["folder_id"],
+    });
+
+    const folderIds = folderUsers.map((folderUser) => folderUser.folder_id);
+
+    // Get folders
     const folders = await Folder.findAll({
-      where: { folder_parent_id: parentFolder },
+      where: {
+        folder_parent_id: parentFolder,
+        folder_id: folderIds,
+      },
       include: [
         {
           model: User,
-          through: { where: { userId: user.userId } },
-          attributes: {
-            exclude: ["password", "createdAt", "updatedAt", "userRole"],
-          },
+          through: { attributes: ["permission"] }, // This will exclude the join table (FolderUser) from the data
+          attributes: ["userName", "userId", "firstName"],
         },
       ],
+    });
+
+    // Flatten user structure
+    folders.forEach((folder) => {
+      folder.dataValues.Users = folder.Users.map((user) => {
+        // Add permission to user object and remove FolderUsers object
+        user.dataValues.permission = user.FolderUsers.permission;
+        delete user.dataValues.FolderUsers;
+        return user;
+      });
     });
 
     for (let folder of folders) {
