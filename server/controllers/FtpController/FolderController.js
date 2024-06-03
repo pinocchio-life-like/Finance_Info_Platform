@@ -270,11 +270,10 @@ const getUserFoldersController = async (req, res) => {
         {
           model: User,
           through: { where: { userId: user.userId } },
+          attributes: {
+            exclude: ["password", "createdAt", "updatedAt", "userRole"],
+          },
         },
-        // {
-        //   model: File,
-        //   required: parentFolder ? true : false,
-        // },
       ],
     });
 

@@ -8,7 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import { useLocation } from "react-router-dom";
 const { Search } = Input;
 
-const FTPHome = () => {
+const FTPHome = (props) => {
   const location = useLocation();
   const currentURL = location.pathname;
   const onSearch = (value, _e, info) => console.log(info?.source, value);
@@ -43,24 +43,25 @@ const FTPHome = () => {
               : currentURL.split("/").pop(),
           },
         });
+
         console.log(response.data.data);
 
         const mergedData = [
           ...response.data.data.folders.map((folder) => ({
-            updatedAt: folder.updatedAt,
+            updatedAt: new Date(folder.updatedAt).toLocaleString(),
             id: folder.folder_id,
             name: folder.folder_name,
             owner: folder.owner,
             type: folder.type,
-            size: "...",
+            url: folder.folder_url,
           })),
           ...response.data.data.files.map((file) => ({
-            updatedAt: file.updatedAt,
+            updatedAt: new Date(file.updatedAt).toLocaleString(),
             id: file.file_id,
             name: file.file_name,
             owner: file.user_name,
             type: file.mime_type,
-            size: "5MB",
+            url: file.file_url,
           })),
         ];
 
@@ -70,7 +71,7 @@ const FTPHome = () => {
       }
     };
     fetchUserFolders();
-  }, [currentURL, userName]);
+  }, [currentURL, userName, props.refetch]);
 
   return (
     <div className="flex flex-col p-3 text-lg">

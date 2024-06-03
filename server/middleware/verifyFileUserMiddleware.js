@@ -29,7 +29,7 @@ const verifyFileUserMiddleware = async (req, res, next) => {
 
     // Check if user has access to the file
     const folderUser = await FolderUser.findOne({
-      where: { userId: user.userId, folderId: file.folder_id },
+      where: { userId: user.userId, folder_id: file.folder_id },
     });
 
     if (!folderUser) {

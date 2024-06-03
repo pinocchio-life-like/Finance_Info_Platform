@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaGoogleDrive } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa";
 import { IoHome } from "react-icons/io5";
@@ -24,6 +24,7 @@ const FTPCommon = (props) => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [lastSegment, setLastSegment] = useState();
   const [parentFolder, setParentFolder] = useState(null);
+  const [refetch, setRefetch] = useState(false);
 
   useEffect(() => {
     const fetchFolder = async () => {
@@ -38,7 +39,7 @@ const FTPCommon = (props) => {
       }
     };
     fetchFolder();
-  }, [currentURL]);
+  }, [currentURL, refetch]);
 
   const token = localStorage.getItem("token");
   let userName = null;
@@ -54,6 +55,7 @@ const FTPCommon = (props) => {
   const handleUploadClick = () => {
     folderInputRef.current.click();
   };
+
   const handleFileUpload = () => {
     fileInputRef.current.click();
   };
@@ -86,6 +88,7 @@ const FTPCommon = (props) => {
     try {
       await api.post("/api/folders/upload", formData, config);
       setUploadStatus("Upload complete!");
+      setRefetch(!refetch);
     } catch (error) {
       setUploadStatus("Upload failed!");
     } finally {
@@ -123,6 +126,7 @@ const FTPCommon = (props) => {
 
       if (response.status === 200) {
         setUploadStatus("Upload complete!");
+        setRefetch(!refetch);
       } else if (response.status === 400) {
         setUploadStatus("Upload failed: File already exists");
       } else {
@@ -161,7 +165,7 @@ const FTPCommon = (props) => {
 
     try {
       await api.post("/api/folder/create", folderData);
-      console.log("Folder created successfully");
+      setRefetch(!refetch);
     } catch (error) {
       console.error("Failed to create folder", error);
     }
@@ -222,38 +226,42 @@ const FTPCommon = (props) => {
                     <FaGoogleDrive size={20} style={{ marginRight: 10 }} /> My
                     Folders
                   </Link>
-                  <li className="w-full">
-                    <Link
-                      className={`flex items-center py-3 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
-                        activeIndex === 3 ? "text-[#155CA2] " : ""
-                      }`}
-                      onClick={() => {
-                        setActiveIndex(3);
-                      }}>
-                      <RiFolderReceivedFill
-                        size={20}
-                        style={{ marginRight: 10 }}
-                      />{" "}
-                      Shared
-                    </Link>
-                  </li>
-                  <li className="w-full">
-                    <Link
-                      className={`flex items-center py-3 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
-                        activeIndex === 4 ? "text-[#155CA2] " : ""
-                      }`}
-                      onClick={() => {
-                        setActiveIndex(4);
-                      }}>
-                      <CgTemplate size={20} style={{ marginRight: 10 }} />{" "}
-                      Templates
-                    </Link>
-                  </li>
+                  {/* <li className="w-full"> */}
+                  <Link
+                    className={`flex items-center py-3 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
+                      activeIndex === 3 ? "text-[#155CA2] " : ""
+                    }`}
+                    onClick={() => {
+                      setActiveIndex(3);
+                    }}>
+                    <RiFolderReceivedFill
+                      size={20}
+                      style={{ marginRight: 10 }}
+                    />{" "}
+                    Shared
+                  </Link>
+                  {/* </li> */}
+                  {/* <li className="w-full"> */}
+                  <Link
+                    className={`flex items-center py-3 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
+                      activeIndex === 4 ? "text-[#155CA2] " : ""
+                    }`}
+                    onClick={() => {
+                      setActiveIndex(4);
+                    }}>
+                    <CgTemplate size={20} style={{ marginRight: 10 }} />{" "}
+                    Templates
+                  </Link>
+                  {/* </li> */}
                 </li>
               </ul>
             </nav>
           </div>
-          <div className="w-5/6 md:mt-0 mt-2">{props.children}</div>
+          <div className="w-5/6 md:mt-0 mt-2">
+            {React.Children.map(props.children, (child) => {
+              return React.cloneElement(child, { refetch: refetch });
+            })}
+          </div>
         </div>
       </div>
       <input
