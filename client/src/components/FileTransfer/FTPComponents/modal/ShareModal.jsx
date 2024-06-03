@@ -51,7 +51,7 @@ const ShareModal = (props) => {
             permission: permissionUser ? permissionUser.permission : null,
           };
         });
-        console.log("users: ", data);
+        console.log("users: ", props.users.users);
         setUsers(data);
         setFolderUsers(props.users.users);
       } catch (error) {
@@ -91,8 +91,6 @@ const ShareModal = (props) => {
 
   const handleCheckboxChange = (checkedValues) => {
     console.log("checked = ", checkedValues);
-    setCheckedValues(checkedValues);
-
     // Update folderUsers state
     const updatedFolderUsers = data
       .filter((user) => checkedValues.includes(user.userId))
