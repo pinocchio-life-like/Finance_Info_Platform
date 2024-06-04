@@ -1,4 +1,4 @@
-import { Button, Modal, Input, List, Avatar, Radio } from "antd";
+import { Button, Modal, Input, List, Avatar, Radio, Skeleton } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { UserOutlined } from "@ant-design/icons";
 import { LockFilled } from "@ant-design/icons";
@@ -20,11 +20,14 @@ const ShareModal = (props) => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [checkedValues, setCheckedValues] = useState([]);
+  const [allCheckedValues, setAllCheckedValues] = useState([]);
   const [folderUsers, setFolderUsers] = useState([]);
   const [data, setData] = useState([]);
+  const [initLoading, setInitLoading] = useState(true);
 
-  const handleAccessOptionChange = (e) => {
-    setSelectedAccessOption(e.target.value);
+  const handleAccessOptionChange = (userId, value) => {
+    console.log(userId, value);
+    // setSelectedAccessOption(e.target.value);
     setDropdownAccessOpen(null);
   };
 
@@ -34,31 +37,50 @@ const ShareModal = (props) => {
   };
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetch_Company_and_Users = async () => {
       try {
-        const response = await api.get("/api/users/getall");
-        const users = response.data.data;
-
-        setData(users);
-
-        const data = users.map((user) => {
-          const permissionUser = props.users.users.find(
-            (p) => p.userId === user.userId
-          );
-          return {
-            label: user.firstName,
-            value: user.userId,
-            permission: permissionUser ? permissionUser.permission : null,
-          };
-        });
-        console.log("users: ", props.users.users);
-        setUsers(data);
         setFolderUsers(props.users.users);
+        const response = await api.get("/api/company_users/getall");
+        const permissions = [];
+
+        let data = response.data.data.map((company) => {
+          return company.Users.map((user) => {
+            const permissionUser = props.users.users.find(
+              (p) => p.userId === user.userId
+            );
+
+            if (permissionUser) {
+              permissions.push(user.userId);
+            }
+
+            return {
+              label: user.firstName,
+              value: user.userId,
+              permission: permissionUser ? permissionUser.permission : null,
+              companyName: company.company_Name,
+              companyId: company.company_Id,
+            };
+          });
+        });
+
+        // Flatten the array
+        data = [].concat(...data);
+
+        console.log(props.users.users);
+
+        // Filter out users that exist in folderUsers
+        data = data.filter(
+          (user) => !props.users.users.some((u) => u.userId === user.value)
+        );
+
+        setData(data);
+
+        setInitLoading(false);
       } catch (error) {
         console.error(error);
       }
     };
-    fetchUsers();
+    fetch_Company_and_Users();
   }, [props.users.users]);
 
   const handleDropdownClick = () => {
@@ -89,24 +111,25 @@ const ShareModal = (props) => {
     };
   }, []);
 
-  const handleCheckboxChange = (checkedValues) => {
-    console.log("checked = ", checkedValues);
-    // Update folderUsers state
-    const updatedFolderUsers = data
-      .filter((user) => checkedValues.includes(user.userId))
-      .map((user) => {
-        const permissionUser = props.users.users.find(
-          (p) => p.userId === user.userId
-        );
-        return {
-          userName: user.userName,
-          userId: user.userId,
-          firstName: user.firstName,
-          permission: permissionUser ? permissionUser.permission : "read",
-        };
-      });
+  const handleAddClick = (id) => {
+    //Remove the clicked user from the data array
+    const newData = data.filter((item) => item.value !== id);
+    setData(newData);
 
-    setFolderUsers(updatedFolderUsers);
+    // Add the clicked item to the folderUsers array
+    setFolderUsers([
+      ...folderUsers,
+      ...data
+        .filter((item) => item.value === id)
+        .map((item) => {
+          return {
+            userId: item.value,
+            userName: item.label,
+            permission: "read",
+            firstName: item.label,
+          };
+        }),
+    ]);
   };
 
   return (
@@ -131,37 +154,38 @@ const ShareModal = (props) => {
             />
             {showOptions && (
               <div
-                className="absolute w-full bg-white border border-gray-200 rounded mt-1 overflow-y-auto z-50"
-                style={{ maxHeight: 300 }}>
-                <div className="px-4 py-2 font-bold">Users</div>
-                <Checkbox.Group
-                  defaultValue={users
-                    .filter((user) => user.permission !== null)
-                    .map((user) => user.value)}
-                  onChange={handleCheckboxChange}>
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(3, 1fr)",
-                      gap: "10px",
-                    }}>
-                    {users
-                      .filter((user) =>
-                        user.label.toLowerCase().includes(search.toLowerCase())
-                      )
-                      .map((user) => (
-                        <div
-                          key={user.value}
-                          className="block px-4 py-2 hover:bg-gray-200 cursor-pointer">
-                          <Checkbox
-                            value={user.value}
-                            disabled={user.permission === "admin"}>
-                            {user.label}
-                          </Checkbox>
-                        </div>
-                      ))}
-                  </div>
-                </Checkbox.Group>
+                className="absolute w-full bg-white border border-gray-200 rounded mt-1 overflow-y-auto z-50 drop-shadow-lg"
+                style={{ maxHeight: 450 }}>
+                <div className="flex flex-col p-2">
+                  <List
+                    className="demo-loadmore-list"
+                    loading={initLoading}
+                    itemLayout="horizontal"
+                    dataSource={data.filter((item) =>
+                      item.label.toLowerCase().includes(search.toLowerCase())
+                    )}
+                    renderItem={(item) => (
+                      <List.Item
+                        actions={[
+                          <Button
+                            key={item.value}
+                            onClick={() => handleAddClick(item.value)}>
+                            add
+                          </Button>,
+                        ]}>
+                        <Skeleton avatar title={false} loading={false} active>
+                          <List.Item.Meta
+                            avatar={<Avatar icon={<UserOutlined />} />}
+                            title={
+                              <a href="https://ant.design">{item.label}</a>
+                            }
+                            description={item.companyName}
+                          />
+                        </Skeleton>
+                      </List.Item>
+                    )}
+                  />
+                </div>
               </div>
             )}
           </div>
@@ -179,9 +203,11 @@ const ShareModal = (props) => {
               actions={[
                 <div
                   key={index}
-                  onClick={() => handleDropdownAccessClick(index)}>
+                  onClick={() => handleDropdownAccessClick(item.userId)}>
                   <span className="font-semibold text-[15px] flex items-center hover:bg-gray-300 w-fit h-fit px-1 rounded">
-                    {selectedAccessOption}
+                    {item.permission === "read"
+                      ? "Read Only"
+                      : "Read and Write"}
                     <span
                       className="flex justify-center"
                       style={{ fontSize: "15px" }}>
@@ -190,25 +216,32 @@ const ShareModal = (props) => {
                   </span>
                 </div>,
               ]}>
-              {dropdownAccessOpen === index && (
+              {dropdownAccessOpen === item.userId && (
                 <div className="absolute bg-white border border-gray-200 rounded mt-40 right-4 py-1 z-50 px-1">
                   <Radio.Group
                     className="flex flex-col"
-                    onChange={handleAccessOptionChange}
-                    value={selectedAccessOption}>
+                    onChange={(e) =>
+                      handleAccessOptionChange(item.userId, e.target.value)
+                    }
+                    value={
+                      item.permission === "admin" ? "write" : item.permission
+                    }>
                     <Radio
                       className="hover:bg-gray-200 px-1 py-2 flex flex-row items-center"
-                      value="Read Only">
+                      value="read"
+                      disabled={item.permission === "admin"}>
                       Read Only
                     </Radio>
                     <Radio
                       className="hover:bg-gray-200 px-1 py-2 flex flex-row items-center"
-                      value="Read and Write">
+                      value="write"
+                      disabled={item.permission === "admin"}>
                       Read and Write
                     </Radio>
                     <Radio
                       className="hover:bg-gray-200 px-1 py-2 flex flex-row items-center"
-                      value="Revoke">
+                      value="Revoke"
+                      disabled={item.permission === "admin"}>
                       Remove User Access
                     </Radio>
                   </Radio.Group>

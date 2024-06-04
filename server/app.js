@@ -53,7 +53,6 @@ app.use("/api", verifyUserMiddleware, uploadRoute);
 app.use("/api", verifyUserMiddleware, tagsRoutes);
 app.use("/api", verifyUserMiddleware, searchRoutes);
 app.use("/api", verifyUserMiddleware, companyRoutes);
-app.use("/api", verifyUserMiddleware, companyRoutes);
 app.use("/api", verifyUserMiddleware, folderRoutes);
 app.use("/api", verifyUserMiddleware, fileRoutes);
 
