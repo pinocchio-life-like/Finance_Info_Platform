@@ -291,6 +291,7 @@ const FTPCommon = (props) => {
         handleAddFolder={handleAddFolder}
         setFolderName={setFolderName}
         folderName={folderName}
+       
       />
     </div>
   );

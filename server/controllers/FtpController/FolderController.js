@@ -286,7 +286,7 @@ const getHomeFoldersController = async (req, res) => {
 const getFolder_urlController = async (req, res) => {
   const { id } = req.params;
   try {
-    const folder = await Folder.findByPk(id);
+    const folder = await Folder.findOne(id);
     if (!folder) {
       return res.status(404).json({ message: "Folder not found" });
     }
@@ -390,6 +390,63 @@ const getUserFoldersController = async (req, res) => {
   }
 };
 
+const deleteFolderC = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const folder = await Folder.findByPk(id);
+    if (!folder) {
+      return res.status(404).json({ message: "Folder not found" });
+    }
+    const deletedFolder = await folder.destroy();
+    if (deletedFolder) {
+      return res.status(200).json({ message: "Folder deleted successfully" });
+    } else {
+      return res.status(500).json({ message: "Error deleting folder: Folder could not be deleted" });
+    }
+  } catch (error) {
+    console.error("Error deleting folder:", error);
+    return res.status(500).json({ message: "Error deleting folder: " + error.message });
+  }
+};
+
+
+const updateFolderC = async (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+  // console.log("Received request to update folder with ID:", id);
+  // console.log("New folder name:", name);
+
+  try {
+    const folder = await Folder.findByPk(id);
+    if (!folder) {
+      console.log("Folder not found with ID:", id);
+      return res.status(404).json({ message: "Folder not found" });
+    }
+
+    console.log("Found folder:", folder.toJSON());
+
+    folder.folder_name = name;
+    const updatedFolder = await folder.update({
+      where:{
+        folder_id: id
+      },
+      ...folder,folder_name: name
+    });
+
+
+    console.log("Folder updated successfully:", updatedFolder.toJSON());
+
+    return res.status(200).json({ message: "Folder updated successfully", data: updatedFolder });
+  } catch (error) {
+    console.error("Error updating folder:", error);
+    return res.status(500).json({ message: "Error updating folder: " + error.message });
+  }
+};
+
+
+
+
+
 module.exports = {
   getAllFoldersController,
   createFolderController,
@@ -398,4 +455,6 @@ module.exports = {
   getUserFoldersController,
   getFolder_urlController,
   getHomeFoldersController,
+  deleteFolderC,
+  updateFolderC
 };

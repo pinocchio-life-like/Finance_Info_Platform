@@ -1,0 +1,258 @@
+[33m3c878ad[m[33m ([m[1;36mHEAD -> [m[1;32mmequannt/test[m[33m)[m HEAD@{0}: reset: moving to HEAD
+[33m3c878ad[m[33m ([m[1;36mHEAD -> [m[1;32mmequannt/test[m[33m)[m HEAD@{1}: reset: moving to HEAD
+[33m3c878ad[m[33m ([m[1;36mHEAD -> [m[1;32mmequannt/test[m[33m)[m HEAD@{2}: reset: moving to HEAD
+[33m3c878ad[m[33m ([m[1;36mHEAD -> [m[1;32mmequannt/test[m[33m)[m HEAD@{3}: reset: moving to HEAD
+[33m3c878ad[m[33m ([m[1;36mHEAD -> [m[1;32mmequannt/test[m[33m)[m HEAD@{4}: reset: moving to 3c878ad
+[33m1522c3e[m[33m ([m[1;31morigin/eliyas/test[m[33m)[m HEAD@{5}: reset: moving to origin/eliyas/test
+[33m3c878ad[m[33m ([m[1;36mHEAD -> [m[1;32mmequannt/test[m[33m)[m HEAD@{6}: reset: moving to HEAD
+[33m3c878ad[m[33m ([m[1;36mHEAD -> [m[1;32mmequannt/test[m[33m)[m HEAD@{7}: reset: moving to HEAD
+[33m3c878ad[m[33m ([m[1;36mHEAD -> [m[1;32mmequannt/test[m[33m)[m HEAD@{8}: reset: moving to HEAD
+[33m3c878ad[m[33m ([m[1;36mHEAD -> [m[1;32mmequannt/test[m[33m)[m HEAD@{9}: reset: moving to HEAD
+[33m3c878ad[m[33m ([m[1;36mHEAD -> [m[1;32mmequannt/test[m[33m)[m HEAD@{10}: checkout: moving from eliyas/test to mequannt/test
+[33m5e1c0b3[m[33m ([m[1;32meliyas/test[m[33m)[m HEAD@{11}: checkout: moving from mequannt/test to eliyas/test
+[33m3c878ad[m[33m ([m[1;36mHEAD -> [m[1;32mmequannt/test[m[33m)[m HEAD@{12}: reset: moving to HEAD
+[33m3c878ad[m[33m ([m[1;36mHEAD -> [m[1;32mmequannt/test[m[33m)[m HEAD@{13}: commit (merge): git pull hasel
+[33mae82380[m[33m ([m[1;31morigin/mequannt/test[m[33m)[m HEAD@{14}: commit: try to debugg the git repository issue
+[33mfb8883f[m HEAD@{15}: reset: moving to origin/mequannt/test
+[33m5024c51[m HEAD@{16}: reset: moving to HEAD
+[33m5024c51[m HEAD@{17}: pull: Merge made by the 'ort' strategy.
+[33m6ed0c62[m[33m ([m[1;32mbackup-master[m[33m)[m HEAD@{18}: reset: moving to HEAD
+[33m6ed0c62[m[33m ([m[1;32mbackup-master[m[33m)[m HEAD@{19}: reset: moving to HEAD
+[33m6ed0c62[m[33m ([m[1;32mbackup-master[m[33m)[m HEAD@{20}: reset: moving to HEAD
+[33m6ed0c62[m[33m ([m[1;32mbackup-master[m[33m)[m HEAD@{21}: reset: moving to HEAD
+[33m6ed0c62[m[33m ([m[1;32mbackup-master[m[33m)[m HEAD@{22}: commit: update
+[33m3d325f5[m HEAD@{23}: reset: moving to HEAD
+[33m3d325f5[m HEAD@{24}: reset: moving to head^
+[33mfe50d71[m HEAD@{25}: reset: moving to head~
+[33mfb8883f[m HEAD@{26}: checkout: moving from eliyas/test to mequannt/test
+[33m5e1c0b3[m[33m ([m[1;32meliyas/test[m[33m)[m HEAD@{27}: commit: update
+[33me9689b3[m HEAD@{28}: pull origin eliyas/test: Fast-forward
+[33m082878b[m HEAD@{29}: reset: moving to HEAD
+[33m082878b[m HEAD@{30}: checkout: moving from mequannt/test to eliyas/test
+[33mfb8883f[m HEAD@{31}: pull --tags origin mequannt/test: Fast-forward
+[33mfe50d71[m HEAD@{32}: reset: moving to HEAD
+[33mfe50d71[m HEAD@{33}: reset: moving to head~
+[33mfb8883f[m HEAD@{34}: commit: update made
+[33mfe50d71[m HEAD@{35}: reset: moving to HEAD
+[33mfe50d71[m HEAD@{36}: commit: folder upload is working
+[33m3d325f5[m HEAD@{37}: commit: update ftp local
+[33m60254d4[m HEAD@{38}: commit: update ftp local
+[33m1ac8cba[m HEAD@{39}: commit (merge): Merge remote-tracking branch 'origin/eliyas/test' into mequannt/test
+[33m02105bd[m HEAD@{40}: commit: local update
+[33m5a5028a[m HEAD@{41}: reset: moving to head~
+[33m79e55e9[m HEAD@{42}: commit: local update
+[33m5a5028a[m HEAD@{43}: checkout: moving from eliyas/test to mequannt/test
+[33m082878b[m HEAD@{44}: checkout: moving from mequannt/test to eliyas/test
+[33m5a5028a[m HEAD@{45}: commit: the comment post for the answer in put toogle and clear fixed
+[33m53a55e7[m HEAD@{46}: checkout: moving from dev to mequannt/test
+[33me9262fb[m[33m ([m[1;32mdev[m[33m)[m HEAD@{47}: checkout: moving from mequannt/test to dev
+[33m53a55e7[m HEAD@{48}: checkout: moving from main to mequannt/test
+[33m6bddee9[m[33m ([m[1;32mmain[m[33m)[m HEAD@{49}: checkout: moving from d1ba9a6828552d3c58b6a24c231a19b202086d51 to main
+[33md1ba9a6[m HEAD@{50}: reset: moving to head^
+[33m4402c38[m HEAD@{51}: commit: ddd
+[33md1ba9a6[m HEAD@{52}: reset: moving to head^
+[33mb43f593[m[33m ([m[1;31morigin/dev[m[33m)[m HEAD@{53}: checkout: moving from mequannt/test to origin/dev
+[33m53a55e7[m HEAD@{54}: reset: moving to HEAD
+[33m53a55e7[m HEAD@{55}: checkout: moving from dev to mequannt/test
+[33me9262fb[m[33m ([m[1;32mdev[m[33m)[m HEAD@{56}: checkout: moving from mequannt/test to dev
+[33m53a55e7[m HEAD@{57}: reset: moving to HEAD
+[33m53a55e7[m HEAD@{58}: reset: moving to HEAD
+[33m53a55e7[m HEAD@{59}: reset: moving to head^
+[33m0db85f7[m HEAD@{60}: commit (merge): dev merged
+[33m53a55e7[m HEAD@{61}: commit (merge): pulling dev
+[33m28762d6[m HEAD@{62}: checkout: moving from dev to mequannt/test
+[33me9262fb[m[33m ([m[1;32mdev[m[33m)[m HEAD@{63}: reset: moving to HEAD
+[33me9262fb[m[33m ([m[1;32mdev[m[33m)[m HEAD@{64}: reset: moving to HEAD
+[33me9262fb[m[33m ([m[1;32mdev[m[33m)[m HEAD@{65}: reset: moving to HEAD
+[33me9262fb[m[33m ([m[1;32mdev[m[33m)[m HEAD@{66}: reset: moving to head^
+[33mf4ab2a4[m HEAD@{67}: reset: moving to head
+[33mf4ab2a4[m HEAD@{68}: reset: moving to HEAD
+[33mf4ab2a4[m HEAD@{69}: reset: moving to head^
+[33m6212a8a[m HEAD@{70}: checkout: moving from mequannt/test to dev
+[33m28762d6[m HEAD@{71}: reset: moving to HEAD
+[33m28762d6[m HEAD@{72}: commit: route fix
+[33m47bc414[m HEAD@{73}: commit: count fix
+[33m412127c[m HEAD@{74}: commit: dependency for answer fetch added
+[33macbcfb8[m HEAD@{75}: commit (merge): Merge remote-tracking branch 'origin/sary/askquestion_answer' into mequannt/test
+[33m8b48470[m HEAD@{76}: commit: update
+[33m26224f2[m HEAD@{77}: reset: moving to HEAD
+[33m26224f2[m HEAD@{78}: reset: moving to HEAD
+[33m26224f2[m HEAD@{79}: checkout: moving from eliyas/test to mequannt/test
+[33m082878b[m HEAD@{80}: checkout: moving from mequannt/test to eliyas/test
+[33m26224f2[m HEAD@{81}: reset: moving to HEAD
+[33m26224f2[m HEAD@{82}: reset: moving to HEAD
+[33m26224f2[m HEAD@{83}: reset: moving to HEAD
+[33m26224f2[m HEAD@{84}: merge origin/eliyas/test: Merge made by the 'ort' strategy.
+[33mfb106eb[m HEAD@{85}: reset: moving to HEAD
+[33mfb106eb[m HEAD@{86}: checkout: moving from sary/askquestion_answer to mequannt/test
+[33m843c7d4[m[33m ([m[1;32msary/askquestion_answer[m[33m)[m HEAD@{87}: checkout: moving from mequannt/test to sary/askquestion_answer
+[33mfb106eb[m HEAD@{88}: checkout: moving from eliyas/test to mequannt/test
+[33m082878b[m HEAD@{89}: commit: update from mequ
+[33m53e77e3[m HEAD@{90}: checkout: moving from mequannt/test to eliyas/test
+[33mfb106eb[m HEAD@{91}: reset: moving to HEAD
+[33mfb106eb[m HEAD@{92}: merge eliyas/test: Merge made by the 'ort' strategy.
+[33m16631b1[m HEAD@{93}: checkout: moving from eliyas/test to mequannt/test
+[33m53e77e3[m HEAD@{94}: commit: update from mequ
+[33me6d4588[m HEAD@{95}: pull origin eliyas/test: Fast-forward
+[33m2f604e4[m HEAD@{96}: checkout: moving from mequannt/test to eliyas/test
+[33m16631b1[m HEAD@{97}: reset: moving to HEAD
+[33m16631b1[m HEAD@{98}: commit (merge): Merge branch 'eliyas/test' into mequennt/test
+[33m8a9f145[m HEAD@{99}: reset: moving to HEAD
+[33m8a9f145[m HEAD@{100}: commit: some how navbar responsive
+[33m928899e[m HEAD@{101}: checkout: moving from sary/askquestion_answer to mequannt/test
+[33m843c7d4[m[33m ([m[1;32msary/askquestion_answer[m[33m)[m HEAD@{102}: checkout: moving from mequannt/test to sary/askquestion_answer
+[33m928899e[m HEAD@{103}: commit: navbar
+[33mb2ca1d1[m HEAD@{104}: checkout: moving from sary/askquestion_answer to mequannt/test
+[33m843c7d4[m[33m ([m[1;32msary/askquestion_answer[m[33m)[m HEAD@{105}: checkout: moving from mequannt/test to sary/askquestion_answer
+[33mb2ca1d1[m HEAD@{106}: commit: commit massage
+[33m5764e4c[m HEAD@{107}: commit: all
+[33m920c07a[m HEAD@{108}: commit: question page
+[33m5378245[m HEAD@{109}: merge origin/eliyas/test: Merge made by the 'ort' strategy.
+[33mfdf597b[m HEAD@{110}: checkout: moving from eliyas/test to mequannt/test
+[33m2f604e4[m HEAD@{111}: commit (merge): questionpage
+[33me37c059[m HEAD@{112}: checkout: moving from mequannt/test to eliyas/test
+[33mfdf597b[m HEAD@{113}: checkout: moving from eliyas/test to mequannt/test
+[33me37c059[m HEAD@{114}: checkout: moving from mequannt/test to eliyas/test
+[33mfdf597b[m HEAD@{115}: commit (merge): commit
+[33ma4ed231[m HEAD@{116}: checkout: moving from eliyas/test to mequannt/test
+[33me37c059[m HEAD@{117}: checkout: moving from mequannt/test to eliyas/test
+[33ma4ed231[m HEAD@{118}: commit: hhh
+[33m721379b[m HEAD@{119}: reset: moving to HEAD
+[33m721379b[m HEAD@{120}: reset: moving to HEAD^
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{121}: reset: moving to HEAD^
+[33m9037485[m HEAD@{122}: reset: moving to HEAD^
+[33m748e207[m HEAD@{123}: reset: moving to HEAD^
+[33md62bd1d[m HEAD@{124}: reset: moving to HEAD^
+[33m567e68d[m HEAD@{125}: checkout: moving from eliyas/test to mequannt/test
+[33me37c059[m HEAD@{126}: commit: hope it is complated
+[33m088c9c9[m HEAD@{127}: commit: question page updted
+[33m46bac87[m HEAD@{128}: merge origin/dev: Fast-forward
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{129}: reset: moving to HEAD
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{130}: checkout: moving from mequannt/test to eliyas/test
+[33m567e68d[m HEAD@{131}: reset: moving to HEAD^
+[33m946fbb3[m HEAD@{132}: commit: commit
+[33m567e68d[m HEAD@{133}: commit (merge): merger
+[33md62bd1d[m HEAD@{134}: reset: moving to HEAD
+[33md62bd1d[m HEAD@{135}: checkout: moving from sary/askquestion_answer to mequannt/test
+[33m843c7d4[m[33m ([m[1;32msary/askquestion_answer[m[33m)[m HEAD@{136}: checkout: moving from mequannt/test to sary/askquestion_answer
+[33md62bd1d[m HEAD@{137}: merge origin/main: Merge made by the 'ort' strategy.
+[33m748e207[m HEAD@{138}: commit: hhh
+[33m9037485[m HEAD@{139}: reset: moving to HEAD^
+[33ma5d1b35[m HEAD@{140}: reset: moving to HEAD^
+[33m68566bc[m HEAD@{141}: checkout: moving from eliyas/test to mequannt/test
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{142}: checkout: moving from mequannt/test to eliyas/test
+[33m68566bc[m HEAD@{143}: pull origin eliyas/test: Merge made by the 'ort' strategy.
+[33ma5d1b35[m HEAD@{144}: commit: update commit
+[33m9037485[m HEAD@{145}: reset: moving to HEAD^
+[33m9745102[m HEAD@{146}: reset: moving to HEAD^
+[33m8c6e92e[m HEAD@{147}: reset: moving to HEAD^
+[33mccba60e[m HEAD@{148}: reset: moving to HEAD^
+[33m4204d64[m HEAD@{149}: commit (merge): update user fix
+[33mccba60e[m HEAD@{150}: commit: update user fixed
+[33m8c6e92e[m HEAD@{151}: commit: update
+[33m9745102[m HEAD@{152}: checkout: moving from mequennt/test to mequannt/test
+[33m96e6172[m[33m ([m[1;32mmequennt/test[m[33m)[m HEAD@{153}: commit: back
+[33m6bfc856[m HEAD@{154}: reset: moving to HEAD^
+[33mee42d30[m[33m ([m[1;31morigin/mequennt/test[m[33m)[m HEAD@{155}: checkout: moving from mequannt/test to mequennt/test
+[33m9745102[m HEAD@{156}: commit (merge): all fixed and worked
+[33m9037485[m HEAD@{157}: checkout: moving from sary/article/versions to mequannt/test
+[33me555a82[m[33m ([m[1;32msary/article/versions[m[33m)[m HEAD@{158}: reset: moving to HEAD^
+[33m334dfe7[m[33m ([m[1;31morigin/sary/article/versions[m[33m)[m HEAD@{159}: checkout: moving from mequannt/test to sary/article/versions
+[33m9037485[m HEAD@{160}: commit: comapny management added
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{161}: checkout: moving from eliyas/test to mequannt/test
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{162}: checkout: moving from mequannt/test to eliyas/test
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{163}: checkout: moving from eliyas/test to mequannt/test
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{164}: checkout: moving from mequannt/test to eliyas/test
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{165}: checkout: moving from eliyas/test to mequannt/test
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{166}: checkout: moving from eliyas/second to eliyas/test
+[33m9f9951b[m[33m ([m[1;32meliyas/second[m[33m)[m HEAD@{167}: checkout: moving from mequennt/test to eliyas/second
+[33mee42d30[m[33m ([m[1;31morigin/mequennt/test[m[33m)[m HEAD@{168}: checkout: moving from eliyas/test to mequennt/test
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{169}: checkout: moving from mequannt/test to eliyas/test
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{170}: checkout: moving from eliyas/test to mequannt/test
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{171}: checkout: moving from mequennt/test to eliyas/test
+[33mee42d30[m[33m ([m[1;31morigin/mequennt/test[m[33m)[m HEAD@{172}: commit (merge): update
+[33m6bfc856[m HEAD@{173}: checkout: moving from eliyas/test to mequennt/test
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{174}: checkout: moving from mequennt/test to eliyas/test
+[33m6bfc856[m HEAD@{175}: commit: article model update
+[33mf40d4fa[m HEAD@{176}: checkout: moving from eliyas/second to mequennt/test
+[33m9f9951b[m[33m ([m[1;32meliyas/second[m[33m)[m HEAD@{177}: commit: all
+[33m3666a5d[m HEAD@{178}: pull origin eliyas/second: Merge made by the 'ort' strategy.
+[33mdd6fc4b[m HEAD@{179}: checkout: moving from mequennt/test to eliyas/second
+[33mf40d4fa[m HEAD@{180}: commit: all
+[33m6212a8a[m HEAD@{181}: checkout: moving from mequennt/test to mequennt/test
+[33m6212a8a[m HEAD@{182}: checkout: moving from dev to mequennt/test
+[33m6212a8a[m HEAD@{183}: checkout: moving from mequennt/test to dev
+[33m6212a8a[m HEAD@{184}: checkout: moving from dev to mequennt/test
+[33m6212a8a[m HEAD@{185}: merge mequennt/test: Fast-forward
+[33m7e0e28f[m HEAD@{186}: checkout: moving from mequennt/test to dev
+[33m6212a8a[m HEAD@{187}: checkout: moving from dev to mequennt/test
+[33m7e0e28f[m HEAD@{188}: pull origin dev: Fast-forward
+[33ma08a2ec[m HEAD@{189}: checkout: moving from mequennt/test to dev
+[33m6212a8a[m HEAD@{190}: checkout: moving from dev to mequennt/test
+[33ma08a2ec[m HEAD@{191}: checkout: moving from mequennt/test to dev
+[33m6212a8a[m HEAD@{192}: commit: admin page is add
+[33mf4ab2a4[m HEAD@{193}: commit (merge): user adimin and navbar added
+[33me9262fb[m[33m ([m[1;32mdev[m[33m)[m HEAD@{194}: commit (merge): user adimin et
+[33m10f3c23[m HEAD@{195}: commit: user adimin
+[33m5ee5ce6[m HEAD@{196}: checkout: moving from eliyas/second to mequennt/test
+[33mdd6fc4b[m HEAD@{197}: commit: ela
+[33m2aa87eb[m HEAD@{198}: pull origin eliyas/second: Fast-forward
+[33m267adf4[m HEAD@{199}: checkout: moving from mequennt/test to eliyas/second
+[33m5ee5ce6[m HEAD@{200}: commit: meq
+[33m20e2865[m HEAD@{201}: commit: the user Admin paged is complated
+[33ma28b6d5[m HEAD@{202}: commit (merge): Merge branch 'dev' of https://github.com/1Sarry/FinanceInfoPlatform into mequennt/test
+[33m1cdfb77[m HEAD@{203}: checkout: moving from dev to mequennt/test
+[33ma08a2ec[m HEAD@{204}: pull origin dev: Fast-forward
+[33me0af0b8[m HEAD@{205}: checkout: moving from eliyas/second to dev
+[33m267adf4[m HEAD@{206}: checkout: moving from mequennt/test to eliyas/second
+[33m1cdfb77[m HEAD@{207}: commit: all
+[33m8444275[m HEAD@{208}: checkout: moving from eliyas/second to mequennt/test
+[33m267adf4[m HEAD@{209}: checkout: moving from mequennt/test to eliyas/second
+[33m8444275[m HEAD@{210}: commit: eliays
+[33mff75d05[m HEAD@{211}: checkout: moving from eliyas/test to mequennt/test
+[33m6ceae2e[m[33m ([m[1;32mremote[m[33m)[m HEAD@{212}: commit: eliays
+[33m721379b[m HEAD@{213}: pull origin eliyas/test: Fast-forward
+[33m2e48976[m HEAD@{214}: checkout: moving from mequennt/test to eliyas/test
+[33mff75d05[m HEAD@{215}: pull origin eliyas/test: Merge made by the 'ort' strategy.
+[33m7bd592c[m HEAD@{216}: checkout: moving from eliyas/test to mequennt/test
+[33m2e48976[m HEAD@{217}: checkout: moving from mequennt/test to eliyas/test
+[33m7bd592c[m HEAD@{218}: reset: moving to HEAD
+[33m7bd592c[m HEAD@{219}: pull origin eliyas/test: updating HEAD
+[33m7bd592c[m HEAD@{220}: commit (merge): Merge branch 'eliyas/test' of https://github.com/1Sarry/FinanceInfoPlatform into mequennt/test
+[33m2428de8[m HEAD@{221}: checkout: moving from dev to mequennt/test
+[33me0af0b8[m HEAD@{222}: checkout: moving from eliyas/test to dev
+[33m2e48976[m HEAD@{223}: commit: all
+[33m2428de8[m HEAD@{224}: commit: Merge branch 'dev' into mequennt/test
+[33m7e9321d[m HEAD@{225}: commit: editor
+[33me15240a[m HEAD@{226}: pull origin eliyas/test: Fast-forward
+[33mee2d42f[m HEAD@{227}: checkout: moving from mequennt/test to eliyas/test
+[33mb017dd9[m HEAD@{228}: commit (merge): merge
+[33m23c0458[m HEAD@{229}: commit (merge): mequannint update
+[33md24f4dc[m HEAD@{230}: checkout: moving from dev to mequennt/test
+[33me0af0b8[m HEAD@{231}: pull origin dev: Fast-forward
+[33mfe2e729[m HEAD@{232}: checkout: moving from mequennt/test to dev
+[33md24f4dc[m HEAD@{233}: commit: user Admin page
+[33m13c8005[m HEAD@{234}: checkout: moving from eliyas/test to mequennt/test
+[33mee2d42f[m HEAD@{235}: reset: moving to HEAD
+[33mee2d42f[m HEAD@{236}: checkout: moving from mequennt/test to eliyas/test
+[33m13c8005[m HEAD@{237}: checkout: moving from eliyas/test to mequennt/test
+[33mee2d42f[m HEAD@{238}: checkout: moving from mequennt/test to eliyas/test
+[33m13c8005[m HEAD@{239}: commit: commit
+[33m76dfe51[m HEAD@{240}: pull origin dev: Fast-forward
+[33m26b1b07[m HEAD@{241}: commit: article relationship done
+[33mfe2e729[m HEAD@{242}: checkout: moving from dev to mequennt/test
+[33mfe2e729[m HEAD@{243}: checkout: moving from mequanntserver to dev
+[33m3e4ad02[m[33m ([m[1;31morigin/mequanntserver[m[33m, [m[1;32mmequanntserver[m[33m)[m HEAD@{244}: checkout: moving from dev to mequanntserver
+[33mfe2e729[m HEAD@{245}: commit: article add
+[33m11423d0[m HEAD@{246}: pull origin dev: Fast-forward
+[33m8c72166[m HEAD@{247}: checkout: moving from mequanntserver to dev
+[33m3e4ad02[m[33m ([m[1;31morigin/mequanntserver[m[33m, [m[1;32mmequanntserver[m[33m)[m HEAD@{248}: commit: frefresh token
+[33mcdcb7c3[m HEAD@{249}: checkout: moving from dev to mequanntserver
+[33m8c72166[m HEAD@{250}: pull origin dev: Fast-forward
+[33mcdcb7c3[m HEAD@{251}: checkout: moving from mequanntserver to dev
+[33mcdcb7c3[m HEAD@{252}: commit: login and add user functionalites are done
+[33ma59089a[m HEAD@{253}: commit: server
+[33m6bddee9[m[33m ([m[1;32mmain[m[33m)[m HEAD@{254}: checkout: moving from main to mequanntserver
+[33m6bddee9[m[33m ([m[1;32mmain[m[33m)[m HEAD@{255}: pull https://github.com/1Sarry/FinanceInfoPlatform.git: Fast-forward
+[33m597f7ab[m HEAD@{256}: pull https://github.com/1Sarry/FinanceInfoPlatform.git: Fast-forward
+[33m846dec0[m HEAD@{257}: clone: from https://github.com/1Sarry/FinanceInfoPlatform.git

@@ -15,6 +15,8 @@ import { DownloadIcon } from "@heroicons/react/solid";
 import { FiCopy } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { RiFileExcel2Line } from "react-icons/ri";
+import api from "../../../../utils/api";
+import Update_modal from "../modal/Rename_modal";
 
 const getIconForMimeType = (mimeType) => {
   switch (mimeType) {
@@ -43,13 +45,21 @@ const getIconForMimeType = (mimeType) => {
 
 const TableComponent = (props) => {
   const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedRowId, setSelectedRowId] = useState(null); 
+  // console.log(selectedRowId)
+  // const [refetch, setRefetch] = useState(false);
   const dropdownRefs = useRef([]);
   const data = props.data;
+  const [folderName, setFolderName] = useState(""); 
+  const [modalOpen, setModalOpen] = useState(false);
+  console.log(folderName)
 
   const [dropdownVisibleIndices, setDropdownVisibleIndices] = useState(
     new Array(data.length).fill(false)
   );
-
+  const closeModal = () => {
+    setModalOpen(false);
+  };
   useEffect(() => {
     // Create a ref for each row
     dropdownRefs.current = new Array(data.length)
@@ -83,6 +93,44 @@ const TableComponent = (props) => {
     props.shareHandler(record);
   };
 
+
+  const deleteHandler = async (id) => {
+    try {
+      const response = await api.delete(`api/folder/delete/${id}`);
+      if (response.status===200) {
+        console.log('Folder deleted successfully');
+        window.location.reload();
+        // props.setRefetch(!props.refetch);
+      
+        
+      } else {
+        console.error('Failed to delete folder:', response.statusText);
+      
+      }
+    } catch (error) {
+      console.error('An error occurred while deleting the folder:', error.message);
+      
+    }
+  };
+  const handleUpdate = async () => {
+    try {
+      const response = await api.put(`api/folder/update/${selectedRowId}`, {
+      folder_name: folderName,
+      });
+      console.log(response.data);
+      if (response.status === 200) {
+        console.log("Folder updated successfully");
+        setFolderName(""); 
+        setModalOpen(false); 
+      } else {
+        console.error("Failed to update folder:", response.statusText);
+      }
+    } catch (error) {
+      console.error("An error occurred while updating the folder:", error);
+    }
+  };
+  
+  
   const columns = [
     {
       title: "Name",
@@ -191,13 +239,13 @@ const TableComponent = (props) => {
               )}
               <button
                 className="hover:bg-gray-200 w-full p-2 text-left flex justify-between items-center"
-                onClick={() => console.log("Option 2 clicked")}>
+                onClick={() => setModalOpen(true)}>
                 Rename
                 <PencilAltIcon className="h-4 w-4 mr-1" aria-hidden="true" />
               </button>
               <button
                 className="hover:bg-gray-200 w-full p-2 text-left flex justify-between items-center"
-                onClick={() => console.log("Option 3 clicked")}>
+                onClick={() => deleteHandler(record.id)}>
                 Delete
                 <TrashIcon className="h-4 w-4 mr-1" aria-hidden="true" />
               </button>
@@ -207,14 +255,20 @@ const TableComponent = (props) => {
       ),
     },
   ];
+ 
 
   return (
-    <Table
+    <>
+
+<Table
       rowKey="id"
       onRow={(record) => {
         return {
           onClick: () => {
-            setSelectedRow(record.id);
+            setSelectedRow(record);
+        
+              setSelectedRowId(record.id); 
+      
           },
           className: "group", // Add this line
         };
@@ -222,6 +276,14 @@ const TableComponent = (props) => {
       columns={columns}
       dataSource={data}
     />
+    <Update_modal
+        isOpen={modalOpen}
+        close={closeModal}
+        handleUpdate={handleUpdate} 
+        folderName={folderName}
+        setFolderName={setFolderName}
+      />
+    </>
   );
 };
 
