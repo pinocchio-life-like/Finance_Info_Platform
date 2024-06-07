@@ -406,6 +406,7 @@ ShareModal.propTypes = {
   users: PropTypes.any,
   onCancelHandler: PropTypes.func,
   isOpen: PropTypes.bool,
+  setRefetch: PropTypes.func,
 };
 
 export default ShareModal;

@@ -5,7 +5,7 @@ import { IoHome } from "react-icons/io5";
 import { RiFolderReceivedFill } from "react-icons/ri";
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
-import { CgTemplate } from "react-icons/cg";
+// import { CgTemplate } from "react-icons/cg";
 import Upload_modal from "../FTPComponents/modal/Upload_modal/";
 import { Dropdown, Menu } from "antd";
 import { jwtDecode } from "jwt-decode";
@@ -242,7 +242,7 @@ const FTPCommon = (props) => {
                   </Link>
                   {/* </li> */}
                   {/* <li className="w-full"> */}
-                  <Link
+                  {/* <Link
                     className={`flex items-center py-3 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 4 ? "text-[#155CA2] " : ""
                     }`}
@@ -251,7 +251,7 @@ const FTPCommon = (props) => {
                     }}>
                     <CgTemplate size={20} style={{ marginRight: 10 }} />{" "}
                     Templates
-                  </Link>
+                  </Link> */}
                   {/* </li> */}
                 </li>
               </ul>

@@ -17,8 +17,8 @@ const FilterDrop = () => {
   );
 
   return (
-    <div className="flex py-3">
-      <Dropdown
+    <div className="flex py-2">
+      {/* <Dropdown
         overlay={menu}
         className="flex items-center mr-2 font-semibold"
         trigger={["click"]}>
@@ -49,7 +49,7 @@ const FilterDrop = () => {
         <Button>
           Company <DownOutlined />
         </Button>
-      </Dropdown>
+      </Dropdown> */}
     </div>
   );
 };

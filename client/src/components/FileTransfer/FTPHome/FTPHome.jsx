@@ -78,21 +78,28 @@ const FTPHome = (props) => {
     fetchUserFolders();
   }, [currentURL, userName, props.refetch]);
 
+  const [searchValue, setSearchValue] = useState("");
+
   return (
     <div className="flex flex-col p-3 text-lg">
       <div className="flex justify-between">
-        <h1 className="text-lg font-semibold">Home</h1>
+        <h1 className="text-xl font-semibold ml-1">My Files</h1>
         <div className="flex-grow max-w-lg">
           <Search
             placeholder="input search text"
-            onSearch={onSearch}
+            // onSearch={onSearch}
+            onChange={(e) => setSearchValue(e.target.value)}
             style={{}}
           />
         </div>
       </div>
       <FilterDrop />
       <div>
-        <TableComponent data={data} shareHandler={shareHandler} />
+        <TableComponent
+          search={searchValue}
+          data={data}
+          shareHandler={shareHandler}
+        />
       </div>
       <ShareModal
         isOpen={openModal}

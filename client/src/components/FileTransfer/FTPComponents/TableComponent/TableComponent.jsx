@@ -44,7 +44,10 @@ const getIconForMimeType = (mimeType) => {
 const TableComponent = (props) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const dropdownRefs = useRef([]);
-  const data = props.data;
+
+  const data = props.data.filter((item) =>
+    item.name.toLowerCase().includes(props.search.toLowerCase())
+  );
 
   const [dropdownVisibleIndices, setDropdownVisibleIndices] = useState(
     new Array(data.length).fill(false)
