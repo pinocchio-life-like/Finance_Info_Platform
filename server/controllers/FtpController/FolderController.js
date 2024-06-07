@@ -2,11 +2,12 @@ const { Folder } = require("../../models/FtpModel/FolderModel");
 const { File } = require("../../models/FtpModel/FileModel");
 const { FolderUser } = require("../../models/FtpModel/associations");
 const { User } = require("../../models/userModel");
-const { Op, Sequelize } = require("sequelize");
+const { Sequelize } = require("sequelize");
 const pathModule = require("path");
 const fs = require("fs");
 const multer = require("multer");
 const mime = require("mime-types");
+const sequelize = require("../../config/db.config");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -189,21 +190,69 @@ const uploadFolderController = async (req, res) => {
 };
 
 const assignUserToFolder = async (req, res) => {
-  const { userId, folderId, permission } = req.body;
+  const { users, folder_id } = req.body;
+
+  let transaction;
   try {
-    const folderUser = await FolderUser.create({
-      userId,
-      folder_id: folderId,
-      permission,
+    // Start a transaction
+    transaction = await sequelize.transaction();
+
+    // Get all existing FolderUsers for the folder
+    const existingFolderUsers = await FolderUser.findAll({
+      where: { folder_id },
+      transaction,
     });
+
+    // Loop over the users array
+    for (const user of users) {
+      // Find an existing FolderUser for the user and folder
+      const existingFolderUser = existingFolderUsers.find(
+        (folderUser) => folderUser.userId === user.userId
+      );
+
+      if (existingFolderUser) {
+        // If the FolderUser exists and the permission is different, update it
+        if (existingFolderUser.permission !== user.permission) {
+          await existingFolderUser.update(
+            { permission: user.permission },
+            { transaction }
+          );
+        }
+      } else {
+        // If the FolderUser doesn't exist, create it
+        await FolderUser.create(
+          {
+            userId: user.userId,
+            folder_id,
+            permission: user.permission,
+          },
+          { transaction }
+        );
+      }
+    }
+
+    // Delete any FolderUsers that weren't in the users array
+    for (const existingFolderUser of existingFolderUsers) {
+      if (!users.some((user) => user.userId === existingFolderUser.userId)) {
+        await existingFolderUser.destroy({ transaction });
+      }
+    }
+
+    // Commit the transaction
+    await transaction.commit();
+
     res.json({
-      message: "User assigned to folder successfully",
-      data: folderUser,
+      message: "Users assigned to folder successfully",
     });
   } catch (error) {
+    // Rollback the transaction if any errors occurred
+    if (transaction) await transaction.rollback();
+
+    console.log(error); // Log the error
+
     res
       .status(500)
-      .json({ message: "Error assigning user to folder: " + error.message });
+      .json({ message: "Error assigning users to folder: " + error.message });
   }
 };
 

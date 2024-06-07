@@ -98,6 +98,8 @@ const FTPHome = (props) => {
         isOpen={openModal}
         onCancelHandler={onCancelHandler}
         users={currentUsers}
+        refetch={props.setRefetch}
+        setRefetch={props.setRefetch}
       />
     </div>
   );

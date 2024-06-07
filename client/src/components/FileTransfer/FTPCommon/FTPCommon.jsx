@@ -259,7 +259,10 @@ const FTPCommon = (props) => {
           </div>
           <div className="w-5/6 md:mt-0 mt-2">
             {React.Children.map(props.children, (child) => {
-              return React.cloneElement(child, { refetch: refetch });
+              return React.cloneElement(child, {
+                refetch: refetch,
+                setRefetch,
+              });
             })}
           </div>
         </div>
