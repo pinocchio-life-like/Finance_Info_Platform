@@ -1,7 +1,7 @@
 import TableComponent from "../FTPComponents/TableComponent/TableComponent";
 import FilterDrop from "../FTPComponents/filterdrop/FilterDrop";
 import { RollbackOutlined } from "@ant-design/icons";
-import { Input } from "antd";
+import { Input, Button } from "antd";
 import ShareModal from "../FTPComponents/modal/ShareModal";
 import { useEffect, useState } from "react";
 import api from "../../../utils/api";

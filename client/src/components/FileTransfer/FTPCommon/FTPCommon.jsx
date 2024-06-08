@@ -41,14 +41,6 @@ const FTPCommon = (props) => {
     fetchFolder();
   }, [currentURL, refetch]);
 
-  useEffect(() => {
-    window.onpopstate = function () {
-      if (window.location.pathname.includes("ftp")) {
-        window.location.reload();
-      }
-    };
-  }, []);
-
   const token = localStorage.getItem("token");
   let userName = null;
   if (token) {
