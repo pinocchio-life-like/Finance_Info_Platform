@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Table ,message} from "antd";
 import PropTypes from "prop-types";
 import { UserOutlined } from "@ant-design/icons";
 import { DotsVerticalIcon, UserAddIcon } from "@heroicons/react/solid";
@@ -45,15 +45,16 @@ const getIconForMimeType = (mimeType) => {
 
 const TableComponent = (props) => {
   const [selectedRow, setSelectedRow] = useState(null);
-  const [selectedRowId, setSelectedRowId] = useState(null); 
+  const [selectedRowId, setSelectedRowId] = useState(null);
   // console.log(selectedRowId)
   // const [refetch, setRefetch] = useState(false);
   const dropdownRefs = useRef([]);
   const data = props.data;
-  const [folderName, setFolderName] = useState(""); 
+  const [folderName, setFolderName] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
- 
-  console.log(folderName)
+
+  // console.log(folderName);
+  console.log(selectedRow)
 
   const [dropdownVisibleIndices, setDropdownVisibleIndices] = useState(
     new Array(data.length).fill(false)
@@ -94,35 +95,34 @@ const TableComponent = (props) => {
     props.shareHandler(record);
   };
 
-
   const deleteHandler = async (id) => {
     try {
       const response = await api.delete(`api/folder/delete/${id}`);
-      if (response.status===200) {
-        console.log('Folder deleted successfully');
+      if (response.status === 200) {
+        console.log("Folder deleted successfully");
         window.location.reload();
         // props.setRefetch(!props.refetch);
-      
-        
       } else {
-        console.error('Failed to delete folder:', response.statusText);
-      
+        console.error("Failed to delete folder:", response.statusText);
       }
     } catch (error) {
-      console.error('An error occurred while deleting the folder:', error.message);
-      
+      console.error(
+        "An error occurred while deleting the folder:",
+        error.message
+      );
     }
   };
   const handleUpdate = async () => {
     try {
       const response = await api.put(`api/folder/update/${selectedRowId}`, {
-        folder_name: folderName
+        folder_name: folderName,
       });
       console.log(response.data);
       if (response.status === 200) {
         console.log("Folder updated successfully");
-        setFolderName(""); 
-        setModalOpen(false); 
+        setFolderName("");
+        setModalOpen(false);
+        window.location.reload();
       } else {
         console.error("Failed to update folder:", response.statusText);
       }
@@ -130,8 +130,15 @@ const TableComponent = (props) => {
       console.error("An error occurred while updating the folder:", error);
     }
   };
-  
-  
+  const handleCopy = (textToCopy) => {
+    navigator.clipboard.writeText(textToCopy);
+    message.success("Folder directory copied to clipboard");
+  };
+
+  const handleDownload = (fileUrl) => {
+    window.open(fileUrl, "_blank");
+  };
+
   const columns = [
     {
       title: "Name",
@@ -149,7 +156,8 @@ const TableComponent = (props) => {
               style={{ color: "#008DDA" }}
               href={record.url}
               target="_blank"
-              rel="noopener noreferrer">
+              rel="noopener noreferrer"
+            >
               {text}
             </a>
           )}
@@ -179,12 +187,12 @@ const TableComponent = (props) => {
           <FiCopy
             className="h-6 w-6 rounded-sm hover:bg-gray-600 hover:text-white p-1 cursor-pointer"
             aria-hidden="true"
-            onClick={() => console.log("Copy clicked")}
+            onClick={() => handleCopy(record.url)}
           />
           <DownloadIcon
             className="h-6 w-6 rounded-sm hover:bg-gray-600 hover:text-white p-1 cursor-pointer"
             aria-hidden="true"
-            onClick={() => console.log("Download clicked")}
+            onClick={() => handleDownload(record.url)}
           />
           <PencilAltIcon
             className="h-6 w-6 rounded-sm hover:bg-gray-600 hover:text-white p-1 cursor-pointer"
@@ -212,7 +220,8 @@ const TableComponent = (props) => {
               // Toggle the dropdown visibility for the current row
               newDropdownVisibleIndices[index] = !dropdownVisibleIndices[index];
               setDropdownVisibleIndices(newDropdownVisibleIndices);
-            }}>
+            }}
+          >
             <DotsVerticalIcon
               className="h-6 w-6 rounded-full hover:bg-gray-600 hover:text-white p-1 cursor-pointer"
               aria-hidden="true"
@@ -229,24 +238,28 @@ const TableComponent = (props) => {
                 borderRadius: "5px",
                 zIndex: 1000,
               }}
-              className="w-64 flex flex-col items-start shadow-lg py-2">
+              className="w-64 flex flex-col items-start shadow-lg py-2"
+            >
               {record.type === "folder" && (
                 <button
                   className="hover:bg-gray-200 w-full p-2 text-left flex justify-between items-center"
-                  onClick={() => shareHandler(record)}>
+                  onClick={() => shareHandler(record)}
+                >
                   Share
                   <UserAddIcon className="h-4 w-4 mr-1" aria-hidden="true" />
                 </button>
               )}
               <button
                 className="hover:bg-gray-200 w-full p-2 text-left flex justify-between items-center"
-                onClick={() => setModalOpen(true)}>
+                onClick={() => setModalOpen(true)}
+              >
                 Rename
                 <PencilAltIcon className="h-4 w-4 mr-1" aria-hidden="true" />
               </button>
               <button
                 className="hover:bg-gray-200 w-full p-2 text-left flex justify-between items-center"
-                onClick={() => deleteHandler(record.id)}>
+                onClick={() => deleteHandler(record.id)}
+              >
                 Delete
                 <TrashIcon className="h-4 w-4 mr-1" aria-hidden="true" />
               </button>
@@ -256,31 +269,28 @@ const TableComponent = (props) => {
       ),
     },
   ];
- 
 
   return (
     <>
+      <Table
+        rowKey="id"
+        onRow={(record) => {
+          return {
+            onClick: () => {
+              setSelectedRow(record);
 
-<Table
-      rowKey="id"
-      onRow={(record) => {
-        return {
-          onClick: () => {
-            setSelectedRow(record);
-        
-              setSelectedRowId(record.id); 
-      
-          },
-          className: "group", // Add this line
-        };
-      }}
-      columns={columns}
-      dataSource={data}
-    />
-    <Update_modal
+              setSelectedRowId(record.id);
+            },
+            className: "group", // Add this line
+          };
+        }}
+        columns={columns}
+        dataSource={data}
+      />
+      <Update_modal
         isOpen={modalOpen}
         close={closeModal}
-        handleUpdate={handleUpdate} 
+        handleUpdate={handleUpdate}
         folderName={folderName}
         setFolderName={setFolderName}
       />
