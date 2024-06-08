@@ -412,9 +412,9 @@ const deleteFolderC = async (req, res) => {
 
 const updateFolderC = async (req, res) => {
   const { id } = req.params;
-  const { name } = req.body;
+  const { folder_name } = req.body;
   // console.log("Received request to update folder with ID:", id);
-  // console.log("New folder name:", name);
+  console.log("New folder name:", folder_name);
 
   try {
     const folder = await Folder.findByPk(id);
@@ -423,15 +423,10 @@ const updateFolderC = async (req, res) => {
       return res.status(404).json({ message: "Folder not found" });
     }
 
-    console.log("Found folder:", folder.toJSON());
+    // console.log("Found folder:", folder.toJSON());
 
-    folder.folder_name = name;
-    const updatedFolder = await folder.update({
-      where:{
-        folder_id: id
-      },
-      ...folder,folder_name: name
-    });
+    folder.folder_name = folder_name;
+    const updatedFolder = await folder.save();
 
 
     console.log("Folder updated successfully:", updatedFolder.toJSON());

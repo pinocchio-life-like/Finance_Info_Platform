@@ -52,6 +52,7 @@ const TableComponent = (props) => {
   const data = props.data;
   const [folderName, setFolderName] = useState(""); 
   const [modalOpen, setModalOpen] = useState(false);
+ 
   console.log(folderName)
 
   const [dropdownVisibleIndices, setDropdownVisibleIndices] = useState(
@@ -115,7 +116,7 @@ const TableComponent = (props) => {
   const handleUpdate = async () => {
     try {
       const response = await api.put(`api/folder/update/${selectedRowId}`, {
-      folder_name: folderName,
+        folder_name: folderName
       });
       console.log(response.data);
       if (response.status === 200) {

@@ -4,19 +4,19 @@ import PropTypes from "prop-types";
 
 const Update_modal = (props) => {
   const [submitActive, setSubmitActive] = useState(false);
-  const [folderName, setFolderName] = useState("");
+
 
   useEffect(() => {
-    if (folderName.trim().length > 0) {
+    if (props.folderName.trim().length > 0) {
       setSubmitActive(true);
     } else {
       setSubmitActive(false);
     }
-  }, [folderName]);
+  }, [props.folderName]);
 
   const handleAction = () => {
-    props.handleUpdate(folderName);
-    setFolderName(""); // Clear folder name after action
+    props.handleUpdate(props.folderName);
+    // setFolderName(""); 
   };
 
   return (
@@ -51,8 +51,8 @@ const Update_modal = (props) => {
             ]}
           >
             <Input
-              value={folderName}
-              onChange={(e) => setFolderName(e.target.value)}
+         
+              onChange={(e) => props.setFolderName(e.target.value)}
               placeholder="Enter folder name"
             />
           </Form.Item>
