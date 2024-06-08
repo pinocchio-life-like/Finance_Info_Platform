@@ -53,7 +53,7 @@ const createFileController = async (req, res) => {
         const newFile = await File.create({
           file_name: file.filename,
           file_url:
-            `http://localhost:5000/_root_/${req.body.folder_url}/${file.filename}`.replace(
+            `http://63.35.242.213:5000/_root_/${req.body.folder_url}/${file.filename}`.replace(
               /\\/g,
               "/"
             ),

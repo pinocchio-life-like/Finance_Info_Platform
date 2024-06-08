@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 // import { CgTemplate } from "react-icons/cg";
 import Upload_modal from "../FTPComponents/modal/Upload_modal/";
-import { Dropdown, Menu } from "antd";
+import { Dropdown, Menu, message } from "antd";
 import { jwtDecode } from "jwt-decode";
 import api from "../../../utils/api";
 
@@ -88,6 +88,7 @@ const FTPCommon = (props) => {
     try {
       await api.post("/api/folders/upload", formData, config);
       setUploadStatus("Upload complete!");
+      message.success("Folder uploaded successfully");
       setRefetch(!refetch);
     } catch (error) {
       setUploadStatus("Upload failed!");
@@ -126,6 +127,7 @@ const FTPCommon = (props) => {
 
       if (response.status === 200) {
         setUploadStatus("Upload complete!");
+        message.success("File uploaded successfully");
         setRefetch(!refetch);
       } else if (response.status === 400) {
         setUploadStatus("Upload failed: File already exists");
@@ -165,9 +167,12 @@ const FTPCommon = (props) => {
 
     try {
       await api.post("/api/folder/create", folderData);
+      message.success("Folder created successfully");
       setRefetch(!refetch);
     } catch (error) {
       console.error("Failed to create folder", error);
+    } finally {
+      setModalOpen(false);
     }
   };
 
