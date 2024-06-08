@@ -1,4 +1,4 @@
-import { Form, Input, Modal, Table, Tooltip, message } from "antd";
+import { Form, Input, Modal, Skeleton, Table, Tooltip, message } from "antd";
 import PropTypes from "prop-types";
 import { UserOutlined } from "@ant-design/icons";
 import { DotsVerticalIcon, UserAddIcon } from "@heroicons/react/solid";
@@ -456,16 +456,20 @@ const TableComponent = (props) => {
   return (
     <>
       {contextHolder}
-      <Table
-        rowKey="id"
-        onRow={() => {
-          return {
-            className: "group", // Add this line
-          };
-        }}
-        columns={columns}
-        dataSource={data}
-      />
+      {props.isLoading ? (
+        <Skeleton active />
+      ) : (
+        <Table
+          rowKey="id"
+          onRow={() => {
+            return {
+              className: "group", // Add this line
+            };
+          }}
+          columns={columns}
+          dataSource={data}
+        />
+      )}
     </>
   );
 };
@@ -476,6 +480,7 @@ TableComponent.propTypes = {
   search: PropTypes.string,
   setRefetch: PropTypes.func,
   userName: PropTypes.string,
+  isLoading: PropTypes.bool,
 };
 
 export default TableComponent;

@@ -14,6 +14,7 @@ const FTPHome = (props) => {
   const currentURL = location.pathname;
   const [data, setData] = useState([]); // [folders, files]
   const [currentUsers, setCurrentUsers] = useState({}); // [users, files]
+  const [isLoading, setIsLoading] = useState(false);
 
   const shareHandler = (record) => {
     setOpenModal(!openModal);
@@ -41,6 +42,7 @@ const FTPHome = (props) => {
   useEffect(() => {
     const fetchUserFolders = async () => {
       try {
+        setIsLoading(true);
         const response = await api.get(`/api/folders/userFolder`, {
           params: {
             userName: userName,
@@ -74,6 +76,8 @@ const FTPHome = (props) => {
         setData(mergedData);
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchUserFolders();
@@ -102,6 +106,7 @@ const FTPHome = (props) => {
           shareHandler={shareHandler}
           setRefetch={props.setRefetch}
           userName={userName}
+          isLoading={isLoading}
         />
       </div>
       <ShareModal
