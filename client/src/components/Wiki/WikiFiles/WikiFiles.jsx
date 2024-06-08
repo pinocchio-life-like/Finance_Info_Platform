@@ -110,7 +110,7 @@ const WikiFiles = () => {
                 ref={fileInputRef}
                 style={{ display: "none" }}
                 onChange={handleFileChange}
-                accept=".pdf,.doc,.docx"
+                // accept=".pdf,.doc,.docx"
               />
             </div>
           </div>
