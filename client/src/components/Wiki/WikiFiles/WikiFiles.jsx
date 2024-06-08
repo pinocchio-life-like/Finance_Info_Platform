@@ -135,7 +135,9 @@ const WikiFiles = () => {
                   description={
                     <div className="flex">
                       <p className="pr-4">by: {item.user}</p>
-                      <p className="pr-4">date: {item.createdAt}</p>
+                      <p className="pr-4">
+                        date: {new Date(item.createdAt).toLocaleString()}
+                      </p>
                     </div>
                   }
                 />
