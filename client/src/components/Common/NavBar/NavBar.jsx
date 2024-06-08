@@ -10,12 +10,15 @@ import useAuth from "../../../hooks/useAuth";
 import api from "../../../utils/api";
 import { jwtDecode } from "jwt-decode";
 
+
+
 const NavBar = () => {
   const { logout } = useAuth();
   const [menuActive, setMenuActive] = useState(false);
   const [categoryId, setCategoryId] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const [toggle, setToggle] = useState(false);
   const token = localStorage.getItem("token");
   // const [articles, setArticles] = useState([]);
   const [allArticles, setAllArticles] = useState([]);
@@ -33,6 +36,17 @@ const NavBar = () => {
 
   const toggleMenu = () => {
     setMenuActive(!menuActive);
+  };
+  const toggler = () => {
+    const ele = document.getElementById("small");
+    if (ele) {
+      ele.classList.toggle("toggler");
+    } else {
+      console.error("Element with ID 'small' not found");
+    }
+
+    console.log("right");
+    setToggle(!toggle);
   };
 
   useEffect(() => {
@@ -469,6 +483,7 @@ const NavBar = () => {
             </>
           )}
         </div>
+        
       </div>
     </nav>
   );

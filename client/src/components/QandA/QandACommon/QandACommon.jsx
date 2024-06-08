@@ -6,6 +6,7 @@ import { RiQuestionnaireFill } from "react-icons/ri";
 import "./checkboxStyle.css";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import "../../Common/NavBar/Navbar.css";
 
 const QandACommon = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);

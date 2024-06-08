@@ -8,8 +8,7 @@ const {
   updateQuestion,
   Answer,
   Comment,
-  getComment,
-} = require("../../models/Q&AModel/associations");
+  getComment} = require("../../models/Q&AModel/associations");
 const askQuestionC = async (req, res) => {
   try {
     const { question_title, question_description, userName, tagNames } =
@@ -81,6 +80,13 @@ const getSingleQuestionC = async (req, res) => {
       });
 
       const answersWithComments = await Promise.all(commentPromises);
+      // const answerCount = answers.length;
+
+      // Attach the count property to each answer object
+      // const answersWithCount = answersWithComments.map((answer) => ({
+      //   ...answer,
+      //   count: answerCount,
+      // }));
 
       // Include the answers with comments in the question object
       question.dataValues.answers = answersWithComments;
@@ -155,3 +161,6 @@ module.exports = {
   getSingleQ,
   getSingleQuestionC,
 };
+
+
+

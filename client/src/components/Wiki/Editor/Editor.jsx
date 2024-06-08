@@ -234,6 +234,8 @@ const Editor = () => {
                 title="post"
                 trigger={
                   <Popconfirm
+                    placement="bottom"
+             
                     title="Do you want to post this Article?"
                     onConfirm={saveArticleHandler}
                     okText="Yes"

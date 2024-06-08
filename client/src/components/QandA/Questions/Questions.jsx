@@ -79,6 +79,7 @@ const Questions = () => {
               let matches = q.question_description.match(
                 /<[^>]*>[^<]*<\/[^>]*>/g
               );
+              // console.log(matches)
               let description = matches ? matches.slice(0, 4).join("") : "";
               return (
                 <div className={i === 0 ? `pt-0` : `pt-3`} key={i}>

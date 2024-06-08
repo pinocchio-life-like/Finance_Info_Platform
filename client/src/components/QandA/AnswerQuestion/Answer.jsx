@@ -185,7 +185,8 @@ const Answer = () => {
                     {singleQuestion.Tags?.map((tag) => (
                       <span
                         key={tag.tag_id}
-                        className="inline-block bg-gray-200 rounded px-3 py-1 text-xs font-normal text-gray-700 mr-2">
+                        className="inline-block bg-gray-200 rounded px-3 py-1 text-xs font-normal text-gray-700 mr-2"
+                      >
                         {tag.tag_name}
                       </span>
                     ))}
@@ -203,7 +204,8 @@ const Answer = () => {
               {singleQuestion.comments?.map((comment) => (
                 <div
                   key={comment.comment_id}
-                  className="flex justify-between items-center border-b border-gray-200 py-1">
+                  className="flex justify-between items-center border-b border-gray-200 py-1"
+                >
                   <p className="text-commentText text-comment items-center">
                     {comment.content}
                     <span> -</span>
@@ -217,7 +219,8 @@ const Answer = () => {
           </div>
           <div
             className="comment text-xs text-gray-500 cursor-pointer my-5 px-6"
-            onClick={toggleQuestionCommentInput}>
+            onClick={toggleQuestionCommentInput}
+          >
             Add comment
           </div>
           {commentVisibilityQuestion && (
@@ -233,7 +236,8 @@ const Answer = () => {
               <Button
                 className="mt-2 qa-button semi-bold"
                 onClick={postQuestionComment}
-                loading={commentLoading}>
+                loading={commentLoading}
+              >
                 Post Comment
               </Button>
             </div>
@@ -266,7 +270,8 @@ const Answer = () => {
                     {a.comments?.map((c) => (
                       <div
                         key={c.comment_id}
-                        className="comment flex gap-1  border-b border-gray-200 py-3 items-center ">
+                        className="comment flex gap-1  border-b border-gray-200 py-3 items-center "
+                      >
                         <p className="text-commentText text-comment items-center">
                           {c.content}
                           <span> -</span>
@@ -279,7 +284,8 @@ const Answer = () => {
                   </div>
                   <div
                     className="comment text-xs text-gray-500 cursor-pointer p-4"
-                    onClick={() => toggleCommentInput(a.answer_id)}>
+                    onClick={() => toggleCommentInput(a.answer_id)}
+                  >
                     Add comment
                   </div>
                   {commentVisibility[a.answer_id] && (
@@ -294,7 +300,8 @@ const Answer = () => {
                       <Button
                         className="mt-2 qa-button semi-bold"
                         onClick={() => postCommentAns(newComment, a.answer_id)}
-                        loading={commentLoading[1]}>
+                        loading={commentLoading[1]}
+                      >
                         Post Comment
                       </Button>
                     </div>
@@ -310,7 +317,8 @@ const Answer = () => {
           </div>
           <form
             onSubmit={handleSubmitAnswer}
-            className="flex flex-col space-y-4 gap-4">
+            className="flex flex-col space-y-4 gap-4"
+          >
             <div className="">
               <ReactQuill
                 value={answer}
@@ -356,7 +364,8 @@ const Answer = () => {
               <Button
                 className="qa-button semi-bold"
                 loading={isLoading}
-                htmlType="submit">
+                htmlType="submit"
+              >
                 Post Answer
               </Button>
             </div>

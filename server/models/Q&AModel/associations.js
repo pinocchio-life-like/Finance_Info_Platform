@@ -110,10 +110,10 @@ const postComment = async (data) => {
   try {
     const { content, referred_id, referred_type, userName } = data;
     let referredItem;
-    if (data.referred_type === "question") {
-      referredItem = await Question.findByPk(data.referred_id);
-    } else if (data.referred_type === "answer") {
-      referredItem = await Answer.findByPk(data.referred_id);
+    if (referred_type === "question") {
+      referredItem = await Question.findByPk(referred_id);
+    } else if (referred_type === "answer") {
+      referredItem = await Answer.findByPk(referred_id);
     } else {
       throw new Error("Invalid referred type");
     }

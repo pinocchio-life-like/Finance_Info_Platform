@@ -35,3 +35,4 @@ const File = sequelize.define("Files", {
 module.exports = {
   File,
 };
+

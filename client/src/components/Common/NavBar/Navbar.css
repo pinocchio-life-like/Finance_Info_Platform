@@ -1,0 +1,54 @@
+.small {
+    display: none;
+}
+.toggler{
+    display:none;
+}
+.list{
+    display: none;
+}
+
+@media screen and (max-width: 1050px) {
+    #right {
+        display: none;
+    }
+    .left ul{
+        display: none;
+    }
+ 
+    .small   {
+        display:block;
+        color: #008DDA;
+        margin: auto;
+        position: relative;
+    }
+    .toggler{
+
+        background-color: #f1f1f1;
+            color: #008DDA;
+            display: block;
+            position: relative;
+            width: 15rem;
+            height: 50vh;
+          
+            margin-top: 30px ;
+            margin-left: 0;
+            
+        z-index: 9999;
+    
+    
+    }
+    
+    .small ul{
+        display: block;
+     }
+    
+
+   
+}
+
+@media screen and (max-width: 920px) {
+  .small-screen{
+    margin-left: -30px;
+  }
+}
