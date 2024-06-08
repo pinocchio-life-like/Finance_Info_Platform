@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+_root_
+Article
+
