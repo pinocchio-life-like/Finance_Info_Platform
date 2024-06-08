@@ -116,9 +116,53 @@ const downloadFileController = async (req, res) => {
   }
 };
 
+const deleteFileController = async (req, res) => {
+  const { fileId } = req.params;
+  try {
+    const file = await File.findByPk(fileId);
+    if (!file) {
+      return res.status(404).json({ message: "File not found" });
+    }
+    await file.destroy();
+    res.json({ message: "File deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting file: " + error.message });
+  }
+};
+
+const renameFileController = async (req, res) => {
+  const { newFileName } = req.body;
+  const { id } = req.params;
+  try {
+    const file = await File.findByPk(id);
+    if (!file) {
+      return res.status(404).json({ message: "File not found" });
+    }
+
+    const existingFile = await File.findOne({
+      where: {
+        file_name: newFileName,
+        folder_id: file.folder_id,
+      },
+    });
+
+    if (existingFile) {
+      return res.status(400).json({ message: "File already exists" });
+    }
+
+    file.file_name = newFileName;
+    await file.save();
+    res.json({ message: "File renamed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error renaming file: " + error.message });
+  }
+};
+
 module.exports = {
   createFileController,
   getFilesController,
   readFileController,
   downloadFileController,
+  deleteFileController,
+  renameFileController,
 };

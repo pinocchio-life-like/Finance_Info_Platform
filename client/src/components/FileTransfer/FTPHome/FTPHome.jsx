@@ -6,12 +6,12 @@ import { useEffect, useState } from "react";
 import api from "../../../utils/api";
 import { jwtDecode } from "jwt-decode";
 import { useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
 const { Search } = Input;
 
 const FTPHome = (props) => {
   const location = useLocation();
   const currentURL = location.pathname;
-  const onSearch = (value, _e, info) => console.log(info?.source, value);
   const [data, setData] = useState([]); // [folders, files]
   const [currentUsers, setCurrentUsers] = useState({}); // [users, files]
 
@@ -67,6 +67,7 @@ const FTPHome = (props) => {
             owner: file.user_name,
             type: file.mime_type,
             url: file.file_url,
+            permission: file.permission,
           })),
         ];
 
@@ -99,6 +100,8 @@ const FTPHome = (props) => {
           search={searchValue}
           data={data}
           shareHandler={shareHandler}
+          setRefetch={props.setRefetch}
+          userName={userName}
         />
       </div>
       <ShareModal
@@ -110,6 +113,11 @@ const FTPHome = (props) => {
       />
     </div>
   );
+};
+
+FTPHome.propTypes = {
+  setRefetch: PropTypes.func.isRequired,
+  refetch: PropTypes.bool.isRequired,
 };
 
 export default FTPHome;

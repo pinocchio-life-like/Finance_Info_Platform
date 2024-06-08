@@ -28,11 +28,13 @@ Folder.hasMany(Folder, {
   as: "subfolders",
   foreignKey: "folder_parent_id",
   sourceKey: "folder_id",
+  onDelete: "CASCADE",
 });
 Folder.belongsTo(Folder, {
   as: "parentFolder",
   foreignKey: "folder_parent_id",
   targetKey: "folder_id",
+  onDelete: "CASCADE",
 });
 
 // In your Folder model

@@ -314,8 +314,9 @@ const getUserFoldersController = async (req, res) => {
         : folder_parent_id;
 
     // Check if user has relation with parentFolder only if parentFolder is not null
+    let userFolderRelation = null;
     if (parentFolder !== null) {
-      const userFolderRelation = await FolderUser.findOne({
+      userFolderRelation = await FolderUser.findOne({
         where: { userId: user.userId, folder_id: parentFolder },
       });
 
@@ -374,7 +375,13 @@ const getUserFoldersController = async (req, res) => {
     const files = await File.findAll({
       where: { folder_id: parentFolder },
       attributes: {
-        include: [[Sequelize.literal('"file"'), "type"]],
+        include: [
+          [Sequelize.literal('"file"'), "type"],
+          [
+            Sequelize.literal(`"${userFolderRelation?.permission}"`),
+            "permission",
+          ],
+        ],
       },
     });
 
@@ -390,6 +397,44 @@ const getUserFoldersController = async (req, res) => {
   }
 };
 
+const deleteFolderController = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const folder = await Folder.findByPk(id);
+    if (!folder) {
+      return res.status(404).json({ message: "Folder not found" });
+    }
+
+    await folder.destroy();
+
+    res.json({ message: "Folder deleted successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error deleting folder: " + error.message });
+  }
+};
+
+const renameFolderController = async (req, res) => {
+  const { newFolderName } = req.body;
+  const { id } = req.params;
+  try {
+    const folder = await Folder.findByPk(id);
+    if (!folder) {
+      return res.status(404).json({ message: "Folder not found" });
+    }
+
+    folder.folder_name = newFolderName;
+    await folder.save();
+    res.json({ message: "Folder renamed successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error renaming folder: " + error.message });
+  }
+};
+
 module.exports = {
   getAllFoldersController,
   createFolderController,
@@ -398,4 +443,6 @@ module.exports = {
   getUserFoldersController,
   getFolder_urlController,
   getHomeFoldersController,
+  deleteFolderController,
+  renameFolderController,
 };

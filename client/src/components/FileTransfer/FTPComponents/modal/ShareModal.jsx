@@ -15,7 +15,6 @@ const ShareModal = (props) => {
   const [folderUsers, setFolderUsers] = useState([]);
   const [data, setData] = useState([]);
   const [initLoading, setInitLoading] = useState(true);
-  const [refetch, setRefetch] = useState(false);
 
   const handleAccessOptionChange = (userId, value) => {
     console.log(userId, value);
@@ -78,6 +77,8 @@ const ShareModal = (props) => {
 
         return newFolderUsers;
       });
+
+      setData([]);
     }
   };
 
@@ -199,7 +200,7 @@ const ShareModal = (props) => {
       });
 
       props.onCancelHandler();
-      props.setRefetch(!refetch);
+      props.setRefetch((prev) => !prev);
 
       // Show success message
       message.success("Users assigned successfully");
