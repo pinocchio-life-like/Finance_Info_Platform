@@ -19,10 +19,12 @@ const WikiFiles = () => {
 
   const token = localStorage.getItem("token");
   let userName = null;
+  let userRole = null;
   if (token) {
     try {
       const decodedToken = jwtDecode(token);
       userName = decodedToken.userName;
+      userRole = decodedToken.userRole;
     } catch (error) {
       console.error("Invalid token");
     }
@@ -199,25 +201,27 @@ const WikiFiles = () => {
                     />
                   </a>
                 </div>
-                <div className="pr-3">
-                  <Popconfirm
-                    title="Are you sure to delete?"
-                    onConfirm={() => handleFileDelete(item.url)}
-                    okText="Yes"
-                    cancelText="No"
-                    okButtonProps={{
-                      style: { backgroundColor: "#155CA2", color: "white" },
-                    }}>
-                    <AiOutlineDelete
-                      color="red"
-                      fontSize={18}
-                      style={{
-                        cursor: "pointer",
-                        marginRight: "2px",
-                      }}
-                    />
-                  </Popconfirm>
-                </div>
+                {userRole !== "reader" && (
+                  <div className="pr-3">
+                    <Popconfirm
+                      title="Are you sure to delete?"
+                      onConfirm={() => handleFileDelete(item.url)}
+                      okText="Yes"
+                      cancelText="No"
+                      okButtonProps={{
+                        style: { backgroundColor: "#155CA2", color: "white" },
+                      }}>
+                      <AiOutlineDelete
+                        color="red"
+                        fontSize={18}
+                        style={{
+                          cursor: "pointer",
+                          marginRight: "2px",
+                        }}
+                      />
+                    </Popconfirm>
+                  </div>
+                )}
               </List.Item>
             )}
           />

@@ -766,8 +766,10 @@ const MainContent = (props) => {
       <div className="flex justify-between items-center w-full border-b border-gray-600 pb-1 pt-3">
         <div>
           {["Article", "Files"].map((link, index) => {
-            if (userRole !== "admin" && link === "Files") {
+            {
+              /* if (userRole !== "admin" && link === "Files") {
               return null;
+            } */
             }
             return (
               <a
