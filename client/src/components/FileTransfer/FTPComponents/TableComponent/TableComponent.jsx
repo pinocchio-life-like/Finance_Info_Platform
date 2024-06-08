@@ -189,7 +189,7 @@ const TableComponent = (props) => {
           <PencilAltIcon
             className="h-6 w-6 rounded-sm hover:bg-gray-600 hover:text-white p-1 cursor-pointer"
             aria-hidden="true"
-            onClick={() => console.log("Rename clicked")}
+            onClick={() => setModalOpen(true)}
           />
         </div>
       ),
