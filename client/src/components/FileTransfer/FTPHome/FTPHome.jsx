@@ -1,11 +1,12 @@
 import TableComponent from "../FTPComponents/TableComponent/TableComponent";
 import FilterDrop from "../FTPComponents/filterdrop/FilterDrop";
+import { RollbackOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 import ShareModal from "../FTPComponents/modal/ShareModal";
 import { useEffect, useState } from "react";
 import api from "../../../utils/api";
 import { jwtDecode } from "jwt-decode";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 const { Search } = Input;
 
@@ -15,6 +16,7 @@ const FTPHome = (props) => {
   const [data, setData] = useState([]); // [folders, files]
   const [currentUsers, setCurrentUsers] = useState({}); // [users, files]
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const shareHandler = (record) => {
     setOpenModal(!openModal);
@@ -88,7 +90,17 @@ const FTPHome = (props) => {
   return (
     <div className="flex flex-col p-3 text-lg">
       <div className="flex justify-between">
-        <h1 className="text-xl font-semibold ml-1">My Files</h1>
+        <div className="flex flex-row items-center">
+          {!currentURL.includes("home") && (
+            <Button
+              className=""
+              onClick={() => navigate(-1)}
+              icon={<RollbackOutlined />}>
+              Back
+            </Button>
+          )}
+          <h1 className="text-xl font-semibold ml-1">My Files</h1>
+        </div>
         <div className="flex-grow max-w-lg">
           <Search
             placeholder="input search text"
