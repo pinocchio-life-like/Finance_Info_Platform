@@ -8,6 +8,8 @@ const fs = require("fs");
 const multer = require("multer");
 const mime = require("mime-types");
 const sequelize = require("../../config/db.config");
+const archiver = require('archiver');
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -438,7 +440,44 @@ const updateFolderC = async (req, res) => {
   }
 };
 
+// const zipAndDownloadFolder = async (req, res) => {
+//   const { id } = req.params;
 
+//   try {
+//     const folder = await Folder.findByPk(id);
+//     // console.log(folder,'from folder')
+//     if (!folder) {
+//       return res.status(404).json({ message: 'Folder not found' });
+//     }
+
+//     // Get folder contents (assuming they are stored in a database)
+//     const folderContents = await File.findAll({ where: { folder_id: id } });
+
+//     // Create a zip file
+//     const zipFileName = `folder_${folder.id}.zip`;
+//     const output = fs.createWriteStream(zipFileName);
+//     const archive = archiver('zip', { zlib: { level: 9 } });
+
+//     output.on('close', () => {
+//       console.log(`Zip file ${zipFileName} created successfully`);
+//       res.download(zipFileName); // Send the zip file for download
+//     });
+
+//     archive.pipe(output);
+//     // Add folder contents to the zip file
+//     folderContents.forEach((file) => {
+//       // console.log(file)
+//       // const path=file.file_url
+//       // const fileUrl =path.replace('http://localhost:5000/_root_','')
+     
+//       archive.append(fs.createReadStream(file.file_url), { name: file.file_name });
+//     });
+//     archive.finalize();
+//   } catch (error) {
+//     console.error('Error zipping and downloading folder:', error);
+//     return res.status(500).json({ message: 'Error zipping and downloading folder', error: error.message });
+//   }
+// };
 
 
 
@@ -451,5 +490,6 @@ module.exports = {
   getFolder_urlController,
   getHomeFoldersController,
   deleteFolderC,
-  updateFolderC
+  updateFolderC,
+  // zipAndDownloadFolder
 };

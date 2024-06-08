@@ -54,7 +54,7 @@ const TableComponent = (props) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   // console.log(folderName);
-  console.log(selectedRow)
+  // console.log(selectedRow)
 
   const [dropdownVisibleIndices, setDropdownVisibleIndices] = useState(
     new Array(data.length).fill(false)
@@ -117,7 +117,7 @@ const TableComponent = (props) => {
       const response = await api.put(`api/folder/update/${selectedRowId}`, {
         folder_name: folderName,
       });
-      console.log(response.data);
+      // console.log(response.data);
       if (response.status === 200) {
         console.log("Folder updated successfully");
         setFolderName("");
@@ -134,10 +134,35 @@ const TableComponent = (props) => {
     navigator.clipboard.writeText(textToCopy);
     message.success("Folder directory copied to clipboard");
   };
+  const handleZipAndDownload=async(id)=>{
+    try {
+      const response = await api.post(`api/folder/zip-and-download/${id}`);
+      if (response.status === 200) {
+        console.log("Folder downloaded successfully");
+        window.open(response.data);
+        // props.setRefetch(!props.refetch);
+      } else {
+        console.error("Failed to download folder:", response.statusText);
+      }
+    } catch (error) {
+      console.error(
+        "An error occurred while downloading the folder:",
+        error.message
+      );
+    }
+  }
 
-  const handleDownload = (fileUrl) => {
-    window.open(fileUrl, "_blank");
+  // const handleDownload = (fileUrl) => {
+  //   window.open(fileUrl, "_blank");
+  // };
+  const handleDownload = (record) => {
+    if (record.type === "folder") {
+      handleZipAndDownload(record.id); 
+    } else {
+      window.open(record.fileUrl, "_blank"); 
+    }
   };
+
 
   const columns = [
     {
@@ -192,7 +217,7 @@ const TableComponent = (props) => {
           <DownloadIcon
             className="h-6 w-6 rounded-sm hover:bg-gray-600 hover:text-white p-1 cursor-pointer"
             aria-hidden="true"
-            onClick={() => handleDownload(record.url)}
+            onClick={() => handleDownload(record)}
           />
           <PencilAltIcon
             className="h-6 w-6 rounded-sm hover:bg-gray-600 hover:text-white p-1 cursor-pointer"

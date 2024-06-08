@@ -5,7 +5,9 @@ const {
   getFolder_urlController,
   assignUserToFolder,
   deleteFolderC,
-  updateFolderC
+  updateFolderC,
+  // zipAndDownloadFolder
+
 } = require("../../controllers/FtpController/FolderController");
 
 const router = require("express").Router();
@@ -18,5 +20,6 @@ router.post("/folders/upload", uploadFolderController);
 router.post("/assignUser/assign", assignUserToFolder);
 router.delete('/folder/delete/:id', deleteFolderC);
 router.put('/folder/update/:id', updateFolderC);
+// router.post('/folder/zip-and-download/:id',zipAndDownloadFolder)
 
 module.exports = router;
