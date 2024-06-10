@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../../config/db.config");
+const { User } = require("../userModel");
 
 const Company = sequelize.define("Companies", {
   company_Id: {
@@ -39,4 +40,17 @@ const getAllCompanies = async () => {
   }
 };
 
-module.exports = { Company, getAllCompanies };
+const getAllCompaniesUsers = async () => {
+  return await Company.findAll({
+    include: [
+      {
+        model: User,
+        attributes: {
+          exclude: ["password", "createdAt", "updatedAt", "userRole"],
+        },
+      },
+    ],
+  });
+};
+
+module.exports = { Company, getAllCompanies, getAllCompaniesUsers };

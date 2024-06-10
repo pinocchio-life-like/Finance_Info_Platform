@@ -1,7 +1,7 @@
 const Question = require("./questionModel").Question;
 const Answer = require("./answerModel").Answer;
 const Comment = require("./commentModel").Comment;
-const User = require("../userModel").User;
+// const User = require("../userModel").User;
 const Tag = require("./tagModel").Tag;
 
 // User.hasMany(Question, {
@@ -108,7 +108,7 @@ const updateQuestion = async (questionId, questionData, tagNames) => {
 
 const postComment = async (data) => {
   try {
-    const { content, referred_id, referred_type , userName } = data;
+    const { content, referred_id, referred_type, userName } = data;
     let referredItem;
     if (data.referred_type === "question") {
       referredItem = await Question.findByPk(data.referred_id);
@@ -123,7 +123,7 @@ const postComment = async (data) => {
         content,
         referred_id,
         referred_type,
-        userName
+        userName,
       });
       return comment;
     } else {

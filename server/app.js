@@ -1,5 +1,7 @@
 require("dotenv").config();
 const sequelize = require("./config/db.config");
+const verifyUserMiddleware = require("./middleware/verifyUserMiddleware");
+const verifyFileUserMiddleware = require("./middleware/verifyFileUserMiddleware");
 
 const express = require("express");
 const cookieParser = require("cookie-parser");
@@ -20,6 +22,8 @@ const tagsRoutes = require("./routes/Q&ARoutes/tagsRoute");
 const uploadRoute = require("./routes/uploadRoute/uploadRoute");
 const searchRoutes = require("./routes/searchRoute");
 const companyRoutes = require("./routes/CompanyRoute/companyRoutes");
+const folderRoutes = require("./routes/FtpRoutes/folderRoutes");
+const fileRoutes = require("./routes/FtpRoutes/fileRoutes");
 
 const app = express();
 const corsOptions = {
@@ -35,30 +39,40 @@ app.use(express.json({ limit: "50mb" }));
 app.use(cors(corsOptions));
 
 app.use(express.json());
-// Routes setup
-app.use("/api", userAddRoute);
+
 app.use("/api", loginRoute);
-app.use("/api", userUpdateRoute);
-app.use("/api", articleRoute);
-app.use("/api", categoryRoute);
-app.use("/api", versionRoute);
-app.use("/api", questionRoutes);
-app.use("/api", answerRoutes);
-app.use("/api", commentRoutes);
-app.use("/api", uploadRoute);
-app.use("/api", tagsRoutes);
-app.use("/api", searchRoutes);
-app.use("/api", companyRoutes);
+app.use("/api", verifyUserMiddleware, userAddRoute);
+app.use("/api", verifyUserMiddleware, userUpdateRoute);
+app.use("/api", verifyUserMiddleware, articleRoute);
+app.use("/api", verifyUserMiddleware, categoryRoute);
+app.use("/api", verifyUserMiddleware, versionRoute);
+app.use("/api", verifyUserMiddleware, questionRoutes);
+app.use("/api", verifyUserMiddleware, answerRoutes);
+app.use("/api", verifyUserMiddleware, commentRoutes);
+app.use("/api", verifyUserMiddleware, uploadRoute);
+app.use("/api", verifyUserMiddleware, tagsRoutes);
+app.use("/api", verifyUserMiddleware, searchRoutes);
+app.use("/api", verifyUserMiddleware, companyRoutes);
+app.use("/api", verifyUserMiddleware, folderRoutes);
+app.use("/api", verifyUserMiddleware, fileRoutes);
 
 app.use(
   "/Article/Images",
+  verifyUserMiddleware,
   express.static(path.join(__dirname, "Article/Images"))
 );
 
 app.use(
   "/Article/Files",
+  verifyUserMiddleware,
   express.static(path.join(__dirname, "Article/Files"))
 );
+
+app.use("/_root_/home/*", verifyFileUserMiddleware, function (req, res, next) {
+  const requestedPath = req.params[0];
+  const fullPath = path.join(__dirname, "_root_/home", requestedPath);
+  express.static(fullPath)(req, res, next);
+});
 
 async function syncDatabase() {
   try {
@@ -69,6 +83,6 @@ async function syncDatabase() {
   }
 }
 
-syncDatabase();
+// syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));

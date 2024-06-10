@@ -10,7 +10,7 @@ const Tag = sequelize.define("Tag", {
   tag_name: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+    // unique: true,
   },
   useCount: {
     type: DataTypes.INTEGER,
