@@ -99,7 +99,7 @@ const FTPHome = (props) => {
               Back
             </Button>
           )}
-          <h1 className="text-xl font-semibold ml-1">My Files</h1>
+          <h1 className="text-xl font-semibold ml-1">{props.openFolder}</h1>
         </div>
         <div className="flex-grow max-w-lg">
           <Search
@@ -135,6 +135,7 @@ const FTPHome = (props) => {
 FTPHome.propTypes = {
   setRefetch: PropTypes.func.isRequired,
   refetch: PropTypes.bool.isRequired,
+  openFolder: PropTypes.string,
 };
 
 export default FTPHome;

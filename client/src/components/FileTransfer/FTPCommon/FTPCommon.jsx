@@ -25,22 +25,7 @@ const FTPCommon = (props) => {
   const [lastSegment, setLastSegment] = useState();
   const [parentFolder, setParentFolder] = useState(null);
   const [refetch, setRefetch] = useState(false);
-  const [isTransferInProgress, setTransferInProgress] = useState(false);
-
-  useEffect(() => {
-    const handler = (event) => {
-      if (isTransferInProgress) {
-        event.preventDefault();
-        event.returnValue = "";
-      }
-    };
-
-    window.addEventListener("beforeunload", handler);
-
-    return () => {
-      window.removeEventListener("beforeunload", handler);
-    };
-  }, [isTransferInProgress]);
+  const [openFolder, setOpenFolder] = useState("Home");
 
   useEffect(() => {
     const fetchFolder = async () => {
@@ -52,6 +37,13 @@ const FTPCommon = (props) => {
         );
         setLastSegment(response.data.data);
         setParentFolder(currentURL.split("/").pop());
+
+        setOpenFolder(
+          response.data.data
+            ? response.data.data.charAt(0).toUpperCase() +
+                response.data.data.slice(1)
+            : "Home"
+        );
       }
     };
     fetchFolder();
@@ -79,7 +71,7 @@ const FTPCommon = (props) => {
   const handleFileChange = async (event) => {
     setShowProgress(true);
     setUploadStatus("Uploading...");
-    setTransferInProgress(true);
+    props.setTransferInProgress(true);
 
     const formData = new FormData();
 
@@ -112,7 +104,7 @@ const FTPCommon = (props) => {
     } finally {
       setTimeout(() => {
         setShowProgress(false);
-        setTransferInProgress(false);
+        props.setTransferInProgress(false);
       }, 3000);
     }
   };
@@ -120,7 +112,7 @@ const FTPCommon = (props) => {
   const handleFileUploadChange = async (event) => {
     setShowProgress(true);
     setUploadStatus("Uploading...");
-    setTransferInProgress(true);
+    props.setTransferInProgress(true);
 
     const formData = new FormData();
 
@@ -168,7 +160,7 @@ const FTPCommon = (props) => {
     } finally {
       setTimeout(() => {
         setShowProgress(false);
-        setTransferInProgress(false);
+        props.setTransferInProgress(false);
       }, 3000);
     }
   };
@@ -223,7 +215,6 @@ const FTPCommon = (props) => {
                 <li className="w-full">
                   <Dropdown overlay={menu} trigger={["click"]}>
                     <Link
-                      to="/ftp/home"
                       className={`w-full flex items-center py-3 md:px-4 px-2 shadow rounded-sm hover:bg-[#155CA2] hover:text-white font-light`}>
                       <FaPlus size={20} style={{ marginRight: 10 }} /> New
                     </Link>
@@ -231,6 +222,7 @@ const FTPCommon = (props) => {
                 </li>
                 <li className="w-full">
                   <Link
+                    to="/ftp/home"
                     className={`flex items-center py-3 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 1 ? "text-[#155CA2] " : ""
                     }`}
@@ -288,6 +280,7 @@ const FTPCommon = (props) => {
               return React.cloneElement(child, {
                 refetch: refetch,
                 setRefetch,
+                openFolder,
               });
             })}
           </div>
@@ -324,6 +317,7 @@ const FTPCommon = (props) => {
 
 FTPCommon.propTypes = {
   children: PropTypes.node,
+  setTransferInProgress: PropTypes.func,
 };
 
 export default FTPCommon;
