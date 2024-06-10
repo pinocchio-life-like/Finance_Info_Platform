@@ -25,6 +25,22 @@ const FTPCommon = (props) => {
   const [lastSegment, setLastSegment] = useState();
   const [parentFolder, setParentFolder] = useState(null);
   const [refetch, setRefetch] = useState(false);
+  const [isTransferInProgress, setTransferInProgress] = useState(false);
+
+  useEffect(() => {
+    const handler = (event) => {
+      if (isTransferInProgress) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handler);
+
+    return () => {
+      window.removeEventListener("beforeunload", handler);
+    };
+  }, [isTransferInProgress]);
 
   useEffect(() => {
     const fetchFolder = async () => {
@@ -63,6 +79,7 @@ const FTPCommon = (props) => {
   const handleFileChange = async (event) => {
     setShowProgress(true);
     setUploadStatus("Uploading...");
+    setTransferInProgress(true);
 
     const formData = new FormData();
 
@@ -95,6 +112,7 @@ const FTPCommon = (props) => {
     } finally {
       setTimeout(() => {
         setShowProgress(false);
+        setTransferInProgress(false);
       }, 3000);
     }
   };
@@ -102,6 +120,7 @@ const FTPCommon = (props) => {
   const handleFileUploadChange = async (event) => {
     setShowProgress(true);
     setUploadStatus("Uploading...");
+    setTransferInProgress(true);
 
     const formData = new FormData();
 
@@ -149,6 +168,7 @@ const FTPCommon = (props) => {
     } finally {
       setTimeout(() => {
         setShowProgress(false);
+        setTransferInProgress(false);
       }, 3000);
     }
   };
@@ -203,6 +223,7 @@ const FTPCommon = (props) => {
                 <li className="w-full">
                   <Dropdown overlay={menu} trigger={["click"]}>
                     <Link
+                      to="/ftp/home"
                       className={`w-full flex items-center py-3 md:px-4 px-2 shadow rounded-sm hover:bg-[#155CA2] hover:text-white font-light`}>
                       <FaPlus size={20} style={{ marginRight: 10 }} /> New
                     </Link>
