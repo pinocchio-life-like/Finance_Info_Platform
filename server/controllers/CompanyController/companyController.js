@@ -2,10 +2,6 @@ const {
   getAllCompanies,
   getAllCompaniesUsers,
 } = require("../../models/CompanyModel/CompanyModel");
-const {
-  getAllCompanies,
-  getAllCompaniesUsers,
-} = require("../../models/CompanyModel/CompanyModel");
 
 //article getter
 const getAllCompaniesC = async (req, res) => {
