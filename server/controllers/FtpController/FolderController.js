@@ -67,6 +67,21 @@ const createFolderController = async (req, res) => {
       permission: "admin",
     });
 
+    // If the new folder has a parent, copy the FolderUser entries from the parent
+    if (parentFolder) {
+      const parentFolderUsers = await FolderUser.findAll({
+        where: { folder_id: parentFolder },
+      });
+      const newFolderUsers = parentFolderUsers
+        .filter((folderUser) => folderUser.userId !== user.userId) // Exclude the admin user
+        .map((folderUser) => ({
+          userId: folderUser.userId,
+          folder_id: newFolder.folder_id,
+          permission: folderUser.permission, // Set the permission to be the same as the parent
+        }));
+      await FolderUser.bulkCreate(newFolderUsers);
+    }
+
     res.json({ message: "Folder created successfully", data: newFolder });
   } catch (error) {
     res
@@ -150,6 +165,21 @@ const uploadFolderController = async (req, res) => {
             folder_id: folder.folder_id,
             permission: "admin",
           });
+
+          // If the new folder has a parent, copy the FolderUser entries from the parent
+          if (parentFolder) {
+            const parentFolderUsers = await FolderUser.findAll({
+              where: { folder_id: parentFolder },
+            });
+            const newFolderUsers = parentFolderUsers
+              .filter((folderUser) => folderUser.userId !== user.userId) // Exclude the admin user
+              .map((folderUser) => ({
+                userId: folderUser.userId,
+                folder_id: folder.folder_id,
+                permission: folderUser.permission, // Set the permission to be the same as the parent
+              }));
+            await FolderUser.bulkCreate(newFolderUsers);
+          }
         }
 
         folderIds[folderPath] = folder.folder_id;
