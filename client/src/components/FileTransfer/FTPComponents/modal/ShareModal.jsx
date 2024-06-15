@@ -264,7 +264,7 @@ const ShareModal = (props) => {
                           <List.Item.Meta
                             avatar={<Avatar icon={<UserOutlined />} />}
                             title={
-                              <a href="https://ant.design">{item.label}</a>
+                              <a>{item.label}</a>
                             }
                             description={item.companyName}
                           />

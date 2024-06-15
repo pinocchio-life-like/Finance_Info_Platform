@@ -77,7 +77,8 @@ const createFolderController = async (req, res) => {
         .map((folderUser) => ({
           userId: folderUser.userId,
           folder_id: newFolder.folder_id,
-          permission: folderUser.permission, // Set the permission to be the same as the parent
+          permission:
+            folderUser.permission === "admin" ? "write" : folderUser.permission, // Set the permission to be the same as the parent
         }));
       await FolderUser.bulkCreate(newFolderUsers);
     }
@@ -176,7 +177,10 @@ const uploadFolderController = async (req, res) => {
               .map((folderUser) => ({
                 userId: folderUser.userId,
                 folder_id: folder.folder_id,
-                permission: folderUser.permission, // Set the permission to be the same as the parent
+                permission:
+                  folderUser.permission === "admin"
+                    ? "write"
+                    : folderUser.permission, // Set the permission to be the same as the parent
               }));
             await FolderUser.bulkCreate(newFolderUsers);
           }
