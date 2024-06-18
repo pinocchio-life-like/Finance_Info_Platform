@@ -1,0 +1,14 @@
+div.timeline_container div.ant-timeline-item-label {
+  white-space: nowrap;
+  text-align: left !important;
+}
+
+div.timeline_container div.ant-timeline-item-content {
+  left: 82px !important;
+  width: calc(100% - 112px) !important;
+}
+
+div.timeline_container div.ant-timeline-item-tail,
+div.ant-timeline-item-head {
+  left: 85px !important;
+}

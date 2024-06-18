@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { wikiRoutes } from "./wikiRoutes";
 import { QandARoutes } from "./QandARoutes";
 import { FTPRoutes } from "./FileTransferRoutes";
+import { NoticeRoutes } from "./NoticeRoutes";
 
 function AppRoutes() {
   const location = useLocation();
@@ -68,6 +69,10 @@ function AppRoutes() {
         ))}
 
         {FTPRoutes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
+
+        {NoticeRoutes.map((route, index) => (
           <Route key={index} path={route.path} element={route.element} />
         ))}
 
