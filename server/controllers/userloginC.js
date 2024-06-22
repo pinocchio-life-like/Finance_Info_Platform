@@ -10,6 +10,7 @@ const generateRefreshToken = (user) => {
     userName: user.userName,
     userRole: user.userRole,
     firstName: user.firstName,
+    userId: user.userId,
   };
   return jwt.sign(payload, refresh_key, {
     expiresIn: "7d",
@@ -30,10 +31,11 @@ const userloginC = async (req, res) => {
       if (passwordMatch) {
         //data to be send to the client side
         const payload = {
-          // userId:user.userId,
+          userId:user.userId,
           userName: user.userName,
           userRole: user.userRole,
           firstName: user.firstName,
+       
         };
         // Generate accesstoken
         const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
@@ -92,6 +94,7 @@ const refreshTokenC = async (req, res) => {
       userName: decoded.userName,
       firstName: decoded.firstName,
       userRole: decoded.userRole,
+      userId: decoded.userId,
     };
 
     const newAccessToken = jwt.sign(payload, secretKey, { expiresIn: "1h" });

@@ -14,6 +14,10 @@ import { useNavigate } from "react-router-dom";
 import { wikiRoutes } from "./wikiRoutes";
 import { QandARoutes } from "./QandARoutes";
 import { FTPRoutes } from "./FileTransferRoutes";
+import NoticeBoard from "../components/NoticeBoard/Notice/NoticeBoard";
+import NoticePostPage from "../components/NoticeBoard/Notice/NoticePostPage";
+import TaskAssignmentPage from "../components/NoticeBoard/TaskAssignment/TaskAssignmentPage";
+import TaskAssign from "../components/NoticeBoard/TaskAssignment/TaskAssign";
 
 function AppRoutes() {
   const location = useLocation();
@@ -50,6 +54,13 @@ function AppRoutes() {
             isAuthenticated ? <Navigate to="/" replace /> : <LoginPage />
           }
         />
+        <Route
+          path="/dashboard" element={<NoticeBoard   />}/>
+        <Route path="/notice" element={<NoticePostPage  />}/>
+        <Route path="/task" element={<TaskAssignmentPage  />}/>
+        <Route path="/task/post" element={<TaskAssign/>}/>
+     
+   
         <Route
           path="profile"
           element={

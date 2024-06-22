@@ -2,9 +2,9 @@ const { postNotice,getNotice,getNoticeById,deleteNotice, findNoticeBYUserId}=req
 
     const noticePost=async(req,res)=>{
 
-        const {noticeDescription,noticeTitle,userId,company_Id}=req.body
+        const {noticeDescription,noticeTitle,userName,company_Name}=req.body
 
-        const notice=await postNotice({noticeDescription,noticeTitle,userId,company_Id})
+        const notice=await postNotice({noticeDescription,noticeTitle,userName,company_Name})
 
         if(!notice){
             return res.status(500).json({

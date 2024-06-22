@@ -11,14 +11,18 @@ const Notice = Sequelize.define("notice", {
     type: DataTypes.STRING,
   },
   noticeDescription: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT("long"),
   },
-  userId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: "users",
-      key: "userId",
-    },
+  // userId: {
+  //   type: DataTypes.INTEGER,
+  //   references: {
+  //     model: "users",
+  //     key: "userId",
+  //   },
+  // },
+  userName: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   company_Name: {
     type: DataTypes.STRING,

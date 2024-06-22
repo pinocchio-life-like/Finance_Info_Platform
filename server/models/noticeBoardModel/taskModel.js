@@ -11,7 +11,7 @@ const Task = sequelize.define("task", {
     type: DataTypes.STRING,
   },
   task_description: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT("long"),
   },
   task_status: {
     type: DataTypes.ENUM,

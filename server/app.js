@@ -25,6 +25,7 @@ const companyRoutes = require("./routes/CompanyRoute/companyRoutes");
 const folderRoutes = require("./routes/FtpRoutes/folderRoutes");
 const fileRoutes = require("./routes/FtpRoutes/fileRoutes");
 const noticeRoute=require('./routes/noticeRoute/noticeRoute')
+const taskRoutes=require('./routes/noticeRoute/taskRoute')
 
 const app = express();
 const corsOptions = {
@@ -43,6 +44,7 @@ app.use(express.json());
 
 app.use("/api", loginRoute);
 app.use("/api",noticeRoute);
+app.use('/api',taskRoutes)
 app.use("/api", verifyUserMiddleware, userAddRoute);
 app.use("/api", verifyUserMiddleware, userUpdateRoute);
 app.use("/api", verifyUserMiddleware, articleRoute);
