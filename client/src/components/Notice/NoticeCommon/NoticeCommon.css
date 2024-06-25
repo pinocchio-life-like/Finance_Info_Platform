@@ -1,14 +1,9 @@
-div.timeline_container div.ant-timeline-item-label {
-  white-space: nowrap;
-  text-align: left !important;
-}
-
-div.timeline_container div.ant-timeline-item-content {
-  left: 82px !important;
-  width: calc(100% - 112px) !important;
-}
-
-div.timeline_container div.ant-timeline-item-tail,
-div.ant-timeline-item-head {
-  left: 85px !important;
+.notices-container::after {
+  content: "";
+  position: absolute;
+  right: -2px; /* Adjust based on the gap you want */
+  top: 0;
+  bottom: 0;
+  width: 1px; /* Thickness of the line */
+  background-color: #000; /* Color of the line */
 }
