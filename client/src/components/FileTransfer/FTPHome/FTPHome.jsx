@@ -134,8 +134,8 @@ const FTPHome = (props) => {
 };
 
 FTPHome.propTypes = {
-  setRefetch: PropTypes.func.isRequired,
-  refetch: PropTypes.bool.isRequired,
+  setRefetch: PropTypes.func,
+  refetch: PropTypes.bool,
   openFolder: PropTypes.string,
 };
 

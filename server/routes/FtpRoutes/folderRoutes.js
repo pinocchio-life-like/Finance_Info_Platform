@@ -18,5 +18,6 @@ router.post("/folders/upload", uploadFolderController);
 router.post("/assignUser/assign", assignUserToFolder);
 router.delete("/folder/delete/:id", deleteFolderController);
 router.put("/folder/rename/:id", renameFolderController);
+router.get("/download/zip/download/:id", getFolder_urlController);
 
 module.exports = router;

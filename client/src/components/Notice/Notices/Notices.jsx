@@ -10,7 +10,7 @@ const Notices = () => {
           color: "red",
           children: (
             <div
-              className="w-full rounded p-2 border border-gray-400"
+              className="w-full p-2 border border-gray-400"
               style={{
                 position: "relative",
                 background: "",
@@ -48,7 +48,7 @@ const Notices = () => {
           color: "green",
           children: (
             <div
-              className="w-full rounded p-2 border border-gray-400"
+              className="w-full p-2 border border-gray-400"
               style={{
                 position: "relative",
                 background: "",
@@ -86,7 +86,7 @@ const Notices = () => {
           color: "blue",
           children: (
             <div
-              className="w-full rounded p-2 border border-gray-400"
+              className="w-full p-2 border border-gray-400"
               style={{
                 position: "relative",
                 background: "",
@@ -124,7 +124,7 @@ const Notices = () => {
           color: "cyan",
           children: (
             <div
-              className="w-full rounded p-2 border border-gray-400"
+              className="w-full p-2 border border-gray-400"
               style={{
                 position: "relative",
                 background: "",
