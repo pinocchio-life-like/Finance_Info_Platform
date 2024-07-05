@@ -9,6 +9,7 @@ const TaskAssignmentPage = () => {
   const [tasks, setTasks] = useState([]);
   const [updateFlag, setUpdateFlag] = useState(false);
   const [taskId, setTaskId] = useState(null);
+  console.log(tasks)
 
   const token = localStorage.getItem("token");
   let userId = null;
@@ -59,7 +60,7 @@ const TaskAssignmentPage = () => {
   
 
   const renderTaskByStatus = () => {
-    const statuses = ["Pending", "Completed", "Not Started"];
+    const statuses = ["Pending", "Completed", "Overdue"];
 
     return statuses.map((status, index) => {
       const filteredTasks = tasks.filter(
