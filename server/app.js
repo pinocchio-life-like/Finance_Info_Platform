@@ -24,6 +24,8 @@ const searchRoutes = require("./routes/searchRoute");
 const companyRoutes = require("./routes/CompanyRoute/companyRoutes");
 const folderRoutes = require("./routes/FtpRoutes/folderRoutes");
 const fileRoutes = require("./routes/FtpRoutes/fileRoutes");
+const noticeRoute = require("./routes/NoticeRoute/noticeRoute");
+const taskRoutes = require("./routes/NoticeRoute/taskRoute");
 
 const app = express();
 const corsOptions = {
@@ -55,6 +57,8 @@ app.use("/api", verifyUserMiddleware, searchRoutes);
 app.use("/api", verifyUserMiddleware, companyRoutes);
 app.use("/api", verifyUserMiddleware, folderRoutes);
 app.use("/api", verifyUserMiddleware, fileRoutes);
+app.use("/api", verifyUserMiddleware, noticeRoute);
+app.use("/api", verifyUserMiddleware, taskRoutes);
 
 app.use(
   "/Article/Images",
