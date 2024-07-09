@@ -17,8 +17,6 @@ const ShareModal = (props) => {
   const [initLoading, setInitLoading] = useState(true);
 
   const handleAccessOptionChange = (userId, value) => {
-    console.log(userId, value);
-
     if (value === "Revoke") {
       // Find the user to be revoked
       const userToRevoke = folderUsers.find((user) => user.userId === userId);

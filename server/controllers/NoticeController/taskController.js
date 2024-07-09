@@ -4,29 +4,37 @@ const {
   getTaskByUserId,
   getAllTaskList,
 } = require("../../models/NoticeBoardModel/association");
+const { Task } = require("../../models/NoticeBoardModel/taskModel");
 
 const taskPost = async (req, res) => {
-  const { userId, task_due_date, task_status, task_description, task_name } =
-    req.body;
+  try {
+    const { task_name, task_description, task_due_date, userName, users } =
+      req.body;
 
-  const task = await assignTask({
-    userId,
-    task_due_date,
-    task_status,
-    task_description,
-    task_name,
-  });
+    // Create the task
+    const task = await Task.create({
+      task_name,
+      task_description,
+      task_due_date,
+      userName,
+    });
 
-  if (!task) {
+    // If there are users to associate with the task
+    if (users && users.length) {
+      // Sequelize automatically provides this method to associate users with the task
+      await task.addUsers(users);
+    }
+    // Respond with success message and the created task
+    return res.status(200).json({
+      message: "Task created successfully",
+      data: task,
+    });
+  } catch (error) {
+    console.error("Error creating task:", error);
     return res.status(500).json({
-      message: "something went wrong while posting task",
+      message: "Something went wrong while posting task",
     });
   }
-
-  return res.status(200).json({
-    message: "task created",
-    data: task,
-  });
 };
 
 const taskGetByUserIdC = async (req, res) => {

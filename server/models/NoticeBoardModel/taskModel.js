@@ -19,15 +19,13 @@ const Task = sequelize.define("task", {
     defaultValue: "Pending",
     allowNull: false,
   },
-
   task_due_date: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
     allowNull: false,
   },
-
-  userId: {
-    type: DataTypes.INTEGER,
+  userName: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
 });

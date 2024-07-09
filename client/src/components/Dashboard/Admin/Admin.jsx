@@ -196,13 +196,14 @@ const Admin = () => {
   };
 
   const onFinishUpdate = async (values) => {
-    const lastCompanyId = values.company_Id[values.company_Id.length - 1];
+    const lastCompanyId = Array.isArray(values.company_Id)
+      ? values.company_Id[0]
+      : values.company_Id;
+
     const newValues = {
       ...values,
       company_Id: lastCompanyId,
     };
-
-    console.log(lastCompanyId);
 
     try {
       await api.put(`/api/user/update/${drawerData.userId}`, newValues);

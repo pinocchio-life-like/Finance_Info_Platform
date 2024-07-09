@@ -11,6 +11,8 @@ const NoticeCommon = () => {
   const [openTask, setOpenTask] = useState(false);
   const [openNotice, setOpenNotice] = useState(false);
   const [companies, setCompanies] = useState([]);
+  const [users, setUsers] = useState([]);
+
   const showTaskDrawer = () => {
     setOpenTask(true);
   };
@@ -34,7 +36,32 @@ const NoticeCommon = () => {
         console.error(error);
       }
     };
+    const fetch_Company_and_Users = async () => {
+      try {
+        const response = await api.get("/api/company_users/getall");
+
+        let data = response.data.data.map((company) => {
+          return company.Users.map((user) => {
+            return {
+              label: user.firstName,
+              value: user.userId,
+              companyName: company.company_Name,
+              companyId: company.company_Id,
+            };
+          });
+        });
+
+        // Flatten the array
+        data = [].concat(...data);
+
+        setUsers(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     getAllCompanies();
+    fetch_Company_and_Users();
   }, []);
 
   return (
@@ -76,7 +103,7 @@ const NoticeCommon = () => {
         open={openNotice}
         setOpen={setOpenNotice}
       />
-      <TasksDrawer open={openTask} setOpen={setOpenTask} />
+      <TasksDrawer open={openTask} setOpen={setOpenTask} users={users} />
     </div>
   );
 };

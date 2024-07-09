@@ -86,6 +86,10 @@ const NoticeDrawer = (props) => {
               }}
               placeholder="Please select"
               options={props.companies}
+              showSearch // Enables the search functionality
+              filterOption={(input, option) =>
+                option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
             />
           </Form.Item>
         </Form>
