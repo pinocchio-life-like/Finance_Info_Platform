@@ -13,20 +13,9 @@ const Notice = Sequelize.define("notice", {
   noticeDescription: {
     type: DataTypes.TEXT("long"),
   },
-  // userId: {
-  //   type: DataTypes.INTEGER,
-  //   references: {
-  //     model: "users",
-  //     key: "userId",
-  //   },
-  // },
   userName: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  company_Name: {
-    type: DataTypes.STRING,
-    allowNull: true,
   },
 });
 

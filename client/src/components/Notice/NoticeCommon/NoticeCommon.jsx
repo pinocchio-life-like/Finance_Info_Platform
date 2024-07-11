@@ -68,7 +68,7 @@ const NoticeCommon = () => {
     <div>
       <div className="flex-grow flex flex-col items-center lg:mx-14 mx-1 bg-white">
         <div className="flex justify-between items-center w-full pt-3">
-          <div className="w-3/4 border-b border-gray-600 mr-2 flex justify-between items-center pb-1">
+          <div className="w-[65%] border-b border-gray-600 mr-2 flex justify-between items-center pb-1">
             <a className={`px-1 cursor-pointer`} style={{ lineHeight: "2rem" }}>
               Notices
             </a>
@@ -78,7 +78,7 @@ const NoticeCommon = () => {
               Add New Notice
             </Button>
           </div>
-          <div className="w-1/4 border-b border-gray-600 ml-2 flex justify-between items-center pb-1">
+          <div className="w-[35%] border-b border-gray-600 ml-2 flex justify-between items-center pb-1">
             <a className={`px-1 cursor-pointer`} style={{ lineHeight: "2rem" }}>
               Tasks
             </a>
@@ -90,10 +90,14 @@ const NoticeCommon = () => {
           </div>
         </div>
         <div className="timeline_container w-full flex justify-between">
-          <div className="w-3/4 mr-2">
+          <div
+            className="w-[65%] mr-2 scrollable"
+            style={{ maxHeight: "86.2vh", overflowY: "auto" }}>
             <Notices />
           </div>
-          <div className="w-1/4 ml-2">
+          <div
+            className="w-[35%] ml-2 scrollable"
+            style={{ maxHeight: "86.2vh", overflowY: "auto" }}>
             <Tasks />
           </div>
         </div>

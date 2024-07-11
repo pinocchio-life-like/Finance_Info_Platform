@@ -1,10 +1,53 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { IoMdPricetags } from "react-icons/io";
-import { RiQuestionAnswerFill } from "react-icons/ri";
-import { RiQuestionnaireFill } from "react-icons/ri";
+import { BiTask } from "react-icons/bi";
+import { MdOutlinePendingActions } from "react-icons/md";
+import { BiTaskX } from "react-icons/bi";
+import api from "../../../utils/api";
+import { jwtDecode } from "jwt-decode";
+import ReactQuill from "react-quill";
+import { Button, Popconfirm } from "antd";
+
 const Tasks = () => {
+  const token = localStorage.getItem("token");
   const [activeIndex, setActiveIndex] = useState(0);
+  const [tasks, setTasks] = useState([]);
+  const [isFull, setIsFull] = useState([]);
+  const [isHovered, setIsHovered] = useState(false);
+
+  let userName = null;
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      userName = decodedToken.userName;
+    } catch (error) {
+      console.error("Invalid token");
+    }
+  }
+
+  const toggleDescription = (index) => {
+    setIsFull((prev) => {
+      const newIsFull = [...prev];
+      newIsFull[index] = !newIsFull[index];
+      return newIsFull;
+    });
+  };
+
+  useEffect(() => {
+    const getTasks = async () => {
+      try {
+        const response = await api.get(`/api/tasks/${userName}`);
+        setTasks(response.data.data);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+    getTasks();
+  }, []);
+
+  const confirm = (e) => {
+    console.log(e);
+  };
 
   return (
     <>
@@ -19,7 +62,7 @@ const Tasks = () => {
               onClick={() => {
                 setActiveIndex(0);
               }}>
-              <RiQuestionAnswerFill size={21} style={{ marginRight: 10 }} />{" "}
+              <MdOutlinePendingActions size={21} style={{ marginRight: 10 }} />{" "}
               Pending
             </Link>
           </li>
@@ -32,7 +75,7 @@ const Tasks = () => {
               onClick={() => {
                 setActiveIndex(1);
               }}>
-              <IoMdPricetags size={21} style={{ marginRight: 10 }} />
+              <BiTask size={21} style={{ marginRight: 10 }} />
               Completed
             </Link>
           </li>
@@ -45,8 +88,7 @@ const Tasks = () => {
               onClick={() => {
                 setActiveIndex(2);
               }}>
-              <RiQuestionnaireFill size={20} style={{ marginRight: 10 }} />{" "}
-              Overdue
+              <BiTaskX size={20} style={{ marginRight: 10 }} /> Overdue
             </Link>
           </li>
         </ul>
@@ -58,27 +100,82 @@ const Tasks = () => {
           scrollbarWidth: "none" /* For Firefox */,
           msOverflowStyle: "none" /* For Internet Explorer and Edge */,
         }}>
-        <div
-          className="w-full p-2 border border-gray-400 mb-2"
-          style={{
-            position: "relative",
-            background: "",
-          }}>
-          <div className="w-full flex-row">
-            <p className="w-full flex border-b pb-1 border-gray-400 text-sm">
-              hello
-            </p>
-            <p className="w-full text-sm">
-              Blum auto bot free download for windows / blum auto farm bot Hi
-              everyone today we present you our bot for crypto game Blum with
-              which you can automate the whole process in the game which is
-              possible blum farm bot / blum auto farm / blum python bot / free
-              farm blum / blum telegram auto bot / blum tg bot / blum auto bot
-              free
-            </p>
-            <div>hello</div>
-          </div>
-        </div>
+        {tasks
+          .filter((task) =>
+            activeIndex === 0
+              ? task.taskUserStatus === "pending"
+              : activeIndex === 1
+              ? task.taskUserStatus === "completed"
+              : task.taskUserStatus === "overdue"
+          )
+          .map((task, i) => {
+            let matches = task.task_description.match(/<[^>]*>[^<]*<\/[^>]*>/g);
+            let description = matches ? matches.slice(0, 4).join("") : "";
+            return (
+              <div
+                onMouseOver={() => setIsHovered(true)}
+                onMouseOut={() => setIsHovered(false)}
+                key={task.task_Id}
+                className={`w-full py-2 px-1 mb-2 ${isHovered ? "group" : ""}`}
+                style={{
+                  position: "relative",
+                  background: "",
+                }}>
+                <div className="w-full flex-row">
+                  <div className="w-full font-bold text-lg text-[#008DDA] flex border-b pb-1 justify-between">
+                    <Link to={`/notice/`}>{`${task.task_name}`}</Link>
+                    <button className="text-gray-500 text-sm font-normal">
+                      Due date:{" "}
+                      {new Date(task.task_due_date).toLocaleDateString()}
+                    </button>
+                  </div>
+                  <div className="w-full">
+                    <ReactQuill
+                      readOnly
+                      value={isFull[i] ? task.task_description : description}
+                      theme="bubble"
+                      className="mt-auto bg-white"
+                      style={{
+                        marginLeft: -14,
+                      }}
+                    />
+                  </div>
+                  <div
+                    style={{ position: "absolute", bottom: 30, left: 0 }}
+                    className="w-full flex justify-between pr-2">
+                    <button
+                      className="text-[#008DDA]"
+                      onClick={() => {
+                        toggleDescription(i);
+                      }}>
+                      {isFull[i] ? "see less" : "...see more"}
+                    </button>
+                    <Popconfirm
+                      className="opacity-0 group-hover:opacity-100"
+                      title="Mark as completed"
+                      description="Do you want to mark as complete?"
+                      onConfirm={confirm}
+                      okText="Yes"
+                      cancelText="No"
+                      okButtonProps={{
+                        style: { backgroundColor: "#155CA2", color: "white" },
+                      }}>
+                      {" "}
+                      <Button className="text-[#008DDA]">
+                        mark as completed
+                      </Button>
+                    </Popconfirm>
+                  </div>
+                  <button
+                    className="text-[#008DDA] text-sm"
+                    style={{ position: "absolute", bottom: 0, left: 0 }}>
+                    assigned by: {task.userName} @{" "}
+                    {new Date(task.createdAt).toLocaleString()}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
       </div>
     </>
   );

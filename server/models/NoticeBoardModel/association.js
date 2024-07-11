@@ -1,20 +1,26 @@
 const { Op } = require("sequelize");
+const Sequelize = require("sequelize");
+const sequelize = require("../../config/db.config");
 
 const Notice = require("./noticeModel").Notice;
 const User = require("../userModel").User;
 const Task = require("./taskModel").Task;
+const Company = require("../CompanyModel/CompanyModel").Company;
 
-// User.hasMany(Notice, {
-//   foreignKey: "userId",
-//   sourceKey: "userId",
-// });
+// The Join model with custom field status
+const TaskUser = sequelize.define("taskUser", {
+  status: {
+    type: Sequelize.STRING,
+    defaultValue: "pending",
+  },
+});
 
-// Notice.belongsTo(User, {
-//   foreignKey: "userId",
-//   targetKey: "userId",
-// });
-Task.belongsToMany(User, { through: "taskUser" });
-User.belongsToMany(Task, { through: "taskUser" });
+Task.belongsToMany(User, { through: TaskUser });
+User.belongsToMany(Task, { through: TaskUser });
+
+// The association between the Company and Notice models
+Company.belongsToMany(Notice, { through: "companyNotice" });
+Notice.belongsToMany(Company, { through: "companyNotice" });
 
 const postNotice = async (data) => {
   // const {noticeDescription,noticeTitle,userId,companyId}=data
@@ -76,12 +82,12 @@ const getAllTaskList = async () => {
 module.exports = {
   Notice,
   User,
+  Company,
   postNotice,
   getNotice,
   getNoticeById,
   deleteNotice,
   findNoticeBYUserId,
-
   assignTask,
   taskUpDate,
   getTaskByUserId,

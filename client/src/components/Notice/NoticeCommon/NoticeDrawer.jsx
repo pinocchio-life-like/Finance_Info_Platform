@@ -1,9 +1,24 @@
 import { Button, Drawer, Form, Input, Select, Space } from "antd";
 import { useState } from "react";
 import ReactQuill from "react-quill";
+import api from "../../../utils/api";
+import { jwtDecode } from "jwt-decode";
 
 const NoticeDrawer = (props) => {
+  const [noticeForm] = Form.useForm();
   const [description, setDescription] = useState("");
+
+  const token = localStorage.getItem("token");
+  let userName = null;
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      userName = decodedToken.userName;
+    } catch (error) {
+      console.error("Invalid token");
+    }
+  }
+
   const onClose = () => {
     props.setOpen(false);
   };
@@ -12,6 +27,29 @@ const NoticeDrawer = (props) => {
     setDescription(value);
   };
 
+  const noticeSubmitHandler = async (values) => {
+    try {
+      const response = await api.post("/api/notice", {
+        userName: userName,
+        noticeTitle: values.noticeTitle,
+        noticeDescription: description,
+        companies: values.companies,
+      });
+
+      // Check if the response is successful
+      if (response.status === 200) {
+        // Display success message
+        console.log("Notice posted successfully", response.data);
+        // Optionally, reset the form or redirect the user
+      } else {
+        // Handle client or server errors
+        console.error("Failed to post notice", response.data);
+      }
+    } catch (error) {
+      // Handle network or unexpected errors
+      console.error("An error occurred while posting the notice", error);
+    }
+  };
   return (
     <div>
       <Drawer
@@ -24,12 +62,18 @@ const NoticeDrawer = (props) => {
         extra={
           <Space>
             <Button onClick={onClose}>Cancel</Button>
-            <Button className="qa-button" type="primary" onClick={onClose}>
+            <Button
+              className="qa-button"
+              type="primary"
+              onClick={() => noticeForm.submit()}>
               Submit
             </Button>
           </Space>
         }>
-        <Form name="noticeForm">
+        <Form
+          form={noticeForm}
+          onFinish={noticeSubmitHandler}
+          name="noticeForm">
           <Form.Item
             name="noticeTitle"
             rules={[
@@ -41,7 +85,10 @@ const NoticeDrawer = (props) => {
             label="Notice Title">
             <Input placeholder="Notice Title" />
           </Form.Item>
-          <Form.Item label="Notice Description">
+          <Form.Item
+            name="noticeDescription"
+            valuePropName="description"
+            label="Notice Description">
             <ReactQuill
               value={description}
               theme="snow"
@@ -78,7 +125,7 @@ const NoticeDrawer = (props) => {
               ]}
             />
           </Form.Item>
-          <Form.Item label="Company">
+          <Form.Item name="companies" label="Company">
             <Select
               mode="multiple"
               style={{

@@ -7,7 +7,7 @@ const {
 const router = require("express").Router();
 
 router.post("/task", taskPost);
-router.get("/task/:id", taskGetByUserIdC);
+router.get("/tasks/:userName", taskGetByUserIdC);
 router.get("/task", taskGetAll);
 router.put("/task/:id", taskUpdate);
 

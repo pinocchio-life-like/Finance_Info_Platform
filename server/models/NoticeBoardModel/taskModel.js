@@ -15,8 +15,8 @@ const Task = sequelize.define("task", {
   },
   task_status: {
     type: DataTypes.ENUM,
-    values: ["Pending", "Completed", "Overdue"],
-    defaultValue: "Pending",
+    values: ["pending", "completed", "overdue"],
+    defaultValue: "pending",
     allowNull: false,
   },
   task_due_date: {

@@ -1,163 +1,100 @@
 import { Timeline } from "antd";
+import { useEffect, useState } from "react";
+import api from "../../../utils/api";
+import { jwtDecode } from "jwt-decode";
+import ReactQuill from "react-quill";
+import { Link } from "react-router-dom";
+
 const Notices = () => {
+  const token = localStorage.getItem("token");
+  const [notices, setNotices] = useState([]);
+  const [isFull, setIsFull] = useState([]);
+
+  let userName = null;
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      userName = decodedToken.userName;
+    } catch (error) {
+      console.error("Invalid token");
+    }
+  }
+
+  const toggleDescription = (index) => {
+    setIsFull((prev) => {
+      const newIsFull = [...prev];
+      newIsFull[index] = !newIsFull[index];
+      return newIsFull;
+    });
+  };
+
+  useEffect(() => {
+    const getNotice = async () => {
+      const response = await api.get(`/api/notices/${userName}`);
+      setNotices(response.data.data);
+    };
+    getNotice();
+  }, []);
+
   return (
     <Timeline
       className="w-full mt-5"
       mode="left"
-      items={[
-        {
-          // label: "2015-09-01",
-          color: "red",
+      items={notices.map((notice, i) => {
+        let matches = notice.noticeDescription.match(/<[^>]*>[^<]*<\/[^>]*>/g);
+        let description = matches ? matches.slice(0, 4).join("") : "";
+        return {
+          color: "black", // Assuming all items are red, adjust as needed
           children: (
             <div
-              className="w-full p-2 border border-gray-400"
+              key={notice.noticeId}
+              className="w-full border-gray-400 font"
               style={{
                 position: "relative",
                 background: "",
               }}>
-              <div
-                style={{
-                  position: "absolute",
-                  right: "100%",
-                  top: "5%",
-                  width: "0",
-                  height: "0",
-                  borderTop: "8px solid transparent",
-                  borderBottom: "8px solid transparent",
-                  borderRight: "8px solid #00224D",
-                }}></div>
               <div className="w-full flex-row">
-                <div className="w-full flex border-b pb-1 border-gray-400">
-                  hello
+                <div className="w-full font-bold text-lg text-[#008DDA] flex border-b pb-1 border-gray-400">
+                  <Link to={`/notice/${notice.noticeId}`}>
+                    {notice.noticeTitle}
+                  </Link>
                 </div>
                 <div className="w-full">
-                  Blum auto bot free download for windows / blum auto farm bot
-                  Hi everyone today we present you our bot for crypto game Blum
-                  with which you can automate the whole process in the game
-                  which is possible blum farm bot / blum auto farm / blum python
-                  bot / free farm blum / blum telegram auto bot / blum tg bot /
-                  blum auto bot free
+                  <ReactQuill
+                    readOnly
+                    value={isFull[i] ? notice.noticeDescription : description}
+                    theme="bubble"
+                    className="mt-auto bg-white"
+                    style={{
+                      marginLeft: -14,
+                    }}
+                  />
                 </div>
-                <div>hello</div>
+                <button
+                  className="text-[#008DDA]"
+                  style={{ position: "absolute", bottom: 30, left: 0 }}
+                  onClick={() => {
+                    toggleDescription(i);
+                  }}>
+                  {isFull[i] ? "see less" : "...see more"}
+                </button>
+                <div className="flex flex-row justify-between">
+                  <button
+                    className="text-[#008DDA]"
+                    style={{ position: "absolute", bottom: 0, left: 0 }}>
+                    Posted by: {notice.userName}
+                  </button>
+                  <button
+                    className="text-[#008DDA]"
+                    style={{ position: "absolute", bottom: 0, right: 10 }}>
+                    Date posted: {new Date(notice.createdAt).toLocaleString()}
+                  </button>
+                </div>
               </div>
             </div>
           ),
-        },
-        {
-          // label: "2015-09-01",
-          color: "green",
-          children: (
-            <div
-              className="w-full p-2 border border-gray-400"
-              style={{
-                position: "relative",
-                background: "",
-              }}>
-              <div
-                style={{
-                  position: "absolute",
-                  right: "100%",
-                  top: "5%",
-                  width: "0",
-                  height: "0",
-                  borderTop: "8px solid transparent",
-                  borderBottom: "8px solid transparent",
-                  borderRight: "8px solid #00224D",
-                }}></div>
-              <div className="w-full flex-row">
-                <div className="w-full flex border-b pb-1 border-gray-400">
-                  hello
-                </div>
-                <div className="w-full">
-                  Blum auto bot free download for windows / blum auto farm bot
-                  Hi everyone today we present you our bot for crypto game Blum
-                  with which you can automate the whole process in the game
-                  which is possible blum farm bot / blum auto farm / blum python
-                  bot / free farm blum / blum telegram auto bot / blum tg bot /
-                  blum auto bot free
-                </div>
-                <div>hello</div>
-              </div>
-            </div>
-          ),
-        },
-        {
-          // label: "2015-09-01",
-          color: "blue",
-          children: (
-            <div
-              className="w-full p-2 border border-gray-400"
-              style={{
-                position: "relative",
-                background: "",
-              }}>
-              <div
-                style={{
-                  position: "absolute",
-                  right: "100%",
-                  top: "5%",
-                  width: "0",
-                  height: "0",
-                  borderTop: "8px solid transparent",
-                  borderBottom: "8px solid transparent",
-                  borderRight: "8px solid #00224D",
-                }}></div>
-              <div className="w-full flex-row">
-                <div className="w-full flex border-b pb-1 border-gray-400">
-                  hello
-                </div>
-                <div className="w-full">
-                  Blum auto bot free download for windows / blum auto farm bot
-                  Hi everyone today we present you our bot for crypto game Blum
-                  with which you can automate the whole process in the game
-                  which is possible blum farm bot / blum auto farm / blum python
-                  bot / free farm blum / blum telegram auto bot / blum tg bot /
-                  blum auto bot free
-                </div>
-                <div>hello</div>
-              </div>
-            </div>
-          ),
-        },
-        {
-          // label: "2015-09-01",
-          color: "cyan",
-          children: (
-            <div
-              className="w-full p-2 border border-gray-400"
-              style={{
-                position: "relative",
-                background: "",
-              }}>
-              <div
-                style={{
-                  position: "absolute",
-                  right: "100%",
-                  top: "5%",
-                  width: "0",
-                  height: "0",
-                  borderTop: "8px solid transparent",
-                  borderBottom: "8px solid transparent",
-                  borderRight: "8px solid #00224D",
-                }}></div>
-              <div className="w-full flex-row">
-                <div className="w-full flex border-b pb-1 border-gray-400">
-                  hello
-                </div>
-                <div className="w-full">
-                  Blum auto bot free download for windows / blum auto farm bot
-                  Hi everyone today we present you our bot for crypto game Blum
-                  with which you can automate the whole process in the game
-                  which is possible blum farm bot / blum auto farm / blum python
-                  bot / free farm blum / blum telegram auto bot / blum tg bot /
-                  blum auto bot free
-                </div>
-                <div>hello</div>
-              </div>
-            </div>
-          ),
-        },
-      ]}
+        };
+      })}
     />
   );
 };

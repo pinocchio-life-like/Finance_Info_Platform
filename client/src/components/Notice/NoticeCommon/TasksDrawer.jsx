@@ -158,14 +158,10 @@ const TasksDrawer = (props) => {
           <Form.Item
             label="End Date"
             name="endDate"
-            getValueFromEvent={(onChange) =>
-              moment(onChange).format("YYYY-MM-DD")
-            }
-            getValueProps={(i) => moment(i)}
             rules={[
               {
                 required: true,
-                message: "Title can not be empty!!",
+                message: "End Date cannot be empty!!",
               },
             ]}>
             <DatePicker

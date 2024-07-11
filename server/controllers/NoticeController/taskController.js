@@ -1,8 +1,8 @@
 const {
-  assignTask,
   taskUpDate,
   getTaskByUserId,
   getAllTaskList,
+  User,
 } = require("../../models/NoticeBoardModel/association");
 const { Task } = require("../../models/NoticeBoardModel/taskModel");
 
@@ -38,18 +38,44 @@ const taskPost = async (req, res) => {
 };
 
 const taskGetByUserIdC = async (req, res) => {
-  const task = await getTaskByUserId(req.params.id);
+  try {
+    const { userName } = req.params;
 
-  if (!task) {
+    const tasksForUser = await Task.findAll({
+      include: [
+        {
+          model: User,
+          as: "Users",
+          where: { userName: userName },
+          through: {
+            attributes: ["status"],
+          },
+        },
+      ],
+    });
+
+    if (!tasksForUser.length) {
+      return res.status(200).json({ data: [] });
+    }
+
+    // Map over tasksForUser to construct a new response
+    const modifiedTasks = tasksForUser.map((task) => {
+      // Assuming task is a sequelize model instance, use task.get({ plain: true }) to get a plain object
+      const taskPlain = task.get({ plain: true });
+      const taskUserStatus = taskPlain.Users[0]?.taskUser?.status; // Safely access status
+
+      // Exclude Users from the response and include taskUserStatus
+      delete taskPlain.Users; // Remove Users array
+      return { ...taskPlain, taskUserStatus }; // Add taskUserStatus at the same level as task attributes
+    });
+
+    return res.status(200).json({ data: modifiedTasks });
+  } catch (error) {
     return res.status(500).json({
-      message: "something went wrong while fetching task",
+      message: "Something went wrong while fetching tasks",
+      error: error.message,
     });
   }
-
-  return res.status(200).json({
-    message: "here is the task",
-    data: task,
-  });
 };
 
 const taskGetAll = async (req, res) => {
