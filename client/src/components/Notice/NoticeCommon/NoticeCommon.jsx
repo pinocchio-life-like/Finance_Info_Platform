@@ -7,6 +7,7 @@ import NoticeDrawer from "./NoticeDrawer";
 import api from "../../../utils/api";
 import { CiSquarePlus } from "react-icons/ci";
 import { jwtDecode } from "jwt-decode";
+import { Skeleton } from "antd";
 
 const NoticeCommon = () => {
   const [openTask, setOpenTask] = useState(false);
@@ -16,6 +17,8 @@ const NoticeCommon = () => {
   const [users, setUsers] = useState([]);
   const [notices, setNotices] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [isTaskLoading, setIsTaskLoading] = useState(true);
+  const [isNoticeLoading, setIsNoticeLoading] = useState(true);
 
   const token = localStorage.getItem("token");
   let userName = null;
@@ -87,6 +90,8 @@ const NoticeCommon = () => {
       } catch (error) {
         console.error("Failed to fetch notices:", error);
         setNotices([]);
+      } finally {
+        setIsNoticeLoading(false);
       }
     };
     getNotice();
@@ -99,6 +104,8 @@ const NoticeCommon = () => {
         setTasks(response.data.data);
       } catch (error) {
         console.error("Error fetching tasks:", error);
+      } finally {
+        setIsTaskLoading(false);
       }
     };
     getTasks();
@@ -130,16 +137,42 @@ const NoticeCommon = () => {
           </div>
         </div>
         <div className="timeline_container w-full flex justify-between">
-          <div
-            className="w-[65%] scrollable"
-            style={{ maxHeight: "86.2vh", overflowY: "auto" }}>
-            <Notices notices={notices} />
-          </div>
-          <div
-            className="w-[35%] ml-1 scrollable"
-            style={{ maxHeight: "86.2vh", overflowY: "auto" }}>
-            <Tasks tasks={tasks} userName={userName} setRefetch={setRefetch} />
-          </div>
+          {isNoticeLoading ? (
+            <div className="w-[65%] flex flex-col gap-3 mt-4 p-2">
+              <Skeleton active />
+              <Skeleton active />
+              <Skeleton active />
+              <Skeleton active />
+              <Skeleton active />
+              <Skeleton active />
+            </div>
+          ) : (
+            <div
+              className="w-[65%] scrollable"
+              style={{ maxHeight: "86.2vh", overflowY: "auto" }}>
+              <Notices notices={notices} />
+            </div>
+          )}
+          {isTaskLoading ? (
+            <div className="w-[35%] flex flex-col gap-3 mt-4 p-2">
+              <Skeleton active />
+              <Skeleton active />
+              <Skeleton active />
+              <Skeleton active />
+              <Skeleton active />
+              <Skeleton active />
+            </div>
+          ) : (
+            <div
+              className="w-[35%] ml-1 scrollable"
+              style={{ maxHeight: "86.2vh", overflowY: "auto" }}>
+              <Tasks
+                tasks={tasks}
+                userName={userName}
+                setRefetch={setRefetch}
+              />
+            </div>
+          )}
         </div>
       </div>
       <NoticeDrawer

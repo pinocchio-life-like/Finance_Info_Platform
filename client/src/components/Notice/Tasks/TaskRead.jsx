@@ -13,7 +13,6 @@ const TaskRead = () => {
     const fetchTask = async () => {
       try {
         const response = await api.get(`/api/task/${id}`);
-        console.log(response.data.data);
         setTask(response.data.data);
       } catch (error) {
         console.error("Failed to fetch task:", error);
