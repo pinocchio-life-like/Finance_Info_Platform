@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import {
   FaTimes,
@@ -8,7 +8,7 @@ import {
 } from "react-icons/fa";
 import PropTypes from "prop-types";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Modal, Form, Input, Button, Tooltip } from "antd";
+import { Modal, Form, Input, Button, Tooltip, message } from "antd";
 import api from "../../../utils/api";
 import store from "../../../redux/store";
 import { addArticleState } from "../../../redux/slices/articleSlice";
@@ -17,6 +17,12 @@ import { jwtDecode } from "jwt-decode";
 import { FiCopy } from "react-icons/fi";
 import { GrArticle } from "react-icons/gr";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { ImDownload2 } from "react-icons/im";
+import html2pdf from "html2pdf.js";
+import { MdPreview, ModalToolbar } from "md-editor-rt";
+import showdown from "showdown";
+
+const headingId = (_text, _levelr, index) => `pdf-ex-heading-${index}`;
 
 const MainContent = (props) => {
   const { status, drop } = useSelector((state) => state.contents);
@@ -42,6 +48,9 @@ const MainContent = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentUrl = location.pathname;
+  const [visible, setVisible] = useState(false);
+  const content = useRef(null);
+  const previewRef = useRef();
   const token = localStorage.getItem("token");
   let userRole = null;
   if (token) {
@@ -53,6 +62,7 @@ const MainContent = (props) => {
     }
   }
   const [copied, setCopied] = useState(null);
+  const [articleContent, setArticleContent] = useState("");
 
   useEffect(() => {
     const getCategories = async () => {
@@ -115,6 +125,7 @@ const MainContent = (props) => {
       try {
         const response = await api.get(`/api/article/${param.id}`);
         const { data } = response.data;
+        setArticleContent(data.articleContent);
         store.dispatch(
           addArticleState({
             articleName: data.articleTitle,
@@ -128,7 +139,7 @@ const MainContent = (props) => {
       }
     };
     getArticle();
-  }, [param.id]);
+  }, [param.id, visible]);
 
   const handleDropdown = (index, level) => {
     if (activeDropdown[level] === index) {
@@ -259,6 +270,39 @@ const MainContent = (props) => {
     background: isDragging ? "lightblue" : "white",
     ...draggableStyle,
   });
+
+  const EDITOR_ID = "export-pdf-preview";
+  const close = useCallback(() => {
+    setVisible(false);
+  }, []);
+
+  const onSaveAsPdf = useCallback(() => {
+    const converter = new showdown.Converter();
+    const html = converter.makeHtml(articleContent);
+
+    const opt = {
+      filename: `${articleTitle}.pdf`,
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+      },
+      pagebreak: { mode: "avoid-all" },
+    };
+
+    html2pdf()
+      .set(opt)
+      .from(html)
+      .save()
+      .then(() => {
+        console.log("success");
+      })
+      .catch((error) => {
+        console.log("error", error);
+      })
+      .finally(() => {
+        previewRef.current?.rerender();
+      });
+  }, [articleContent, articleTitle]);
 
   const onDragMainEnd = async (result) => {
     const { source, destination } = result;
@@ -807,9 +851,16 @@ const MainContent = (props) => {
         </div>
       </div>
       <div className="flex justify-between items-center w-full border-b px-2 border-gray-600 relative pt-1 pb-1">
-        <h1 className="text-xl font-bold">
-          {articleTitle ? articleTitle : "Current Title"}
-        </h1>
+        <div className="flex items-center gap-4">
+          <h1 className="text-xl font-bold">
+            {articleTitle ? articleTitle : "Current Title"}
+          </h1>
+          <ImDownload2
+            size={25}
+            className="font-bold text-[#155CA2] rounded hover:bg-black hover:text-white p-1 cursor-pointer"
+            onClick={() => setVisible(true)}
+          />
+        </div>
         <button
           ref={buttonRef}
           className="flex items-center text-sm font-bold"
@@ -1001,6 +1052,39 @@ const MainContent = (props) => {
           </Form.Item>
         </Form>
       </Modal>
+      <ModalToolbar
+        width={"90%"}
+        height="84vh"
+        visible={visible}
+        title={"Export as pdf"}
+        modalTitle={`${articleTitle}.pdf`}
+        onClose={close}
+        trigger={"export" || <span className="mee-iconfont icon-mee-pdf" />}>
+        <div
+          className="export-pdf-content"
+          ref={content}
+          style={{ overflowY: "auto", maxHeight: "72vh" }}>
+          <MdPreview
+            ref={previewRef}
+            editorId={EDITOR_ID}
+            theme={"light"}
+            previewTheme={"light"}
+            language={"en-US"}
+            modelValue={articleContent}
+            mdHeadingId={headingId}
+            style={{ height: "auto", minHeight: "72vh" }}
+            codeFoldable={false}
+          />
+        </div>
+        <div className="w-full flex items-center justify-center">
+          <button
+            className="mt-1 p-1 bg-[#155CA2] text-white rounded-sm hover:bg-[#337294]"
+            type="button"
+            onClick={onSaveAsPdf}>
+            Export as PDF
+          </button>
+        </div>
+      </ModalToolbar>
     </div>
   );
 };
