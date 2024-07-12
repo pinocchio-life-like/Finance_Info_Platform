@@ -4,7 +4,7 @@ import ReactQuill from "react-quill";
 import api from "../../../utils/api";
 import { jwtDecode } from "jwt-decode";
 
-const NoticeDrawer = (props) => {
+const NoticeDrawer = ({ setOpen, open, companies, setRefetch }) => {
   const [noticeForm] = Form.useForm();
   const [description, setDescription] = useState("");
 
@@ -20,7 +20,7 @@ const NoticeDrawer = (props) => {
   }
 
   const onClose = () => {
-    props.setOpen(false);
+    setOpen(false);
   };
 
   const handleDescriptionChange = (value) => {
@@ -38,15 +38,12 @@ const NoticeDrawer = (props) => {
 
       // Check if the response is successful
       if (response.status === 200) {
-        // Display success message
-        console.log("Notice posted successfully", response.data);
-        // Optionally, reset the form or redirect the user
+        setRefetch((prev) => !prev);
+        onClose();
       } else {
-        // Handle client or server errors
         console.error("Failed to post notice", response.data);
       }
     } catch (error) {
-      // Handle network or unexpected errors
       console.error("An error occurred while posting the notice", error);
     }
   };
@@ -58,7 +55,7 @@ const NoticeDrawer = (props) => {
         width={900}
         height="86%"
         onClose={onClose}
-        open={props.open}
+        open={open}
         extra={
           <Space>
             <Button onClick={onClose}>Cancel</Button>
@@ -132,7 +129,7 @@ const NoticeDrawer = (props) => {
                 width: "100%",
               }}
               placeholder="Please select"
-              options={props.companies}
+              options={companies}
               showSearch // Enables the search functionality
               filterOption={(input, option) =>
                 option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0

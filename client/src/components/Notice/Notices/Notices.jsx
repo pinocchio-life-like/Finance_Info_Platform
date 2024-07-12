@@ -1,24 +1,10 @@
 import { Timeline } from "antd";
-import { useEffect, useState } from "react";
-import api from "../../../utils/api";
-import { jwtDecode } from "jwt-decode";
+import { useState } from "react";
 import ReactQuill from "react-quill";
 import { Link } from "react-router-dom";
 
-const Notices = () => {
-  const token = localStorage.getItem("token");
-  const [notices, setNotices] = useState([]);
+const Notices = ({ notices }) => {
   const [isFull, setIsFull] = useState([]);
-
-  let userName = null;
-  if (token) {
-    try {
-      const decodedToken = jwtDecode(token);
-      userName = decodedToken.userName;
-    } catch (error) {
-      console.error("Invalid token");
-    }
-  }
 
   const toggleDescription = (index) => {
     setIsFull((prev) => {
@@ -27,14 +13,6 @@ const Notices = () => {
       return newIsFull;
     });
   };
-
-  useEffect(() => {
-    const getNotice = async () => {
-      const response = await api.get(`/api/notices/${userName}`);
-      setNotices(response.data.data);
-    };
-    getNotice();
-  }, []);
 
   return (
     <Timeline

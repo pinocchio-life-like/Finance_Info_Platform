@@ -1,29 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { BiTask } from "react-icons/bi";
 import { MdOutlinePendingActions } from "react-icons/md";
 import { BiTaskX } from "react-icons/bi";
 import api from "../../../utils/api";
-import { jwtDecode } from "jwt-decode";
 import ReactQuill from "react-quill";
 import { Button, Popconfirm } from "antd";
 
-const Tasks = () => {
-  const token = localStorage.getItem("token");
+const Tasks = ({ tasks, userName, setRefetch }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [tasks, setTasks] = useState([]);
   const [isFull, setIsFull] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
-
-  let userName = null;
-  if (token) {
-    try {
-      const decodedToken = jwtDecode(token);
-      userName = decodedToken.userName;
-    } catch (error) {
-      console.error("Invalid token");
-    }
-  }
 
   const toggleDescription = (index) => {
     setIsFull((prev) => {
@@ -33,20 +20,18 @@ const Tasks = () => {
     });
   };
 
-  useEffect(() => {
-    const getTasks = async () => {
-      try {
-        const response = await api.get(`/api/tasks/${userName}`);
-        setTasks(response.data.data);
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
+  // Assuming `api` is an instance of an Axios object or similar that supports Promises
+  const updateStatus = async (id, status) => {
+    try {
+      const response = await api.put(`/api/task/${id}`, { status, userName });
+      if (response.status === 200) {
+        setRefetch((prev) => !prev);
+      } else {
+        console.error("Update failed", response.status, response.data);
       }
-    };
-    getTasks();
-  }, []);
-
-  const confirm = (e) => {
-    console.log(e);
+    } catch (error) {
+      console.error("Error updating status", error);
+    }
   };
 
   return (
@@ -55,7 +40,6 @@ const Tasks = () => {
         <ul className="flex flex-row items-center justify-between px-1 space-x-2 text-m">
           <li>
             <Link
-              // to="/qa/questions/all"
               className={`flex items-center px-2 rounded hover:bg-gray-200 font-light ${
                 activeIndex === 0 ? "text-[#155CA2] " : ""
               }`}
@@ -68,7 +52,6 @@ const Tasks = () => {
           </li>
           <li>
             <Link
-              // to="/qa/tags"
               className={`flex items-center px-2 rounded hover:bg-gray-200 font-light ${
                 activeIndex === 1 ? "text-[#155CA2] " : ""
               }`}
@@ -81,7 +64,6 @@ const Tasks = () => {
           </li>
           <li>
             <Link
-              // to="/qa/questions/ununs"
               className={`flex items-center px-2 rounded hover:bg-gray-200 font-light ${
                 activeIndex === 2 ? "text-[#155CA2] " : ""
               }`}
@@ -115,7 +97,7 @@ const Tasks = () => {
               <div
                 onMouseOver={() => setIsHovered(true)}
                 onMouseOut={() => setIsHovered(false)}
-                key={task.task_Id}
+                key={task.task_id}
                 className={`w-full py-2 px-1 mb-2 ${isHovered ? "group" : ""}`}
                 style={{
                   position: "relative",
@@ -123,7 +105,8 @@ const Tasks = () => {
                 }}>
                 <div className="w-full flex-row">
                   <div className="w-full font-bold text-lg text-[#008DDA] flex border-b pb-1 justify-between">
-                    <Link to={`/notice/`}>{`${task.task_name}`}</Link>
+                    <Link
+                      to={`/task/${task.task_id}`}>{`${task.task_name}`}</Link>
                     <button className="text-gray-500 text-sm font-normal">
                       Due date:{" "}
                       {new Date(task.task_due_date).toLocaleDateString()}
@@ -150,21 +133,25 @@ const Tasks = () => {
                       }}>
                       {isFull[i] ? "see less" : "...see more"}
                     </button>
-                    <Popconfirm
-                      className="opacity-0 group-hover:opacity-100"
-                      title="Mark as completed"
-                      description="Do you want to mark as complete?"
-                      onConfirm={confirm}
-                      okText="Yes"
-                      cancelText="No"
-                      okButtonProps={{
-                        style: { backgroundColor: "#155CA2", color: "white" },
-                      }}>
-                      {" "}
-                      <Button className="text-[#008DDA]">
-                        mark as completed
-                      </Button>
-                    </Popconfirm>
+                    {task.taskUserStatus !== "completed" && (
+                      <Popconfirm
+                        className="opacity-0 group-hover:opacity-100"
+                        title="Mark as completed"
+                        description="Do you want to mark as complete?"
+                        onConfirm={() => {
+                          updateStatus(task.task_id, "completed");
+                        }}
+                        okText="Yes"
+                        cancelText="No"
+                        okButtonProps={{
+                          style: { backgroundColor: "#155CA2", color: "white" },
+                        }}>
+                        {" "}
+                        <Button className="text-[#008DDA]">
+                          mark as completed
+                        </Button>
+                      </Popconfirm>
+                    )}
                   </div>
                   <button
                     className="text-[#008DDA] text-sm"

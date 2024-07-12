@@ -3,6 +3,7 @@ const {
   getTaskByUserId,
   getAllTaskList,
   User,
+  TaskUser,
 } = require("../../models/NoticeBoardModel/association");
 const { Task } = require("../../models/NoticeBoardModel/taskModel");
 
@@ -78,8 +79,10 @@ const taskGetByUserIdC = async (req, res) => {
   }
 };
 
-const taskGetAll = async (req, res) => {
-  const task = await getAllTaskList();
+const getTask = async (req, res) => {
+  const task = await Task.findOne({
+    where: { task_id: req.params.id },
+  });
 
   if (!task) {
     return res.status(500).json({
@@ -91,6 +94,52 @@ const taskGetAll = async (req, res) => {
     message: "here is the task",
     data: task,
   });
+};
+
+const updateStatus = async (req, res) => {
+  const { task_id } = req.params;
+  const { status, userName } = req.body; // Use userName from req.body
+
+  try {
+    // Find the User instance by userName to get the user_id
+    const user = await User.findOne({
+      where: { userName: userName },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    // Now that we have the user_id, find the TaskUser instance
+    const taskUser = await TaskUser.findOne({
+      where: {
+        taskTaskId: task_id,
+        userUserId: user.userId, // Use the found user's id
+      },
+    });
+
+    if (!taskUser) {
+      return res.status(404).json({
+        message: "TaskUser not found",
+      });
+    }
+
+    // Update the status
+    taskUser.status = status;
+    await taskUser.save();
+
+    return res.status(200).json({
+      message: "TaskUser status updated successfully",
+      data: taskUser,
+    });
+  } catch (error) {
+    console.error("Error updating TaskUser status:", error);
+    return res.status(500).json({
+      message: "Something went wrong while updating TaskUser status",
+    });
+  }
 };
 
 const taskUpdate = async (req, res) => {
@@ -111,4 +160,10 @@ const taskUpdate = async (req, res) => {
   });
 };
 
-module.exports = { taskPost, taskGetByUserIdC, taskGetAll, taskUpdate };
+module.exports = {
+  taskPost,
+  taskGetByUserIdC,
+  taskUpdate,
+  updateStatus,
+  getTask,
+};

@@ -5,19 +5,21 @@ import { useEffect, useState } from "react";
 import api from "../../../utils/api";
 import ReactQuill from "react-quill";
 
-const NoticeRead = () => {
+const TaskRead = () => {
   const { id } = useParams();
-  const [notice, setNotice] = useState({});
+  const [task, setTask] = useState({});
+
   useEffect(() => {
-    const fetchNotice = async () => {
+    const fetchTask = async () => {
       try {
-        const response = await api.get(`/api/notice/${id}`);
-        setNotice(response.data.data);
+        const response = await api.get(`/api/task/${id}`);
+        console.log(response.data.data);
+        setTask(response.data.data);
       } catch (error) {
-        console.error("Failed to fetch notice:", error);
+        console.error("Failed to fetch task:", error);
       }
     };
-    fetchNotice();
+    fetchTask();
   }, [id]);
 
   return (
@@ -33,19 +35,19 @@ const NoticeRead = () => {
             </Link>
           </div>
           <div>
-            <h2 className="text-xl font-semibold">{`${notice.noticeTitle}`}</h2>
+            <h2 className="text-xl font-semibold">{`${task.task_name}`}</h2>
             <div className="flex justify-between">
-              <span className="italic text-gray-500">{`Date Posted: ${new Date(
-                notice.createdAt
+              <span className="italic text-gray-500">{`Due date: ${new Date(
+                task.task_due_date
               ).toLocaleDateString()}`}</span>
-              <span className="italic text-gray-500">{`By: ${notice.userName}`}</span>
+              <span className="italic text-gray-500">{`By: ${task.userName}`}</span>
             </div>
           </div>
         </div>
         <div className="diff-viewer-container">
           <ReactQuill
             readOnly
-            value={notice.noticeDescription}
+            value={task.task_description}
             theme="bubble"
             className="mt-auto bg-white"
             style={{
@@ -58,4 +60,4 @@ const NoticeRead = () => {
   );
 };
 
-export default NoticeRead;
+export default TaskRead;

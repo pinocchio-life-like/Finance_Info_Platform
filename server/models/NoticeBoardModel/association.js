@@ -83,6 +83,7 @@ module.exports = {
   Notice,
   User,
   Company,
+  TaskUser,
   postNotice,
   getNotice,
   getNoticeById,
