@@ -19,6 +19,8 @@ const NoticeCommon = () => {
   const [tasks, setTasks] = useState([]);
   const [isTaskLoading, setIsTaskLoading] = useState(true);
   const [isNoticeLoading, setIsNoticeLoading] = useState(true);
+  const [data, setData] = useState({});
+  const [status, setStatus] = useState("");
 
   const token = localStorage.getItem("token");
   let userName = null;
@@ -86,7 +88,17 @@ const NoticeCommon = () => {
     const getNotice = async () => {
       try {
         const response = await api.get(`/api/notices/${userName}`);
-        setNotices(response.data.data);
+        const noticesWithMappedCompanies = response.data.data
+          .map((notice) => ({
+            ...notice,
+            companies: notice.Companies.map((company) => ({
+              label: company.company_Name,
+              value: company.company_Id,
+            })),
+            Companies: undefined,
+          }))
+          .map(({ Companies, ...rest }) => rest);
+        setNotices(noticesWithMappedCompanies);
       } catch (error) {
         console.error("Failed to fetch notices:", error);
         setNotices([]);
@@ -111,6 +123,12 @@ const NoticeCommon = () => {
     getTasks();
   }, [refetch]);
 
+  useEffect(() => {
+    if (status === "edit") {
+      setOpenNotice(true);
+    }
+  }, [status]);
+
   return (
     <div>
       <div className="flex-grow flex flex-col items-center lg:mx-14 mx-1 bg-white">
@@ -119,7 +137,10 @@ const NoticeCommon = () => {
             <CiSquarePlus
               className="hover:bg-[#008DDA] hover:text-white rounded-full p-1 cursor-pointer"
               size={40}
-              onClick={() => showNoticeDrawer()}
+              onClick={() => {
+                showNoticeDrawer();
+                setStatus("");
+              }}
             />
             <a className={`px-1 cursor-pointer`} style={{ lineHeight: "2rem" }}>
               Notices
@@ -148,9 +169,15 @@ const NoticeCommon = () => {
             </div>
           ) : (
             <div
-              className="w-[65%] scrollable"
+              className="w-[65%] scrollable border-r"
               style={{ maxHeight: "86.2vh", overflowY: "auto" }}>
-              <Notices notices={notices} />
+              <Notices
+                notices={notices}
+                setRefetch={setRefetch}
+                setData={setData}
+                setStatus={setStatus}
+                userName={userName}
+              />
             </div>
           )}
           {isTaskLoading ? (
@@ -176,16 +203,23 @@ const NoticeCommon = () => {
         </div>
       </div>
       <NoticeDrawer
+        key={status}
         companies={companies}
         open={openNotice}
         setOpen={setOpenNotice}
         setRefetch={setRefetch}
+        data={data}
+        status={status}
+        setStatus={setStatus}
+        userName={userName}
+        setData={setData}
       />
       <TasksDrawer
         open={openTask}
         setOpen={setOpenTask}
         users={users}
         setRefetch={setRefetch}
+        userName={userName}
       />
     </div>
   );

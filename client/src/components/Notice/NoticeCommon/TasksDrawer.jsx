@@ -2,23 +2,11 @@ import { Button, DatePicker, Drawer, Form, Input, Select, Space } from "antd";
 import { useState } from "react";
 import ReactQuill from "react-quill";
 import moment from "moment";
-import { jwtDecode } from "jwt-decode";
 import api from "../../../utils/api";
 
-const TasksDrawer = ({ setOpen, open, users, setRefetch }) => {
+const TasksDrawer = ({ setOpen, open, users, setRefetch, userName }) => {
   const [taskForm] = Form.useForm();
   const [description, setDescription] = useState("");
-
-  const token = localStorage.getItem("token");
-  let userName = null;
-  if (token) {
-    try {
-      const decodedToken = jwtDecode(token);
-      userName = decodedToken.userName;
-    } catch (error) {
-      console.error("Invalid token");
-    }
-  }
 
   const onClose = () => {
     setOpen(false);

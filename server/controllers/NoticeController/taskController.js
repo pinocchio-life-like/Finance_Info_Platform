@@ -1,10 +1,4 @@
-const {
-  taskUpDate,
-  getTaskByUserId,
-  getAllTaskList,
-  User,
-  TaskUser,
-} = require("../../models/NoticeBoardModel/association");
+const { User, TaskUser } = require("../../models/NoticeBoardModel/association");
 const { Task } = require("../../models/NoticeBoardModel/taskModel");
 
 const taskPost = async (req, res) => {
@@ -12,7 +6,6 @@ const taskPost = async (req, res) => {
     const { task_name, task_description, task_due_date, userName, users } =
       req.body;
 
-    // Create the task
     const task = await Task.create({
       task_name,
       task_description,
@@ -20,12 +13,9 @@ const taskPost = async (req, res) => {
       userName,
     });
 
-    // If there are users to associate with the task
     if (users && users.length) {
-      // Sequelize automatically provides this method to associate users with the task
       await task.addUsers(users);
     }
-    // Respond with success message and the created task
     return res.status(200).json({
       message: "Task created successfully",
       data: task,
@@ -141,22 +131,73 @@ const updateStatus = async (req, res) => {
     });
   }
 };
-
 const taskUpdate = async (req, res) => {
   const taskId = req.params.id;
-  const updatedData = req.body;
+  const { task_name, task_description, task_due_date, users } = req.body;
 
-  const task = await taskUpDate(taskId, updatedData);
+  try {
+    let task = await Task.findByPk(taskId);
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    // Update task details
+    await task.update({
+      task_name,
+      task_description,
+      task_due_date,
+    });
+
+    // If users are provided, update the association
+    if (users) {
+      // Assuming `users` is an array of user IDs
+      // First, find all associated users
+      const currentUsers = await task.getUsers();
+      const currentUserIds = currentUsers.map((user) => user.id);
+
+      // Determine users to add and to remove
+      const usersToAdd = users.filter(
+        (userId) => !currentUserIds.includes(userId)
+      );
+      const usersToRemove = currentUserIds.filter(
+        (userId) => !users.includes(userId)
+      );
+
+      // Update associations
+      if (usersToAdd.length) await task.addUsers(usersToAdd);
+      if (usersToRemove.length) await task.removeUsers(usersToRemove);
+    }
+
+    // Fetch the updated task details along with associated users
+    const updatedTask = await Task.findByPk(taskId, { include: [User] });
+
+    return res.status(200).json({
+      message: "Task updated",
+      data: updatedTask,
+    });
+  } catch (error) {
+    console.error("Error updating task:", error);
+    return res.status(500).json({ message: "Error updating task" });
+  }
+};
+
+const taskDelete = async (req, res) => {
+  const id = req.params.id;
+
+  const task = await Task.findOne({
+    where: { task_id: id },
+  });
 
   if (!task) {
-    return res.status(500).json({
-      message: "Something went wrong while updating task",
+    return res.status(404).json({
+      message: "Task not found",
     });
   }
 
+  await task.destroy();
+
   return res.status(200).json({
-    message: "Task updated",
-    data: task,
+    message: "Task deleted successfully",
   });
 };
 
@@ -166,4 +207,5 @@ module.exports = {
   taskUpdate,
   updateStatus,
   getTask,
+  taskDelete,
 };

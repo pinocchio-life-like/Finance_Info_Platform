@@ -1,25 +1,33 @@
 import { Button, Drawer, Form, Input, Select, Space } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import api from "../../../utils/api";
-import { jwtDecode } from "jwt-decode";
 
-const NoticeDrawer = ({ setOpen, open, companies, setRefetch }) => {
+const NoticeDrawer = ({
+  setOpen,
+  open,
+  companies,
+  setRefetch,
+  data,
+  setStatus,
+  status,
+  userName,
+  setData,
+}) => {
   const [noticeForm] = Form.useForm();
   const [description, setDescription] = useState("");
-
-  const token = localStorage.getItem("token");
-  let userName = null;
-  if (token) {
-    try {
-      const decodedToken = jwtDecode(token);
-      userName = decodedToken.userName;
-    } catch (error) {
-      console.error("Invalid token");
+  useEffect(() => {
+    if (Object.keys(data).length) {
+      setDescription(data.noticeDescription);
     }
-  }
+  }, [data]);
 
   const onClose = () => {
+    setRefetch((prev) => !prev);
+    setData({});
+    noticeForm.resetFields();
+    setDescription("");
+    setStatus("");
     setOpen(false);
   };
 
@@ -28,7 +36,25 @@ const NoticeDrawer = ({ setOpen, open, companies, setRefetch }) => {
   };
 
   const noticeSubmitHandler = async (values) => {
+    console.log("values", values.companies);
     try {
+      if (status === "edit") {
+        const response = await api.put(`/api/notice/${data.noticeId}`, {
+          noticeTitle: values.noticeTitle,
+          noticeDescription: description,
+          companies: values.companies,
+        });
+
+        // Check if the response is successful
+        if (response.status === 200) {
+          onClose();
+        } else {
+          console.error("Failed to edit notice", response.data);
+          setStatus("");
+          noticeForm.resetFields();
+        }
+        return;
+      }
       const response = await api.post("/api/notice", {
         userName: userName,
         noticeTitle: values.noticeTitle,
@@ -38,10 +64,10 @@ const NoticeDrawer = ({ setOpen, open, companies, setRefetch }) => {
 
       // Check if the response is successful
       if (response.status === 200) {
-        setRefetch((prev) => !prev);
         onClose();
       } else {
         console.error("Failed to post notice", response.data);
+        onClose();
       }
     } catch (error) {
       console.error("An error occurred while posting the notice", error);
@@ -58,7 +84,12 @@ const NoticeDrawer = ({ setOpen, open, companies, setRefetch }) => {
         open={open}
         extra={
           <Space>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button
+              onClick={() => {
+                onClose();
+              }}>
+              Cancel
+            </Button>
             <Button
               className="qa-button"
               type="primary"
@@ -70,7 +101,8 @@ const NoticeDrawer = ({ setOpen, open, companies, setRefetch }) => {
         <Form
           form={noticeForm}
           onFinish={noticeSubmitHandler}
-          name="noticeForm">
+          name="noticeForm"
+          initialValues={Object.keys(data).length ? data : {}}>
           <Form.Item
             name="noticeTitle"
             rules={[
@@ -88,6 +120,9 @@ const NoticeDrawer = ({ setOpen, open, companies, setRefetch }) => {
             label="Notice Description">
             <ReactQuill
               value={description}
+              defaultValue={
+                Object.keys(data).length ? data.noticeDescription : description
+              }
               theme="snow"
               onChange={handleDescriptionChange}
               placeholder="Describe your notice here"

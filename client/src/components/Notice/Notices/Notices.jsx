@@ -1,10 +1,13 @@
-import { Timeline } from "antd";
+import { Button, Popconfirm, Popover, Timeline } from "antd";
 import { useState } from "react";
 import ReactQuill from "react-quill";
 import { Link } from "react-router-dom";
+import { FaEllipsisV } from "react-icons/fa";
+import api from "../../../utils/api";
 
-const Notices = ({ notices }) => {
+const Notices = ({ notices, setRefetch, setData, setStatus, userName }) => {
   const [isFull, setIsFull] = useState([]);
+  const [isHovered, setIsHovered] = useState(false);
 
   const toggleDescription = (index) => {
     setIsFull((prev) => {
@@ -12,6 +15,19 @@ const Notices = ({ notices }) => {
       newIsFull[index] = !newIsFull[index];
       return newIsFull;
     });
+  };
+
+  const deleteNotice = async (id) => {
+    try {
+      const response = await api.delete(`/api/notice/${id}`);
+      if (response.status === 200) {
+        setRefetch((prev) => !prev);
+      } else {
+        console.error("Delete failed", response.status, response.data);
+      }
+    } catch (error) {
+      console.error("Error deleting notice", error);
+    }
   };
 
   return (
@@ -25,17 +41,55 @@ const Notices = ({ notices }) => {
           color: "black", // Assuming all items are red, adjust as needed
           children: (
             <div
+              onMouseOver={() => setIsHovered(true)}
+              onMouseOut={() => setIsHovered(false)}
               key={notice.noticeId}
-              className="w-full border-gray-400 font"
+              className={`w-full border-gray-400 font ${
+                isHovered ? "group" : ""
+              }`}
               style={{
                 position: "relative",
                 background: "",
               }}>
               <div className="w-full flex-row">
-                <div className="w-full font-bold text-lg text-[#008DDA] flex border-b pb-1 border-gray-400">
+                <div className="w-full font-bold text-lg text-[#008DDA] flex border-b pb-1 border-gray-400 justify-between">
                   <Link to={`/notice/${notice.noticeId}`}>
                     {notice.noticeTitle}
                   </Link>
+                  {userName === notice.userName && (
+                    <Popover
+                      className="opacity-0 group-hover:opacity-100"
+                      position="bottom"
+                      content={
+                        <div className="flex flex-col gap-1">
+                          <Button
+                            onClick={() => {
+                              setData(notice);
+                              setStatus("edit");
+                            }}>
+                            Edit
+                          </Button>
+                          <Popconfirm
+                            title="Delete Task"
+                            description="Do you want to delete task?"
+                            onConfirm={() => {
+                              deleteNotice(notice.noticeId);
+                            }}
+                            okText="Yes"
+                            cancelText="No"
+                            okButtonProps={{
+                              style: {
+                                backgroundColor: "#155CA2",
+                                color: "white",
+                              },
+                            }}>
+                            <Button>Delete</Button>
+                          </Popconfirm>
+                        </div>
+                      }>
+                      <FaEllipsisV className="cursor-pointer" />
+                    </Popover>
+                  )}
                 </div>
                 <div className="w-full">
                   <ReactQuill

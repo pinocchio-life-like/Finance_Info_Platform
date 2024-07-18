@@ -5,8 +5,8 @@ import { MdOutlinePendingActions } from "react-icons/md";
 import { BiTaskX } from "react-icons/bi";
 import api from "../../../utils/api";
 import ReactQuill from "react-quill";
-import { Button, Popconfirm } from "antd";
-
+import { Button, Popconfirm, Popover } from "antd";
+import { FaEllipsisV } from "react-icons/fa";
 const Tasks = ({ tasks, userName, setRefetch }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isFull, setIsFull] = useState([]);
@@ -31,6 +31,19 @@ const Tasks = ({ tasks, userName, setRefetch }) => {
       }
     } catch (error) {
       console.error("Error updating status", error);
+    }
+  };
+
+  const deleteTask = async (id) => {
+    try {
+      const response = await api.delete(`/api/task/${id}`);
+      if (response.status === 200) {
+        setRefetch((prev) => !prev);
+      } else {
+        console.error("Delete failed", response.status, response.data);
+      }
+    } catch (error) {
+      console.error("Error deleting task", error);
     }
   };
 
@@ -104,13 +117,53 @@ const Tasks = ({ tasks, userName, setRefetch }) => {
                   background: "",
                 }}>
                 <div className="w-full flex-row">
-                  <div className="w-full font-bold text-lg text-[#008DDA] flex border-b pb-1 justify-between">
+                  <div className="w-full font-bold text-lg text-[#008DDA] flex border-b pb-1 justify-between items-center">
                     <Link
                       to={`/task/${task.task_id}`}>{`${task.task_name}`}</Link>
-                    <button className="text-gray-500 text-sm font-normal">
-                      Due date:{" "}
-                      {new Date(task.task_due_date).toLocaleDateString()}
-                    </button>
+                    <Popover
+                      className="opacity-0 group-hover:opacity-100"
+                      position="bottom"
+                      content={
+                        <div className="flex flex-col gap-1">
+                          {task.taskUserStatus !== "completed" && (
+                            <Popconfirm
+                              title="Mark as completed"
+                              description="Do you want to mark as complete?"
+                              onConfirm={() => {
+                                updateStatus(task.task_id, "completed");
+                              }}
+                              okText="Yes"
+                              cancelText="No"
+                              okButtonProps={{
+                                style: {
+                                  backgroundColor: "#155CA2",
+                                  color: "white",
+                                },
+                              }}>
+                              <Button>mark as completed</Button>
+                            </Popconfirm>
+                          )}
+                          <Button>Edit</Button>
+                          <Popconfirm
+                            title="Delete Task"
+                            description="Do you want to delete task?"
+                            onConfirm={() => {
+                              deleteTask(task.task_id);
+                            }}
+                            okText="Yes"
+                            cancelText="No"
+                            okButtonProps={{
+                              style: {
+                                backgroundColor: "#155CA2",
+                                color: "white",
+                              },
+                            }}>
+                            <Button>Delete</Button>
+                          </Popconfirm>
+                        </div>
+                      }>
+                      <FaEllipsisV className="cursor-pointer" />
+                    </Popover>
                   </div>
                   <div className="w-full">
                     <ReactQuill
@@ -133,25 +186,10 @@ const Tasks = ({ tasks, userName, setRefetch }) => {
                       }}>
                       {isFull[i] ? "see less" : "...see more"}
                     </button>
-                    {task.taskUserStatus !== "completed" && (
-                      <Popconfirm
-                        className="opacity-0 group-hover:opacity-100"
-                        title="Mark as completed"
-                        description="Do you want to mark as complete?"
-                        onConfirm={() => {
-                          updateStatus(task.task_id, "completed");
-                        }}
-                        okText="Yes"
-                        cancelText="No"
-                        okButtonProps={{
-                          style: { backgroundColor: "#155CA2", color: "white" },
-                        }}>
-                        {" "}
-                        <Button className="text-[#008DDA]">
-                          mark as completed
-                        </Button>
-                      </Popconfirm>
-                    )}
+                    <button className="text-gray-500 text-sm font-normal">
+                      Due date:{" "}
+                      {new Date(task.task_due_date).toLocaleDateString()}
+                    </button>
                   </div>
                   <button
                     className="text-[#008DDA] text-sm"

@@ -1,3 +1,4 @@
+const { Sequelize } = require("sequelize");
 const {
   getNotice,
   getNoticeById,
@@ -24,13 +25,16 @@ const noticePost = async (req, res) => {
       const allCompanies = await Company.findAll({
         attributes: ["company_Id"],
       });
+
       // Extract just the ids of all companies
       const companyIds = allCompanies.map((company) => company.company_Id);
       // Associate the notice with all companies
       await notice.addCompanies(companyIds);
     } else if (companies && companies.length) {
-      // If there are specific companies to associate with the notice
-      await notice.addCompanies(companies);
+      const companyIds = companies.map((company) =>
+        company.hasOwnProperty("value") ? company.value : company
+      );
+      await notice.addCompanies(companyIds);
     }
 
     // Respond with success message and the created task
@@ -69,15 +73,25 @@ const noticeGet = async (req, res) => {
     }
 
     // Step 3: Fetch notices related to the company
+    const companyId = user.Company.company_Id;
+
     const notices = await Notice.findAll({
       include: [
         {
           model: Company,
-          where: { company_Id: user.Company.company_Id },
-          through: { attributes: [] }, // Do not include properties from the join table
-          attributes: [], // Assuming you don't need to return company details with notices
+          through: {
+            attributes: [],
+          },
+          attributes: ["company_Id", "company_Name"],
         },
       ],
+      where: Sequelize.literal(`EXISTS (
+        SELECT 1
+        FROM \`companynotice\` AS cn
+        INNER JOIN \`Companies\` AS c ON c.\`company_Id\` = cn.\`CompanyCompanyId\`
+        WHERE cn.\`noticeNoticeId\` = Notice.\`noticeId\`
+        AND c.\`company_Id\` = ${companyId}
+      )`),
     });
 
     return res.status(200).json({
@@ -121,6 +135,7 @@ const noticeDelete = async (req, res) => {
     data: notice,
   });
 };
+
 const getNoticeByUserC = async (req, res) => {
   const notice = await findNoticeBYUserId(req.params.id);
   if (!notice) {
@@ -135,10 +150,61 @@ const getNoticeByUserC = async (req, res) => {
   });
 };
 
+const noticeUpdate = async (req, res) => {
+  try {
+    const { noticeDescription, noticeTitle, companies } = req.body;
+    const noticeId = req.params.id;
+
+    // Update the notice
+    const [updated] = await Notice.update(
+      { noticeDescription, noticeTitle },
+      { where: { noticeId } }
+    );
+
+    if (!updated) {
+      return res.status(404).json({
+        message: "Notice not found",
+      });
+    }
+
+    const notice = await Notice.findByPk(noticeId);
+
+    if (companies.length === 0) {
+      const allCompanies = await Company.findAll({
+        attributes: ["company_Id"],
+      });
+      const companyIds = allCompanies.map((company) => company.company_Id);
+      console.log(
+        "No companies provided, associating with all companies",
+        companyIds
+      );
+      await notice.setCompanies(companyIds);
+    } else {
+      // Extract company IDs from the companies array
+      const companyIds = companies.map((company) =>
+        company.hasOwnProperty("value") ? company.value : company
+      );
+      console.log("Associating with provided companies", companyIds);
+      await notice.setCompanies(companyIds);
+    }
+
+    return res.status(200).json({
+      message: "Notice updated successfully",
+      data: notice,
+    });
+  } catch (error) {
+    console.error("Error updating notice:", error);
+    return res.status(500).json({
+      message: "Something went wrong while updating the notice",
+    });
+  }
+};
+
 module.exports = {
   noticePost,
   noticeGet,
   noticeGetById,
   noticeDelete,
   getNoticeByUserC,
+  noticeUpdate,
 };
