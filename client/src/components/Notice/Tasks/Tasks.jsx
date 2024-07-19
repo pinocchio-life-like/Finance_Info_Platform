@@ -7,7 +7,7 @@ import api from "../../../utils/api";
 import ReactQuill from "react-quill";
 import { Button, Popconfirm, Popover } from "antd";
 import { FaEllipsisV } from "react-icons/fa";
-const Tasks = ({ tasks, userName, setRefetch }) => {
+const Tasks = ({ tasks, userName, setRefetch, setTaskData, setTaskStatus }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isFull, setIsFull] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
@@ -143,7 +143,13 @@ const Tasks = ({ tasks, userName, setRefetch }) => {
                               <Button>mark as completed</Button>
                             </Popconfirm>
                           )}
-                          <Button>Edit</Button>
+                          <Button
+                            onClick={() => {
+                              setTaskData(task);
+                              setTaskStatus("edit");
+                            }}>
+                            Edit
+                          </Button>
                           <Popconfirm
                             title="Delete Task"
                             description="Do you want to delete task?"

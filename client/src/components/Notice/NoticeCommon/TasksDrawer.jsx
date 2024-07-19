@@ -1,15 +1,35 @@
 import { Button, DatePicker, Drawer, Form, Input, Select, Space } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import moment from "moment";
 import api from "../../../utils/api";
 
-const TasksDrawer = ({ setOpen, open, users, setRefetch, userName }) => {
+const TasksDrawer = ({
+  setOpen,
+  open,
+  users,
+  setRefetch,
+  userName,
+  taskData,
+  setTaskStatus,
+  taskStatus,
+  setTaskData,
+}) => {
   const [taskForm] = Form.useForm();
   const [description, setDescription] = useState("");
 
+  useEffect(() => {
+    if (Object.keys(taskData).length) {
+      setDescription(taskData.task_description);
+    }
+  }, [taskData]);
+
   const onClose = () => {
     setOpen(false);
+    taskForm.resetFields();
+    setDescription("");
+    setTaskData({});
+    setTaskStatus("");
   };
 
   const handleDescriptionChange = (value) => {
@@ -18,6 +38,23 @@ const TasksDrawer = ({ setOpen, open, users, setRefetch, userName }) => {
 
   const submitHandler = async (values) => {
     try {
+      if (taskStatus === "edit") {
+        console.log("values", values);
+        const response = await api.put(`/api/task/${taskData.task_id}`, {
+          task_name: values.taskTitle,
+          task_description: description,
+          users: values.users,
+          task_due_date: values.endDate,
+        });
+
+        if (response.status === 200) {
+          setRefetch((prev) => !prev);
+        } else {
+          console.error("Failed to edit task", response.statusText);
+          taskForm.resetFields();
+        }
+        return;
+      }
       const response = await api.post("/api/task", {
         task_name: values.taskTitle,
         task_description: description,
@@ -28,14 +65,13 @@ const TasksDrawer = ({ setOpen, open, users, setRefetch, userName }) => {
 
       if (response.status >= 200 && response.status < 300) {
         setRefetch((prev) => !prev);
-        onClose();
-        taskForm.resetFields();
-        setDescription("");
       } else {
         console.error("Failed to create task:", response.statusText);
       }
     } catch (error) {
       console.error("Error submitting task:", error);
+    } finally {
+      onClose();
     }
   };
 
@@ -56,13 +92,25 @@ const TasksDrawer = ({ setOpen, open, users, setRefetch, userName }) => {
               type="primary"
               onClick={() => {
                 taskForm.submit();
-                // onClose();
               }}>
               Submit
             </Button>
           </Space>
         }>
-        <Form name="taskForm" form={taskForm} onFinish={submitHandler}>
+        <Form
+          name="taskForm"
+          form={taskForm}
+          onFinish={submitHandler}
+          initialValues={
+            Object.keys(taskData).length
+              ? {
+                  taskTitle: taskData.task_name,
+                  taskDescription: taskData.task_description,
+                  users: taskData.users,
+                  endDate: moment(taskData.task_due_date),
+                }
+              : {}
+          }>
           <Form.Item
             name="taskTitle"
             rules={[
@@ -80,6 +128,11 @@ const TasksDrawer = ({ setOpen, open, users, setRefetch, userName }) => {
             label="Task Description">
             <ReactQuill
               value={description}
+              defaultValue={
+                Object.keys(taskData).length
+                  ? taskData.task_description
+                  : description
+              }
               theme="snow"
               onChange={handleDescriptionChange}
               placeholder="Describe your task here"

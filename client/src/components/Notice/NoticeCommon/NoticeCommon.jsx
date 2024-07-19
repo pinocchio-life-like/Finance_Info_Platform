@@ -20,7 +20,9 @@ const NoticeCommon = () => {
   const [isTaskLoading, setIsTaskLoading] = useState(true);
   const [isNoticeLoading, setIsNoticeLoading] = useState(true);
   const [data, setData] = useState({});
+  const [taskData, setTaskData] = useState({});
   const [status, setStatus] = useState("");
+  const [taskStatus, setTaskStatus] = useState("");
 
   const token = localStorage.getItem("token");
   let userName = null;
@@ -113,7 +115,17 @@ const NoticeCommon = () => {
     const getTasks = async () => {
       try {
         const response = await api.get(`/api/tasks/${userName}`);
-        setTasks(response.data.data);
+        const tasksWithMappedUsers = response.data.data
+          .map((task) => ({
+            ...task,
+            users: task.Users.map((user) => ({
+              label: user.firstName,
+              value: user.userId,
+            })),
+            Users: undefined,
+          }))
+          .map(({ Users, ...rest }) => rest);
+        setTasks(tasksWithMappedUsers);
       } catch (error) {
         console.error("Error fetching tasks:", error);
       } finally {
@@ -127,7 +139,10 @@ const NoticeCommon = () => {
     if (status === "edit") {
       setOpenNotice(true);
     }
-  }, [status]);
+    if (taskStatus === "edit") {
+      setOpenTask(true);
+    }
+  }, [status, taskStatus]);
 
   return (
     <div>
@@ -197,6 +212,8 @@ const NoticeCommon = () => {
                 tasks={tasks}
                 userName={userName}
                 setRefetch={setRefetch}
+                setTaskData={setTaskData}
+                setTaskStatus={setTaskStatus}
               />
             </div>
           )}
@@ -215,11 +232,16 @@ const NoticeCommon = () => {
         setData={setData}
       />
       <TasksDrawer
+        key={taskStatus}
         open={openTask}
         setOpen={setOpenTask}
         users={users}
         setRefetch={setRefetch}
         userName={userName}
+        taskData={taskData}
+        setTaskStatus={setTaskStatus}
+        taskStatus={taskStatus}
+        setTaskData={setTaskData}
       />
     </div>
   );

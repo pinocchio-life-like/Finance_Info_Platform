@@ -36,10 +36,10 @@ const taskGetByUserIdC = async (req, res) => {
       include: [
         {
           model: User,
-          as: "Users",
-          where: { userName: userName },
+          as: "Users", // Ensure this alias matches the one defined in your association
+          // Removed the where clause to include all users related to the task
           through: {
-            attributes: ["status"],
+            attributes: ["status"], // Assuming you still want to fetch specific attributes from the join table
           },
         },
       ],
@@ -51,12 +51,11 @@ const taskGetByUserIdC = async (req, res) => {
 
     // Map over tasksForUser to construct a new response
     const modifiedTasks = tasksForUser.map((task) => {
-      // Assuming task is a sequelize model instance, use task.get({ plain: true }) to get a plain object
       const taskPlain = task.get({ plain: true });
       const taskUserStatus = taskPlain.Users[0]?.taskUser?.status; // Safely access status
 
       // Exclude Users from the response and include taskUserStatus
-      delete taskPlain.Users; // Remove Users array
+      // delete taskPlain.Users; // Remove Users array
       return { ...taskPlain, taskUserStatus }; // Add taskUserStatus at the same level as task attributes
     });
 
@@ -131,6 +130,7 @@ const updateStatus = async (req, res) => {
     });
   }
 };
+
 const taskUpdate = async (req, res) => {
   const taskId = req.params.id;
   const { task_name, task_description, task_due_date, users } = req.body;
@@ -149,15 +149,13 @@ const taskUpdate = async (req, res) => {
     });
 
     // If users are provided, update the association
-    if (users) {
-      // Assuming `users` is an array of user IDs
-      // First, find all associated users
+    if (users.length > 0) {
       const currentUsers = await task.getUsers();
-      const currentUserIds = currentUsers.map((user) => user.id);
+      const currentUserIds = currentUsers.map((user) => user.userId);
 
       // Determine users to add and to remove
       const usersToAdd = users.filter(
-        (userId) => !currentUserIds.includes(userId)
+        (user) => !currentUserIds.includes(user.value)
       );
       const usersToRemove = currentUserIds.filter(
         (userId) => !users.includes(userId)

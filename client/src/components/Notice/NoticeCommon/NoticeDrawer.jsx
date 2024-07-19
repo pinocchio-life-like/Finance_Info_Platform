@@ -36,7 +36,6 @@ const NoticeDrawer = ({
   };
 
   const noticeSubmitHandler = async (values) => {
-    console.log("values", values.companies);
     try {
       if (status === "edit") {
         const response = await api.put(`/api/notice/${data.noticeId}`, {
