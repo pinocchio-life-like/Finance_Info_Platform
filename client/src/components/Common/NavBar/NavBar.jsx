@@ -115,7 +115,8 @@ const NavBar = () => {
           <Link
             // to={`/wiki/articles/${categoryId}`}
             to={`/wiki/articles/17`}
-            className="flex items-center lg:gap-1 gap-2">
+            className="flex items-center lg:gap-1 gap-2"
+          >
             <div className="w-6 lg:w-12">
               <img src={logo} alt="" className="w-full" />
             </div>
@@ -134,7 +135,8 @@ const NavBar = () => {
                 location.pathname.includes("wiki")
                   ? "text-blue-800"
                   : "text-black"
-              }`}>
+              }`}
+            >
               Wiki
             </Link>
           </li>
@@ -145,21 +147,23 @@ const NavBar = () => {
                 location.pathname.includes("ftp")
                   ? "text-blue-800"
                   : "text-black"
-              }`}>
+              }`}
+            >
               FTP
             </Link>
           </li>
-          {/* <li>
+          <li>
             <Link
               to="/notice"
               className={`font-bold hover:text-blue-700 ${
                 location.pathname.includes("notice")
                   ? "text-blue-800"
                   : "text-black"
-              }`}>
+              }`}
+            >
               Notice
             </Link>
-          </li> */}
+          </li>
           <li>
             <Link
               to="/qa/questions/all"
@@ -167,7 +171,8 @@ const NavBar = () => {
                 location.pathname.includes("qa")
                   ? "text-blue-800"
                   : "text-black"
-              }`}>
+              }`}
+            >
               Q&A
             </Link>
           </li>
@@ -179,7 +184,8 @@ const NavBar = () => {
                   location.pathname.includes("Manage")
                     ? "text-blue-800"
                     : "text-black"
-                }`}>
+                }`}
+              >
                 Manage
               </Link>
             </li>
@@ -193,7 +199,8 @@ const NavBar = () => {
               <div className="flex items-center justify-end  h-full">
                 <div
                   className="flex w-full mx-2 rounded bg-white h-full relative"
-                  ref={searchRef}>
+                  ref={searchRef}
+                >
                   <div className="relative w-full">
                     <input
                       className="w-full border-none bg-transparent px-4 py-2 items-center text-gray-400 outline-none focus:outline-none pl-10"
@@ -210,7 +217,8 @@ const NavBar = () => {
                     {showOptions && (
                       <div
                         className="absolute w-full z-50 bg-white border border-gray-200 rounded mt-1 overflow-y-auto"
-                        style={{ maxHeight: "80vh" }}>
+                        style={{ maxHeight: "80vh" }}
+                      >
                         <div className="px-4 py-2 font-bold">Articles</div>
                         {allArticles
                           .filter(
@@ -228,7 +236,8 @@ const NavBar = () => {
                               key={index}
                               to={`/wiki/articles/${article.value}`}
                               onClick={() => handleOptionClick(article.label)}
-                              className="block px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                              className="block px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                            >
                               {article.label}
                             </Link>
                           ))}
@@ -244,7 +253,8 @@ const NavBar = () => {
                               key={index}
                               to={`/question/${question.value}`}
                               onClick={() => handleOptionClick(question.label)}
-                              className="block px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                              className="block px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                            >
                               {question.label}
                             </Link>
                           ))}
@@ -260,7 +270,8 @@ const NavBar = () => {
                 data-dropdown-toggle="dropdownInformation"
                 className="lg:h-10 h-9 text-white bg-gray-100 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:bg-gray-400 font-medium rounded text-sm  lg:px-5 px-2 text-center inline-flex items-center "
                 type="button"
-                onClick={toggleMenu}>
+                onClick={toggleMenu}
+              >
                 <FaRegCircleUser size={26} color="#241F1F" className="mr-2" />
                 <GoChevronDown size={26} color="#241F1F" />
               </button>
@@ -285,7 +296,8 @@ const NavBar = () => {
                   </div>
                   <Link
                     to="#"
-                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white"
+                  >
                     Profile
                   </Link>
                   {/* may be we need to set our own email app */}
@@ -302,7 +314,8 @@ const NavBar = () => {
                   {/* this is to give some articles and demo */}
                   <Link
                     to="#"
-                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white"
+                  >
                     Help
                   </Link>
                   <Link
@@ -310,7 +323,8 @@ const NavBar = () => {
                       await logout();
                     }}
                     to="#"
-                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white"
+                  >
                     Logout
                   </Link>
                 </div>
@@ -319,13 +333,15 @@ const NavBar = () => {
           </div>
           <button
             className="lg:hidden flex items-center ml-auto"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              className="h-9 w-9">
+              className="h-9 w-9"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -338,18 +354,21 @@ const NavBar = () => {
             <>
               <div
                 className="fixed z-50 inset-0 lg:hidden bg-black opacity-70"
-                onClick={() => setIsMobileMenuOpen(false)}></div>
+                onClick={() => setIsMobileMenuOpen(false)}
+              ></div>
               <div className="fixed top-0 right-0 h-full w-56 bg-nav-bg z-50 shadow-lg lg:hidden">
                 <button
                   className="p-4 text-red-500 font-medium"
-                  onClick={() => setIsMobileMenuOpen(false)}>
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
                   Close
                 </button>
                 {/* Add your drawer content here */}
                 <hr className="mx-2" />
                 <ul
                   className="flex flex-col gap-2 my-4"
-                  onClick={() => setIsMobileMenuOpen(false)}>
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
                   <div className="notification p-1 flex items-center px-4">
                     <BsBellFill
                       color="white"
@@ -374,7 +393,8 @@ const NavBar = () => {
                         location.pathname.includes("wiki")
                           ? "text-blue-800"
                           : "text-black"
-                      }`}>
+                      }`}
+                    >
                       Wiki
                     </Link>
                   </li>
@@ -385,21 +405,23 @@ const NavBar = () => {
                         location.pathname.includes("ftp")
                           ? "text-blue-800"
                           : "text-black"
-                      }`}>
+                      }`}
+                    >
                       FTP
                     </Link>
                   </li>
-                  {/* <li>
+                  <li>
                     <Link
                       to="/notice"
                       className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
                         location.pathname.includes("notice")
                           ? "text-blue-800"
                           : "text-black"
-                      }`}>
+                      }`}
+                    >
                       Notice
                     </Link>
-                  </li> */}
+                  </li>
                   <li>
                     <Link
                       to="/qa/questions/all"
@@ -407,7 +429,8 @@ const NavBar = () => {
                         location.pathname.includes("qa")
                           ? "text-blue-800"
                           : "text-black"
-                      }`}>
+                      }`}
+                    >
                       Q&A
                     </Link>
                   </li>
@@ -419,7 +442,8 @@ const NavBar = () => {
                           location.pathname.includes("Manage")
                             ? "text-blue-800"
                             : "text-black"
-                        }`}>
+                        }`}
+                      >
                         Manage
                       </Link>
                     </li>
@@ -432,7 +456,8 @@ const NavBar = () => {
                       location.pathname.includes("profile")
                         ? "text-blue-800"
                         : "text-black"
-                    }`}>
+                    }`}
+                  >
                     Profile
                   </Link>
                   {/* may be we need to set our own email app */}
@@ -453,7 +478,8 @@ const NavBar = () => {
                       location.pathname.includes("help")
                         ? "text-blue-800"
                         : "text-black"
-                    }`}>
+                    }`}
+                  >
                     Help
                   </Link>
                   <Link
@@ -461,7 +487,8 @@ const NavBar = () => {
                       await logout();
                     }}
                     to="#"
-                    className="font-semibold block px-4 py-2 text-black hover:bg-blue-500 hover:text-white">
+                    className="font-semibold block px-4 py-2 text-black hover:bg-blue-500 hover:text-white"
+                  >
                     Logout
                   </Link>
                 </ul>

@@ -1,0 +1,32 @@
+.notices-container::after {
+  content: "";
+  position: absolute;
+  right: -2px; /* Adjust based on the gap you want */
+  top: 0;
+  bottom: 0;
+  width: 1px; /* Thickness of the line */
+  background-color: #000; /* Color of the line */
+}
+
+/* For Webkit browsers */
+.scrollable::-webkit-scrollbar {
+  width: 10px; /* Adjust the width of the scrollbar */
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track color */
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background: #888; /* Handle color */
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Handle color on hover */
+}
+
+/* For other browsers */
+.scrollable {
+  scrollbar-width: thin; /* "auto" or "thin" */
+  scrollbar-color: #888 #f1f1f1; /* Handle and track color */
+}

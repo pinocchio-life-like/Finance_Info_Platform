@@ -23,6 +23,8 @@ const uploadRoute = require("./routes/uploadRoute/uploadRoute");
 const companyRoutes = require("./routes/CompanyRoute/companyRoutes");
 const folderRoutes = require("./routes/FtpRoutes/folderRoutes");
 const fileRoutes = require("./routes/FtpRoutes/fileRoutes");
+const noticeRoute = require("./routes/NoticeRoute/noticeRoute");
+const taskRoutes = require("./routes/NoticeRoute/taskRoute");
 
 const app = express();
 const corsOptions = {
@@ -55,7 +57,8 @@ app.use("/api", verifyUserMiddleware, tagsRoutes);
 app.use("/api", verifyUserMiddleware, companyRoutes);
 app.use("/api", verifyUserMiddleware, folderRoutes);
 app.use("/api", verifyUserMiddleware, fileRoutes);
-
+app.use("/api", verifyUserMiddleware, noticeRoute);
+app.use("/api", verifyUserMiddleware, taskRoutes);
 app.use(
   "/Article/Images",
   verifyUserMiddleware,
@@ -83,6 +86,6 @@ async function syncDatabase() {
   }
 }
 
-syncDatabase();
+// syncDatabase();
 
 app.listen(5000, () => console.log("Server running on port 5000"));
