@@ -113,23 +113,39 @@ const NoticeCommon = () => {
 
   useEffect(() => {
     const getTasks = async () => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const overDueIds = [];
       try {
         const response = await api.get(`/api/tasks/${userName}`);
         const tasksWithMappedUsers = response.data.data
-          .map((task) => ({
-            ...task,
-            users: task.Users.map((user) => ({
-              label: user.firstName,
-              value: user.userId,
-            })),
-            Users: undefined,
-          }))
+          .map((task) => {
+            const taskDueDate = new Date(task.task_due_date);
+            taskDueDate.setHours(0, 0, 0, 0);
+            const isOverdue = taskDueDate < today;
+            const mappedTask = {
+              ...task,
+              users: task.Users.map((user) => ({
+                label: user.firstName,
+                value: user.userId,
+              })),
+              Users: undefined,
+              taskUserStatus: isOverdue ? "overdue" : task.taskUserStatus,
+            };
+            return mappedTask;
+          })
           .map(({ Users, ...rest }) => rest);
         setTasks(tasksWithMappedUsers);
       } catch (error) {
         console.error("Error fetching tasks:", error);
       } finally {
         setIsTaskLoading(false);
+        if (overDueIds.length === 0) {
+          const updateStatusPromises = overDueIds.map((id) =>
+            api.put(`/api/generalStatus/${id}`, { status })
+          );
+          await Promise.all(updateStatusPromises);
+        }
       }
     };
     getTasks();
@@ -220,7 +236,7 @@ const NoticeCommon = () => {
         </div>
       </div>
       <NoticeDrawer
-        key={status}
+        key={data && data.task_id ? data.task_id : Math.random().toString()}
         companies={companies}
         open={openNotice}
         setOpen={setOpenNotice}
@@ -232,7 +248,11 @@ const NoticeCommon = () => {
         setData={setData}
       />
       <TasksDrawer
-        key={taskStatus}
+        key={
+          taskData && taskData.task_id
+            ? taskData.task_id
+            : Math.random().toString()
+        }
         open={openTask}
         setOpen={setOpenTask}
         users={users}

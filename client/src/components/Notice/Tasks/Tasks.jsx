@@ -20,9 +20,19 @@ const Tasks = ({ tasks, userName, setRefetch, setTaskData, setTaskStatus }) => {
     });
   };
 
-  // Assuming `api` is an instance of an Axios object or similar that supports Promises
-  const updateStatus = async (id, status) => {
+  const updateStatus = async (id, user, status) => {
     try {
+      if (user === userName) {
+        const response = await api.put(`/api/generalStatus/${id}`, {
+          status,
+        });
+        if (response.status === 200) {
+          setRefetch((prev) => !prev);
+        } else {
+          console.error("Update failed", response.status, response.data);
+        }
+        return;
+      }
       const response = await api.put(`/api/task/${id}`, { status, userName });
       if (response.status === 200) {
         setRefetch((prev) => !prev);
@@ -130,7 +140,11 @@ const Tasks = ({ tasks, userName, setRefetch, setTaskData, setTaskStatus }) => {
                               title="Mark as completed"
                               description="Do you want to mark as complete?"
                               onConfirm={() => {
-                                updateStatus(task.task_id, "completed");
+                                updateStatus(
+                                  task.task_id,
+                                  task.userName,
+                                  "completed"
+                                );
                               }}
                               okText="Yes"
                               cancelText="No"
@@ -143,29 +157,35 @@ const Tasks = ({ tasks, userName, setRefetch, setTaskData, setTaskStatus }) => {
                               <Button>mark as completed</Button>
                             </Popconfirm>
                           )}
-                          <Button
-                            onClick={() => {
-                              setTaskData(task);
-                              setTaskStatus("edit");
-                            }}>
-                            Edit
-                          </Button>
-                          <Popconfirm
-                            title="Delete Task"
-                            description="Do you want to delete task?"
-                            onConfirm={() => {
-                              deleteTask(task.task_id);
-                            }}
-                            okText="Yes"
-                            cancelText="No"
-                            okButtonProps={{
-                              style: {
-                                backgroundColor: "#155CA2",
-                                color: "white",
-                              },
-                            }}>
-                            <Button>Delete</Button>
-                          </Popconfirm>
+                          {task.userName === userName && (
+                            <>
+                              {task.task_status !== "Completed" && (
+                                <Button
+                                  onClick={() => {
+                                    setTaskData(task);
+                                    setTaskStatus("edit");
+                                  }}>
+                                  Edit
+                                </Button>
+                              )}
+                              <Popconfirm
+                                title="Delete Task"
+                                description="Do you want to delete task?"
+                                onConfirm={() => {
+                                  deleteTask(task.task_id);
+                                }}
+                                okText="Yes"
+                                cancelText="No"
+                                okButtonProps={{
+                                  style: {
+                                    backgroundColor: "#155CA2",
+                                    color: "white",
+                                  },
+                                }}>
+                                <Button>Delete</Button>
+                              </Popconfirm>
+                            </>
+                          )}
                         </div>
                       }>
                       <FaEllipsisV className="cursor-pointer" />

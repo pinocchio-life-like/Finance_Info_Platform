@@ -39,8 +39,7 @@ const TasksDrawer = ({
   const submitHandler = async (values) => {
     try {
       if (taskStatus === "edit") {
-        console.log("values", values);
-        const response = await api.put(`/api/task/${taskData.task_id}`, {
+        const response = await api.put(`/api/taskUpdate/${taskData.task_id}`, {
           task_name: values.taskTitle,
           task_description: description,
           users: values.users,
@@ -147,11 +146,7 @@ const TasksDrawer = ({
                     { indent: "-1" },
                     { indent: "+1" },
                   ],
-                  [
-                    "link",
-                    "image",
-                    // "video"
-                  ],
+                  ["link", "image", "video"],
                   ["clean"],
                 ],
               }}
@@ -167,7 +162,7 @@ const TasksDrawer = ({
                 "indent",
                 "link",
                 "image",
-                // "video",
+                "video",
               ]}
             />
           </Form.Item>
@@ -180,7 +175,7 @@ const TasksDrawer = ({
               rules={[
                 {
                   required: true,
-                  message: "Title can not be empty!!",
+                  message: "Users can not be empty!!",
                 },
               ]}
               placeholder="Please select"
