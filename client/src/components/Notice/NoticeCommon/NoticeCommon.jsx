@@ -130,7 +130,10 @@ const NoticeCommon = () => {
                 value: user.userId,
               })),
               Users: undefined,
-              taskUserStatus: isOverdue ? "overdue" : task.taskUserStatus,
+              taskUserStatus:
+                isOverdue && task.task_status !== "completed"
+                  ? "overdue"
+                  : task.taskUserStatus,
             };
             return mappedTask;
           })
@@ -201,7 +204,8 @@ const NoticeCommon = () => {
           ) : (
             <div
               className="w-[65%] scrollable border-r"
-              style={{ maxHeight: "86.2vh", overflowY: "auto" }}>
+              style={{ maxHeight: "86.2vh", overflowY: "auto" }}
+            >
               <Notices
                 notices={notices}
                 setRefetch={setRefetch}
@@ -223,7 +227,8 @@ const NoticeCommon = () => {
           ) : (
             <div
               className="w-[35%] ml-1 scrollable"
-              style={{ maxHeight: "86.2vh", overflowY: "auto" }}>
+              style={{ maxHeight: "86.2vh", overflowY: "auto" }}
+            >
               <Tasks
                 tasks={tasks}
                 userName={userName}

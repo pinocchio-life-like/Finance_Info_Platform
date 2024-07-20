@@ -220,12 +220,15 @@ const generalStatus = async (req, res) => {
   const { task_id } = req.params;
   const { status } = req.body;
 
-  const task = await Task.update(
-    { task_status: status },
-    {
-      where: { task_id },
-    }
-  );
+  const task = await Task.findOne({
+    where: {
+      task_id,
+    },
+  });
+
+  if (task.task_status !== "completed") {
+    await task.update({ task_status: status });
+  }
 
   if (!task) {
     return res.status(404).json({

@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import moment from "moment";
 import api from "../../../utils/api";
-
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 const TasksDrawer = ({
   setOpen,
   open,
@@ -91,11 +93,13 @@ const TasksDrawer = ({
               type="primary"
               onClick={() => {
                 taskForm.submit();
-              }}>
+              }}
+            >
               Submit
             </Button>
           </Space>
-        }>
+        }
+      >
         <Form
           name="taskForm"
           form={taskForm}
@@ -106,10 +110,11 @@ const TasksDrawer = ({
                   taskTitle: taskData.task_name,
                   taskDescription: taskData.task_description,
                   users: taskData.users,
-                  endDate: moment(taskData.task_due_date),
+                  // endDate: moment(taskData.task_due_date),
                 }
               : {}
-          }>
+          }
+        >
           <Form.Item
             name="taskTitle"
             rules={[
@@ -118,13 +123,15 @@ const TasksDrawer = ({
                 message: "Title can not be empty!!",
               },
             ]}
-            label="Task Title">
+            label="Task Title"
+          >
             <Input placeholder="Task Title" />
           </Form.Item>
           <Form.Item
             name="taskDescription"
             valuePropName="description"
-            label="Task Description">
+            label="Task Description"
+          >
             <ReactQuill
               value={description}
               defaultValue={
@@ -194,10 +201,12 @@ const TasksDrawer = ({
                 required: true,
                 message: "End Date cannot be empty!!",
               },
-            ]}>
+            ]}
+          >
             <DatePicker
               format="YYYY-MM-DD"
               style={{ width: "100%" }}
+              defaultValue={dayjs(taskData.task_due_date)}
               disabledDate={(current) =>
                 current && current < moment().add(1, "days").startOf("day")
               }

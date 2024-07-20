@@ -68,7 +68,8 @@ const Tasks = ({ tasks, userName, setRefetch, setTaskData, setTaskStatus }) => {
               }`}
               onClick={() => {
                 setActiveIndex(0);
-              }}>
+              }}
+            >
               <MdOutlinePendingActions size={21} style={{ marginRight: 10 }} />{" "}
               Pending
             </Link>
@@ -80,7 +81,8 @@ const Tasks = ({ tasks, userName, setRefetch, setTaskData, setTaskStatus }) => {
               }`}
               onClick={() => {
                 setActiveIndex(1);
-              }}>
+              }}
+            >
               <BiTask size={21} style={{ marginRight: 10 }} />
               Completed
             </Link>
@@ -92,7 +94,8 @@ const Tasks = ({ tasks, userName, setRefetch, setTaskData, setTaskStatus }) => {
               }`}
               onClick={() => {
                 setActiveIndex(2);
-              }}>
+              }}
+            >
               <BiTaskX size={20} style={{ marginRight: 10 }} /> Overdue
             </Link>
           </li>
@@ -104,7 +107,8 @@ const Tasks = ({ tasks, userName, setRefetch, setTaskData, setTaskStatus }) => {
           overflowY: "auto",
           scrollbarWidth: "none" /* For Firefox */,
           msOverflowStyle: "none" /* For Internet Explorer and Edge */,
-        }}>
+        }}
+      >
         {tasks
           .filter((task) =>
             activeIndex === 0
@@ -125,11 +129,13 @@ const Tasks = ({ tasks, userName, setRefetch, setTaskData, setTaskStatus }) => {
                 style={{
                   position: "relative",
                   background: "",
-                }}>
+                }}
+              >
                 <div className="w-full flex-row">
                   <div className="w-full font-bold text-lg text-[#008DDA] flex border-b pb-1 justify-between items-center">
                     <Link
-                      to={`/task/${task.task_id}`}>{`${task.task_name}`}</Link>
+                      to={`/task/${task.task_id}`}
+                    >{`${task.task_name}`}</Link>
                     <Popover
                       className="opacity-0 group-hover:opacity-100"
                       position="bottom"
@@ -153,18 +159,22 @@ const Tasks = ({ tasks, userName, setRefetch, setTaskData, setTaskStatus }) => {
                                   backgroundColor: "#155CA2",
                                   color: "white",
                                 },
-                              }}>
+                              }}
+                            >
                               <Button>mark as completed</Button>
                             </Popconfirm>
                           )}
                           {task.userName === userName && (
                             <>
-                              {task.task_status !== "Completed" && (
+                              {((task.task_status === "pending" &&
+                                task.userName === userName) &&
+                                task.taskUserStatus !== "completed") && (
                                 <Button
                                   onClick={() => {
                                     setTaskData(task);
                                     setTaskStatus("edit");
-                                  }}>
+                                  }}
+                                >
                                   Edit
                                 </Button>
                               )}
@@ -181,13 +191,15 @@ const Tasks = ({ tasks, userName, setRefetch, setTaskData, setTaskStatus }) => {
                                     backgroundColor: "#155CA2",
                                     color: "white",
                                   },
-                                }}>
+                                }}
+                              >
                                 <Button>Delete</Button>
                               </Popconfirm>
                             </>
                           )}
                         </div>
-                      }>
+                      }
+                    >
                       <FaEllipsisV className="cursor-pointer" />
                     </Popover>
                   </div>
@@ -204,12 +216,14 @@ const Tasks = ({ tasks, userName, setRefetch, setTaskData, setTaskStatus }) => {
                   </div>
                   <div
                     style={{ position: "absolute", bottom: 30, left: 0 }}
-                    className="w-full flex justify-between pr-2">
+                    className="w-full flex justify-between pr-2"
+                  >
                     <button
                       className="text-[#008DDA]"
                       onClick={() => {
                         toggleDescription(i);
-                      }}>
+                      }}
+                    >
                       {isFull[i] ? "see less" : "...see more"}
                     </button>
                     <button className="text-gray-500 text-sm font-normal">
@@ -219,7 +233,8 @@ const Tasks = ({ tasks, userName, setRefetch, setTaskData, setTaskStatus }) => {
                   </div>
                   <button
                     className="text-[#008DDA] text-sm"
-                    style={{ position: "absolute", bottom: 0, left: 0 }}>
+                    style={{ position: "absolute", bottom: 0, left: 0 }}
+                  >
                     assigned by: {task.userName} @{" "}
                     {new Date(task.createdAt).toLocaleString()}
                   </button>
