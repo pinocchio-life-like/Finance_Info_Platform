@@ -71,11 +71,6 @@ const createUser = async (user) => {
 
   return users;
 };
-const getUserByUserName = async (userName) => {
-  return User.findOne({
-    where: { userName: userName },
-  });
-};
 
 //method to get all user
 const getAllUsers = async () => {
@@ -131,7 +126,6 @@ const destroy = async (userIds) => {
 
 module.exports = {
   createUser,
-  getUserByUserName,
   getAllUsers,
   updateUser,
   destroy,

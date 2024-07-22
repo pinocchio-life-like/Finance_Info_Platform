@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import logo from "../../../assets/Images/wihLogo.png";
-import { BsBellFill } from "react-icons/bs";
-import { IoLanguageOutline } from "react-icons/io5";
+// import { BsBellFill } from "react-icons/bs";
+// import { IoLanguageOutline } from "react-icons/io5";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { CiSearch } from "react-icons/ci";
 import { GoChevronDown } from "react-icons/go";
@@ -129,9 +129,9 @@ const NavBar = () => {
           <li>
             <Link
               to={`/wiki/articles/${categoryId}`}
-              className={`font-bold hover:text-blue-700 ${
+              className={`font-bold hover:text-[#155CA2] ${
                 location.pathname.includes("wiki")
-                  ? "text-blue-800"
+                  ? "text-[#155CA2]"
                   : "text-black"
               }`}>
               Wiki
@@ -140,9 +140,9 @@ const NavBar = () => {
           <li>
             <Link
               to="/ftp/home"
-              className={`font-bold hover:text-blue-700 ${
+              className={`font-bold hover:text-[#155CA2] ${
                 location.pathname.includes("ftp")
-                  ? "text-blue-800"
+                  ? "text-[#155CA2]"
                   : "text-black"
               }`}>
               FTP
@@ -151,9 +151,9 @@ const NavBar = () => {
           <li>
             <Link
               to="/notice"
-              className={`font-bold hover:text-blue-700 ${
+              className={`font-bold hover:text-[#155CA2] ${
                 location.pathname.includes("notice")
-                  ? "text-blue-800"
+                  ? "text-[#155CA2]"
                   : "text-black"
               }`}>
               Notice
@@ -162,9 +162,9 @@ const NavBar = () => {
           <li>
             <Link
               to="/qa/questions/all"
-              className={`font-semibold hover:text-blue-700 ${
+              className={`font-semibold hover:text-[#155CA2] ${
                 location.pathname.includes("qa")
-                  ? "text-blue-800"
+                  ? "text-[#155CA2]"
                   : "text-black"
               }`}>
               Q&A
@@ -174,9 +174,9 @@ const NavBar = () => {
             <li>
               <Link
                 to="/manage"
-                className={`font-semibold hover:text-blue-700 ${
+                className={`font-semibold hover:text-[#155CA2] ${
                   location.pathname.includes("Manage")
-                    ? "text-blue-800"
+                    ? "text-[#155CA2]"
                     : "text-black"
                 }`}>
                 Manage
@@ -266,42 +266,42 @@ const NavBar = () => {
 
               {menuActive && (
                 <div className="hidden lg:flex flex-col menu z-50 absolute top-full right-0 bg-white shadow-md mt-1 py-2 w-48 rounded">
-                  <div className="notification p-1 flex items-center px-4">
+                  {/* <div className="notification p-1 flex items-center px-4">
                     <BsBellFill
                       color="white"
                       className="bg-gray-800 rounded mr-2"
                       size={20}
                     />{" "}
                     notifications
-                  </div>
-                  <div className="lang p-1 flex items-center px-4">
+                  </div> */}
+                  {/* <div className="lang p-1 flex items-center px-4">
                     <IoLanguageOutline
                       className="bg-gray-800 rounded mr-2"
                       color="white"
                       size={20}
                     />{" "}
                     language
-                  </div>
+                  </div> */}
                   <Link
-                    to="#"
-                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                    to="/profile"
+                    className="block px-4 py-2 text-gray-800 hover:bg-[#155CA2] hover:text-white">
                     Profile
                   </Link>
                   {/* may be we need to set our own email app */}
                   {/* <Link
                   to="#"
-                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                  className="block px-4 py-2 text-gray-800 hover:bg-[#155CA2] hover:text-white">
                   Inbox
                 </Link> */}
                   {/* <Link
                   to="#"
-                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                  className="block px-4 py-2 text-gray-800 hover:bg-[#155CA2] hover:text-white">
                   Manage
                 </Link> */}
                   {/* this is to give some articles and demo */}
                   <Link
                     to="#"
-                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                    className="block px-4 py-2 text-gray-800 hover:bg-[#155CA2] hover:text-white">
                     Help
                   </Link>
                   <Link
@@ -309,7 +309,7 @@ const NavBar = () => {
                       await logout();
                     }}
                     to="#"
-                    className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                    className="block px-4 py-2 text-gray-800 hover:bg-[#155CA2] hover:text-white">
                     Logout
                   </Link>
                 </div>
@@ -349,29 +349,29 @@ const NavBar = () => {
                 <ul
                   className="flex flex-col gap-2 my-4"
                   onClick={() => setIsMobileMenuOpen(false)}>
-                  <div className="notification p-1 flex items-center px-4">
+                  {/* <div className="notification p-1 flex items-center px-4">
                     <BsBellFill
                       color="white"
                       className="bg-gray-800 rounded mr-2"
                       size={20}
                     />{" "}
                     notifications
-                  </div>
-                  <div className="lang p-1 flex items-center px-4">
+                  </div> */}
+                  {/* <div className="lang p-1 flex items-center px-4">
                     <IoLanguageOutline
                       className="bg-gray-800 rounded mr-2"
                       color="white"
                       size={20}
                     />{" "}
                     language
-                  </div>
+                  </div> */}
                   <hr className="mx-2" />
                   <li>
                     <Link
                       to={`/wiki/articles/${categoryId}`}
-                      className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
+                      className={`block py-2 text-black hover:bg-[#155CA2] hover:text-white font-semibold px-4 ${
                         location.pathname.includes("wiki")
-                          ? "text-blue-800"
+                          ? "text-[#155CA2]"
                           : "text-black"
                       }`}>
                       Wiki
@@ -380,9 +380,9 @@ const NavBar = () => {
                   <li>
                     <Link
                       to="/ftp/home"
-                      className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
+                      className={`block py-2 text-black hover:bg-[#155CA2] hover:text-white font-semibold px-4 ${
                         location.pathname.includes("ftp")
-                          ? "text-blue-800"
+                          ? "text-[#155CA2]"
                           : "text-black"
                       }`}>
                       FTP
@@ -391,9 +391,9 @@ const NavBar = () => {
                   <li>
                     <Link
                       to="/notice"
-                      className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
+                      className={`block py-2 text-black hover:bg-[#155CA2] hover:text-white font-semibold px-4 ${
                         location.pathname.includes("notice")
-                          ? "text-blue-800"
+                          ? "text-[#155CA2]"
                           : "text-black"
                       }`}>
                       Notice
@@ -402,9 +402,9 @@ const NavBar = () => {
                   <li>
                     <Link
                       to="/qa/questions/all"
-                      className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
+                      className={`block py-2 text-black hover:bg-[#155CA2] hover:text-white font-semibold px-4 ${
                         location.pathname.includes("qa")
-                          ? "text-blue-800"
+                          ? "text-[#155CA2]"
                           : "text-black"
                       }`}>
                       Q&A
@@ -414,7 +414,7 @@ const NavBar = () => {
                     <li>
                       <Link
                         to="/manage"
-                        className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
+                        className={`block py-2 text-black hover:bg-[#155CA2] hover:text-white font-semibold px-4 ${
                           location.pathname.includes("Manage")
                             ? "text-blue-800"
                             : "text-black"
@@ -426,10 +426,10 @@ const NavBar = () => {
                   <hr className="mx-2" />
 
                   <Link
-                    to="#"
-                    className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
+                    to="/profile"
+                    className={`block py-2 text-black hover:bg-[#155CA2] hover:text-white font-semibold px-4 ${
                       location.pathname.includes("profile")
-                        ? "text-blue-800"
+                        ? "text-[#155CA2]"
                         : "text-black"
                     }`}>
                     Profile
@@ -437,20 +437,20 @@ const NavBar = () => {
                   {/* may be we need to set our own email app */}
                   {/* <Link
                   to="#"
-                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                  className="block px-4 py-2 text-gray-800 hover:bg-[#155CA2] hover:text-white">
                   Inbox
                 </Link> */}
                   {/* <Link
                   to="#"
-                  className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">
+                  className="block px-4 py-2 text-gray-800 hover:bg-[#155CA2] hover:text-white">
                   Manage
                 </Link> */}
                   {/* this is to give some articles and demo */}
                   <Link
                     to="#"
-                    className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
+                    className={`block py-2 text-black hover:bg-[#155CA2] hover:text-white font-semibold px-4 ${
                       location.pathname.includes("help")
-                        ? "text-blue-800"
+                        ? "text-[#155CA2]"
                         : "text-black"
                     }`}>
                     Help
@@ -460,7 +460,7 @@ const NavBar = () => {
                       await logout();
                     }}
                     to="#"
-                    className="font-semibold block px-4 py-2 text-black hover:bg-blue-500 hover:text-white">
+                    className="font-semibold block px-4 py-2 text-black hover:bg-[#155CA2] hover:text-white">
                     Logout
                   </Link>
                 </ul>
