@@ -28,6 +28,10 @@ const columns = [
     dataIndex: "userRole",
   },
   {
+    title: "Company",
+    dataIndex: "companyName",
+  },
+  {
     title: "Password",
     dataIndex: "password",
   },
@@ -86,10 +90,12 @@ const Admin = () => {
   }
 
   useEffect(() => {
+    let usersData = [];
     const fetchUsers = async () => {
       try {
         const response = await api.get("/api/users/getall");
         setUsers(response.data.data);
+        usersData = response.data.data;
         setTableData(response.data.data);
       } catch (error) {
         console.error(error);
@@ -101,6 +107,16 @@ const Admin = () => {
       try {
         const response = await api.get("/api/companies/getAll");
         const transformedData = transformDataToHierarchy(response.data.data);
+        const updatedUsers = usersData.map((data) => {
+          return {
+            ...data,
+            companyName: response.data.data.find(
+              (company) => company.company_Id === data.company_Id
+            )?.company_Name,
+          };
+        });
+        setUsers(updatedUsers);
+        setTableData(updatedUsers);
         setCompanies(transformedData);
       } catch (error) {
         console.error(error);
@@ -129,11 +145,6 @@ const Admin = () => {
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows
-      );
       setSelectedRows(selectedRows);
       setSelectedRowKeys(selectedRowKeys);
     },
@@ -248,19 +259,28 @@ const Admin = () => {
     setTableData(filteredUsersData);
   };
 
+  const filter = (inputValue, path) =>
+    path.some(
+      (option) =>
+        option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+    );
+
   return (
     <>
       {contextHolder}
       <div
         style={{ width: "100%" }}
-        className="flex-grow flex flex-col items-center bg-white">
+        className="flex-grow flex flex-col items-center bg-white"
+      >
         <div
           style={{ width: "95%" }}
-          className="flex justify-between items-center border-b mt-3 border-gray-600 pb-1">
+          className="flex justify-between items-center border-b mt-3 border-gray-600 pb-1"
+        >
           <div>
             <a
               className={"p-2 cursor-pointer border-b-2 border-black font-bold"}
-              style={{ lineHeight: "2rem" }}>
+              style={{ lineHeight: "2rem" }}
+            >
               User
             </a>
           </div>
@@ -270,14 +290,17 @@ const Admin = () => {
             <div style={{ width: "100%" }} className="">
               <div
                 style={{ width: "100%" }}
-                className="flex flex-col justify-between items-center">
+                className="flex flex-col justify-between items-center"
+              >
                 <div
                   style={{ width: "100%" }}
-                  className="flex items-center justify-between mt-1 pl-2 border-b border-gray-600 pb-1">
+                  className="flex items-center justify-between mt-1 pl-2 border-b border-gray-600 pb-1"
+                >
                   <div className="flex">
                     <button
                       onClick={handleAdd}
-                      className="flex items-center text-black hover:bg-white hover:text-green-500 rounded">
+                      className="flex items-center text-black hover:bg-white hover:text-green-500 rounded"
+                    >
                       <FaPlus size={12} style={{ marginRight: 4 }} /> Add New
                     </button>
                     <button
@@ -287,16 +310,20 @@ const Admin = () => {
                         selectedRows.length === 0
                           ? "text-gray-400 cursor-not-allowed"
                           : "text-black hover:bg-white hover:text-red-500"
-                      }`}>
+                      }`}
+                    >
                       <FaTrash size={12} style={{ marginRight: 4 }} /> Delete
                     </button>
                   </div>
-                  <div style={{ width: "400px" }}>
+                  <div style={{ width: "40%" }}>
                     <Cascader
-                      style={{ width: "400px" }}
+                      style={{ width: "100%" }}
                       options={companies}
                       onChange={onChange}
                       changeOnSelect
+                      showSearch={{
+                        filter,
+                      }}
                     />
                   </div>
                 </div>
@@ -332,7 +359,8 @@ const Admin = () => {
             style={{
               maxWidth: 600,
             }}
-            initialValues={drawerData || {}}>
+            initialValues={drawerData || {}}
+          >
             <Form.Item
               label="Name"
               name="firstName"
@@ -341,7 +369,8 @@ const Admin = () => {
                   required: true,
                   message: "Please input!",
                 },
-              ]}>
+              ]}
+            >
               <Input />
             </Form.Item>
 
@@ -353,7 +382,8 @@ const Admin = () => {
                   required: true,
                   message: "Please input!",
                 },
-              ]}>
+              ]}
+            >
               <Input />
             </Form.Item>
 
@@ -365,7 +395,8 @@ const Admin = () => {
                   required: true,
                   message: "Please input!",
                 },
-              ]}>
+              ]}
+            >
               <Cascader options={companies} changeOnSelect />
             </Form.Item>
 
@@ -377,7 +408,8 @@ const Admin = () => {
                   required: true,
                   message: "Please select a role!",
                 },
-              ]}>
+              ]}
+            >
               <Select placeholder="Select a role">
                 <Select.Option value="admin">Admin</Select.Option>
                 <Select.Option value="user">User</Select.Option>
@@ -393,10 +425,12 @@ const Admin = () => {
               wrapperCol={{
                 offset: 0,
                 span: 24,
-              }}>
+              }}
+            >
               <Button
                 style={{ background: "#387ADF", color: "white", width: "100%" }}
-                htmlType="submit">
+                htmlType="submit"
+              >
                 Update User
               </Button>
             </Form.Item>
@@ -406,7 +440,8 @@ const Admin = () => {
           width={500}
           title="Add New User"
           onClose={onCloseAdd}
-          open={openAdd}>
+          open={openAdd}
+        >
           <Form
             onFinish={onFinishAdd}
             form={newform}
@@ -414,7 +449,8 @@ const Admin = () => {
             variant="filled"
             style={{
               maxWidth: 600,
-            }}>
+            }}
+          >
             <Form.Item
               label="Name"
               name="firstName"
@@ -423,7 +459,8 @@ const Admin = () => {
                   required: true,
                   message: "Please input!",
                 },
-              ]}>
+              ]}
+            >
               <Input />
             </Form.Item>
 
@@ -435,7 +472,8 @@ const Admin = () => {
                   required: true,
                   message: "Please input!",
                 },
-              ]}>
+              ]}
+            >
               <Input />
             </Form.Item>
 
@@ -447,7 +485,8 @@ const Admin = () => {
                   required: true,
                   message: "Please input!",
                 },
-              ]}>
+              ]}
+            >
               <Cascader options={companies} changeOnSelect />
             </Form.Item>
 
@@ -459,7 +498,8 @@ const Admin = () => {
                   required: true,
                   message: "Please select a role!",
                 },
-              ]}>
+              ]}
+            >
               <Select placeholder="Select a role">
                 <Select.Option value="admin">Admin</Select.Option>
                 <Select.Option value="user">User</Select.Option>
@@ -475,7 +515,8 @@ const Admin = () => {
                   required: true,
                   message: "Please input!",
                 },
-              ]}>
+              ]}
+            >
               <Input.Password />
             </Form.Item>
 
@@ -483,10 +524,12 @@ const Admin = () => {
               wrapperCol={{
                 offset: 0,
                 span: 24,
-              }}>
+              }}
+            >
               <Button
                 style={{ background: "#387ADF", color: "white", width: "100%" }}
-                htmlType="submit">
+                htmlType="submit"
+              >
                 Save User
               </Button>
             </Form.Item>
