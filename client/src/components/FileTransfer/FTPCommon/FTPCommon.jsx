@@ -215,7 +215,8 @@ const FTPCommon = (props) => {
                 <li className="w-full">
                   <Dropdown overlay={menu} trigger={["click"]}>
                     <Link
-                      className={`w-full flex items-center py-3 md:px-4 px-2 shadow rounded-sm hover:bg-[#155CA2] hover:text-white font-light`}>
+                      className={`w-full flex items-center py-3 md:px-4 px-2 shadow rounded-sm hover:bg-[#155CA2] hover:text-white font-light`}
+                    >
                       <FaPlus size={20} style={{ marginRight: 10 }} /> New
                     </Link>
                   </Dropdown>
@@ -228,12 +229,13 @@ const FTPCommon = (props) => {
                     }`}
                     onClick={() => {
                       setActiveIndex(1);
-                    }}>
+                    }}
+                  >
                     <IoHome size={21} style={{ marginRight: 10 }} />
                     Home
                   </Link>
                 </li>
-                <li className="w-full">
+                {/* <li className="w-full">
                   <Link
                     className={`flex items-center py-3 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 2 ? "text-[#155CA2] " : ""
@@ -243,9 +245,9 @@ const FTPCommon = (props) => {
                     }}>
                     <FaGoogleDrive size={20} style={{ marginRight: 10 }} /> My
                     Folders
-                  </Link>
-                  {/* <li className="w-full"> */}
-                  <Link
+                  </Link> */}
+                {/* <li className="w-full"> */}
+                {/* <Link
                     className={`flex items-center py-3 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 3 ? "text-[#155CA2] " : ""
                     }`}
@@ -257,10 +259,10 @@ const FTPCommon = (props) => {
                       style={{ marginRight: 10 }}
                     />{" "}
                     Shared
-                  </Link>
-                  {/* </li> */}
-                  {/* <li className="w-full"> */}
-                  {/* <Link
+                  </Link> */}
+                {/* </li> */}
+                {/* <li className="w-full"> */}
+                {/* <Link
                     className={`flex items-center py-3 md:px-4 px-2 rounded hover:bg-gray-200 font-light ${
                       activeIndex === 4 ? "text-[#155CA2] " : ""
                     }`}
@@ -270,8 +272,8 @@ const FTPCommon = (props) => {
                     <CgTemplate size={20} style={{ marginRight: 10 }} />{" "}
                     Templates
                   </Link> */}
-                  {/* </li> */}
-                </li>
+                {/* </li> */}
+                {/* </li> */}
               </ul>
             </nav>
           </div>

@@ -52,9 +52,11 @@ const WikiFiles = () => {
   };
 
   const handleFileChange = async (event) => {
-    const file = event.target.files[0];
+    const files = event.target.files;
     const form = new FormData();
-    form.append("file", file);
+    Array.from(files).forEach((file) => {
+      form.append("files", file);
+    });
     form.append("category_Id", param.id);
     form.append("user", userName);
     setUploading(true);
@@ -93,7 +95,8 @@ const WikiFiles = () => {
           <div className="w-full flex justify-between border-b">
             <h2
               style={{ color: "#070F2B" }}
-              className="text-lg pl-4 font-bold pt-4">
+              className="text-lg pl-4 font-bold pt-4"
+            >
               {data.length} Files
             </h2>
             <div className="flex">
@@ -102,7 +105,8 @@ const WikiFiles = () => {
                 icon={<UploadOutlined />}
                 className="m-3 px-5 bg-[#155CA2] text-white right-0"
                 onClick={handleButtonClick}
-                loading={uploading}>
+                loading={uploading}
+              >
                 Click to Upload
               </Button>
               <input
@@ -111,6 +115,7 @@ const WikiFiles = () => {
                 style={{ display: "none" }}
                 onChange={handleFileChange}
                 // accept=".pdf,.doc,.docx"
+                multiple
               />
             </div>
           </div>
@@ -128,7 +133,8 @@ const WikiFiles = () => {
                       style={{ color: "#008DDA" }}
                       href={item.url}
                       target="_blank"
-                      rel="noopener noreferrer">
+                      rel="noopener noreferrer"
+                    >
                       {item.originalname}
                     </a>
                   }
@@ -147,7 +153,8 @@ const WikiFiles = () => {
                     placement="left"
                     color="#00224D"
                     title={"Copied!"}
-                    arrow>
+                    arrow
+                  >
                     <FiCopy
                       color="#00224D"
                       fontSize={18}
@@ -212,7 +219,8 @@ const WikiFiles = () => {
                       cancelText="No"
                       okButtonProps={{
                         style: { backgroundColor: "#155CA2", color: "white" },
-                      }}>
+                      }}
+                    >
                       <AiOutlineDelete
                         color="red"
                         fontSize={18}

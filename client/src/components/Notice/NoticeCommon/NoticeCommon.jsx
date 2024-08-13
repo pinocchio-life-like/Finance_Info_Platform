@@ -100,7 +100,11 @@ const NoticeCommon = () => {
             Companies: undefined,
           }))
           .map(({ Companies, ...rest }) => rest);
-        setNotices(noticesWithMappedCompanies);
+        setNotices(
+          noticesWithMappedCompanies.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          )
+        );
       } catch (error) {
         console.error("Failed to fetch notices:", error);
         setNotices([]);

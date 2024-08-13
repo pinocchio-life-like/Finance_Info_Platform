@@ -108,6 +108,18 @@ const getallversionsOFAnArticle = async (id) => {
   return versions;
 };
 
+const getUserByUserName = async (userName) => {
+  return User.findOne({
+    where: { userName: userName },
+    include: [
+      {
+        model: Company,
+        attributes: ["company_Name"],
+      },
+    ],
+  });
+};
+
 module.exports = {
   sequelize,
   Company,
@@ -117,4 +129,5 @@ module.exports = {
   createArticle,
   updateArticle,
   getallversionsOFAnArticle,
+  getUserByUserName,
 };

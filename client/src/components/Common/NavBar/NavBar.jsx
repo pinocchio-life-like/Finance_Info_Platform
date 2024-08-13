@@ -278,24 +278,24 @@ const NavBar = () => {
 
               {menuActive && (
                 <div className="hidden lg:flex flex-col menu z-50 absolute top-full right-0 bg-white shadow-md mt-1 py-2 w-48 rounded">
-                  <div className="notification p-1 flex items-center px-4">
+                  {/* <div className="notification p-1 flex items-center px-4">
                     <BsBellFill
                       color="white"
                       className="bg-gray-800 rounded mr-2"
                       size={20}
                     />{" "}
                     notifications
-                  </div>
-                  <div className="lang p-1 flex items-center px-4">
+                  </div> */}
+                  {/* <div className="lang p-1 flex items-center px-4">
                     <IoLanguageOutline
                       className="bg-gray-800 rounded mr-2"
                       color="white"
                       size={20}
                     />{" "}
                     language
-                  </div>
+                  </div> */}
                   <Link
-                    to="#"
+                    to="/profile"
                     className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white"
                   >
                     Profile
@@ -313,7 +313,7 @@ const NavBar = () => {
                 </Link> */}
                   {/* this is to give some articles and demo */}
                   <Link
-                    to="#"
+                    to="/wiki/articles/81"
                     className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white"
                   >
                     Help
@@ -369,22 +369,22 @@ const NavBar = () => {
                   className="flex flex-col gap-2 my-4"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <div className="notification p-1 flex items-center px-4">
+                  {/* <div className="notification p-1 flex items-center px-4">
                     <BsBellFill
                       color="white"
                       className="bg-gray-800 rounded mr-2"
                       size={20}
                     />{" "}
                     notifications
-                  </div>
-                  <div className="lang p-1 flex items-center px-4">
+                  </div> */}
+                  {/* <div className="lang p-1 flex items-center px-4">
                     <IoLanguageOutline
                       className="bg-gray-800 rounded mr-2"
                       color="white"
                       size={20}
                     />{" "}
                     language
-                  </div>
+                  </div> */}
                   <hr className="mx-2" />
                   <li>
                     <Link
@@ -451,7 +451,7 @@ const NavBar = () => {
                   <hr className="mx-2" />
 
                   <Link
-                    to="#"
+                    to="/profile"
                     className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
                       location.pathname.includes("profile")
                         ? "text-blue-800"
@@ -473,7 +473,7 @@ const NavBar = () => {
                 </Link> */}
                   {/* this is to give some articles and demo */}
                   <Link
-                    to="#"
+                    to="/wiki/articles/81"
                     className={`block py-2 text-black hover:bg-blue-500 hover:text-white font-semibold px-4 ${
                       location.pathname.includes("help")
                         ? "text-blue-800"

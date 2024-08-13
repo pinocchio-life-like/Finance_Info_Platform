@@ -1,15 +1,29 @@
 import { useState, useEffect } from "react";
 import DiffViewer from "react-diff-viewer-continued";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../../../utils/api";
 import { RollbackOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Button, message } from "antd";
+import { jwtDecode } from "jwt-decode";
+
 function Difference() {
+  const token = localStorage.getItem("token");
+  let userName = null;
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      userName = decodedToken.userName;
+    } catch (error) {
+      console.error("Invalid token");
+    }
+  }
   const [oldValue, setOldValue] = useState("");
   const [newValue, setNewValue] = useState("");
   const [title, setTitle] = useState("");
   const [updatedAt, setUpdatedAt] = useState("");
   const [isMobile, setIsMobile] = useState(true);
+  const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => {
@@ -63,8 +77,31 @@ function Difference() {
   const formattedUpdatedAt = updatedAt
     ? new Date(updatedAt).toLocaleDateString()
     : "";
+
+  const success = () => {
+    messageApi.open({
+      type: "success",
+      content: "Article Restored to previous version successfully",
+    });
+  };
+
+  const handleRestore = async () => {
+    try {
+      await api.put(`/api/article/${category_Id}`, {
+        articleTitle: title,
+        articleContent: oldValue,
+        userName: userName,
+      });
+
+      success();
+      navigate(`/wiki/articles/${category_Id}`);
+    } catch (error) {
+      console.error("Failed to restore article:", error);
+    }
+  };
   return (
     <div className=" main-diff flex w-full justify-center lg:mt-6 mt-3">
+      {contextHolder}
       <div className="w-full lg:mx-14 mx-1 mb-8">
         <div className="border-b border-gray-200 flex justify-between">
           <div>
@@ -73,13 +110,18 @@ function Difference() {
             </h2>
             <span className="italic text-gray-300 pb-4">{`Date Modified: ${formattedUpdatedAt}`}</span>
           </div>
-          <div className="button">
-            {" "}
-            <Link to={`/wiki/history/${category_Id}`}>
-              <Button className="" icon={<RollbackOutlined />}>
-                Back
-              </Button>
-            </Link>
+          <div className="flex justify-between gap-1">
+            <div className="button">
+              {" "}
+              <Link to={`/wiki/history/${category_Id}`}>
+                <Button className="" icon={<RollbackOutlined />}>
+                  Back
+                </Button>
+              </Link>
+            </div>
+            <Button onClick={handleRestore} className="">
+              Restore Version
+            </Button>
           </div>
         </div>
         <div className="diff-viewer-container">

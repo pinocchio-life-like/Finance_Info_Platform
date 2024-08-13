@@ -28,6 +28,10 @@ const columns = [
     dataIndex: "userRole",
   },
   {
+    title: "Company",
+    dataIndex: "companyName",
+  },
+  {
     title: "Password",
     dataIndex: "password",
   },
@@ -86,10 +90,11 @@ const Admin = () => {
   }
 
   useEffect(() => {
+    let usersData = [];
     const fetchUsers = async () => {
       try {
         const response = await api.get("/api/users/getall");
-        setUsers(response.data.data);
+        usersData = response.data.data;
         setTableData(response.data.data);
       } catch (error) {
         console.error(error);
@@ -101,6 +106,16 @@ const Admin = () => {
       try {
         const response = await api.get("/api/companies/getAll");
         const transformedData = transformDataToHierarchy(response.data.data);
+        const updatedUsers = usersData.map((data) => {
+          return {
+            ...data,
+            companyName: response.data.data.find(
+              (company) => company.company_Id === data.company_Id
+            )?.company_Name,
+          };
+        });
+        setUsers(updatedUsers);
+        setTableData(updatedUsers);
         setCompanies(transformedData);
       } catch (error) {
         console.error(error);
@@ -248,6 +263,12 @@ const Admin = () => {
     setTableData(filteredUsersData);
   };
 
+  const filter = (inputValue, path) =>
+    path.some(
+      (option) =>
+        option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+    );
+
   return (
     <>
       {contextHolder}
@@ -298,12 +319,15 @@ const Admin = () => {
                       <FaTrash size={12} style={{ marginRight: 4 }} /> Delete
                     </button>
                   </div>
-                  <div style={{ width: "400px" }}>
+                  <div style={{ width: "40%" }}>
                     <Cascader
-                      style={{ width: "400px" }}
+                      style={{ width: "100%" }}
                       options={companies}
                       onChange={onChange}
                       changeOnSelect
+                      showSearch={{
+                        filter,
+                      }}
                     />
                   </div>
                 </div>

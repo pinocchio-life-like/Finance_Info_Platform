@@ -75,31 +75,32 @@ const articleUpload = multer({ storage: fileStorage });
 
 router.post(
   "/article/file/upload",
-  articleUpload.single("file"),
+  articleUpload.array("files"),
   async (req, res) => {
-    const file = req.file;
+    const files = req.files;
     const user = req.body.user;
     const category_Id = req.body.category_Id;
 
-    if (!file) {
+    if (!files) {
       return res.status(400).send("No file was uploaded.");
     }
 
-    const url = `${req.protocol}://${req.get("host")}/Article/Files/${
-      file.filename
-    }`;
-
-    const uploadData = {
-      url: url,
-      type: file.mimetype,
-      user,
-      category_Id,
-      originalname: file.originalname,
-    };
+    const uploads = files.map((file) => {
+      const url = `${req.protocol}://${req.get("host")}/Article/Files/${
+        file.filename
+      }`;
+      return {
+        url: url,
+        type: file.mimetype,
+        user,
+        category_Id,
+        originalname: file.originalname,
+      };
+    });
 
     try {
-      const upload = await uploadFile(uploadData);
-      res.send(upload);
+      const results = await Promise.all(uploads.map(uploadFile));
+      res.send(results);
     } catch (error) {
       console.error("Error saving to database:", error);
       res.status(500).send("Error saving file information");
