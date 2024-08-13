@@ -94,6 +94,7 @@ const Admin = () => {
     const fetchUsers = async () => {
       try {
         const response = await api.get("/api/users/getall");
+        setUsers(response.data.data);
         usersData = response.data.data;
         setTableData(response.data.data);
       } catch (error) {
