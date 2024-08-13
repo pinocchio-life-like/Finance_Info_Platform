@@ -13,6 +13,7 @@ const authService = {
     try {
       sessionStorage.clear();
       localStorage.removeItem("token");
+      localStorage.removeItem("persist:root");
 
       if ("caches" in window) {
         const cacheNames = await caches.keys();
