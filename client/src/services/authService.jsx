@@ -11,10 +11,19 @@ const authService = {
   },
   logout: async function () {
     try {
-      await api.post("/api/logout");
+      sessionStorage.clear();
       localStorage.removeItem("token");
+
+      if ("caches" in window) {
+        const cacheNames = await caches.keys();
+        for (const cacheName of cacheNames) {
+          await caches.delete(cacheName);
+        }
+      }
     } catch (error) {
       console.error("Error logging out:", error);
+    } finally{
+      await api.post("/api/logout");
     }
   },
   isAuthenticated: function () {

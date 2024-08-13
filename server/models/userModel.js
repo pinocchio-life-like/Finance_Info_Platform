@@ -124,6 +124,12 @@ const destroy = async (userIds) => {
   }
 };
 
+const getUserByUserName = async (userName) => {
+  return User.findOne({
+    where: { userName: userName },
+  });
+};
+
 module.exports = {
   createUser,
   getAllUsers,
@@ -131,4 +137,5 @@ module.exports = {
   destroy,
   User,
   getUserById,
+  getUserByUserName,
 };
