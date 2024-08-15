@@ -26,14 +26,17 @@ const NoticeCommon = () => {
 
   const token = localStorage.getItem("token");
   let userName = null;
+  let userRole=null
   if (token) {
     try {
       const decodedToken = jwtDecode(token);
       userName = decodedToken.userName;
+      userRole=decodedToken.userRole
     } catch (error) {
       console.error("Invalid token");
     }
   }
+  // console.log(userRole)
 
   const showTaskDrawer = () => {
     setOpenTask(true);
@@ -168,24 +171,26 @@ const NoticeCommon = () => {
       <div className="flex-grow flex flex-col items-center lg:mx-14 mx-1 bg-white">
         <div className="flex justify-between items-center w-full pt-3">
           <div className="w-[65%] border-b border-gray-600 flex items-center pb-1">
-            <CiSquarePlus
+           {userRole==="admin"? <CiSquarePlus 
               className="hover:bg-[#008DDA] hover:text-white rounded-full p-1 cursor-pointer"
               size={40}
               onClick={() => {
                 showNoticeDrawer();
                 setStatus("");
               }}
-            />
+            />:''}
             <a className={`px-1 cursor-pointer`} style={{ lineHeight: "2rem" }}>
               Notices
             </a>
           </div>
           <div className="w-[35%] border-b border-gray-600 ml-1 flex items-center pb-1">
-            <CiSquarePlus
-              className="hover:bg-[#008DDA] hover:text-white rounded-full p-1 cursor-pointer"
-              size={40}
-              onClick={() => showTaskDrawer()}
-            />
+           {
+            userRole==="admin"?  <CiSquarePlus
+            className="hover:bg-[#008DDA] hover:text-white rounded-full p-1 cursor-pointer"
+            size={40}
+            onClick={() => showTaskDrawer()}
+          />:""
+           }
             <a className={`px-1 cursor-pointer`} style={{ lineHeight: "2rem" }}>
               Tasks
             </a>
