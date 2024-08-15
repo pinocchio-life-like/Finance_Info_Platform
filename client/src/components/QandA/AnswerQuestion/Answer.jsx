@@ -164,7 +164,7 @@ const Answer = () => {
   return (
     <div className="p-4 pt-8">
       <div className="question-and-answers">
-        <div className="single-question mb-8">
+        <div className="single-question mb-4">
           <div className="border-b mb-2 border-gray-200">
             <h2 className="font-semibold text-lg mb-2">
               {singleQuestion.question_title}
@@ -185,7 +185,8 @@ const Answer = () => {
                     {singleQuestion.Tags?.map((tag) => (
                       <span
                         key={tag.tag_id}
-                        className="inline-block bg-gray-200 rounded px-3 py-1 text-xs font-normal text-gray-700 mr-2">
+                        className="inline-block bg-gray-200 rounded px-3 py-1 text-xs font-normal text-gray-700 mr-2"
+                      >
                         {tag.tag_name}
                       </span>
                     ))}
@@ -203,37 +204,77 @@ const Answer = () => {
               {singleQuestion.comments?.map((comment) => (
                 <div
                   key={comment.comment_id}
-                  className="flex justify-between items-center border-b border-gray-200 py-1">
-                  <p className="text-commentText text-comment items-center">
-                    {comment.content}
-                    <span> -</span>
-                    <span className="text-xs text-userName">
-                      {comment.userName} | {comment.createdAt}
-                    </span>
-                  </p>
+                  className="flex flex-col border-b border-gray-200 py-1"
+                >
+                  <ReactQuill
+                    readOnly
+                    value={comment.content}
+                    theme="bubble"
+                    className="mt-auto bg-white"
+                    style={{
+                      marginLeft: -14,
+                      marginTop: -8,
+                    }}
+                  />
+                  <span className="mt-[-40px] text-xs text-userName flex">
+                    {comment.userName} | {comment.createdAt}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
           <div
             className="comment text-xs text-gray-500 cursor-pointer my-5 px-6"
-            onClick={toggleQuestionCommentInput}>
+            onClick={toggleQuestionCommentInput}
+          >
             Add comment
           </div>
           {commentVisibilityQuestion && (
             <div className="comment-input-area px-5">
-              <input
-                type="text"
-                id="qc-input"
-                placeholder="Type your comment here..."
-                className="border rounded p-2 w-full"
+              <ReactQuill
                 value={newQuestionComment}
-                onChange={(e) => setNewQuestionComment(e.target.value)}
+                theme="snow"
+                onChange={setNewQuestionComment}
+                placeholder="Add your answer here"
+                className="rounded-md  bg-white"
+                modules={{
+                  toolbar: [
+                    [{ header: [1, 2, false] }],
+                    ["bold", "italic", "underline", "blockquote"],
+                    [
+                      { list: "ordered" },
+                      { list: "bullet" },
+                      { indent: "-1" },
+                      { indent: "+1" },
+                    ],
+                    [
+                      "link",
+                      "image",
+                      // "video"
+                    ],
+                    ["clean"],
+                  ],
+                }}
+                formats={[
+                  "header",
+                  "bold",
+                  "italic",
+                  "underline",
+                  "strike",
+                  "blockquote",
+                  "list",
+                  "bullet",
+                  "indent",
+                  "link",
+                  "image",
+                  // "video",
+                ]}
               />
               <Button
                 className="mt-2 qa-button semi-bold"
                 onClick={postQuestionComment}
-                loading={commentLoading}>
+                loading={commentLoading}
+              >
                 Post Comment
               </Button>
             </div>
@@ -241,11 +282,11 @@ const Answer = () => {
         </div>
         <div className="all-answers">
           <div className="answers ">
-            <h3 className="text-lg font-medium py-3">
+            <h3 className="text-lg font-medium py-2">
               {singleQuestion.answers?.length} Answers
             </h3>
             {singleQuestion.answers?.map((a) => (
-              <div key={a.answer_id} className="p-4 rounded-sm mt-4">
+              <div key={a.answer_id} className="px-4 rounded-sm mt-2">
                 <div className="">
                   <div key={a.answer_id} className=" border-t">
                     <ReactQuill
@@ -266,35 +307,76 @@ const Answer = () => {
                     {a.comments?.map((c) => (
                       <div
                         key={c.comment_id}
-                        className="comment flex gap-1  border-b border-gray-200 py-3 items-center ">
-                        <p className="text-commentText text-comment items-center">
-                          {c.content}
-                          <span> -</span>
-                          <span className="text-xs text-userName">
-                            {c.userName} | {c.createdAt}
-                          </span>
-                        </p>
+                        className="comment flex flex-col gap-1  border-b border-gray-200 py-3"
+                      >
+                        <ReactQuill
+                          readOnly
+                          value={c.content}
+                          theme="bubble"
+                          className="mt-auto bg-white"
+                          style={{
+                            marginLeft: -14,
+                            marginTop: -8,
+                          }}
+                        />
+                        <span className="mt-[-40px] text-xs text-userName">
+                          {c.userName} | {c.createdAt}
+                        </span>
                       </div>
                     ))}
                   </div>
                   <div
                     className="comment text-xs text-gray-500 cursor-pointer p-4"
-                    onClick={() => toggleCommentInput(a.answer_id)}>
+                    onClick={() => toggleCommentInput(a.answer_id)}
+                  >
                     Add comment
                   </div>
                   {commentVisibility[a.answer_id] && (
                     <div className="comment-input-area mt-2">
-                      <input
-                        type="text"
-                        id="ac-input"
-                        placeholder="Type your comment here..."
-                        className="border rounded p-2 w-full"
-                        onChange={(e) => setNewComment(e.target.value)}
+                      <ReactQuill
+                        value={newComment}
+                        theme="snow"
+                        onChange={setNewComment}
+                        placeholder="Add your answer here"
+                        className="rounded-md  bg-white"
+                        modules={{
+                          toolbar: [
+                            [{ header: [1, 2, false] }],
+                            ["bold", "italic", "underline", "blockquote"],
+                            [
+                              { list: "ordered" },
+                              { list: "bullet" },
+                              { indent: "-1" },
+                              { indent: "+1" },
+                            ],
+                            [
+                              "link",
+                              "image",
+                              // "video"
+                            ],
+                            ["clean"],
+                          ],
+                        }}
+                        formats={[
+                          "header",
+                          "bold",
+                          "italic",
+                          "underline",
+                          "strike",
+                          "blockquote",
+                          "list",
+                          "bullet",
+                          "indent",
+                          "link",
+                          "image",
+                          // "video",
+                        ]}
                       />
                       <Button
                         className="mt-2 qa-button semi-bold"
                         onClick={() => postCommentAns(newComment, a.answer_id)}
-                        loading={commentLoading[1]}>
+                        loading={commentLoading[1]}
+                      >
                         Post Comment
                       </Button>
                     </div>
@@ -310,7 +392,8 @@ const Answer = () => {
           </div>
           <form
             onSubmit={handleSubmitAnswer}
-            className="flex flex-col space-y-4 gap-4">
+            className="flex flex-col space-y-4 gap-4"
+          >
             <div className="">
               <ReactQuill
                 value={answer}
@@ -356,7 +439,8 @@ const Answer = () => {
               <Button
                 className="qa-button semi-bold"
                 loading={isLoading}
-                htmlType="submit">
+                htmlType="submit"
+              >
                 Post Answer
               </Button>
             </div>
